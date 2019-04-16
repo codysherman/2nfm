@@ -121,8 +121,6 @@ var stream = null;
 connection.onstream = function(e) {
   video.srcObject = null;
   audio.srcObject = null;
-  video.pause();
-  audio.pause();
   stream = e.stream;
   if (stream.isVideo) {
     video.removeAttribute('hidden');
@@ -282,18 +280,24 @@ function updateTitle(message) {
 
 connection.socketCustomEvent = params.s;
 
+let presenceCheckWait = 1000;
+
 function checkPresence() {
-  infoBar.innerHTML = 'Checking room: ' + params.s;
+  // infoBar.innerHTML = 'Checking room: ' + params.s;
 
   connection.checkPresence(params.s, function(isRoomExist, roomid, extra) {
       if (isRoomExist === false) {
-          infoBar.innerHTML = 'Room does not exist: ' + params.s;
+        let noHostMessage = 'No one is currently hosting the room: ' + params.s;
+        if (infoBar.innerHTML != noHostMessage) {
+          infoBar.innerHTML = noHostMessage;
+        }
 
-          setTimeout(function() {
-              infoBar.innerHTML = 'Checking room: ' + params.s;
-              setTimeout(checkPresence, 1000);
-          }, 4000);
-          return;
+        setTimeout(function() {
+            console.log('checked', presenceCheckWait);
+            presenceCheckWait < 60000 && (presenceCheckWait = presenceCheckWait * 2);
+            setTimeout(checkPresence, presenceCheckWait);
+        }, 4000);
+        return;
       }
 
       infoBar.innerHTML = 'Joining room: ' + params.s;
