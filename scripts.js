@@ -113,11 +113,11 @@ connection.onstream = function(e) {
     // video.srcObject.mute();
     // console.log(video.srcObject);
    
-    stream.getVideoTracks()[0].enabled = true;
-    stream.getAudioTracks()[0].enabled = true;
+    // stream.getVideoTracks()[0].enabled = true;
+    // stream.getAudioTracks()[0].enabled = true;
     // console.log('videoooooooo', stream.getVideoTracks()[0]);
     // console.log('audioooooooo', stream.getAudioTracks()[0]);
-    console.dir(video);
+    // console.dir(video);
   } else {
     audio.removeAttribute('hidden');
     audio.srcObject = stream;
@@ -136,12 +136,12 @@ togglePlayback = function() {
   } else {
     audio.paused ? audio.play() : audio.pause();
   }
-  console.log(video.paused);
+  // console.log(video.paused);
   if (video.paused || audio.paused) {
-    console.log('video is paused, unpausing now');
+    // console.log('video is paused, unpausing now');
     playButton.classList.remove('playing');
   } else {
-    console.log('video not paused');
+    // console.log('video not paused');
     playButton.classList.add('playing');
   }
 };
