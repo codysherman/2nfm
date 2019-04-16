@@ -102,6 +102,11 @@ video {
 #play-button-container {
   width: 30px;
   height: 30px;
+  margin-right: 20px;
+}
+
+#play-button-container:disabled {
+  display: none;
 }
 
 .play-button {
@@ -129,7 +134,6 @@ video {
 
 #volume-slider {
   max-width: 120px;
-  margin-left: 20px;
 }
 
 #info-bar {

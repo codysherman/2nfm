@@ -122,26 +122,20 @@ connection.onstream = function(e) {
   video.srcObject = null;
   audio.srcObject = null;
   stream = e.stream;
+  stream.mute();
   if (stream.isVideo) {
     video.removeAttribute('hidden');
     video.srcObject = stream;
-    // video.srcObject.mute();
-    // console.log(video.srcObject);
-   
-    // stream.getVideoTracks()[0].enabled = true;
-    // stream.getAudioTracks()[0].enabled = true;
-    // console.log('videoooooooo', stream.getVideoTracks()[0]);
-    // console.log('audioooooooo', stream.getAudioTracks()[0]);
-    // console.dir(video);
+    video.srcObject.getVideoTracks()[0].enabled = true;
+    video.srcObject.getAudioTracks()[0].enabled = true;
     video.play();
   } else {
     audio.removeAttribute('hidden');
     audio.srcObject = stream;
-    audio.srcObject.mute();
-    stream.getAudioTracks()[0].enabled = true;
+    audio.srcObject.getAudioTracks()[0].enabled = true;
     audio.play();
+    playButton.removeAttribute('disabled');
   }
-  playButton.removeAttribute('disabled');
   volumeSlider.removeAttribute('disabled');
   body.classList.add("stream-live");
 };
