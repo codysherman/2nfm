@@ -100,6 +100,23 @@ var volumeSlider = document.getElementById('volume-slider');
 
 var video = document.getElementById('video');
 var audio = document.getElementById('audio');
+
+video.onplay = (event) => {
+  playButton.classList.add('playing');
+};
+
+video.onpause = (event) => {
+  playButton.classList.remove('playing');
+};
+
+audio.onplay = (event) => {
+  playButton.classList.add('playing');
+};
+
+audio.onpause = (event) => {
+  playButton.classList.remove('playing');
+};
+
 var stream = null;
 connection.onstream = function(e) {
   video.srcObject = null;
@@ -118,11 +135,13 @@ connection.onstream = function(e) {
     // console.log('videoooooooo', stream.getVideoTracks()[0]);
     // console.log('audioooooooo', stream.getAudioTracks()[0]);
     // console.dir(video);
+    video.play();
   } else {
     audio.removeAttribute('hidden');
     audio.srcObject = stream;
     audio.srcObject.mute();
     stream.getAudioTracks()[0].enabled = true;
+    audio.play();
   }
   playButton.removeAttribute('disabled');
   volumeSlider.removeAttribute('disabled');
@@ -132,17 +151,9 @@ connection.onstream = function(e) {
 togglePlayback = function() {
   if (stream.isVideo) {
     video.paused ? video.play() : video.pause();
-    console.dir(video.paused);
+    // console.dir(video.paused);
   } else {
     audio.paused ? audio.play() : audio.pause();
-  }
-  // console.log(video.paused);
-  if (video.paused || audio.paused) {
-    // console.log('video is paused, unpausing now');
-    playButton.classList.remove('playing');
-  } else {
-    // console.log('video not paused');
-    playButton.classList.add('playing');
   }
 };
 
