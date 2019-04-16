@@ -40,7 +40,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         if (typeof global.console.debug === 'undefined') {
             global.console.debug = global.console.info = global.console.error = global.console.log = global.console.log || function() {
-                console.log(arguments);
+                // console.log(arguments);
             };
         }
 
@@ -167,9 +167,9 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         if (connection.enableLogs) {
             if (connection.socketURL == '/') {
-                console.info('socket.io url is: ', location.origin + '/');
+                // console.info('socket.io url is: ', location.origin + '/');
             } else {
-                console.info('socket.io url is: ', connection.socketURL);
+                // console.info('socket.io url is: ', connection.socketURL);
             }
         }
 
@@ -364,7 +364,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
             alreadyConnected = true;
 
             if (connection.enableLogs) {
-                console.info('socket.io connection is opened.');
+                // console.info('socket.io connection is opened.');
             }
 
             setTimeout(function() {
@@ -720,7 +720,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
                 return;
             }
 
-            console.warn('RTPSender.replaceTrack is NOT supported.');
+            // console.warn('RTPSender.replaceTrack is NOT supported.');
             this.renegotiatePeer(remoteUserId);
         };
 
@@ -742,7 +742,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
                 }
 
                 if (connection.enableLogs) {
-                    console.log('Remote peer\'s sdp:', message.sdp);
+                    // console.log('Remote peer\'s sdp:', message.sdp);
                 }
                 return;
             }
@@ -753,7 +753,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
                 }
 
                 if (connection.enableLogs) {
-                    console.log('Remote peer\'s candidate pairs:', message.candidate);
+                    // console.log('Remote peer\'s candidate pairs:', message.candidate);
                 }
                 return;
             }
@@ -3147,9 +3147,9 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
             if (isScreen) {
                 if (!bandwidth.screen) {
-                    console.warn('It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.');
+                    // console.warn('It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.');
                 } else if (bandwidth.screen < 300) {
-                    console.warn('It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.');
+                    // console.warn('It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.');
                 }
             }
 
@@ -4635,7 +4635,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
             }, function(isRoomJoined, error) {
                 if (isRoomJoined === true) {
                     if (connection.enableLogs) {
-                        console.log('isRoomJoined: ', isRoomJoined, ' roomid: ', connection.sessionid);
+                        // console.log('isRoomJoined: ', isRoomJoined, ' roomid: ', connection.sessionid);
                     }
 
                     if (!!connection.peers[connection.sessionid]) {
@@ -4648,7 +4648,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
                 if (isRoomJoined === false) {
                     if (connection.enableLogs) {
-                        console.warn('isRoomJoined: ', error, ' roomid: ', connection.sessionid);
+                        // console.warn('isRoomJoined: ', error, ' roomid: ', connection.sessionid);
                     }
 
                     // [disabled] retry after 3 seconds
@@ -4665,7 +4665,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         function openRoom(callback) {
             if (connection.enableLogs) {
-                console.log('Sending open-room signal to socket.io');
+                // console.log('Sending open-room signal to socket.io');
             }
 
             connection.waitingForLocalMedia = false;
@@ -4681,14 +4681,14 @@ var RTCMultiConnection = function(roomid, forceOptions) {
             }, function(isRoomOpened, error) {
                 if (isRoomOpened === true) {
                     if (connection.enableLogs) {
-                        console.log('isRoomOpened: ', isRoomOpened, ' roomid: ', connection.sessionid);
+                        // console.log('isRoomOpened: ', isRoomOpened, ' roomid: ', connection.sessionid);
                     }
                     callback(isRoomOpened, connection.sessionid);
                 }
 
                 if (isRoomOpened === false) {
                     if (connection.enableLogs) {
-                        console.warn('isRoomOpened: ', error, ' roomid: ', connection.sessionid);
+                        // console.warn('isRoomOpened: ', error, ' roomid: ', connection.sessionid);
                     }
 
                     callback(isRoomOpened, connection.sessionid, error);
@@ -5110,13 +5110,13 @@ var RTCMultiConnection = function(roomid, forceOptions) {
         // EVENTs
         connection.onopen = function(event) {
             if (!!connection.enableLogs) {
-                console.info('Data connection has been opened between you & ', event.userid);
+                // console.info('Data connection has been opened between you & ', event.userid);
             }
         };
 
         connection.onclose = function(event) {
             if (!!connection.enableLogs) {
-                console.warn('Data connection has been closed between you & ', event.userid);
+                // console.warn('Data connection has been closed between you & ', event.userid);
             }
         };
 
@@ -5163,7 +5163,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         connection.onEntireSessionClosed = function(event) {
             if (!connection.enableLogs) return;
-            console.info('Entire session is closed: ', event.sessionid, event.extra);
+            // console.info('Entire session is closed: ', event.sessionid, event.extra);
         };
 
         connection.onstream = function(e) {
@@ -5210,7 +5210,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
             });
 
             if (!stream) {
-                console.warn('No such stream exist.', streamid);
+                // console.warn('No such stream exist.', streamid);
                 return;
             }
 
@@ -5705,7 +5705,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         connection.getSocket = function(callback) {
             if (!callback && connection.enableLogs) {
-                console.warn('getSocket.callback paramter is required.');
+                // console.warn('getSocket.callback paramter is required.');
             }
 
             callback = callback || function() {};
@@ -5836,12 +5836,12 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         connection.onNumberOfBroadcastViewersUpdated = function(event) {
             if (!connection.enableLogs || !connection.isInitiator) return;
-            console.info('Number of broadcast (', event.broadcastId, ') viewers', event.numberOfBroadcastViewers);
+            // console.info('Number of broadcast (', event.broadcastId, ') viewers', event.numberOfBroadcastViewers);
         };
 
         connection.onUserStatusChanged = function(event, dontWriteLogs) {
             if (!!connection.enableLogs && !dontWriteLogs) {
-                console.info(event.userid, event.status);
+                // console.info(event.userid, event.status);
             }
         };
 
@@ -5894,7 +5894,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
             connection.socket.emit('check-presence', roomid + '', function(isRoomExist, _roomid, extra) {
                 if (connection.enableLogs) {
-                    console.log('checkPresence.isRoomExist: ', isRoomExist, ' roomid: ', _roomid);
+                    // console.log('checkPresence.isRoomExist: ', isRoomExist, ' roomid: ', _roomid);
                 }
                 callback(isRoomExist, _roomid, extra);
             });
@@ -5929,7 +5929,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         connection.onReConnecting = function(event) {
             if (connection.enableLogs) {
-                console.info('ReConnecting with', event.userid, '...');
+                // console.info('ReConnecting with', event.userid, '...');
             }
         };
 
@@ -6055,7 +6055,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
             connection.join(connection.sessionid);
 
             if (connection.enableLogs) {
-                console.warn('Userid already taken.', useridAlreadyTaken, 'Your new userid:', connection.userid);
+                // console.warn('Userid already taken.', useridAlreadyTaken, 'Your new userid:', connection.userid);
             }
         };
 
@@ -6064,7 +6064,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         connection.onSettingLocalDescription = function(event) {
             if (connection.enableLogs) {
-                console.info('Set local description for remote user', event.userid);
+                // console.info('Set local description for remote user', event.userid);
             }
         };
 
@@ -6100,13 +6100,13 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
         connection.onSocketDisconnect = function(event) {
             if (connection.enableLogs) {
-                console.warn('socket.io connection is closed');
+                // console.warn('socket.io connection is closed');
             }
         };
 
         connection.onSocketError = function(event) {
             if (connection.enableLogs) {
-                console.warn('socket.io connection is failed');
+                // console.warn('socket.io connection is failed');
             }
         };
 
