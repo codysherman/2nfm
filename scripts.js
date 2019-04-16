@@ -128,11 +128,13 @@ connection.onstream = function(e) {
     video.srcObject = stream;
     video.srcObject.getVideoTracks()[0].enabled = true;
     video.srcObject.getAudioTracks()[0].enabled = true;
+    video.volume = 0.5;
     video.play();
   } else {
     audio.removeAttribute('hidden');
     audio.srcObject = stream;
     audio.srcObject.getAudioTracks()[0].enabled = true;
+    audio.volume = 0.5;
     audio.play();
     playButton.removeAttribute('disabled');
   }
