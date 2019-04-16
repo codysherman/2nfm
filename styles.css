@@ -91,14 +91,11 @@ video {
 }
 
 #media-controls {
+  opacity: 0;
   transition: opacity 0.4s;
 }
 
-.not-active #media-controls {
-  opacity: 0;
-}
-
-.active #media-controls {
+.stream-live #media-controls {
   opacity: 1;
 }
 
@@ -138,15 +135,12 @@ video {
 #info-bar {
   font-size: 24px;
   margin-top: 20px;
+  opacity: 1;
   transition: opacity 0.4s;
 }
 
-.active #info-bar {
+.stream-live #info-bar {
   opacity: 0;
-}
-
-.not-active #info-bar {
-  opacity: 1;
 }
 
 #chat-container {

@@ -104,48 +104,51 @@ var stream = null;
 connection.onstream = function(e) {
   video.srcObject = null;
   audio.srcObject = null;
+  video.pause();
+  audio.pause();
   stream = e.stream;
-  stream.getVideoTracks()[0] && (stream.getVideoTracks()[0].enabled = false);
-  stream.getAudioTracks()[0] && (stream.getAudioTracks()[0].enabled = false);
   if (stream.isVideo) {
     video.removeAttribute('hidden');
     video.srcObject = stream;
+    // video.srcObject.mute();
+    // console.log(video.srcObject);
+   
+    stream.getVideoTracks()[0].enabled = true;
+    stream.getAudioTracks()[0].enabled = true;
+    // console.log('videoooooooo', stream.getVideoTracks()[0]);
+    // console.log('audioooooooo', stream.getAudioTracks()[0]);
+    console.dir(video);
   } else {
     audio.removeAttribute('hidden');
     audio.srcObject = stream;
+    audio.srcObject.mute();
+    stream.getAudioTracks()[0].enabled = true;
   }
   playButton.removeAttribute('disabled');
   volumeSlider.removeAttribute('disabled');
-  body.classList.remove("not-active");
-  body.classList.add("active");
+  body.classList.add("stream-live");
 };
 
 togglePlayback = function() {
   if (stream.isVideo) {
-    stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
-    stream.getAudioTracks()[0] && (stream.getAudioTracks()[0].enabled = stream.getVideoTracks()[0].enabled);
+    video.paused ? video.play() : video.pause();
+    console.dir(video.paused);
   } else {
-    stream.getAudioTracks()[0] && (stream.getAudioTracks()[0].enabled = !stream.getAudioTracks()[0].enabled);
+    audio.paused ? audio.play() : audio.pause();
   }
-  if ((stream.isAudio && stream.getAudioTracks()[0].enabled) || (stream.isVideo && stream.getVideoTracks()[0].enabled)) {
-    playButton.classList.add('playing');
-  } else {
+  console.log(video.paused);
+  if (video.paused || audio.paused) {
+    console.log('video is paused, unpausing now');
     playButton.classList.remove('playing');
+  } else {
+    console.log('video not paused');
+    playButton.classList.add('playing');
   }
-  video.paused && video.play();
-  audio.paused && audio.play();
 };
 
 setVolume = function(input) {
-  if (input > 0) {
     audio.volume = input;
     video.volume = input;
-    stream.getAudioTracks()[0] && (stream.getAudioTracks()[0].enabled = true);
-    stream.isAudio && playButton.classList.add('playing');
-  } else {
-    stream.getAudioTracks()[0] && (stream.getAudioTracks()[0].enabled = false);
-    stream.isAudio && playButton.classList.remove('playing');
-  }
 }
 
 // if user left
@@ -155,8 +158,7 @@ connection.onleave = connection.onstreamended = connection.onSessionClosed = fun
   video.srcObject = null;
   
   infoBar.innerHTML = 'Screen sharing has been closed.';
-  body.classList.remove('active');
-  body.classList.add('not-active');
+  body.classList.remove('stream-live');
   statsBar.setAttribute('hidden', '');
   connection.close();
   connection.closeSocket();
