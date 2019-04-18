@@ -288,7 +288,7 @@ function checkPresence() {
 
   connection.checkPresence(params.s, function(isRoomExist, roomid, extra) {
       if (isRoomExist === false) {
-        let noHostMessage = 'Waiting for someone to host to room: ' + params.s;
+        let noHostMessage = 'Waiting for someone to host the room: ' + params.s;
         if (infoBar.innerHTML != noHostMessage) {
           infoBar.innerHTML = noHostMessage;
         }
