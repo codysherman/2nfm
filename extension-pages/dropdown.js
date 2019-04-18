@@ -168,8 +168,7 @@ document.getElementById('selected-tab-audio').onclick = function() {
 // };
 
 document.getElementById('options-button').onclick = function(e) {
-  e.preventDefault();
-  location.href = this.href;
+  location.href = 'options.html';
 };
 
 function querySelectorAll(selector, element) {
@@ -182,6 +181,12 @@ chrome.storage.sync.get(['isSharingOn', 'room_id', 'sessionId', 'room_password']
   
   document.getElementById('stream-section').style.display = isSharingOn ? 'none' : 'block';
   document.getElementById('stop-section').style.display = isSharingOn ? 'block' : 'none';
+  if ( isSharingOn ) {
+    document.getElementById('options-button').setAttribute('disabled', '');
+  } else {
+    document.getElementById('options-button').removeAttribute('disabled');
+  }
+  
 
   if (isSharingOn) {
     document.getElementById('room-id-label').hidden = true;

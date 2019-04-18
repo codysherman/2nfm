@@ -17,6 +17,10 @@ body {
   text-align: center;
 }
 
+#logo {
+  fill: #4f4f51;
+}
+
 #stream-section svg {
   width: 40px;
   height: 40px;
@@ -53,6 +57,14 @@ body {
   display: block;
 }
 
+#options-button {
+  opacity: 1;
+}
+
+#options-button[type=button]:disabled {
+  opacity: 0
+}
+
 /* Delete these styles after Frow 3.1 release */
 .shrink-0 {
   flex-shrink: 0;
@@ -68,4 +80,18 @@ body {
 
 .grow-1 {
   flex-grow: 1;
+}
+
+.button-none, .button-none:focus, .button-none:active, .button-none:hover, .button-none:disabled, .button-none:disabled:hover {
+  color: #333;
+  font-weight: 400;
+  border: none;
+  outline: none;
+  background: none;
+  margin: 0;
+  padding: 0;
+  text-transform: none;
+}
+.button-none:disabled, .button-none:disabled:hover {
+  color: #999999;
 }
