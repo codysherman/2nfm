@@ -1,4 +1,8 @@
-# Disclaimer
+# 2N.FM is in progress
+
+Please manually load this extension into Google Chrome to share a tab. Or visit https://2N.FM/?s={{room-name-here}} to view someone else's tab.
+
+<!-- # Disclaimer
 
 No more maintaining this extension; as of 2019. So please use at your own risk.
 
@@ -74,4 +78,4 @@ For additional information, click [this link](https://github.com/muaz-khan/WebRT
 
 ## License
 
-[Chrome-Extensions](https://github.com/muaz-khan/Chrome-Extensions) are released under [MIT license](https://github.com/muaz-khan/Chrome-Extensions/blob/master/LICENSE) . Copyright (c) [Muaz Khan](https://MuazKhan.com).
+[Chrome-Extensions](https://github.com/muaz-khan/Chrome-Extensions) are released under [MIT license](https://github.com/muaz-khan/Chrome-Extensions/blob/master/LICENSE) . Copyright (c) [Muaz Khan](https://MuazKhan.com). -->
