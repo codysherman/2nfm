@@ -147,11 +147,6 @@ function captureDesktop() {
             resolutions.maxHeight = 360;
         }
 
-        if (_resolutions === '9p') {
-            resolutions.maxWidth = 16;
-            resolutions.maxHeight = 9;
-        }
-
         if (_resolutions === '4K') {
             alert('"4K" resolutions is not stable in Chrome. Please try "fit-screen" instead.');
         }
