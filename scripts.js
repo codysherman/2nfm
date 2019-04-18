@@ -117,8 +117,13 @@ audio.onpause = (event) => {
   playButton.classList.remove('playing');
 };
 
+var loadingLogo = document.getElementById('loading-logo');
+var logo = document.getElementById('logo');
+
 var stream = null;
 connection.onstream = function(e) {
+  loadingLogo.setAttribute('hidden', '');
+  logo.removeAttribute('hidden');
   video.srcObject = null;
   audio.srcObject = null;
   stream = e.stream;
@@ -283,16 +288,15 @@ function checkPresence() {
 
   connection.checkPresence(params.s, function(isRoomExist, roomid, extra) {
       if (isRoomExist === false) {
-        let noHostMessage = 'No one is currently hosting the room: ' + params.s;
+        let noHostMessage = 'Waiting for someone to host to room: ' + params.s;
         if (infoBar.innerHTML != noHostMessage) {
           infoBar.innerHTML = noHostMessage;
         }
 
         setTimeout(function() {
-            console.log('checked', presenceCheckWait);
             presenceCheckWait < 60000 && (presenceCheckWait = presenceCheckWait * 2);
             setTimeout(checkPresence, presenceCheckWait);
-        }, 4000);
+        }, presenceCheckWait);
         return;
       }
 

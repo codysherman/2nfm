@@ -76,10 +76,42 @@ body, html {
   height: 10px;
 }
 
-.logo {
+#loading-logo {
+  height: 53px;
+  width: auto;
+}
+
+@keyframes dash {
+  90% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+#loading-logo path {
+  stroke: #bebebe;
+  stroke-width: 1.5;
+  stroke-dasharray: 495;
+  stroke-dashoffset: 990;
+  animation: dash 15s ease-in-out 1.5s infinite;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0.1;
+  }
+  100% {
+    opactity: 1;
+  }
+}
+
+#logo {
   height: 50px;
   width: auto;
   fill: #4f4f51;
+  animation: fade-in 2s ease-out;
 }
 
 video {
