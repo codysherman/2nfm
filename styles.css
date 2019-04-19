@@ -1,4 +1,8 @@
 /* Delete these buttons after Frow 3.1 release */
+[hidden] {
+  display: none !important;
+}
+
 input[type="range"] {
   cursor: pointer;
 }
@@ -123,6 +127,7 @@ video {
 }
 
 #media-controls {
+  width: 60%;
   opacity: 0;
   transition: opacity 0.4s;
 }
@@ -166,6 +171,17 @@ video {
 
 #volume-slider {
   max-width: 120px;
+}
+
+#fullscreen-button svg {
+  fill: 4f4f51;
+  transition: transform 0.4s;
+}
+
+#fullscreen-button:hover,
+#fullscreen-button:active,
+#fullscreen-button:focus {
+  transform: scale(1.1);
 }
 
 #info-bar {

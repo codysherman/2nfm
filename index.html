@@ -39,13 +39,17 @@
           Your browser does not support the audio element.
       </audio>
 
-      <div id="media-controls" class="frow justify-between nowrap">
-        <button type="button" id="play-button-container" class="frow nowrap button-none" onclick="togglePlayback()" disabled>
-          <div class="play-button play-button-before"></div>
-          <div class="play-button play-button-after"></div>
+      <div id="media-controls" class="frow nowrap">
+        <div class="frow nowrap">
+          <button type="button" id="play-button-container" class="frow nowrap button-none" onclick="togglePlayback()" disabled>
+            <div class="play-button play-button-before"></div>
+            <div class="play-button play-button-after"></div>
+          </button>
+          <input type="range" id="volume-slider" min="0" max="1" value="0.5" step="0.01" oninput="setVolume(this.value)" disabled>
+        </div>
+        <button type="button" id="fullscreen-button" class="button-none" hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z"/></svg>
         </button>
-        <!-- <input type="number" id="volume-slider" oninput="setVolume(this.value)"> -->
-        <input type="range" id="volume-slider" min="0" max="1" value="0.5" step="0.01" oninput="setVolume(this.value)" disabled>
       </div>
 
       <div id="info-bar">&nbsp;</div>

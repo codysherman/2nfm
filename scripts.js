@@ -95,8 +95,10 @@ connection.onstreamid = function(event) {
   infoBar.innerHTML = 'Remote peer is about to send his screen.';
 };
 
+var mediaControls = document.getElementById('media-controls');
 var playButton = document.getElementById('play-button-container');
 var volumeSlider = document.getElementById('volume-slider');
+var fullscreenButton = document.getElementById('fullscreen-button');
 
 var video = document.getElementById('video');
 var audio = document.getElementById('audio');
@@ -135,6 +137,8 @@ connection.onstream = function(e) {
     video.srcObject.getAudioTracks()[0].enabled = true;
     video.volume = 0.5;
     video.play();
+    fullscreenButton.removeAttribute('hidden');
+    mediaControls.classList.add('justify-between');
   } else {
     audio.removeAttribute('hidden');
     audio.srcObject = stream;
@@ -150,16 +154,22 @@ connection.onstream = function(e) {
 togglePlayback = function() {
   if (stream.isVideo) {
     video.paused ? video.play() : video.pause();
-    // console.dir(video.paused);
   } else {
     audio.paused ? audio.play() : audio.pause();
   }
 };
 
 setVolume = function(input) {
-    audio.volume = input;
-    video.volume = input;
+  audio.volume = input;
+  video.volume = input;
 }
+
+fullscreenButton.addEventListener('click', function(e) {
+  if (video.requestFullscreen) video.requestFullscreen();
+  else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
+  else if (video.webkitRequestFullScreen) video.webkitRequestFullScreen();
+  else if (video.msRequestFullscreen) video.msRequestFullscreen();
+});
 
 // if user left
 connection.onleave = connection.onstreamended = connection.onSessionClosed = function(e) {
