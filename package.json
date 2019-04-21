@@ -23,6 +23,6 @@
     "nodemon": "^1.18.10"
   },
   "dependencies": {
-    "frow": "^3.0.4"
+    "frow": "^3.1.0"
   }
 }

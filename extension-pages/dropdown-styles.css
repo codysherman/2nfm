@@ -64,34 +64,3 @@ body {
 #options-button[type=button]:disabled {
   opacity: 0
 }
-
-/* Delete these styles after Frow 3.1 release */
-.shrink-0 {
-  flex-shrink: 0;
-}
-
-.shrink-1 {
-  flex-shrink: 1;
-}
-
-.grow-0 {
-  flex-grow: 0;
-}
-
-.grow-1 {
-  flex-grow: 1;
-}
-
-.button-none, .button-none:focus, .button-none:active, .button-none:hover, .button-none:disabled, .button-none:disabled:hover {
-  color: #333;
-  font-weight: 400;
-  border: none;
-  outline: none;
-  background: none;
-  margin: 0;
-  padding: 0;
-  text-transform: none;
-}
-.button-none:disabled, .button-none:disabled:hover {
-  color: #999999;
-}
