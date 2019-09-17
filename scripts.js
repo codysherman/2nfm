@@ -20,7 +20,7 @@ var body = document.getElementsByTagName("BODY")[0];
 
 // http://www.rtcmulticonnection.org/docs/constructor/
 var connection = new RTCMultiConnection(params.s);
-connection.socketURL = "http://api.2n.fm:9001/";
+connection.socketURL = "https://api.2n.fm:9001/";
 connection.autoCloseEntireSession = true;
 
 // this must match the extension page
