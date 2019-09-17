@@ -1,7 +1,7 @@
 function shareStreamUsingRTCMultiConnection(stream) {
   // www.RTCMultiConnection.org/docs/
   connection = new RTCMultiConnection();
-  connection.socketURL = "http://35.238.96.8:9001/";
+  connection.socketURL = "https://api.2n.fm:9001/";
   connection.autoCloseEntireSession = true;
 
   // this must match the viewer page
