@@ -80,19 +80,19 @@ function getUserMediaError(e) {
   });
 }
 
-function setBadgeText(text) {
-  chrome.browserAction.setBadgeBackgroundColor({
-    color: [255, 0, 0, 255],
-  });
+// function setBadgeText(text) {
+//     chrome.browserAction.setBadgeBackgroundColor({
+//         color: [255, 0, 0, 255]
+//     });
 
-  chrome.browserAction.setBadgeText({
-    text: text + "",
-  });
+//     chrome.browserAction.setBadgeText({
+//         text: text + ''
+//     });
 
-  chrome.browserAction.setTitle({
-    title: text + " viewers",
-  });
-}
+//     chrome.browserAction.setTitle({
+//         title: text + ' viewers'
+//     });
+// }
 
 // sometimes extension unexpectedly crashes or reloads
 // in this case, making sure to remove "ON" status

@@ -1,5 +1,7 @@
+let globalSettingsTestObject = {};
+
 function setDefaults() {
-  chrome.storage.sync.set({
+  Object.assign(globalSettingsTestObject, {
     enableTabCaptureAPI: "false",
     enableMicrophone: "false",
     enableCamera: "false",
@@ -32,25 +34,25 @@ function setDefaults() {
     connection = null;
   }
 
-  chrome.browserAction.setIcon({
-    path: "images/icon-inactive_128.png",
-  });
+  // chrome.browserAction.setIcon({
+  //     path: 'images/icon-inactive_128.png'
+  // });
 
-  if (popup_id) {
-    try {
-      chrome.windows.remove(popup_id);
-    } catch (e) {}
+  // if (popup_id) {
+  //     try {
+  //         chrome.windows.remove(popup_id);
+  //     } catch (e) {}
 
-    popup_id = null;
-  }
+  //     popup_id = null;
+  // }
 
-  chrome.browserAction.setTitle({
-    title: "2N Streamer",
-  });
+  // chrome.browserAction.setTitle({
+  //     title: '2N Streamer'
+  // });
 
-  chrome.browserAction.setBadgeText({
-    text: "",
-  });
+  // chrome.browserAction.setBadgeText({
+  //     text: ''
+  // });
 
-  chrome.runtime.reload();
+  // chrome.runtime.reload();
 }

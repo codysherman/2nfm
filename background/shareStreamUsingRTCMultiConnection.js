@@ -105,12 +105,12 @@ function shareStreamUsingRTCMultiConnection(stream) {
   var text = "-";
   (function looper() {
     if (!connection) {
-      setBadgeText("");
+      // setBadgeText("");
       return;
     }
 
     if (connection.isInitiator) {
-      setBadgeText("0");
+      // setBadgeText("0");
       return;
     }
 
@@ -119,7 +119,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
       text = "-";
     }
 
-    setBadgeText(text);
+    // setBadgeText(text);
     setTimeout(looper, 500);
   })();
 
@@ -132,12 +132,10 @@ function shareStreamUsingRTCMultiConnection(stream) {
     }
 
     // any key-values set here should be reset in setDefaults.js
-    chrome.storage.sync.set({
-      sessionId: connection.sessionid,
-    });
+    globalSettingsTestObject.sessionId = connection.sessionid;
 
-    chrome.browserAction.enable();
-    setBadgeText(0);
+    // chrome.browserAction.enable();
+    // setBadgeText(0);
 
     if (room_url_box === true) {
       var resultingURL = "https://2n.fm/?s=" + connection.sessionid;
@@ -158,30 +156,30 @@ function shareStreamUsingRTCMultiConnection(stream) {
       var popup_width = 600;
       var popup_height = 300;
 
-      chrome.windows.create(
-        {
-          url:
-            "data:text/html,<title>Unique Room URL</title><h1 style='text-align:center'>Copy following URL:</h1><input id='link' type='text' value='" +
-            resultingURL +
-            "' style='text-align:center;width:100%;font-size:1.2em;'><p style='text-align:center'>Share this link with anyone you would like to share your cast with.</p><script type='text/javascript'>document.getElementById('link').focus();document.getElementById('link').setSelectionRange(0, 9999)</script>",
-          type: "popup",
-          width: popup_width,
-          height: popup_height,
-          top: parseInt(screen.height / 2 - popup_height / 2),
-          left: parseInt(screen.width / 2 - popup_width / 2),
-          focused: true,
-        },
-        function(win) {
-          popup_id = win.id;
-        }
-      );
+      // chrome.windows.create(
+      //   {
+      //     url:
+      //       "data:text/html,<title>Unique Room URL</title><h1 style='text-align:center'>Copy following URL:</h1><input id='link' type='text' value='" +
+      //       resultingURL +
+      //       "' style='text-align:center;width:100%;font-size:1.2em;'><p style='text-align:center'>Share this link with anyone you would like to share your cast with.</p><script type='text/javascript'>document.getElementById('link').focus();document.getElementById('link').setSelectionRange(0, 9999)</script>",
+      //     type: "popup",
+      //     width: popup_width,
+      //     height: popup_height,
+      //     top: parseInt(screen.height / 2 - popup_height / 2),
+      //     left: parseInt(screen.width / 2 - popup_width / 2),
+      //     focused: true,
+      //   },
+      //   function(win) {
+      //     popup_id = win.id;
+      //   }
+      // );
     }
 
     connection.socket.on(connection.socketCustomEvent, function(message) {
       if (message.receivedYourScreen) {
-        setBadgeText(
-          connection.isInitiator ? connection.getAllParticipants().length : ""
-        );
+        // setBadgeText(
+        //   connection.isInitiator ? connection.getAllParticipants().length : ""
+        // );
       }
     });
   }
@@ -237,6 +235,6 @@ function shareStreamUsingRTCMultiConnection(stream) {
     if (oldLength != participantsCount) {
       sendTabTitle();
     }
-    setBadgeText(connection.isInitiator ? participantsCount : "");
+    // setBadgeText(connection.isInitiator ? participantsCount : "");
   };
 }
