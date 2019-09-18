@@ -156,14 +156,14 @@ function shareStreamUsingRTCMultiConnection(stream) {
       }
 
       var popup_width = 600;
-      var popup_height = 170;
+      var popup_height = 300;
 
       chrome.windows.create(
         {
           url:
-            "data:text/html,<title>Unique Room URL</title><h1 style='text-align:center'>Copy following URL:</h1><input type='text' value='" +
+            "data:text/html,<title>Unique Room URL</title><h1 style='text-align:center'>Copy following URL:</h1><input id='link' type='text' value='" +
             resultingURL +
-            "' style='text-align:center;width:100%;font-size:1.2em;'><p style='text-align:center'>Share this link with anyone you would like to share your cast with.</p>",
+            "' style='text-align:center;width:100%;font-size:1.2em;'><p style='text-align:center'>Share this link with anyone you would like to share your cast with.</p><script type='text/javascript'>document.getElementById('link').focus();document.getElementById('link').setSelectionRange(0, 9999)</script>",
           type: "popup",
           width: popup_width,
           height: popup_height,
