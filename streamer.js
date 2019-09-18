@@ -1,10 +1,3 @@
-/*
- *  Copyright (c) 2018 The WebRTC project authors. All Rights Reserved.
- *
- *  Use of this source code is governed by a BSD-style license
- *  that can be found in the LICENSE file in the root of the source
- *  tree.
- */
 "use strict";
 
 let enableStartCapture = true;
@@ -15,20 +8,6 @@ let chunks = [];
 let mediaRecorder = null;
 let status = "Inactive";
 let recording = null;
-
-// static get properties() {
-//   return {
-//     status: String,
-//     enableStartCapture: Boolean,
-//     enableStopCapture: Boolean,
-//     enableDownloadRecording: Boolean,
-//     recording: {
-//       type: {
-//         fromAttribute: input => input,
-//       },
-//     },
-//   };
-// }
 
 function startScreenCapture() {
   if (navigator.getDisplayMedia) {
