@@ -34,12 +34,9 @@ document.getElementById("video-and-audio").onclick = function() {
   setDefaults();
   const streamFlags = {
     enableTabCaptureAPI: "false",
-    enableMicrophone: "false",
-    enableCamera: "false",
-    enableScreen: "false",
     isSharingOn: "true",
-    enableVideo: "false",
-    enableSpeakers: "true",
+    enableVideo: "true",
+    enableAudio: "true",
   };
   Object.keys(streamFlags).forEach(function(key) {
     window.localStorage.setItem(key, streamFlags[key]);

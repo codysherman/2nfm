@@ -4,7 +4,7 @@ function gotTabCaptureStream(stream, constraints) {
       console.log(
         "unable to capture with audio enabled; trying again without audio"
       );
-      enableSpeakers = false;
+      enableAudio = false;
       captureTabUsingTabCapture(constraints.videoConstraints.mandatory);
       return;
     }

@@ -59,53 +59,6 @@ function onAccessApproved(chromeMediaSourceId, opts) {
           }
         });
 
-        if (opts.stream) {
-          if (enableCamera && opts.stream.getVideoTracks().length) {
-            var cameraStream = opts.stream;
-
-            screenStream.fullcanvas = true;
-            screenStream.width = screen.width; // or 3840
-            screenStream.height = screen.height; // or 2160
-
-            cameraStream.width = parseInt((15 / 100) * screenStream.width);
-            cameraStream.height = parseInt((15 / 100) * screenStream.height);
-            cameraStream.top = screenStream.height - cameraStream.height - 20;
-            cameraStream.left = screenStream.width - cameraStream.width - 20;
-
-            var mixer = new MultiStreamsMixer([screenStream, cameraStream]);
-
-            mixer.frameInterval = 1;
-            mixer.startDrawingFrames();
-
-            screenStream = mixer.getMixedStream();
-            // win = openVideoPreview(screenStream);
-          } else if (enableMicrophone && opts.stream.getAudioTracks().length) {
-            var speakers = new MediaStream();
-            screenStream.getAudioTracks().forEach(function(track) {
-              speakers.addTrack(track);
-              screenStream.removeTrack(track);
-            });
-
-            var mixer = new MultiStreamsMixer([speakers, opts.stream]);
-            mixer
-              .getMixedStream()
-              .getAudioTracks()
-              .forEach(function(track) {
-                screenStream.addTrack(track);
-              });
-
-            screenStream.getVideoTracks().forEach(function(track) {
-              track.onended = function() {
-                if (win && !win.closed) {
-                  win.close();
-                } else {
-                  captureDesktop();
-                }
-              };
-            });
-          }
-        }
-
         gotStream(screenStream);
       },
       getUserMediaError

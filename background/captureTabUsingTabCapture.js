@@ -40,7 +40,7 @@ function captureTabUsingTabCapture(resolutions) {
         };
       }
 
-      if (!!enableSpeakers) {
+      if (!!enableAudio) {
         constraints.audio = true;
       }
 

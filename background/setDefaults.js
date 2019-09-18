@@ -1,12 +1,9 @@
 function setDefaults() {
   const defaults = {
     enableTabCaptureAPI: "false",
-    enableMicrophone: "false",
-    enableCamera: "false",
-    enableScreen: "false",
     isSharingOn: "false",
     enableVideo: "false",
-    enableSpeakers: "false",
+    enableAudio: "false",
     sessionId: "",
   };
 

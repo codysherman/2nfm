@@ -1,35 +1,4 @@
 function captureDesktop() {
-  false &&
-    chrome.storage.sync.set({
-      isSharingOn: "false",
-    });
-
-  if (connection && connection.attachStreams[0]) {
-    setDefaults();
-
-    connection &&
-      connection.attachStreams.forEach(function(stream) {
-        stream.getTracks().forEach(function(track) {
-          track.stop();
-        });
-      });
-
-    chrome.storage.sync.set({
-      enableTabCaptureAPI: "false",
-      enableMicrophone: "false",
-      enableCamera: "false",
-      enableScreen: "false",
-      isSharingOn: "false",
-      enableVideo: "false",
-      enableSpeakers: "false",
-    });
-    return;
-  }
-
-  chrome.browserAction.setTitle({
-    title: "Capturing Desktop",
-  });
-
   desktop_id = null;
   constraints = null;
   room_password = "";
@@ -38,168 +7,131 @@ function captureDesktop() {
   bandwidth = null;
 
   enableTabCaptureAPI = null;
-  enableMicrophone = null;
   enableVideo = null;
-  enableSpeakers = null;
-  enableCamera = null;
-  enableScreen = null;
+  enableAudio = null;
   isSharingOn = null;
 
   streaming_method = "RTCMultiConnection";
 
   room_url_box = true;
 
-  chrome.storage.sync.get(null, function(items) {
-    var resolutions = {};
+  var resolutions = {};
 
-    if (items["room_password"]) {
-      room_password = items["room_password"];
-    }
+  if (window.localStorage.getItem("room_password")) {
+    room_password = window.localStorage.getItem("room_password");
+  }
 
-    if (items["room_id"]) {
-      room_id = items["room_id"];
-    }
+  if (window.localStorage.getItem("room_id")) {
+    room_id = window.localStorage.getItem("room_id");
+  }
 
-    if (items["streaming_method"]) {
-      streaming_method = items["streaming_method"];
-    }
+  if (window.localStorage.getItem("streaming_method")) {
+    streaming_method = window.localStorage.getItem("streaming_method");
+  }
 
-    if (items["room_url_box"] === "false") {
-      room_url_box = false;
-    }
+  if (window.localStorage.getItem("room_url_box") === "false") {
+    room_url_box = false;
+  }
 
-    if (items["codecs"]) {
-      codecs = items["codecs"];
-    }
+  if (window.localStorage.getItem("codecs")) {
+    codecs = window.localStorage.getItem("codecs");
+  }
 
-    if (items["bandwidth"]) {
-      bandwidth = items["bandwidth"];
-    }
+  if (window.localStorage.getItem("bandwidth")) {
+    bandwidth = window.localStorage.getItem("bandwidth");
+  }
 
-    if (items["enableTabCaptureAPI"] == "true") {
-      enableTabCaptureAPI = items["enableTabCaptureAPI"];
-    }
+  if (window.localStorage.getItem("enableTabCaptureAPI") == "true") {
+    enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
+  }
 
-    if (items["enableMicrophone"] == "true") {
-      enableMicrophone = items["enableMicrophone"];
-    }
+  if (window.localStorage.getItem("enableVideo") == "true") {
+    enableVideo = window.localStorage.getItem("enableVideo");
+  }
 
-    if (items["enableVideo"] == "true") {
-      enableVideo = items["enableVideo"];
-    }
+  if (window.localStorage.getItem("enableAudio") == "true") {
+    enableAudio = window.localStorage.getItem("enableAudio");
+  }
 
-    if (items["enableSpeakers"] == "true") {
-      enableSpeakers = items["enableSpeakers"];
-    }
+  if (window.localStorage.getItem("enableTabCaptureAPI") == "true") {
+    enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
+  }
 
-    if (items["enableCamera"] == "true") {
-      enableCamera = items["enableCamera"];
-    }
+  if (window.localStorage.getItem("isSharingOn") == "true") {
+    isSharingOn = window.localStorage.getItem("isSharingOn");
+  }
 
-    if (items["enableScreen"] == "true") {
-      enableScreen = items["enableScreen"];
-    }
+  var _resolutions = window.localStorage.getItem("resolutions");
+  if (!_resolutions) {
+    _resolutions = "fit-screen";
+    chrome.storage.sync.set(
+      {
+        resolutions: "fit-screen",
+      },
+      function() {}
+    );
+  }
 
-    if (items["enableTabCaptureAPI"] == "true") {
-      enableTabCaptureAPI = items["enableTabCaptureAPI"];
-    }
+  if (_resolutions === "fit-screen") {
+    // resolutions.maxWidth = screen.availWidth;
+    // resolutions.maxHeight = screen.availHeight;
 
-    if (items["isSharingOn"] == "true") {
-      isSharingOn = items["isSharingOn"];
-    }
+    resolutions.maxWidth = screen.width;
+    resolutions.maxHeight = screen.height;
+  }
 
-    var _resolutions = items["resolutions"];
-    if (!_resolutions) {
-      _resolutions = "fit-screen";
-      chrome.storage.sync.set(
-        {
-          resolutions: "fit-screen",
-        },
-        function() {}
-      );
-    }
+  if (_resolutions === "4K") {
+    resolutions.maxWidth = 3840;
+    resolutions.maxHeight = 2160;
+  }
 
-    if (_resolutions === "fit-screen") {
-      // resolutions.maxWidth = screen.availWidth;
-      // resolutions.maxHeight = screen.availHeight;
+  if (_resolutions === "1080p") {
+    resolutions.maxWidth = 1920;
+    resolutions.maxHeight = 1080;
+  }
 
-      resolutions.maxWidth = screen.width;
-      resolutions.maxHeight = screen.height;
-    }
+  if (_resolutions === "720p") {
+    resolutions.maxWidth = 1280;
+    resolutions.maxHeight = 720;
+  }
 
-    if (_resolutions === "4K") {
-      resolutions.maxWidth = 3840;
-      resolutions.maxHeight = 2160;
-    }
+  if (_resolutions === "480p") {
+    resolutions.maxWidth = 853;
+    resolutions.maxHeight = 480;
+  }
 
-    if (_resolutions === "1080p") {
-      resolutions.maxWidth = 1920;
-      resolutions.maxHeight = 1080;
-    }
+  if (_resolutions === "360p") {
+    resolutions.maxWidth = 640;
+    resolutions.maxHeight = 360;
+  }
 
-    if (_resolutions === "720p") {
-      resolutions.maxWidth = 1280;
-      resolutions.maxHeight = 720;
-    }
+  if (_resolutions === "4K") {
+    alert(
+      '"4K" resolutions is not stable in Chrome. Please try "fit-screen" instead.'
+    );
+  }
 
-    if (_resolutions === "480p") {
-      resolutions.maxWidth = 853;
-      resolutions.maxHeight = 480;
-    }
+  var sources = [
+    // 'screen',
+    // 'window',
+    "tab",
+  ];
 
-    if (_resolutions === "360p") {
-      resolutions.maxWidth = 640;
-      resolutions.maxHeight = 360;
-    }
+  if (enableAudio) {
+    sources.push("audio");
+  }
 
-    if (_resolutions === "4K") {
-      alert(
-        '"4K" resolutions is not stable in Chrome. Please try "fit-screen" instead.'
-      );
-    }
+  // if (enableTabCaptureAPI) {
+  //   captureTabUsingTabCapture(resolutions);
+  //   return;
+  // }
 
-    var sources = [
-      // 'screen',
-      // 'window',
-      "tab",
-    ];
-
-    if (enableSpeakers) {
-      sources.push("audio");
-    }
-
-    if (enableTabCaptureAPI) {
-      captureTabUsingTabCapture(resolutions);
-      return;
-    }
-
-    if (enableCamera || enableMicrophone) {
-      captureCamera(function(stream) {
-        if (!enableScreen) {
-          gotStream(stream);
-          return;
-        }
-
-        desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(
-          chromeMediaSourceId,
-          opts
-        ) {
-          opts = opts || {};
-          opts.resolutions = resolutions;
-          opts.stream = stream;
-          onAccessApproved(chromeMediaSourceId, opts);
-        });
-      });
-      return;
-    }
-
-    desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(
-      chromeMediaSourceId,
-      opts
-    ) {
-      opts = opts || {};
-      opts.resolutions = resolutions;
-      onAccessApproved(chromeMediaSourceId, opts);
-    });
-  });
+  // desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(
+  //   chromeMediaSourceId,
+  //   opts
+  // ) {
+  //   opts = opts || {};
+  //   opts.resolutions = resolutions;
+  //   onAccessApproved(chromeMediaSourceId, opts);
+  // });
 }

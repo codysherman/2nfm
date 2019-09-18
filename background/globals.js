@@ -8,11 +8,8 @@ var codecs = "default";
 var bandwidth;
 
 var enableTabCaptureAPI;
-var enableMicrophone;
 var enableVideo;
-var enableSpeakers;
-var enableCamera;
-var enableScreen;
+var enableAudio;
 var isSharingOn;
 
 var streaming_method = "RTCMultiConnection";
