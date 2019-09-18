@@ -1,56 +1,56 @@
 function setDefaults() {
-    chrome.storage.sync.set({
-        enableTabCaptureAPI: 'false',
-        enableMicrophone: 'false',
-        enableCamera: 'false',
-        enableScreen: 'false',
-        isSharingOn: 'false',
-        enableVideo: 'false',
-        enableSpeakers: 'false',
-        sessionId: '',
-    });
+  chrome.storage.sync.set({
+    enableTabCaptureAPI: "false",
+    enableMicrophone: "false",
+    enableCamera: "false",
+    enableScreen: "false",
+    isSharingOn: "false",
+    enableVideo: "false",
+    enableSpeakers: "false",
+    sessionId: "",
+  });
 
-    if (connection) {
-        connection.attachStreams.forEach(function(stream) {
-            try {
-                stream.getTracks().forEach(function(track) {
-                    try {
-                        track.stop();
-                    } catch (e) {}
-                });
-            } catch (e) {}
+  if (connection) {
+    connection.attachStreams.forEach(function(stream) {
+      try {
+        stream.getTracks().forEach(function(track) {
+          try {
+            track.stop();
+          } catch (e) {}
         });
-
-        try {
-            connection.close();
-        } catch (e) {}
-
-        try {
-            connection.closeSocket();
-        } catch (e) {}
-
-        connection = null;
-    }
-
-    chrome.browserAction.setIcon({
-        path: 'images/icon-inactive_128.png'
+      } catch (e) {}
     });
 
-    if (popup_id) {
-        try {
-            chrome.windows.remove(popup_id);
-        } catch (e) {}
+    try {
+      connection.close();
+    } catch (e) {}
 
-        popup_id = null;
-    }
+    try {
+      connection.closeSocket();
+    } catch (e) {}
 
-    chrome.browserAction.setTitle({
-        title: '2N Streamer'
-    });
+    connection = null;
+  }
 
-    chrome.browserAction.setBadgeText({
-        text: ''
-    });
+  chrome.browserAction.setIcon({
+    path: "images/icon-inactive_128.png",
+  });
 
-    chrome.runtime.reload();
+  if (popup_id) {
+    try {
+      chrome.windows.remove(popup_id);
+    } catch (e) {}
+
+    popup_id = null;
+  }
+
+  chrome.browserAction.setTitle({
+    title: "2N Streamer",
+  });
+
+  chrome.browserAction.setBadgeText({
+    text: "",
+  });
+
+  chrome.runtime.reload();
 }
