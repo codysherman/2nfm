@@ -1,13 +1,6 @@
 "use strict";
 
-let enableStartCapture = true;
-let enableStopCapture = false;
-let enableDownloadRecording = false;
 let stream = null;
-let chunks = [];
-let mediaRecorder = null;
-let status = "Inactive";
-let recording = null;
 
 function startScreenCapture() {
   if (navigator.getDisplayMedia) {
@@ -22,54 +15,19 @@ function startScreenCapture() {
 }
 
 async function startCapturing(e) {
-  console.log("Start capturing.");
-  status = "Screen recording started.";
-  enableStartCapture = false;
-  enableStopCapture = true;
-  enableDownloadRecording = false;
-
-  if (recording) {
-    window.URL.revokeObjectURL(recording);
-  }
-
-  chunks = [];
-  recording = null;
   stream = await startScreenCapture();
   stream.addEventListener("inactive", e => {
-    console.log("Capture stream inactive - stop recording!");
     stopCapturing(e);
   });
-  // mediaRecorder = new MediaRecorder(stream, {
-  //   mimeType: "video/webm",
-  // });
-  // mediaRecorder.addEventListener("dataavailable", event => {
-  //   if (event.data && event.data.size > 0) {
-  //     chunks.push(event.data);
-  //   }
-  // });
-  // mediaRecorder.start(10);
   setupWebRTCConnection(stream);
 }
 
 function stopCapturing(e) {
-  console.log("Stop capturing.");
-  status = "Screen recorded completed.";
-  enableStartCapture = true;
-  enableStopCapture = false;
-  enableDownloadRecording = true;
-
-  mediaRecorder.stop();
-  mediaRecorder = null;
   stream.getTracks().forEach(track => track.stop());
   stream = null;
-
-  recording = window.URL.createObjectURL(
-    new Blob(chunks, { type: "video/webm" })
-  );
 }
 
-document.getElementById("magic").onclick = function() {
-  console.log("calling on magic");
+document.getElementById("video-and-audio").onclick = function() {
   setDefaults();
   Object.assign(globalSettingsTestObject, {
     enableTabCaptureAPI: "false",
@@ -82,3 +40,80 @@ document.getElementById("magic").onclick = function() {
   });
   startCapturing();
 };
+
+// chrome.storage.sync.get(
+//   ["isSharingOn", "room_id", "sessionId", "room_password"],
+//   function(obj) {
+//     var isSharingOn = obj.isSharingOn === "true";
+
+//     document.getElementById("stream-section").style.display = isSharingOn
+//       ? "none"
+//       : "block";
+//     document.getElementById("stop-section").style.display = isSharingOn
+//       ? "block"
+//       : "none";
+//     if (isSharingOn) {
+//       document.getElementById("options-button").setAttribute("disabled", "");
+//     } else {
+//       document.getElementById("options-button").removeAttribute("disabled");
+//     }
+
+//     if (isSharingOn) {
+//       document.getElementById("room-id-label").hidden = true;
+//       var linkToSession = document.getElementById("link-to-session");
+//       linkToSession.innerHTML = "2n.fm/?s=" + obj.sessionId;
+//       linkToSession.href = "https://" + linkToSession.innerHTML;
+//       // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+//       linkToSession.href +=
+//         (obj.room_password || "") == "" ? "" : "&p=" + obj.room_password;
+//       linkToSession.hidden = false;
+
+//       // auto-stop-sharing
+//       // document.getElementById('stop-sharing').click();
+//     } else {
+//       // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+//       document.getElementById("room-id").value = obj.room_id || "";
+//     }
+//   }
+// );
+
+// document.getElementById("stop-sharing").onclick = function() {
+//   chrome.storage.sync.set(
+//     {
+//       isSharingOn: "false",
+//     },
+//     function() {
+//       runtimePort.postMessage({
+//         messageFromContentScript1234: true,
+//         stopSharing: true,
+//       });
+//       window.close();
+//     }
+//   );
+// };
+
+// document.getElementById("room-id").onchange = function(event) {
+//   event && event.stopPropagation();
+//   this.disabled = true;
+
+//   try {
+//     chrome.storage.sync.set({ room_id: this.value }, () => {
+//       this.disabled = false;
+//     });
+//   } catch (e) {
+//     location.reload();
+//   }
+// };
+
+// document.getElementById('enable-chat').onclick = function() {
+//   var popup_width = 312;
+//   var popup_height = 400;
+
+//   runtimePort.postMessage({
+//     messageFromContentScript1234: true,
+//     openChat: true
+//   });
+
+//   window.open('chat.html','Chat','width='+popup_width+',height='+popup_height+',toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,top='+(screen.height - popup_height)+',left=' + (screen.width - popup_width - 30));
+//   window.close();
+// };
