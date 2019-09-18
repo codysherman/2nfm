@@ -1,5 +1,5 @@
 body {
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
   min-width: 400px;
   margin: 20px;
   font-family: Quicksand;
@@ -7,7 +7,8 @@ body {
   font-size: 14px;
 }
 
-#default-section, #stop-section {
+#default-section,
+#stop-section {
   display: none;
 }
 
@@ -37,8 +38,12 @@ body {
 }
 
 @keyframes pulse {
-  from {opacity: 1.0;}
-  to {opacity: 0.5;}
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.5;
+  }
 }
 
 .record-icon {
@@ -61,6 +66,6 @@ body {
   opacity: 1;
 }
 
-#options-button[type=button]:disabled {
-  opacity: 0
+#options-button[type="button"]:disabled {
+  opacity: 0;
 }

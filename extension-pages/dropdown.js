@@ -1,5 +1,10 @@
 ﻿var runtimePort = chrome.runtime.connect({
-  name: location.href.replace(/\/|:|#|\?|\$|\^|%|\.|`|~|!|\+|@|\[|\||]|\|*. /g, '').split('\n').join('').split('\r').join('')
+  name: location.href
+    .replace(/\/|:|#|\?|\$|\^|%|\.|`|~|!|\+|@|\[|\||]|\|*. /g, "")
+    .split("\n")
+    .join("")
+    .split("\r")
+    .join(""),
 });
 
 runtimePort.onMessage.addListener(function(message) {
@@ -26,22 +31,25 @@ runtimePort.onMessage.addListener(function(message) {
 //   });
 // };
 
-document.getElementById('full-screen-audio').onclick = function() {
-  chrome.storage.sync.set({
-    enableTabCaptureAPI: 'false',
-    enableMicrophone: 'false',
-    enableCamera: 'false',
-    enableScreen: 'false', // TRUE
-    isSharingOn: 'true', // TRUE
-    enableVideo: 'true', // TRUE
-    enableSpeakers: 'true' // TRUE
-  }, function() {
-    runtimePort.postMessage({
-      messageFromContentScript1234: true,
-      startSharing: true
-    });
-    window.close();
-  });
+document.getElementById("full-screen-audio").onclick = function() {
+  chrome.storage.sync.set(
+    {
+      enableTabCaptureAPI: "false",
+      enableMicrophone: "false",
+      enableCamera: "false",
+      enableScreen: "false", // TRUE
+      isSharingOn: "true", // TRUE
+      enableVideo: "true", // TRUE
+      enableSpeakers: "true", // TRUE
+    },
+    function() {
+      runtimePort.postMessage({
+        messageFromContentScript1234: true,
+        startSharing: true,
+      });
+      window.close();
+    }
+  );
 };
 
 // document.getElementById('full-screen-audio-microphone').onclick = function() {
@@ -80,40 +88,46 @@ document.getElementById('full-screen-audio').onclick = function() {
 //   });
 // };
 
-document.getElementById('selected-tab').onclick = function() {
-  chrome.storage.sync.set({
-    enableTabCaptureAPI: 'true', // TRUE
-    enableMicrophone: 'false',
-    enableCamera: 'false',
-    enableScreen: 'false',
-    isSharingOn: 'true', // TRUE
-    enableVideo: 'true', // TRUE
-    enableSpeakers: 'true'
-  }, function() {
-    runtimePort.postMessage({
-      messageFromContentScript1234: true,
-      startSharing: true
-    });
-    window.close();
-  });
+document.getElementById("selected-tab").onclick = function() {
+  chrome.storage.sync.set(
+    {
+      enableTabCaptureAPI: "true", // TRUE
+      enableMicrophone: "false",
+      enableCamera: "false",
+      enableScreen: "false",
+      isSharingOn: "true", // TRUE
+      enableVideo: "true", // TRUE
+      enableSpeakers: "true",
+    },
+    function() {
+      runtimePort.postMessage({
+        messageFromContentScript1234: true,
+        startSharing: true,
+      });
+      window.close();
+    }
+  );
 };
 
-document.getElementById('selected-tab-audio').onclick = function() {
-  chrome.storage.sync.set({
-    enableTabCaptureAPI: 'true', // TRUE
-    enableMicrophone: 'false',
-    enableCamera: 'false',
-    enableScreen: 'false',
-    isSharingOn: 'true', // TRUE
-    enableVideo: 'false', // TRUE
-    enableSpeakers: 'true'
-  }, function() {
-    runtimePort.postMessage({
-      messageFromContentScript1234: true,
-      startSharing: true
-    });
-    window.close();
-  });
+document.getElementById("selected-tab-audio").onclick = function() {
+  chrome.storage.sync.set(
+    {
+      enableTabCaptureAPI: "true", // TRUE
+      enableMicrophone: "false",
+      enableCamera: "false",
+      enableScreen: "false",
+      isSharingOn: "true", // TRUE
+      enableVideo: "false", // TRUE
+      enableSpeakers: "true",
+    },
+    function() {
+      runtimePort.postMessage({
+        messageFromContentScript1234: true,
+        startSharing: true,
+      });
+      window.close();
+    }
+  );
 };
 
 // document.getElementById('microphone-screen').onclick = function() {
@@ -167,8 +181,8 @@ document.getElementById('selected-tab-audio').onclick = function() {
 //   });
 // };
 
-document.getElementById('options-button').onclick = function(e) {
-  location.href = 'options.html';
+document.getElementById("options-button").onclick = function(e) {
+  location.href = "options.html";
 };
 
 function querySelectorAll(selector, element) {
@@ -176,57 +190,66 @@ function querySelectorAll(selector, element) {
   return Array.prototype.slice.call(element.querySelectorAll(selector));
 }
 
-chrome.storage.sync.get(['isSharingOn', 'room_id', 'sessionId', 'room_password'], function(obj) {
-  var isSharingOn = obj.isSharingOn === 'true';
-  
-  document.getElementById('stream-section').style.display = isSharingOn ? 'none' : 'block';
-  document.getElementById('stop-section').style.display = isSharingOn ? 'block' : 'none';
-  if ( isSharingOn ) {
-    document.getElementById('options-button').setAttribute('disabled', '');
-  } else {
-    document.getElementById('options-button').removeAttribute('disabled');
+chrome.storage.sync.get(
+  ["isSharingOn", "room_id", "sessionId", "room_password"],
+  function(obj) {
+    var isSharingOn = obj.isSharingOn === "true";
+
+    document.getElementById("stream-section").style.display = isSharingOn
+      ? "none"
+      : "block";
+    document.getElementById("stop-section").style.display = isSharingOn
+      ? "block"
+      : "none";
+    if (isSharingOn) {
+      document.getElementById("options-button").setAttribute("disabled", "");
+    } else {
+      document.getElementById("options-button").removeAttribute("disabled");
+    }
+
+    if (isSharingOn) {
+      document.getElementById("room-id-label").hidden = true;
+      var linkToSession = document.getElementById("link-to-session");
+      linkToSession.innerHTML = "2n.fm/?s=" + obj.sessionId;
+      linkToSession.href = "https://" + linkToSession.innerHTML;
+      // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+      linkToSession.href +=
+        (obj.room_password || "") == "" ? "" : "&p=" + obj.room_password;
+      linkToSession.hidden = false;
+
+      // auto-stop-sharing
+      // document.getElementById('stop-sharing').click();
+    } else {
+      // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+      document.getElementById("room-id").value = obj.room_id || "";
+    }
   }
-  
+);
 
-  if (isSharingOn) {
-    document.getElementById('room-id-label').hidden = true;
-    var linkToSession = document.getElementById('link-to-session');
-    linkToSession.innerHTML = '2n.fm/?s=' + obj.sessionId
-    linkToSession.href = 'https://' + linkToSession.innerHTML;
-    // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
-    linkToSession.href += (obj.room_password || '') == '' ? '' : '&p=' + obj.room_password;
-    linkToSession.hidden = false;
-
-    // auto-stop-sharing
-    // document.getElementById('stop-sharing').click();
-  } else {
-    // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
-    document.getElementById('room-id').value = obj.room_id || '';
-  }
-});
-
-document.getElementById('stop-sharing').onclick = function() {
-  chrome.storage.sync.set({
-    isSharingOn: 'false'
-  }, function() {
-    runtimePort.postMessage({
-      messageFromContentScript1234: true,
-      stopSharing: true
-    });
-    window.close();
-  });
+document.getElementById("stop-sharing").onclick = function() {
+  chrome.storage.sync.set(
+    {
+      isSharingOn: "false",
+    },
+    function() {
+      runtimePort.postMessage({
+        messageFromContentScript1234: true,
+        stopSharing: true,
+      });
+      window.close();
+    }
+  );
 };
 
-document.getElementById('room-id').onchange = function (event) {
+document.getElementById("room-id").onchange = function(event) {
   event && event.stopPropagation();
   this.disabled = true;
 
   try {
     chrome.storage.sync.set({ room_id: this.value }, () => {
       this.disabled = false;
-    })
-  }
-  catch(e) {
+    });
+  } catch (e) {
     location.reload();
   }
 };

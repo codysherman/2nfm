@@ -3,11 +3,11 @@
   return Array.prototype.slice.call(element.querySelectorAll(selector));
 }
 
-var elements_ids = querySelectorAll('input, select').map(function(item) {
+var elements_ids = querySelectorAll("input, select").map(function(item) {
   return item.id;
 });
 
-var loading = document.getElementById('loading');
+var loading = document.getElementById("loading");
 
 chrome.storage.sync.get(null, function(items) {
   elements_ids.forEach(function(id) {
@@ -15,27 +15,29 @@ chrome.storage.sync.get(null, function(items) {
 
     var element = document.getElementById(id);
     if (items[id]) {
-      if (element.type === 'checkbox') {
-        element.checked = items[id] === 'true';
+      if (element.type === "checkbox") {
+        element.checked = items[id] === "true";
       } else {
         element.value = items[id];
       }
     } else {
       var item = {};
-      item[element.id] = element.type === 'checkbox' ?
-        (element.checked === true ? 'true' : 'false') :
-        element.value;
+      item[element.id] =
+        element.type === "checkbox"
+          ? element.checked === true
+            ? "true"
+            : "false"
+          : element.value;
 
       try {
         chrome.storage.sync.set(item);
-      }
-      catch(e) {
+      } catch (e) {
         location.reload();
       }
     }
   });
   setTimeout(function() {
-    loading.setAttribute('hidden', '');
+    loading.setAttribute("hidden", "");
   }, 600);
 });
 
@@ -45,30 +47,32 @@ elements_ids.forEach(function(id) {
     e && e.stopPropagation();
     element.disabled = true;
 
-    loading.querySelector('span').innerHTML = 'Saving changes';
-    loading.removeAttribute('hidden');
+    loading.querySelector("span").innerHTML = "Saving changes";
+    loading.removeAttribute("hidden");
 
     var item = {};
-    item[element.id] = element.type === 'checkbox' ?
-      (element.checked === true ? 'true' : 'false') :
-      element.value;
+    item[element.id] =
+      element.type === "checkbox"
+        ? element.checked === true
+          ? "true"
+          : "false"
+        : element.value;
 
     try {
       chrome.storage.sync.set(item, function() {
         element.disabled = false;
         setTimeout(function() {
-          loading.setAttribute('hidden', '');
+          loading.setAttribute("hidden", "");
         }, 600);
       });
-    }
-    catch(e) {
+    } catch (e) {
       location.reload();
     }
   };
 
   if (element.type) {
     element.parentNode.onclick = function() {
-      if (element.type !== 'checkbox') {
+      if (element.type !== "checkbox") {
         element.focus();
       } else {
         element.checked = !element.checked;
@@ -80,7 +84,7 @@ elements_ids.forEach(function(id) {
     };
   }
 
-  document.getElementById('done-button').onclick = function(e) {
+  document.getElementById("done-button").onclick = function(e) {
     e.preventDefault();
     location.href = this.href;
   };

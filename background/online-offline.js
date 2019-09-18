@@ -1,13 +1,21 @@
-window.addEventListener('offline', function() {
+window.addEventListener(
+  "offline",
+  function() {
     if (!connection || !connection.attachStreams.length) return;
 
     setDefaults();
     chrome.runtime.reload();
-}, false);
+  },
+  false
+);
 
-window.addEventListener('online', function() {
+window.addEventListener(
+  "online",
+  function() {
     if (!connection) return;
 
     setDefaults();
     chrome.runtime.reload();
-}, false);
+  },
+  false
+);

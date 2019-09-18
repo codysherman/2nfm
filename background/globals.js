@@ -2,9 +2,9 @@ var runtimePort;
 
 var desktop_id;
 var constraints;
-var room_password = '';
-var room_id = '';
-var codecs = 'default';
+var room_password = "";
+var room_id = "";
+var codecs = "default";
 var bandwidth;
 
 var enableTabCaptureAPI;
@@ -15,7 +15,7 @@ var enableCamera;
 var enableScreen;
 var isSharingOn;
 
-var streaming_method = 'RTCMultiConnection';
+var streaming_method = "RTCMultiConnection";
 
 var room_url_box = true;
 

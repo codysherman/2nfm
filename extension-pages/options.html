@@ -1,14 +1,16 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
   <head>
     <title>2N Streamer Options</title>
-    <link rel="stylesheet" href="../frow/frow.css">
-    <link rel="stylesheet" href="options-styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:500" rel="stylesheet">
+    <link rel="stylesheet" href="../frow/frow.css" />
+    <link rel="stylesheet" href="options-styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand:500"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="frow row-start gutters">
-      
       <div class="col-xs-1-2">
         <div class="item">
           <label>
@@ -40,7 +42,8 @@
       </div>
 
       <div class="col-xs-1-2" hidden>
-        <div class="item"> <!-- disabled on setupWebRTCConnection.js -->
+        <div class="item">
+          <!-- disabled on setupWebRTCConnection.js -->
           <label>
             Streaming Method
             <select id="streaming_method">
@@ -55,7 +58,12 @@
         <div class="item">
           <label>
             Bandwidth
-            <input type="text" id="bandwidth" value="" placeholder="8192, 1048, 512, etc." />
+            <input
+              type="text"
+              id="bandwidth"
+              value=""
+              placeholder="8192, 1048, 512, etc."
+            />
           </label>
         </div>
       </div>
@@ -64,7 +72,12 @@
         <div class="item">
           <label>
             Room Password
-            <input type="password" id="room_password" value="" placeholder="Optional"/>
+            <input
+              type="password"
+              id="room_password"
+              value=""
+              placeholder="Optional"
+            />
           </label>
         </div>
       </div>
@@ -73,21 +86,22 @@
         <div class="item">
           <label>
             Show URL Share Popup
-            <input type="checkbox" id="room_url_box" class="mt-10" checked/>
+            <input type="checkbox" id="room_url_box" class="mt-10" checked />
           </label>
         </div>
       </div>
-
     </div>
 
     <div class="frow row-between">
       <div>
-          <div id="loading">
-            <span>Loading configuration</span>
-            <img class="ml-5" src="../images/progress.gif">
-          </div>
+        <div id="loading">
+          <span>Loading configuration</span>
+          <img class="ml-5" src="../images/progress.gif" />
+        </div>
       </div>
-      <a type="button" id="done-button" href="dropdown.html" target="_blank">Done</a>
+      <a type="button" id="done-button" href="dropdown.html" target="_blank"
+        >Done</a
+      >
     </div>
 
     <script src="options.js"></script>
