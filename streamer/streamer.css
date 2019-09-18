@@ -54,18 +54,18 @@ body {
   animation: pulse 3s infinite alternate;
 }
 
-.website-link {
-  margin-top: 20px;
-  background-color: #ffffff;
-  padding: 20px;
-  text-align: center;
-  display: block;
-}
-
 #options-button {
   opacity: 1;
 }
 
 #options-button[type="button"]:disabled {
   opacity: 0;
+}
+
+#options {
+  display: none;
+}
+
+.settings-item {
+  margin-bottom: 40px;
 }
