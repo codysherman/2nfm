@@ -95,6 +95,14 @@ document.getElementById("room-id").onchange = function(event) {
   window.localStorage.setItem("room_id", this.value);
 };
 
+document.getElementById("options-button").onclick = function() {
+  if (document.getElementById("options").hidden) {
+    document.getElementById("options").removeAttribute("hidden");
+  } else {
+    document.getElementById("options").setAttribute("hidden", "");
+  }
+};
+
 // document.getElementById('enable-chat').onclick = function() {
 //   var popup_width = 312;
 //   var popup_height = 400;

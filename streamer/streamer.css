@@ -63,7 +63,7 @@ body {
 }
 
 #options {
-  /* display: none; */
+  animation: fade-in 0.3s;
 }
 
 .settings-item {

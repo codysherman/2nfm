@@ -78,9 +78,4 @@ elements_ids.forEach(function(id) {
       e && e.stopPropagation();
     };
   }
-
-  document.getElementById("done-button").onclick = function(e) {
-    e.preventDefault();
-    location.href = this.href;
-  };
 });

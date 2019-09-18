@@ -141,7 +141,6 @@ connection.onstream = function(e) {
   stream = e.stream;
   stream.mute();
   if (stream.isVideo) {
-    console.log("ran as video");
     video.removeAttribute("hidden");
     video.srcObject = stream;
     video.srcObject.getVideoTracks()[0].enabled = true;
@@ -153,7 +152,6 @@ connection.onstream = function(e) {
     fullscreenButton.removeAttribute("hidden");
     mediaControls.classList.add("justify-between");
   } else {
-    console.log("ran as audio");
     audio.removeAttribute("hidden");
     audio.srcObject = stream;
     audio.srcObject.getAudioTracks()[0].enabled = true;
