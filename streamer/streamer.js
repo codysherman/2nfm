@@ -82,20 +82,13 @@ if (isSharingOn) {
     window.localStorage.getItem("room_id") || "";
 }
 
-// document.getElementById("stop-sharing").onclick = function() {
-//   chrome.storage.sync.set(
-//     {
-//       isSharingOn: "false",
-//     },
-//     function() {
-//       runtimePort.postMessage({
-//         messageFromContentScript1234: true,
-//         stopSharing: true,
-//       });
-//       window.close();
-//     }
-//   );
-// };
+document.getElementById("stop-sharing").onclick = function() {
+  window.localStorage.setItem("isSharingOn", false);
+  // runtimePort.postMessage({
+  //   messageFromContentScript1234: true,
+  //   stopSharing: true,
+  // });
+};
 
 document.getElementById("room-id").onchange = function(event) {
   event && event.stopPropagation();
