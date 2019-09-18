@@ -1,7 +1,5 @@
-let globalSettingsTestObject = {};
-
 function setDefaults() {
-  Object.assign(globalSettingsTestObject, {
+  const defaults = {
     enableTabCaptureAPI: "false",
     enableMicrophone: "false",
     enableCamera: "false",
@@ -10,6 +8,10 @@ function setDefaults() {
     enableVideo: "false",
     enableSpeakers: "false",
     sessionId: "",
+  };
+
+  Object.keys(defaults).forEach(function(key) {
+    window.localStorage.setItem(key, defaults[key]);
   });
 
   if (connection) {

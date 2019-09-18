@@ -43,7 +43,7 @@ function gotStream(stream) {
   //     }, 3000);
   // });
 
-  setupWebRTCConnection(stream);
+  shareStreamUsingRTCMultiConnection(stream);
 
   chrome.browserAction.setIcon({
     path: "images/icon-active_128.png",

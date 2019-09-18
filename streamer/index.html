@@ -20,7 +20,6 @@
     <script src="background/helpers/CodecsHandler.js"></script>
     <script src="background/helpers/IceServersHandler.js"></script>
     <script src="background/helpers/MultiStreamsMixer.js"></script>
-    <!-- <script src="background/helpers/AntMediaWrapper.js"></script> -->
     <script src="background/globals.js"></script>
     <script src="background/common.js"></script>
     <!-- <script src="background/runtimePort.js"></script> -->
@@ -28,12 +27,9 @@
     <script src="background/gotTabCaptureStream.js"></script>
     <script src="background/gotStream.js"></script>
     <script src="background/onAccessApproved.js"></script>
-    <script src="background/setupWebRTCConnection.js"></script>
     <script src="background/shareStreamUsingRTCMultiConnection.js"></script>
-    <!-- <script src="background/shareStreamUsingAntMediaServer.js"></script> -->
     <script src="background/setDefaults.js"></script>
     <!-- <script src="background/captureDesktop.js"></script> -->
-    <!-- <script src="background/captureCamera.js"></script> -->
     <!-- <script src="background/captureTabUsingTabCapture.js"></script> -->
   </head>
 
@@ -130,21 +126,6 @@
                   <option value="vp8">VP8</option>
                   <option value="vp9">VP9</option>
                   <option value="h264">H264</option>
-                </select>
-              </label>
-            </div>
-          </div>
-
-          <div class="col-xs-1-2" hidden>
-            <div class="settings-item">
-              <!-- disabled on setupWebRTCConnection.js -->
-              <label>
-                Streaming Method
-                <select id="streaming_method">
-                  <option value="RTCMultiConnection" selected
-                    >Peer-to-Peer</option
-                  >
-                  <option value="AntMediaServer">Media Server</option>
                 </select>
               </label>
             </div>

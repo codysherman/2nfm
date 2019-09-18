@@ -132,7 +132,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
     }
 
     // any key-values set here should be reset in setDefaults.js
-    globalSettingsTestObject.sessionId = connection.sessionid;
+    window.localStorage.setItem("sessionId", connection.sessionid);
 
     // chrome.browserAction.enable();
     // setBadgeText(0);
@@ -189,7 +189,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
     if (connection.getAllParticipants().length > 0) return;
 
     setDefaults();
-    chrome.runtime.reload();
+    // chrome.runtime.reload();
   };
 
   connection.onSocketError = function(event) {
@@ -197,7 +197,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
 
     setTimeout(function() {
       setDefaults();
-      chrome.runtime.reload();
+      // chrome.runtime.reload();
     }, 1000);
   };
 
@@ -233,7 +233,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
   connection.onleave = connection.onPeerStateChanged = function() {
     var participantsCount = connection.getAllParticipants().length;
     if (oldLength != participantsCount) {
-      sendTabTitle();
+      // sendTabTitle();
     }
     // setBadgeText(connection.isInitiator ? participantsCount : "");
   };

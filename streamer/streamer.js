@@ -15,11 +15,14 @@ function startScreenCapture() {
 }
 
 async function startCapturing(e) {
+  if (window.localStorage.getItem("room_id")) {
+    room_id = window.localStorage.getItem("room_id");
+  }
   stream = await startScreenCapture();
   stream.addEventListener("inactive", e => {
     stopCapturing(e);
   });
-  setupWebRTCConnection(stream);
+  shareStreamUsingRTCMultiConnection(stream);
 }
 
 function stopCapturing(e) {
@@ -29,7 +32,7 @@ function stopCapturing(e) {
 
 document.getElementById("video-and-audio").onclick = function() {
   setDefaults();
-  Object.assign(globalSettingsTestObject, {
+  const streamFlags = {
     enableTabCaptureAPI: "false",
     enableMicrophone: "false",
     enableCamera: "false",
@@ -37,45 +40,47 @@ document.getElementById("video-and-audio").onclick = function() {
     isSharingOn: "true",
     enableVideo: "false",
     enableSpeakers: "true",
+  };
+  Object.keys(streamFlags).forEach(function(key) {
+    window.localStorage.setItem(key, streamFlags[key]);
   });
   startCapturing();
 };
 
-// chrome.storage.sync.get(
-//   ["isSharingOn", "room_id", "sessionId", "room_password"],
-//   function(obj) {
-//     var isSharingOn = obj.isSharingOn === "true";
+var isSharingOn = window.localStorage.getItem("isSharingOn") === "true";
 
-//     document.getElementById("stream-section").style.display = isSharingOn
-//       ? "none"
-//       : "block";
-//     document.getElementById("stop-section").style.display = isSharingOn
-//       ? "block"
-//       : "none";
-//     if (isSharingOn) {
-//       document.getElementById("options-button").setAttribute("disabled", "");
-//     } else {
-//       document.getElementById("options-button").removeAttribute("disabled");
-//     }
+document.getElementById("stream-section").style.display = isSharingOn
+  ? "none"
+  : "block";
+document.getElementById("stop-section").style.display = isSharingOn
+  ? "block"
+  : "none";
+if (isSharingOn) {
+  document.getElementById("options-button").setAttribute("disabled", "");
+} else {
+  document.getElementById("options-button").removeAttribute("disabled");
+}
 
-//     if (isSharingOn) {
-//       document.getElementById("room-id-label").hidden = true;
-//       var linkToSession = document.getElementById("link-to-session");
-//       linkToSession.innerHTML = "2n.fm/?s=" + obj.sessionId;
-//       linkToSession.href = "https://" + linkToSession.innerHTML;
-//       // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
-//       linkToSession.href +=
-//         (obj.room_password || "") == "" ? "" : "&p=" + obj.room_password;
-//       linkToSession.hidden = false;
+if (isSharingOn) {
+  document.getElementById("room-id-label").hidden = true;
+  var linkToSession = document.getElementById("link-to-session");
+  linkToSession.innerHTML =
+    "2n.fm/?s=" + window.localStorage.getItem("sessionId");
+  linkToSession.href = "https://" + linkToSession.innerHTML;
+  // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+  linkToSession.href +=
+    (window.localStorage.getItem("room_password") || "") == ""
+      ? ""
+      : "&p=" + window.localStorage.getItem("room_password");
+  linkToSession.hidden = false;
 
-//       // auto-stop-sharing
-//       // document.getElementById('stop-sharing').click();
-//     } else {
-//       // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
-//       document.getElementById("room-id").value = obj.room_id || "";
-//     }
-//   }
-// );
+  // auto-stop-sharing
+  // document.getElementById('stop-sharing').click();
+} else {
+  // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+  document.getElementById("room-id").value =
+    window.localStorage.getItem("room_id") || "";
+}
 
 // document.getElementById("stop-sharing").onclick = function() {
 //   chrome.storage.sync.set(
@@ -92,18 +97,10 @@ document.getElementById("video-and-audio").onclick = function() {
 //   );
 // };
 
-// document.getElementById("room-id").onchange = function(event) {
-//   event && event.stopPropagation();
-//   this.disabled = true;
-
-//   try {
-//     chrome.storage.sync.set({ room_id: this.value }, () => {
-//       this.disabled = false;
-//     });
-//   } catch (e) {
-//     location.reload();
-//   }
-// };
+document.getElementById("room-id").onchange = function(event) {
+  event && event.stopPropagation();
+  window.localStorage.setItem("room_id", this.value);
+};
 
 // document.getElementById('enable-chat').onclick = function() {
 //   var popup_width = 312;
