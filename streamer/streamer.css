@@ -63,7 +63,7 @@ body {
 }
 
 #options {
-  display: none;
+  /* display: none; */
 }
 
 .settings-item {
