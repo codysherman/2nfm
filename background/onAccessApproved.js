@@ -57,16 +57,13 @@ function onAccessApproved(chromeMediaSourceId, opts) {
   //   getUserMediaError
   // );
 
-  function startScreenCapture() {
-    if (navigator.getDisplayMedia) {
-      return navigator.getDisplayMedia(constraints);
-    } else if (navigator.mediaDevices.getDisplayMedia) {
-      return navigator.mediaDevices.getDisplayMedia(constraints);
-    } else {
-      return navigator.mediaDevices.getUserMedia({
-        video: { mediaSource: "screen" },
-      });
+  async function startScreenCapture() {
+    try {
+      captureStream = await navigator.mediaDevices.getDisplayMedia(constraints);
+    } catch (err) {
+      console.log(err);
     }
+    return captureStream;
   }
 
   async function startCapturing(e) {
