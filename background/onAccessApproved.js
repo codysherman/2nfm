@@ -61,7 +61,7 @@ function onAccessApproved(chromeMediaSourceId, opts) {
     try {
       captureStream = await navigator.mediaDevices.getDisplayMedia(constraints);
     } catch (err) {
-      console.log(err);
+      setDefaults();
     }
     return captureStream;
   }

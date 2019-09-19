@@ -54,4 +54,5 @@ function setDefaults() {
   // });
 
   // chrome.runtime.reload();
+  init();
 }

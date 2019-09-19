@@ -50,7 +50,7 @@ document.getElementById("video-button").onclick = function() {
     window.localStorage.setItem(key, streamFlags[key]);
   });
   captureDesktop();
-  init();
+  // init();
 };
 
 document.getElementById("audio-button").onclick = function() {
@@ -65,7 +65,7 @@ document.getElementById("audio-button").onclick = function() {
     window.localStorage.setItem(key, streamFlags[key]);
   });
   captureDesktop();
-  init();
+  // init();
 };
 
 document.getElementById("stop-sharing").onclick = function() {

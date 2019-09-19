@@ -188,6 +188,8 @@ function shareStreamUsingRTCMultiConnection(stream) {
         // );
       }
     });
+
+    init();
   }
 
   connection.onSocketDisconnect = function(event) {
@@ -196,6 +198,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
 
     setDefaults();
     // chrome.runtime.reload();
+    init();
   };
 
   connection.onSocketError = function(event) {
@@ -204,6 +207,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
     setTimeout(function() {
       setDefaults();
       // chrome.runtime.reload();
+      init();
     }, 1000);
   };
 
