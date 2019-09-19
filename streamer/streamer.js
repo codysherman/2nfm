@@ -41,7 +41,7 @@ document.getElementById("video-and-audio").onclick = function() {
   Object.keys(streamFlags).forEach(function(key) {
     window.localStorage.setItem(key, streamFlags[key]);
   });
-  startCapturing();
+  captureDesktop();
 };
 
 var isSharingOn = window.localStorage.getItem("isSharingOn") === "true";

@@ -134,4 +134,5 @@ function captureDesktop() {
   //   opts.resolutions = resolutions;
   //   onAccessApproved(chromeMediaSourceId, opts);
   // });
+  onAccessApproved();
 }
