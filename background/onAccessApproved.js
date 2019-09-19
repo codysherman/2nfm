@@ -70,7 +70,7 @@ function onAccessApproved(chromeMediaSourceId, opts) {
   }
 
   async function startCapturing(e) {
-    stream = await startScreenCapture();
+    let stream = await startScreenCapture();
     gotStream(stream);
   }
   startCapturing();

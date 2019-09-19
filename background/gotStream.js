@@ -19,7 +19,7 @@ function gotStream(stream) {
   // chrome.browserAction.disable();
 
   stream.addEventListener("inactive", e => {
-    stopCapturing(e);
+    setDefaults();
   });
 
   addStreamStopListener(stream, function() {

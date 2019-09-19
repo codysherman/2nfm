@@ -2,33 +2,39 @@
 
 let stream = null;
 
-function startScreenCapture() {
-  if (navigator.getDisplayMedia) {
-    return navigator.getDisplayMedia({ video: true, audio: true });
-  } else if (navigator.mediaDevices.getDisplayMedia) {
-    return navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+function init() {
+  var isSharingOn = window.localStorage.getItem("isSharingOn") === "true";
+
+  document.getElementById("stream-section").style.display = isSharingOn
+    ? "none"
+    : "block";
+  document.getElementById("stop-section").style.display = isSharingOn
+    ? "block"
+    : "none";
+  if (isSharingOn) {
+    document.getElementById("options-button").setAttribute("disabled", "");
+    document.getElementById("room-id-label").hidden = true;
+    var linkToSession = document.getElementById("link-to-session");
+    linkToSession.innerHTML =
+      "2n.fm/?s=" + window.localStorage.getItem("sessionId");
+    linkToSession.href = "https://" + linkToSession.innerHTML;
+    // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+    linkToSession.href +=
+      (window.localStorage.getItem("room_password") || "") == ""
+        ? ""
+        : "&p=" + window.localStorage.getItem("room_password");
+    linkToSession.hidden = false;
+
+    // auto-stop-sharing
+    // document.getElementById('stop-sharing').click();
   } else {
-    return navigator.mediaDevices.getUserMedia({
-      video: { mediaSource: "screen" },
-    });
+    document.getElementById("options-button").removeAttribute("disabled");
+    // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+    document.getElementById("room-id").value =
+      window.localStorage.getItem("room_id") || "";
   }
 }
-
-async function startCapturing(e) {
-  if (window.localStorage.getItem("room_id")) {
-    room_id = window.localStorage.getItem("room_id");
-  }
-  stream = await startScreenCapture();
-  stream.addEventListener("inactive", e => {
-    stopCapturing(e);
-  });
-  shareStreamUsingRTCMultiConnection(stream);
-}
-
-function stopCapturing(e) {
-  stream.getTracks().forEach(track => track.stop());
-  stream = null;
-}
+init();
 
 document.getElementById("video-and-audio").onclick = function() {
   setDefaults();
@@ -42,45 +48,13 @@ document.getElementById("video-and-audio").onclick = function() {
     window.localStorage.setItem(key, streamFlags[key]);
   });
   captureDesktop();
+  init();
 };
-
-var isSharingOn = window.localStorage.getItem("isSharingOn") === "true";
-
-document.getElementById("stream-section").style.display = isSharingOn
-  ? "none"
-  : "block";
-document.getElementById("stop-section").style.display = isSharingOn
-  ? "block"
-  : "none";
-if (isSharingOn) {
-  document.getElementById("options-button").setAttribute("disabled", "");
-} else {
-  document.getElementById("options-button").removeAttribute("disabled");
-}
-
-if (isSharingOn) {
-  document.getElementById("room-id-label").hidden = true;
-  var linkToSession = document.getElementById("link-to-session");
-  linkToSession.innerHTML =
-    "2n.fm/?s=" + window.localStorage.getItem("sessionId");
-  linkToSession.href = "https://" + linkToSession.innerHTML;
-  // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
-  linkToSession.href +=
-    (window.localStorage.getItem("room_password") || "") == ""
-      ? ""
-      : "&p=" + window.localStorage.getItem("room_password");
-  linkToSession.hidden = false;
-
-  // auto-stop-sharing
-  // document.getElementById('stop-sharing').click();
-} else {
-  // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
-  document.getElementById("room-id").value =
-    window.localStorage.getItem("room_id") || "";
-}
 
 document.getElementById("stop-sharing").onclick = function() {
   window.localStorage.setItem("isSharingOn", false);
+  captureDesktop();
+  init();
   // runtimePort.postMessage({
   //   messageFromContentScript1234: true,
   //   stopSharing: true,

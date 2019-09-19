@@ -1,4 +1,9 @@
 function captureDesktop() {
+  if (connection && connection.attachStreams[0]) {
+    setDefaults();
+    return;
+  }
+
   desktop_id = null;
   constraints = null;
   room_password = "";
