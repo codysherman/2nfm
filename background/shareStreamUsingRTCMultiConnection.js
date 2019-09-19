@@ -102,6 +102,12 @@ function shareStreamUsingRTCMultiConnection(stream) {
   // www.RTCMultiConnection.org/docs/attachStreams/
   connection.attachStreams.push(stream);
 
+  if (!enableVideo && connection.attachStreams[0].getVideoTracks().length > 0) {
+    connection.attachStreams[0].removeTrack(
+      connection.attachStreams[0].getVideoTracks()[0]
+    );
+  }
+
   var text = "-";
   (function looper() {
     if (!connection) {

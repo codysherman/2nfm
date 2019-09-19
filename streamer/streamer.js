@@ -38,12 +38,27 @@ function init() {
 }
 init();
 
-document.getElementById("video-and-audio").onclick = function() {
+document.getElementById("video-button").onclick = function() {
   setDefaults();
   const streamFlags = {
     enableTabCaptureAPI: "false",
     isSharingOn: "true",
     enableVideo: "true",
+    enableAudio: "true",
+  };
+  Object.keys(streamFlags).forEach(function(key) {
+    window.localStorage.setItem(key, streamFlags[key]);
+  });
+  captureDesktop();
+  init();
+};
+
+document.getElementById("audio-button").onclick = function() {
+  setDefaults();
+  const streamFlags = {
+    enableTabCaptureAPI: "false",
+    isSharingOn: "true",
+    enableVideo: "false",
     enableAudio: "true",
   };
   Object.keys(streamFlags).forEach(function(key) {
