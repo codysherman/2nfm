@@ -70,32 +70,8 @@ function onAccessApproved(chromeMediaSourceId, opts) {
   }
 
   async function startCapturing(e) {
-    if (window.localStorage.getItem("room_id")) {
-      room_id = window.localStorage.getItem("room_id");
-    }
     stream = await startScreenCapture();
-    stream.addEventListener("inactive", e => {
-      stopCapturing(e);
-    });
-    shareStreamUsingRTCMultiConnection(stream);
+    gotStream(stream);
   }
   startCapturing();
-
-  // console.log(navigator);
-  // navigator.getDisplayMedia(
-  //   constraints,
-  //   function(screenStream) {
-  //     var win;
-  //     addStreamStopListener(screenStream, function() {
-  //       if (win && !win.closed) {
-  //         win.close();
-  //       } else {
-  //         captureDesktop();
-  //       }
-  //     });
-
-  //     gotStream(screenStream);
-  //   },
-  //   getUserMediaError
-  // );
 }

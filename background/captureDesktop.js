@@ -41,10 +41,6 @@ function captureDesktop() {
     bandwidth = window.localStorage.getItem("bandwidth");
   }
 
-  if (window.localStorage.getItem("enableTabCaptureAPI") == "true") {
-    enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
-  }
-
   if (window.localStorage.getItem("enableVideo") == "true") {
     enableVideo = window.localStorage.getItem("enableVideo");
   }
