@@ -1,3 +1,9 @@
+html,
+body {
+  font-family: Quicksand;
+  font-weight: 500;
+}
+
 /* Animations */
 @keyframes pop-in {
   0% {

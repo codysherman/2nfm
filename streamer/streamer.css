@@ -1,10 +1,5 @@
 body {
-  background-color: #f6f6f6;
-  min-width: 400px;
-  padding: 20px;
-  font-family: Quicksand;
-  font-weight: 500;
-  font-size: 14px;
+  padding-top: 20px;
 }
 
 #default-section,
@@ -22,13 +17,13 @@ body {
   fill: #4f4f51;
 }
 
-#stream-section svg {
-  width: 40px;
+.stream-svg {
+  width: auto;
   height: 40px;
   margin-bottom: 10px;
 }
 
-#stream-section svg path {
+.stream-svg path {
   fill: #000000;
 }
 
