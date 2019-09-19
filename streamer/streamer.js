@@ -12,8 +12,9 @@ function init() {
     ? "block"
     : "none";
   if (isSharingOn) {
-    document.getElementById("options-button").setAttribute("disabled", "");
     document.getElementById("room-id-label").hidden = true;
+    document.getElementById("options-button").setAttribute("disabled", "");
+    document.getElementById("options").hidden = true;
     var linkToSession = document.getElementById("link-to-session");
     linkToSession.innerHTML =
       "2n.fm/?s=" + window.localStorage.getItem("sessionId");
@@ -28,10 +29,11 @@ function init() {
     // auto-stop-sharing
     // document.getElementById('stop-sharing').click();
   } else {
-    document.getElementById("options-button").removeAttribute("disabled");
     // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
     document.getElementById("room-id").value =
       window.localStorage.getItem("room_id") || "";
+    document.getElementById("options-button").removeAttribute("disabled");
+    document.getElementById("options").hidden = true;
   }
 }
 init();
