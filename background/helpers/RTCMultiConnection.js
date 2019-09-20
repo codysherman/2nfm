@@ -2998,6 +2998,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
         peer.getReceivers().forEach(function(receiver) {
           stream.addTrack(receiver.track);
         });
+        console.log("RTCstream2", stream);
         return [stream];
       };
     }
@@ -3008,6 +3009,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
         peer.getSenders().forEach(function(sender) {
           stream.addTrack(sender.track);
         });
+        console.log("RTCstream3", stream);
         return [stream];
       };
     }
@@ -4003,11 +4005,13 @@ var RTCMultiConnection = function(roomid, forceOptions) {
       this.mutex = false;
 
       var stream = this.streams[idInstance];
+      console.log("RTCstream4", stream);
       if (!stream) {
         return;
       }
 
       stream = stream.stream;
+      console.log("RTCstream5", stream);
 
       var options = stream.currentUserMediaRequestOptions;
 
@@ -4018,6 +4022,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
       this.streams[idInstance].stream = null;
       delete this.streams[idInstance];
+      console.log("RTCstream6", stream);
     },
   };
 

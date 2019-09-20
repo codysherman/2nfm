@@ -149,7 +149,8 @@ connection.onstream = function(e) {
     video.removeAttribute("hidden");
     video.srcObject = stream;
     video.srcObject.getVideoTracks()[0].enabled = true;
-    if (video.srcObject.getAudioTracks.length) {
+    if (video.srcObject.getAudioTracks().length) {
+      console.log("audio-detected");
       video.srcObject.getAudioTracks()[0].enabled = true;
     }
     video.volume = 0.5;
