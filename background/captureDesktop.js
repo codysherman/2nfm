@@ -65,12 +65,12 @@ function captureDesktop() {
   var _resolutions = window.localStorage.getItem("resolutions");
   if (!_resolutions) {
     _resolutions = "fit-screen";
-    chrome.storage.sync.set(
-      {
-        resolutions: "fit-screen",
-      },
-      function() {}
-    );
+    // chrome.storage.sync.set(
+    //   {
+    //     resolutions: "fit-screen",
+    //   },
+    //   function() {}
+    // );
   }
 
   if (_resolutions === "fit-screen") {
