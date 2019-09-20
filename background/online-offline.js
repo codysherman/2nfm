@@ -4,7 +4,6 @@ window.addEventListener(
     if (!connection || !connection.attachStreams.length) return;
 
     setDefaults();
-    chrome.runtime.reload();
   },
   false
 );
@@ -15,7 +14,6 @@ window.addEventListener(
     if (!connection) return;
 
     setDefaults();
-    chrome.runtime.reload();
   },
   false
 );
