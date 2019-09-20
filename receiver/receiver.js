@@ -19,7 +19,9 @@ var infoBar = document.getElementById("info-bar");
 var body = document.getElementsByTagName("BODY")[0];
 
 // http://www.rtcmulticonnection.org/docs/constructor/
+console.log("ran");
 var connection = new RTCMultiConnection(params.s);
+console.log("ran", connection);
 connection.socketURL = "https://api.2n.fm:9001/";
 connection.autoCloseEntireSession = true;
 
@@ -132,8 +134,11 @@ audio.onpause = event => {
 var loadingLogo = document.getElementById("loading-logo");
 var logo = document.getElementById("logo");
 
+console.log("connection", connection);
+
 var stream = null;
 connection.onstream = function(e) {
+  console.log("raw stream", e.stream);
   loadingLogo.setAttribute("hidden", "");
   logo.removeAttribute("hidden");
   video.srcObject = null;
@@ -407,10 +412,10 @@ document.getElementById("hide-stats-bar").onclick = function() {
   NO_MORE = true;
 };
 
-document.getElementById("show-chats").onclick = function() {
-  chatContainer.toggleAttribute("hidden");
-  chatMessages.scrollTo(0, chatMessages.scrollHeight);
-};
+// document.getElementById("show-chats").onclick = function() {
+//   chatContainer.toggleAttribute("hidden");
+//   chatMessages.scrollTo(0, chatMessages.scrollHeight);
+// };
 
 function onGettingWebRCStats(stats, userid) {
   if (!connection.peers[userid] || NO_MORE) {
