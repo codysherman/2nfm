@@ -1,192 +1,139 @@
 function captureDesktop() {
-    false && chrome.storage.sync.set({
-        isSharingOn: 'false'
-    });
+  if (connection && connection.attachStreams[0]) {
+    setDefaults();
+    return;
+  }
 
-    if (connection && connection.attachStreams[0]) {
-        setDefaults();
+  desktop_id = null;
+  constraints = null;
+  room_password = "";
+  room_id = "";
+  codecs = "default";
+  bandwidth = null;
 
-        connection && connection.attachStreams.forEach(function(stream) {
-            stream.getTracks().forEach(function(track) {
-                track.stop();
-            });
-        });
+  enableTabCaptureAPI = null;
+  enableVideo = null;
+  enableAudio = null;
+  isSharingOn = null;
 
-        chrome.storage.sync.set({
-            enableTabCaptureAPI: 'false',
-            enableMicrophone: 'false',
-            enableCamera: 'false',
-            enableScreen: 'false',
-            isSharingOn: 'false',
-            enableVideo: 'false',
-            enableSpeakers: 'false'
-        });
-        return;
-    }
+  streaming_method = "RTCMultiConnection";
 
-    chrome.browserAction.setTitle({
-        title: 'Capturing Desktop'
-    });
+  room_url_box = true;
 
-    desktop_id = null;
-    constraints = null;
-    room_password = '';
-    room_id = '';
-    codecs = 'default';
-    bandwidth = null;
+  var resolutions = {};
 
-    enableTabCaptureAPI = null;
-    enableMicrophone = null;
-    enableVideo = null;
-    enableSpeakers = null;
-    enableCamera = null;
-    enableScreen = null;
-    isSharingOn = null;
+  if (window.localStorage.getItem("room_password")) {
+    room_password = window.localStorage.getItem("room_password");
+  }
 
-    streaming_method = 'RTCMultiConnection';
+  if (window.localStorage.getItem("room_id")) {
+    room_id = window.localStorage.getItem("room_id");
+  }
 
-    room_url_box = true;
+  if (window.localStorage.getItem("streaming_method")) {
+    streaming_method = window.localStorage.getItem("streaming_method");
+  }
 
-    chrome.storage.sync.get(null, function(items) {
-        var resolutions = {};
+  if (window.localStorage.getItem("room_url_box") === "false") {
+    room_url_box = false;
+  }
 
-        if (items['room_password']) {
-            room_password = items['room_password'];
-        }
+  if (window.localStorage.getItem("codecs")) {
+    codecs = window.localStorage.getItem("codecs");
+  }
 
-        if (items['room_id']) {
-            room_id = items['room_id'];
-        }
+  if (window.localStorage.getItem("bandwidth")) {
+    bandwidth = window.localStorage.getItem("bandwidth");
+  }
 
-        if (items['streaming_method']) {
-            streaming_method = items['streaming_method'];
-        }
+  if (window.localStorage.getItem("enableVideo") == "true") {
+    enableVideo = window.localStorage.getItem("enableVideo");
+  }
 
-        if (items['room_url_box'] === 'false') {
-            room_url_box = false;
-        }
+  if (window.localStorage.getItem("enableAudio") == "true") {
+    enableAudio = window.localStorage.getItem("enableAudio");
+  }
 
-        if (items['codecs']) {
-            codecs = items['codecs'];
-        }
+  if (window.localStorage.getItem("enableTabCaptureAPI") == "true") {
+    enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
+  }
 
-        if (items['bandwidth']) {
-            bandwidth = items['bandwidth'];
-        }
+  if (window.localStorage.getItem("isSharingOn") == "true") {
+    isSharingOn = window.localStorage.getItem("isSharingOn");
+  }
 
-        if (items['enableTabCaptureAPI'] == 'true') {
-            enableTabCaptureAPI = items['enableTabCaptureAPI'];
-        }
+  var _resolutions = window.localStorage.getItem("resolutions");
+  if (!_resolutions) {
+    _resolutions = "fit-screen";
+    chrome.storage.sync.set(
+      {
+        resolutions: "fit-screen",
+      },
+      function() {}
+    );
+  }
 
-        if (items['enableMicrophone'] == 'true') {
-            enableMicrophone = items['enableMicrophone'];
-        }
+  if (_resolutions === "fit-screen") {
+    // resolutions.maxWidth = screen.availWidth;
+    // resolutions.maxHeight = screen.availHeight;
 
-        if (items['enableVideo'] == 'true') {
-            enableVideo = items['enableVideo'];
-        }
+    resolutions.maxWidth = screen.width;
+    resolutions.maxHeight = screen.height;
+  }
 
-        if (items['enableSpeakers'] == 'true') {
-            enableSpeakers = items['enableSpeakers'];
-        }
+  if (_resolutions === "4K") {
+    resolutions.maxWidth = 3840;
+    resolutions.maxHeight = 2160;
+  }
 
-        if (items['enableCamera'] == 'true') {
-            enableCamera = items['enableCamera'];
-        }
+  if (_resolutions === "1080p") {
+    resolutions.maxWidth = 1920;
+    resolutions.maxHeight = 1080;
+  }
 
-        if (items['enableScreen'] == 'true') {
-            enableScreen = items['enableScreen'];
-        }
+  if (_resolutions === "720p") {
+    resolutions.maxWidth = 1280;
+    resolutions.maxHeight = 720;
+  }
 
-        if (items['enableTabCaptureAPI'] == 'true') {
-            enableTabCaptureAPI = items['enableTabCaptureAPI'];
-        }
+  if (_resolutions === "480p") {
+    resolutions.maxWidth = 853;
+    resolutions.maxHeight = 480;
+  }
 
-        if (items['isSharingOn'] == 'true') {
-            isSharingOn = items['isSharingOn'];
-        }
+  if (_resolutions === "360p") {
+    resolutions.maxWidth = 640;
+    resolutions.maxHeight = 360;
+  }
 
-        var _resolutions = items['resolutions'];
-        if (!_resolutions) {
-            _resolutions = 'fit-screen';
-            chrome.storage.sync.set({
-                resolutions: 'fit-screen'
-            }, function() {});
-        }
+  if (_resolutions === "4K") {
+    alert(
+      '"4K" resolutions is not stable in Chrome. Please try "fit-screen" instead.'
+    );
+  }
 
-        if (_resolutions === 'fit-screen') {
-            // resolutions.maxWidth = screen.availWidth;
-            // resolutions.maxHeight = screen.availHeight;
+  var sources = [
+    // 'screen',
+    // 'window',
+    "tab",
+  ];
 
-            resolutions.maxWidth = screen.width;
-            resolutions.maxHeight = screen.height;
-        }
+  if (enableAudio) {
+    sources.push("audio");
+  }
 
-        if (_resolutions === '4K') {
-            resolutions.maxWidth = 3840;
-            resolutions.maxHeight = 2160;
-        }
+  // if (enableTabCaptureAPI) {
+  //   captureTabUsingTabCapture(resolutions);
+  //   return;
+  // }
 
-        if (_resolutions === '1080p') {
-            resolutions.maxWidth = 1920;
-            resolutions.maxHeight = 1080;
-        }
-
-        if (_resolutions === '720p') {
-            resolutions.maxWidth = 1280;
-            resolutions.maxHeight = 720;
-        }
-
-        if (_resolutions === '480p') {
-            resolutions.maxWidth = 853;
-            resolutions.maxHeight = 480;
-        }
-
-        if (_resolutions === '360p') {
-            resolutions.maxWidth = 640;
-            resolutions.maxHeight = 360;
-        }
-
-        if (_resolutions === '4K') {
-            alert('"4K" resolutions is not stable in Chrome. Please try "fit-screen" instead.');
-        }
-
-        var sources = [
-            // 'screen',
-            // 'window',
-            'tab'
-        ];
-
-        if (enableSpeakers) {
-            sources.push('audio');
-        }
-
-        if (enableTabCaptureAPI) {
-            captureTabUsingTabCapture(resolutions);
-            return;
-        }
-
-        if (enableCamera || enableMicrophone) {
-            captureCamera(function(stream) {
-                if (!enableScreen) {
-                    gotStream(stream);
-                    return;
-                }
-
-                desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(chromeMediaSourceId, opts) {
-                    opts = opts || {};
-                    opts.resolutions = resolutions;
-                    opts.stream = stream;
-                    onAccessApproved(chromeMediaSourceId, opts);
-                });
-            });
-            return;
-        }
-
-        desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(chromeMediaSourceId, opts) {
-            opts = opts || {};
-            opts.resolutions = resolutions;
-            onAccessApproved(chromeMediaSourceId, opts);
-        });
-    });
+  // desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(
+  //   chromeMediaSourceId,
+  //   opts
+  // ) {
+  //   opts = opts || {};
+  //   opts.resolutions = resolutions;
+  //   onAccessApproved(chromeMediaSourceId, opts);
+  // });
+  onAccessApproved();
 }

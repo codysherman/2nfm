@@ -144,9 +144,11 @@ connection.onstream = function(e) {
     video.removeAttribute("hidden");
     video.srcObject = stream;
     video.srcObject.getVideoTracks()[0].enabled = true;
-    video.srcObject.getAudioTracks()[0].enabled = true;
+    if (video.srcObject.getAudioTracks.length) {
+      video.srcObject.getAudioTracks()[0].enabled = true;
+    }
     video.volume = 0.5;
-    // video.play();
+    video.play();
     fullscreenButton.removeAttribute("hidden");
     mediaControls.classList.add("justify-between");
   } else {
@@ -154,7 +156,7 @@ connection.onstream = function(e) {
     audio.srcObject = stream;
     audio.srcObject.getAudioTracks()[0].enabled = true;
     audio.volume = 0.5;
-    // audio.play();
+    audio.play();
     playButton.removeAttribute("disabled");
   }
   volumeSlider.removeAttribute("disabled");
