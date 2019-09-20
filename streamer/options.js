@@ -7,8 +7,6 @@ var elements_ids = querySelectorAll("input, select").map(function(item) {
   return item.id;
 });
 
-var loading = document.getElementById("loading");
-
 elements_ids.forEach(function(id) {
   if (!window.localStorage.getItem(id)) return;
 
@@ -34,19 +32,12 @@ elements_ids.forEach(function(id) {
     );
   }
 });
-setTimeout(function() {
-  loading.setAttribute("hidden", "");
-}, 600);
 
 elements_ids.forEach(function(id) {
   var element = document.getElementById(id);
   element.onchange = function(e) {
     e && e.stopPropagation();
     element.disabled = true;
-
-    loading.querySelector("span").innerHTML = "Saving changes";
-    loading.removeAttribute("hidden");
-
     var item = {};
     item[element.id] =
       element.type === "checkbox"
@@ -60,9 +51,6 @@ elements_ids.forEach(function(id) {
       item[Object.keys(item)[0]]
     );
     element.disabled = false;
-    setTimeout(function() {
-      loading.setAttribute("hidden", "");
-    }, 600);
   };
 
   if (element.type) {

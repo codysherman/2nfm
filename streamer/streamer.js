@@ -5,17 +5,12 @@ let stream = null;
 function init() {
   var isSharingOn = window.localStorage.getItem("isSharingOn") === "true";
 
-  document.getElementById("stream-section").style.display = isSharingOn
+  document.getElementById("setup-section").style.display = isSharingOn
     ? "none"
     : "block";
-  document.getElementById("stop-section").style.display = isSharingOn
-    ? "block"
-    : "none";
   if (isSharingOn) {
-    document.getElementById("room-id-label").hidden = true;
-    document.getElementById("options-button").setAttribute("disabled", "");
-    document.getElementById("options").hidden = true;
-    var linkToSession = document.getElementById("link-to-session");
+    document.getElementById("live-indicator").classList.add("live");
+    var linkToSession = document.getElementById("public-link");
     linkToSession.innerHTML =
       "2n.fm/?s=" + window.localStorage.getItem("sessionId");
     linkToSession.href = "https://" + linkToSession.innerHTML;
@@ -24,16 +19,15 @@ function init() {
       (window.localStorage.getItem("room_password") || "") == ""
         ? ""
         : "&p=" + window.localStorage.getItem("room_password");
-    linkToSession.hidden = false;
-
+    document.getElementById("stop-section").hidden = false;
     // auto-stop-sharing
     // document.getElementById('stop-sharing').click();
   } else {
+    document.getElementById("live-indicator").classList.remove("live");
     // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
+    document.getElementById("stop-section").hidden = true;
     document.getElementById("room-id").value =
       window.localStorage.getItem("room_id") || "";
-    document.getElementById("options-button").removeAttribute("disabled");
-    document.getElementById("options").hidden = true;
   }
 }
 init();
@@ -81,14 +75,6 @@ document.getElementById("stop-sharing").onclick = function() {
 document.getElementById("room-id").onchange = function(event) {
   event && event.stopPropagation();
   window.localStorage.setItem("room_id", this.value);
-};
-
-document.getElementById("options-button").onclick = function() {
-  if (document.getElementById("options").hidden) {
-    document.getElementById("options").removeAttribute("hidden");
-  } else {
-    document.getElementById("options").setAttribute("hidden", "");
-  }
 };
 
 // document.getElementById('enable-chat').onclick = function() {

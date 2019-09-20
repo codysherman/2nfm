@@ -2,11 +2,6 @@ body {
   padding-top: 20px;
 }
 
-#default-section,
-#stop-section {
-  display: none;
-}
-
 .card {
   background-color: #ffffff;
   padding: 15px;
@@ -14,53 +9,153 @@ body {
 }
 
 #logo {
+  margin: 0 auto;
+  width: 228px;
+  height: auto;
   fill: #4f4f51;
 }
 
-.stream-svg {
+#live-indicator {
+  margin: 15px auto 0;
+  width: 228px;
+  color: #eaeaea;
+  border-radius: 20px;
+  border: 6px solid #eaeaea;
+  font-weight: bold;
+  font-size: 91px;
+  text-align: center;
+}
+
+#live-indicator.live {
+  color: red;
+  border-color: red;
+  animation: pulse 3s infinite alternate;
+}
+
+/* XS */
+@media (max-width: 767px) {
+  #logo {
+    margin: 0 auto;
+    width: 114px;
+  }
+
+  #live-indicator {
+    width: 114px;
+    border-radius: 10px;
+    border: 3px solid #eaeaea;
+    font-size: 45px;
+    margin-bottom: 30px;
+  }
+}
+
+#room-id-label {
+  font-size: 40px;
+  color: #4f4f51;
+}
+
+#room-id-label input {
+  font-size: 40px;
+  border-width: 4px;
+}
+
+/* XS */
+@media (max-width: 767px) {
+  #room-id-label {
+    font-size: 30px;
+  }
+
+  #room-id-label input {
+    font-size: 30px;
+    border-width: 2px;
+  }
+}
+
+#options {
+  border: 2px solid #eaeaea;
+  border-radius: 10px;
+  padding: 40px;
+  margin: 40px 0;
+  position: relative;
+}
+
+#options .label {
+  position: absolute;
+  top: -9px;
+  left: 30px;
+  background-color: #fff;
+  padding: 0 8px;
+  width: auto;
+}
+
+.settings-item {
+  margin-bottom: 40px;
+}
+
+.settings-item label {
+  margin-bottom: 0;
+}
+
+#start {
+  border: 2px solid #eaeaea;
+  border-radius: 10px;
+  padding: 40px;
+  margin: 40px 0;
+  position: relative;
+}
+
+#start .label {
+  position: absolute;
+  top: -9px;
+  left: 30px;
+  background-color: #fff;
+  padding: 0 8px;
+  width: auto;
+}
+
+.stream-button {
+  transition: color 0.3s;
+}
+
+.stream-button:hover {
+  color: #000;
+}
+
+.stream-button svg {
   width: auto;
   height: 40px;
   margin-bottom: 10px;
 }
 
-.stream-svg path {
-  fill: #000000;
+.stream-button svg path {
+  fill: #4f4f51;
+  transition: fill 0.3s;
 }
 
-#room-id-label {
-  max-width: 200px;
-  margin-bottom: 0;
+.stream-button:hover svg path {
+  fill: #000;
 }
 
-@keyframes pulse {
-  from {
-    opacity: 1;
+#public-link {
+  display: block;
+  font-size: 40px;
+  color: #4f4f51;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+/* XS */
+@media (max-width: 767px) {
+  #public-link {
+    font-size: 30px;
   }
-  to {
-    opacity: 0.5;
-  }
 }
 
-.record-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: red;
-  animation: pulse 3s infinite alternate;
-}
-
-#options-button {
-  opacity: 1;
-}
-
-#options-button[type="button"]:disabled {
-  opacity: 0;
-}
-
-#options {
-  animation: fade-in 0.3s;
-}
-
-.settings-item {
-  margin-bottom: 40px;
+#stop-sharing {
+  margin: 0 auto;
+  font-size: 40px;
+  padding: 20px;
+  background: none;
+  border: 3px solid #4f4f51;
+  color: #4f4f51;
+  border-radius: 10px;
 }
