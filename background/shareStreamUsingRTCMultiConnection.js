@@ -108,6 +108,8 @@ function shareStreamUsingRTCMultiConnection(stream) {
     );
   }
 
+  console.log("connectionHere", connection.attachStreams[0].getAudioTracks());
+
   var text = "-";
   (function looper() {
     if (!connection) {

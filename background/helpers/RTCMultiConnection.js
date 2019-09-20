@@ -232,11 +232,14 @@ var RTCMultiConnection = function(roomid, forceOptions) {
         updateExtraBackup(message.sender, message.extra);
       }
 
+      console.log("message", message);
+
       if (
         message.message.streamSyncNeeded &&
         connection.peers[message.sender]
       ) {
         var stream = connection.streamEvents[message.message.streamid];
+        console.log("RTCstream", stream);
         if (!stream || !stream.stream) {
           return;
         }
