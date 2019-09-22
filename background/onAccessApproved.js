@@ -32,6 +32,10 @@ function onAccessApproved(chromeMediaSourceId, opts) {
   constraints.audio = {
     mandatory: {
       // echoCancellation: true,
+      // autoGainControl: false,
+      // noiseSuppression: false,
+      // sampleRate: 48000,
+      // sampleSize: 16,
     },
     optional: [
       {
