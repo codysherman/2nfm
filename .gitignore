@@ -3,9 +3,9 @@ node_modules
 
 # bower
 bower_components
-
 .DS_Store
-
 .zip
 .tar
 */*.zip
+
+background/helpers/IceServersHandler.js
