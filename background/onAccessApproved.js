@@ -30,18 +30,20 @@ function onAccessApproved(chromeMediaSourceId, opts) {
   };
 
   constraints.audio = {
-    mandatory: {
-      // echoCancellation: true,
-      // autoGainControl: false,
-      // noiseSuppression: false,
-      // sampleRate: 48000,
-      // sampleSize: 16,
-    },
-    optional: [
-      {
-        googDisableLocalEcho: false, // https://www.chromestatus.com/feature/5056629556903936
-      },
-    ],
+    echoCancellation: false,
+    noiseSuppression: false,
+    autoGainControl: false,
+    googAutoGainControl: false,
+    googAutoGainControl2: false,
+    googEchoCancellation: false,
+    googEchoCancellation2: false,
+    googNoiseSupression: false,
+    googNoiseSupression2: false,
+    googNoiseSuppression: false,
+    googNoiseSuppression2: false,
+    googHighpassFilter: false,
+    googAudioMirroring: false,
+    googDisableLocalEcho: false, // https://www.chromestatus.com/feature/5056629556903936
   };
 
   // navigator.webkitGetUserMedia(
