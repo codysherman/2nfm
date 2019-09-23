@@ -113,12 +113,12 @@ function shareStreamUsingRTCMultiConnection(stream) {
   var text = "-";
   (function looper() {
     if (!connection) {
-      // setBadgeText("");
+      setViewerCount(0);
       return;
     }
 
     if (connection.isInitiator) {
-      // setBadgeText("0");
+      setViewerCount(0);
       return;
     }
 
@@ -127,7 +127,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
       text = "-";
     }
 
-    // setBadgeText(text);
+    setViewerCount(text);
     setTimeout(looper, 500);
   })();
 
@@ -143,7 +143,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
     window.localStorage.setItem("sessionId", connection.sessionid);
 
     // chrome.browserAction.enable();
-    // setBadgeText(0);
+    setViewerCount(0);
 
     if (room_url_box === true) {
       var resultingURL = "https://2n.fm/?s=" + connection.sessionid;
@@ -185,9 +185,9 @@ function shareStreamUsingRTCMultiConnection(stream) {
 
     connection.socket.on(connection.socketCustomEvent, function(message) {
       if (message.receivedYourScreen) {
-        // setBadgeText(
-        //   connection.isInitiator ? connection.getAllParticipants().length : ""
-        // );
+        setViewerCount(
+          connection.isInitiator ? connection.getAllParticipants().length : 0
+        );
       }
     });
 
@@ -247,6 +247,6 @@ function shareStreamUsingRTCMultiConnection(stream) {
     if (oldLength != participantsCount) {
       // sendTabTitle();
     }
-    // setBadgeText(connection.isInitiator ? participantsCount : "");
+    setViewerCount(connection.isInitiator ? participantsCount : 0);
   };
 }

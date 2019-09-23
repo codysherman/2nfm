@@ -49,9 +49,7 @@ function setDefaults() {
   //     title: '2N Streamer'
   // });
 
-  // chrome.browserAction.setBadgeText({
-  //     text: ''
-  // });
+  setViewerCount("0");
 
   // chrome.runtime.reload();
   init();

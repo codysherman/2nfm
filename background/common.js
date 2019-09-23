@@ -80,20 +80,10 @@ function getUserMediaError(e) {
   });
 }
 
-// function setBadgeText(text) {
-//     chrome.browserAction.setBadgeBackgroundColor({
-//         color: [255, 0, 0, 255]
-//     });
-
-//     chrome.browserAction.setBadgeText({
-//         text: text + ''
-//     });
-
-//     chrome.browserAction.setTitle({
-//         title: text + ' viewers'
-//     });
-// }
+function setViewerCount(viewerCount) {
+  document.getElementById("viewer-count-number").innerHTML = viewerCount;
+}
 
 // sometimes extension unexpectedly crashes or reloads
 // in this case, making sure to remove "ON" status
-// chrome.storage.sync.set({ isSharingOn: 'false' });
+window.localStorage.setItem("isSharingOn", false);
