@@ -342,7 +342,7 @@ body {
 </template>
 
 <script>
-// import "@/utils/background/helpers/socket.io.js";
+import "@/utils/background/helpers/socket.io.js";
 import "@/utils/background/helpers/adapter.js";
 import "@/utils/background/helpers/RTCMultiConnection.js";
 import "@/utils/background/helpers/CodecsHandler.js";
