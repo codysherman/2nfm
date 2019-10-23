@@ -476,5 +476,5 @@ if (params.s) {
     e.preventDefault();
     window.location.href = `/?s=${document.getElementById("room-input").value}`;
   });
-  document.getElementById("room-input").focus();
+  // document.getElementById("room-input").focus();
 }
