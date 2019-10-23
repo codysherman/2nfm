@@ -2,6 +2,34 @@ body {
   text-align: center;
 }
 
+.stream-button {
+  width: 200px;
+  margin: auto;
+  font-size: 40px;
+  background-color: red;
+  border-color: red;
+  animation: pulse 1s infinite alternate;
+}
+
+.stream-button:hover {
+  animation: none;
+  background-color: red;
+  border-color: red;
+}
+
+#home-logo {
+  height: 70px;
+  width: auto;
+  margin: 0 auto;
+  fill: #4f4f51;
+  animation: fade-in 2s ease-out;
+}
+
+#room-input,
+#enter-room {
+  font-size: 30px;
+}
+
 .menu-bar {
   position: fixed;
   left: 10px;
@@ -149,7 +177,16 @@ video {
   transition: opacity 0.4s;
 }
 
-.stream-live #info-bar {
+#create-message {
+  font-size: 24px;
+  margin-top: 20px;
+  opacity: 1;
+  text-decoration: underline;
+  transition: opacity 0.4s;
+}
+
+.stream-live #info-bar,
+.stream-live #create-message {
   opacity: 0;
 }
 

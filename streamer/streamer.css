@@ -29,7 +29,7 @@ body {
 #live-indicator.live {
   color: red;
   border-color: red;
-  animation: pulse 3s infinite alternate;
+  animation: pulse 1s infinite alternate;
 }
 
 /* XS */

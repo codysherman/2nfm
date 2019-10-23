@@ -12,128 +12,71 @@
     <link rel="stylesheet" href="global.css" />
     <link rel="stylesheet" href="receiver/receiver.css" />
     <link
-      href="https://fonts.googleapis.com/css?family=Quicksand:500"
+      href="https://fonts.googleapis.com/css?family=Quicksand:500&display=swap"
       rel="stylesheet"
     />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-150821892-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-150821892-1");
+    </script>
   </head>
+
   <body>
-    <div class="menu-bar">
-      <div class="frow row-start">
-        <button id="show-stats-bar" class="button-link">Stats</button>
-        <!-- <button id="show-chats" class="button-link">Past Tabs</button> -->
-      </div>
-    </div>
-
-    <div id="stats-bar" class="shadow-light" hidden>
-      <div id="hide-stats-bar">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
-          />
-        </svg>
-      </div>
-      <div id="stats-bar-html"></div>
-    </div>
-
-    <div class="frow centered-column nowrap">
-      <svg
-        id="loading-logo"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 92 53"
-        width="92"
-        height="53"
-        isolation="isolate"
-      >
-        <defs>
-          <clipPath><rect width="92" height="53" /></clipPath>
-        </defs>
-        <g clip-path="url(#_clipPath_DBKJNQ6ncz1fVktbefDVInZnlBu8kyHj)">
-          <rect
-            width="92"
-            height="53"
-            fill-opacity="0"
-            fill="rgb(185,187,189)"
-          />
-          <path
-            d="M2.6 17.5C3.2 13.8 4.2 10.8 5.8 8.8 7.2 6.7 9.4 5.1 12.1 3.9 14.8 2.8 18.6 2.2 23.4 2.2 28.4 2.2 32.3 2.8 35 3.8 37.9 4.9 40.1 6.5 41.6 8.8 43.2 11 44.1 13.4 44.1 16.3 44.1 19.1 43.2 22 41.3 24.6 39.5 27.3 36.2 30.2 31.3 33.5 28.4 35.3 26.6 36.6 25.6 37.3 24.6 38 23.4 39 22.1 40.2L45.4 40.2 45.4 1.9C49.7 2.5 53.8 3.9 57.5 6.5Q60.4 8.4 67.1 15.7C68.3 17.1 69.6 18.7 70.9 20.6 72.9 23.6 74.3 25.6 75.2 26.4 76 27.4 77 28.7 78.3 30L78.3 1.9 90.4 1.9 90.4 51.1C85.9 50.7 81.9 49.1 78 46.5 75.3 44.6 72 41.6 68.6 37.3L68.6 37.3C67.3 35.9 66.1 34.3 64.8 32.4 62.7 29.4 58.5 24.4 57.3 23L57.3 51.1 1.6 51.1C2.1 47.2 3.6 43.5 6.1 39.9 8.5 36.5 13.3 32.3 20.1 27.6 24.3 24.7 27 22.4 28.2 21 29.3 19.4 29.9 18 29.9 16.7 29.9 15.2 29.3 14 28.2 13 27 11.8 25.6 11.4 23.7 11.4 22 11.4 20.4 12 19.3 13 18.1 14.1 17.6 14.8 17.1 17.5L2.6 17.5Z"
-            fill="none"
-            vector-effect="non-scaling-stroke"
-            stroke-linejoin="miter"
-            stroke-linecap="butt"
-            stroke-miterlimit="4"
-          />
-        </g>
-      </svg>
-      <svg
-        id="logo"
-        hidden
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 61.9 34.3"
-        width="61.9"
-        height="34.3"
-        isolation="isolate"
-      >
-        <defs>
-          <clipPath><rect width="61.9" height="34.3" /></clipPath>
-        </defs>
-        <g clip-path="url(#_clipPath_tcUaJZ4siK7ZJPj4ATDJEfxLNlNwtkyj)">
-          <path
-            d="M30.5 26.7L30.5 0C33.5 0.4 36.4 1.4 39 3.2 41 4.5 43.2 6.7 45.7 9.7L45.7 9.6C46.5 10.6 47.4 11.7 48.3 13 49.7 15.1 50.7 16.5 51.3 17.1 51.9 17.8 52.6 18.7 53.5 19.6L53.5 0 61.9 0 61.9 34.3C58.8 34 56 32.9 53.3 31.1 51.4 29.8 49.1 27.7 46.7 24.7L46.7 24.7C45.8 23.7 45 22.6 44.1 21.3 42.6 19.2 41.6 17.9 41.1 17.2 40.5 16.5 39.7 15.7 38.8 14.7L38.8 34.3 30.5 34.3 30.5 34.3 0 34.3C0.3 31.6 1.4 29 3.1 26.5 4.8 24.1 8.1 21.2 12.9 17.9 15.8 15.9 17.7 14.3 18.5 13.3 19.3 12.2 19.7 11.2 19.7 10.3 19.7 9.3 19.3 8.4 18.5 7.7 17.7 6.9 16.7 6.6 15.4 6.6 14.2 6.6 13.1 7 12.3 7.7 11.5 8.5 11.1 9 10.8 10.9L0.7 10.9C1.1 8.3 1.8 6.2 2.9 4.8 3.9 3.3 5.4 2.2 7.3 1.4 9.2 0.6 11.8 0.2 15.2 0.2 18.7 0.2 21.4 0.6 23.3 1.3 25.3 2.1 26.8 3.2 27.9 4.8 29 6.3 29.6 8 29.6 10 29.6 12 29 14 27.7 15.8 26.4 17.7 24.1 19.7 20.7 22 18.7 23.3 17.4 24.2 16.7 24.7 16 25.2 15.2 25.9 14.3 26.7L30.5 26.7Z"
-            fill-rule="evenodd"
-          />
-        </g>
-      </svg>
-
-      <div
-        id="tab-title"
-        class="mt-30 mb-20"
-        onclick="document.execCommand('copy')"
-      >
-        &nbsp;
-      </div>
-
-      <video
-        id="video"
-        class="shadow-light"
-        playsinline
-        onclick="togglePlayback()"
-        hidden
-      >
-        Your browser does not support the video element.
-      </video>
-      <audio id="audio" hidden>
-        Your browser does not support the audio element.
-      </audio>
-
-      <div id="media-controls" class="frow nowrap">
-        <div class="frow nowrap">
-          <button
-            type="button"
-            id="play-button-container"
-            class="frow nowrap button-none"
-            onclick="togglePlayback()"
-            disabled
-          >
-            <div class="play-button play-button-before"></div>
-            <div class="play-button play-button-after"></div>
-          </button>
-          <input
-            type="range"
-            id="volume-slider"
-            min="0"
-            max="1"
-            value="0.5"
-            step="0.01"
-            oninput="setVolume(this.value)"
-            disabled
-          />
+    <div id="home" class="frow-container height-100" hidden>
+      <div class="frow centered align-between gutters width-100">
+        <div class="col-md-1-3">
+          <h1 class="mb-30">Start a Room</h1>
+          <a type="button" class="stream-button" href="/streamer">Stream</a>
         </div>
-        <button type="button" id="fullscreen-button" class="button-none" hidden>
+        <div class="col-md-1-3">
+          <svg
+            id="home-logo"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 61.9 34.3"
+            isolation="isolate"
+          >
+            <defs>
+              <clipPath>
+                <rect width="61.9" height="34.3" />
+              </clipPath>
+            </defs>
+            <g clip-path="url(#_clipPath_tcUaJZ4siK7ZJPj4ATDJEfxLNlNwtkyj)">
+              <path
+                d="M30.5 26.7L30.5 0C33.5 0.4 36.4 1.4 39 3.2 41 4.5 43.2 6.7 45.7 9.7L45.7 9.6C46.5 10.6 47.4 11.7 48.3 13 49.7 15.1 50.7 16.5 51.3 17.1 51.9 17.8 52.6 18.7 53.5 19.6L53.5 0 61.9 0 61.9 34.3C58.8 34 56 32.9 53.3 31.1 51.4 29.8 49.1 27.7 46.7 24.7L46.7 24.7C45.8 23.7 45 22.6 44.1 21.3 42.6 19.2 41.6 17.9 41.1 17.2 40.5 16.5 39.7 15.7 38.8 14.7L38.8 34.3 30.5 34.3 30.5 34.3 0 34.3C0.3 31.6 1.4 29 3.1 26.5 4.8 24.1 8.1 21.2 12.9 17.9 15.8 15.9 17.7 14.3 18.5 13.3 19.3 12.2 19.7 11.2 19.7 10.3 19.7 9.3 19.3 8.4 18.5 7.7 17.7 6.9 16.7 6.6 15.4 6.6 14.2 6.6 13.1 7 12.3 7.7 11.5 8.5 11.1 9 10.8 10.9L0.7 10.9C1.1 8.3 1.8 6.2 2.9 4.8 3.9 3.3 5.4 2.2 7.3 1.4 9.2 0.6 11.8 0.2 15.2 0.2 18.7 0.2 21.4 0.6 23.3 1.3 25.3 2.1 26.8 3.2 27.9 4.8 29 6.3 29.6 8 29.6 10 29.6 12 29 14 27.7 15.8 26.4 17.7 24.1 19.7 20.7 22 18.7 23.3 17.4 24.2 16.7 24.7 16 25.2 15.2 25.9 14.3 26.7L30.5 26.7Z"
+                fill-rule="evenodd"
+              />
+            </g>
+          </svg>
+        </div>
+        <div class="col-md-1-3">
+          <h1 class="mb-30">Join a Room</h1>
+          <form id="join-form" class="frow nowrap">
+            <input type="text" id="room-input" placeholder="Room Name" />
+            <button type="submit" id="enter-room" class="ml-15">Enter</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="receiver" class="height-100" hidden>
+      <div class="menu-bar">
+        <div class="frow row-start">
+          <button id="show-stats-bar" class="button-link">Stats</button>
+          <!-- <button id="show-chats" class="button-link">Past Tabs</button> -->
+        </div>
+      </div>
+
+      <div id="stats-bar" class="shadow-light" hidden>
+        <div id="hide-stats-bar">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -141,23 +84,142 @@
             viewBox="0 0 24 24"
           >
             <path
-              d="M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z"
+              d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"
             />
           </svg>
-        </button>
+        </div>
+        <div id="stats-bar-html"></div>
       </div>
 
-      <div id="info-bar">&nbsp;</div>
-    </div>
+      <div class="frow centered-column nowrap">
+        <svg
+          id="loading-logo"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 92 53"
+          width="92"
+          height="53"
+          isolation="isolate"
+        >
+          <defs>
+            <clipPath>
+              <rect width="92" height="53" />
+            </clipPath>
+          </defs>
+          <g clip-path="url(#_clipPath_DBKJNQ6ncz1fVktbefDVInZnlBu8kyHj)">
+            <rect
+              width="92"
+              height="53"
+              fill-opacity="0"
+              fill="rgb(185,187,189)"
+            />
+            <path
+              d="M2.6 17.5C3.2 13.8 4.2 10.8 5.8 8.8 7.2 6.7 9.4 5.1 12.1 3.9 14.8 2.8 18.6 2.2 23.4 2.2 28.4 2.2 32.3 2.8 35 3.8 37.9 4.9 40.1 6.5 41.6 8.8 43.2 11 44.1 13.4 44.1 16.3 44.1 19.1 43.2 22 41.3 24.6 39.5 27.3 36.2 30.2 31.3 33.5 28.4 35.3 26.6 36.6 25.6 37.3 24.6 38 23.4 39 22.1 40.2L45.4 40.2 45.4 1.9C49.7 2.5 53.8 3.9 57.5 6.5Q60.4 8.4 67.1 15.7C68.3 17.1 69.6 18.7 70.9 20.6 72.9 23.6 74.3 25.6 75.2 26.4 76 27.4 77 28.7 78.3 30L78.3 1.9 90.4 1.9 90.4 51.1C85.9 50.7 81.9 49.1 78 46.5 75.3 44.6 72 41.6 68.6 37.3L68.6 37.3C67.3 35.9 66.1 34.3 64.8 32.4 62.7 29.4 58.5 24.4 57.3 23L57.3 51.1 1.6 51.1C2.1 47.2 3.6 43.5 6.1 39.9 8.5 36.5 13.3 32.3 20.1 27.6 24.3 24.7 27 22.4 28.2 21 29.3 19.4 29.9 18 29.9 16.7 29.9 15.2 29.3 14 28.2 13 27 11.8 25.6 11.4 23.7 11.4 22 11.4 20.4 12 19.3 13 18.1 14.1 17.6 14.8 17.1 17.5L2.6 17.5Z"
+              fill="none"
+              vector-effect="non-scaling-stroke"
+              stroke-linejoin="miter"
+              stroke-linecap="butt"
+              stroke-miterlimit="4"
+            />
+          </g>
+        </svg>
+        <svg
+          id="logo"
+          hidden
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 61.9 34.3"
+          width="61.9"
+          height="34.3"
+          isolation="isolate"
+        >
+          <defs>
+            <clipPath>
+              <rect width="61.9" height="34.3" />
+            </clipPath>
+          </defs>
+          <g clip-path="url(#_clipPath_tcUaJZ4siK7ZJPj4ATDJEfxLNlNwtkyj)">
+            <path
+              d="M30.5 26.7L30.5 0C33.5 0.4 36.4 1.4 39 3.2 41 4.5 43.2 6.7 45.7 9.7L45.7 9.6C46.5 10.6 47.4 11.7 48.3 13 49.7 15.1 50.7 16.5 51.3 17.1 51.9 17.8 52.6 18.7 53.5 19.6L53.5 0 61.9 0 61.9 34.3C58.8 34 56 32.9 53.3 31.1 51.4 29.8 49.1 27.7 46.7 24.7L46.7 24.7C45.8 23.7 45 22.6 44.1 21.3 42.6 19.2 41.6 17.9 41.1 17.2 40.5 16.5 39.7 15.7 38.8 14.7L38.8 34.3 30.5 34.3 30.5 34.3 0 34.3C0.3 31.6 1.4 29 3.1 26.5 4.8 24.1 8.1 21.2 12.9 17.9 15.8 15.9 17.7 14.3 18.5 13.3 19.3 12.2 19.7 11.2 19.7 10.3 19.7 9.3 19.3 8.4 18.5 7.7 17.7 6.9 16.7 6.6 15.4 6.6 14.2 6.6 13.1 7 12.3 7.7 11.5 8.5 11.1 9 10.8 10.9L0.7 10.9C1.1 8.3 1.8 6.2 2.9 4.8 3.9 3.3 5.4 2.2 7.3 1.4 9.2 0.6 11.8 0.2 15.2 0.2 18.7 0.2 21.4 0.6 23.3 1.3 25.3 2.1 26.8 3.2 27.9 4.8 29 6.3 29.6 8 29.6 10 29.6 12 29 14 27.7 15.8 26.4 17.7 24.1 19.7 20.7 22 18.7 23.3 17.4 24.2 16.7 24.7 16 25.2 15.2 25.9 14.3 26.7L30.5 26.7Z"
+              fill-rule="evenodd"
+            />
+          </g>
+        </svg>
 
-    <div id="chat-container" hidden>
-      <div id="chat-messages"></div>
-      <input
-        type="text"
-        id="txt-chat-message"
-        placeholder="Enter Chat Message"
-        hidden
-      />
+        <div
+          id="tab-title"
+          class="mt-30 mb-20"
+          onclick="document.execCommand('copy')"
+        >
+          &nbsp;
+        </div>
+
+        <video
+          id="video"
+          class="shadow-light"
+          playsinline
+          onclick="togglePlayback()"
+          hidden
+        >
+          Your browser does not support the video element.
+        </video>
+        <audio id="audio" hidden>
+          Your browser does not support the audio element.
+        </audio>
+
+        <div id="media-controls" class="frow nowrap">
+          <div class="frow nowrap">
+            <button
+              type="button"
+              id="play-button-container"
+              class="frow nowrap button-none"
+              onclick="togglePlayback()"
+              disabled
+            >
+              <div class="play-button play-button-before"></div>
+              <div class="play-button play-button-after"></div>
+            </button>
+            <input
+              type="range"
+              id="volume-slider"
+              min="0"
+              max="1"
+              value="0.5"
+              step="0.01"
+              oninput="setVolume(this.value)"
+              disabled
+            />
+          </div>
+          <button
+            type="button"
+            id="fullscreen-button"
+            class="button-none"
+            hidden
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div id="info-bar">&nbsp;</div>
+        <a id="create-message" href="/streamer">Create your own room</a>
+      </div>
+
+      <div id="chat-container" hidden>
+        <div id="chat-messages"></div>
+        <input
+          type="text"
+          id="txt-chat-message"
+          placeholder="Enter Chat Message"
+          hidden
+        />
+      </div>
     </div>
   </body>
 
