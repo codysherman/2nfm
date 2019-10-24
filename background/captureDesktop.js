@@ -115,7 +115,7 @@ function captureDesktop() {
   var sources = [
     // 'screen',
     // 'window',
-    "tab",
+    "tab"
   ];
 
   if (enableAudio) {

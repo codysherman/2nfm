@@ -10,13 +10,13 @@ function onAccessApproved(chromeMediaSourceId, opts) {
 
   constraints = {
     video: {
-      displaySurface: 'browser',
+      displaySurface: "browser"
     },
     audio: {
       autoGainControl: false,
       echoCancellation: false,
       noiseSuppression: false,
-      googDisableLocalEcho: false, // https://www.chromestatus.com/feature/5056629556903936
+      googDisableLocalEcho: false // https://www.chromestatus.com/feature/5056629556903936
     }
   };
 
