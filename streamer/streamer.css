@@ -29,7 +29,7 @@ body {
 #live-indicator.live {
   color: red;
   border-color: red;
-  animation: pulse 1s infinite alternate;
+  animation: pulse 1.5s ease-in-out infinite alternate;
 }
 
 /* XS */
@@ -99,7 +99,7 @@ body {
   border: 2px solid #eaeaea;
   border-radius: 10px;
   padding: 40px;
-  margin: 40px 0;
+  margin-top: 40px;
   position: relative;
 }
 

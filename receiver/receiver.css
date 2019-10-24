@@ -8,7 +8,7 @@ body {
   font-size: 40px;
   background-color: red;
   border-color: red;
-  animation: pulse 1s infinite alternate;
+  animation: pulse 1.5s ease-in-out infinite alternate;
 }
 
 .stream-button:hover {
