@@ -117,10 +117,12 @@ if (params.s) {
 
   video.onplay = event => {
     playButton.classList.add("playing");
+    playButton.disabled = true;
   };
 
   video.onpause = event => {
     playButton.classList.remove("playing");
+    playButton.disabled = false;
   };
 
   audio.onplay = event => {
@@ -159,7 +161,7 @@ if (params.s) {
       audio.srcObject.getAudioTracks()[0].enabled = true;
       audio.volume = 0.5;
       audio.play();
-      playButton.removeAttribute("disabled");
+      playButton.disabled = false;
     }
     volumeSlider.removeAttribute("disabled");
     body.classList.add("stream-live");
