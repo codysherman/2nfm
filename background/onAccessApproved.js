@@ -48,8 +48,14 @@ function onAccessApproved(chromeMediaSourceId, opts) {
 
   async function startCapturing(e) {
     let stream = await startScreenCapture();
-    console.log(stream.getTracks()[0].getCapabilities());
-    console.log(stream.getTracks()[0].getSettings());
+    // console.log(stream.getTracks()[0].getCapabilities());
+    // console.log(stream.getTracks()[0].getSettings());
+    if (
+      window.localStorage.getItem("enableVideo") == "false" &&
+      stream.getAudioTracks().length === 0
+    ) {
+      alert(`Make sure the check the "Share audio" box in Google Chrome`);
+    }
     gotStream(stream);
   }
   startCapturing();
