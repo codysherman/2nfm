@@ -13,7 +13,7 @@ function serverHandler(request, response) {
   fs.exists(filename, function(exists) {
     if (!exists) {
       response.writeHead(404, {
-        "Content-Type": "text/plain",
+        "Content-Type": "text/plain"
       });
       response.write("404 Not Found: " + filename + "\n");
       response.end();
@@ -35,7 +35,7 @@ function serverHandler(request, response) {
     fs.readFile(filename, "binary", function(err, file) {
       if (err) {
         response.writeHead(500, {
-          "Content-Type": "text/plain",
+          "Content-Type": "text/plain"
         });
         response.write(err + "\n");
         response.end();
@@ -58,7 +58,7 @@ function serverHandler(request, response) {
 
       if (contentType) {
         response.writeHead(200, {
-          "Content-Type": contentType,
+          "Content-Type": contentType
         });
       } else response.writeHead(200);
 
@@ -77,6 +77,6 @@ app = app.listen(
   process.env.IP || "0.0.0.0",
   function() {
     var addr = app.address();
-    console.log("Server listening at", addr.address + ":" + addr.port);
+    // console.log("Server listening at", addr.address + ":" + addr.port);
   }
 );

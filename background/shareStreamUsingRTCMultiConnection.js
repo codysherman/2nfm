@@ -17,22 +17,22 @@ function shareStreamUsingRTCMultiConnection(stream) {
     audio: true,
     video: true,
     data: true,
-    oneway: true,
+    oneway: true
   };
 
   connection.candidates = {
     stun: true,
-    turn: true,
+    turn: true
   };
 
   connection.iceProtocols = {
     tcp: true,
-    udp: true,
+    udp: true
   };
 
   connection.optionalArgument = {
     optional: [],
-    mandatory: {},
+    mandatory: {}
   };
 
   connection.channel = connection.sessionid = connection.userid;
@@ -72,7 +72,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
         sdp = setBandwidth(sdp, bandwidth);
         sdp = BandwidthHandler.setVideoBitrates(sdp, {
           min: bandwidth,
-          max: bandwidth,
+          max: bandwidth
         });
       }
     }
@@ -86,7 +86,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
   // www.rtcmulticonnection.org/docs/sdpConstraints/
   connection.sdpConstraints.mandatory = {
     OfferToReceiveAudio: false,
-    OfferToReceiveVideo: false,
+    OfferToReceiveVideo: false
   };
 
   connection.onstream = connection.onstreamended = function(event) {
@@ -108,7 +108,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
     );
   }
 
-  console.log("connectionHere", connection.attachStreams[0].getAudioTracks());
+  // console.log("connectionHere", connection.attachStreams[0].getAudioTracks());
 
   var text = "-";
   (function looper() {
@@ -221,12 +221,12 @@ function shareStreamUsingRTCMultiConnection(stream) {
     if (event.data.newChatMessage) {
       runtimePort.postMessage({
         messageFromContentScript1234: true,
-        newChatMessage: event.data.newChatMessage,
+        newChatMessage: event.data.newChatMessage
       });
 
       connection.send({
         receivedChatMessage: true,
-        checkmark_id: event.data.checkmark_id,
+        checkmark_id: event.data.checkmark_id
       });
     }
 
@@ -234,7 +234,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
       runtimePort.postMessage({
         messageFromContentScript1234: true,
         receivedChatMessage: true,
-        checkmark_id: event.data.checkmark_id,
+        checkmark_id: event.data.checkmark_id
       });
     }
   };
