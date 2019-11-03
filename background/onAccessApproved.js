@@ -9,9 +9,9 @@ function onAccessApproved(chromeMediaSourceId, opts) {
   // console.log(navigator.mediaDevices.getSupportedConstraints());
 
   constraints = {
-    // video: {
-    //   displaySurface: ["application", "browser", "monitor", "window"] // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
-    // },
+    video: {
+      // displaySurface: ["application", "browser", "monitor", "window"] // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+    },
     audio: {
       autoGainControl: false,
       echoCancellation: false,
