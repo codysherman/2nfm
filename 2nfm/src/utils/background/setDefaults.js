@@ -10,6 +10,7 @@ export function setDefaults(externalThis) {
   };
 
   // TODO: change to externalThis
+  // TODO: SM: don't think this is necessary now that (a) not in an extension & (b) we removed reading from localStorage from captureDesktop
   Object.keys(defaults).forEach(function(key) {
     window.localStorage.setItem(key, defaults[key]);
   });

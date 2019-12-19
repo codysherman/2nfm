@@ -191,10 +191,10 @@ body {
           />
         </g>
       </svg>
-      <div id="live-indicator" :class="{ live: isSharingOn == 'true' }">LIVE</div>
+      <div id="live-indicator" :class="{ live: isSharingOn }">LIVE</div>
     </div>
     <div class="col-md-1-2">
-      <section id="setup-section" v-if="!(isSharingOn == 'true')">
+      <section id="setup-section" v-if="!isSharingOn">
         <label id="room-id-label" class="row-start">
           <span class="shrink-0">2n.fm/?s=</span>
           <input type="text" id="room-id" placeholder="Random" :value="roomName" @change="setRoomName"/>
@@ -325,7 +325,7 @@ body {
           </div>
         </section>
       </section>
-      <section id="stop-section" v-if="isSharingOn == 'true'">
+      <section id="stop-section" v-if="isSharingOn">
         <router-link id="public-link" to="{query: { s: sessionId, p: room_password }}`}" target="_blank">
           {{`2n.fm/?s=${sessionId}`}}
         </router-link>
@@ -359,7 +359,7 @@ export default {
   data() {
     return {
       stream: null,
-      isSharingOn: 'false', // window.localStorage.getItem("isSharingOn")
+      isSharingOn: false, // window.localStorage.getItem("isSharingOn")
       sessionId: null, // window.localStorage.getItem("sessionId")
       roomName: window.localStorage.getItem('room_id') || '',
       desktop_id: null,
@@ -368,9 +368,9 @@ export default {
       room_id: '',
       codecs: 'default',
       bandwidth: null,
-      enableTabCaptureAPI: null,
-      enableVideo: null,
-      enableAudio: null,
+      enableTabCaptureAPI: false,
+      enableVideo: false,
+      enableAudio: false,
       streaming_method: 'RTCMultiConnection',
       room_url_box: 'true',
     }
@@ -378,24 +378,24 @@ export default {
   methods: {
     startVideoStream() {
       setDefaults(this);
-      this.enableTabCaptureAPI = 'false';
-      this.isSharingOn = 'true';
-      this.enableVideo = 'true';
-      this.enableAudio = 'true';
+      this.enableTabCaptureAPI = false;
+      this.isSharingOn = true;
+      this.enableVideo = true;
+      this.enableAudio = true;
       
       captureDesktop(this);
     },
     startAudioStream() {
       setDefaults(this);
-      this.enableTabCaptureAPI = 'false';
-      this.isSharingOn = 'true';
-      this.enableVideo = 'false';
-      this.enableAudio = 'true';
+      this.enableTabCaptureAPI = false;
+      this.isSharingOn = true;
+      this.enableVideo = false;
+      this.enableAudio = true;
 
       captureDesktop(this);
     },
     stopStream() {
-      this.isSharingOn = "false";
+      this.isSharingOn = false;
       captureDesktop(this);
       // runtimePort.postMessage({
       //   messageFromContentScript1234: true,

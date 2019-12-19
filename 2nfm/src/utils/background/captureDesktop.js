@@ -18,7 +18,7 @@ export function captureDesktop(externalThis) {
 
   // TODO: why would we need to do this?
   //   - Cody: we don't need to worry about this because it was here for Chrome Extension
-  externalThis.isSharingOn = 'true';
+  externalThis.isSharingOn = true;
 
   var _resolutions = window.localStorage.getItem("resolutions");
   if (!_resolutions) {

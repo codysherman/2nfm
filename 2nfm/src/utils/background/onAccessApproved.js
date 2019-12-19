@@ -57,7 +57,7 @@ export function onAccessApproved(externalThis) {
     // console.log(stream.getTracks()[0].getCapabilities());
     // console.log(stream.getTracks()[0].getSettings());
     if (
-      externalThis.enableVideo == "false" &&
+      !externalThis.enableVideo &&
       stream.getAudioTracks().length === 0
     ) {
       alert(`Make sure the check the "Share audio" box in Google Chrome`);
