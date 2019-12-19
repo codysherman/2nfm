@@ -402,11 +402,11 @@ export default {
       Object.keys(streamFlags).forEach(function(key) {
         window.localStorage.setItem(key, streamFlags[key]);
       });
-      captureDesktop();
+      captureDesktop(this);
     },
     stopStream() {
       window.localStorage.setItem("isSharingOn", false);
-      captureDesktop();
+      captureDesktop(this);
       // runtimePort.postMessage({
       //   messageFromContentScript1234: true,
       //   stopSharing: true,

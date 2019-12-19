@@ -152,7 +152,7 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     // chrome.browserAction.enable();
     setViewerCount(0);
 
-    if (room_url_box === true) {
+    if (externalThis.room_url_box === true) {
       var resultingURL = "https://2n.fm/?s=" + externalThis.connection.sessionid;
 
       // resultingURL = 'http://localhost:9001/?s=' + externalThis.connection.sessionid;
@@ -203,7 +203,7 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     // alert('externalThis.connection to the server is closed.');
     if (externalThis.connection.getAllParticipants().length > 0) return;
 
-    setDefaults();
+    setDefaults(externalThis);
 
     // chrome.runtime.reload();
   };
@@ -212,7 +212,7 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     alert("Unable to connect to the server. Please try again.");
 
     setTimeout(function() {
-      setDefaults();
+      setDefaults(externalThis);
       // chrome.runtime.reload();
     }, 1000);
   };
