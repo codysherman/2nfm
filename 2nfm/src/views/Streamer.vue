@@ -191,13 +191,13 @@ body {
           />
         </g>
       </svg>
-      <div id="live-indicator">LIVE</div>
+      <div id="live-indicator" :class="{ live: isSharingOn }">LIVE</div>
     </div>
     <div class="col-md-1-2">
-      <section id="setup-section">
-        <label id="room-id-label" class="row-start" @change="setRoomName">
+      <section id="setup-section" v-if="!isSharingOn">
+        <label id="room-id-label" class="row-start">
           <span class="shrink-0">2n.fm/?s=</span>
-          <input type="text" id="room-id" placeholder="Random" />
+          <input type="text" id="room-id" placeholder="Random" :value="roomName" @change="setRoomName"/>
         </label>
         <section id="options">
           <div class="label">Options</div>
@@ -325,8 +325,10 @@ body {
           </div>
         </section>
       </section>
-      <section id="stop-section" hidden>
-        <a id="public-link" target="_blank"></a>
+      <section id="stop-section" v-if="isSharingOn">
+        <router-link id="public-link" to="{query: { s: sessionId, p: roomPassword }}`}" target="_blank">
+          {{`2n.fm/?s=${window.localStorage.getItem("sessionId")}`}}
+        </router-link>
         <div class="viewer-count">
           <span id="viewer-count-number"></span> Viewers
         </div>
@@ -355,7 +357,11 @@ export default {
   name: "Streamer",
   data() {
     return {
-      
+      stream: null,
+      isSharingOn: window.localStorage.getItem("isSharingOn") === "true", // window.localStorage.getItem("isSharingOn")
+      sessionId: null, // window.localStorage.getItem("sessionId")
+      roomName: window.localStorage.getItem('room_id') || '',
+      roomPassword: null, 
     }
   },
   methods: {
@@ -371,7 +377,6 @@ export default {
         window.localStorage.setItem(key, streamFlags[key]);
       });
       captureDesktop();
-      // init();
     },
     startAudioStream() {
       setDefaults();
@@ -385,12 +390,10 @@ export default {
         window.localStorage.setItem(key, streamFlags[key]);
       });
       captureDesktop();
-      // init();
     },
     stopStream() {
       window.localStorage.setItem("isSharingOn", false);
       captureDesktop();
-      init();
       // runtimePort.postMessage({
       //   messageFromContentScript1234: true,
       //   stopSharing: true,
@@ -401,38 +404,6 @@ export default {
     },
   },
   mounted() {
-    let stream = null;
-
-    function init() {
-      var isSharingOn = window.localStorage.getItem("isSharingOn") === "true";
-
-      document.getElementById("setup-section").style.display = isSharingOn
-        ? "none"
-        : "block";
-      if (isSharingOn) {
-        document.getElementById("live-indicator").classList.add("live");
-        var linkToSession = document.getElementById("public-link");
-        linkToSession.innerHTML =
-          "2n.fm/?s=" + window.localStorage.getItem("sessionId");
-        linkToSession.href = "https://" + linkToSession.innerHTML;
-        // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
-        linkToSession.href +=
-          (window.localStorage.getItem("room_password") || "") == ""
-            ? ""
-            : "&p=" + window.localStorage.getItem("room_password");
-        document.getElementById("stop-section").hidden = false;
-        // auto-stop-sharing
-        // document.getElementById('stop-sharing').click();
-      } else {
-        document.getElementById("live-indicator").classList.remove("live");
-        // if setDefaults hasn't been called yet, key-values are undefined, otherwise empty string
-        document.getElementById("stop-section").hidden = true;
-        document.getElementById("room-id").value =
-          window.localStorage.getItem("room_id") || "";
-      }
-    }
-    init();
-
     // document.getElementById('enable-chat').onclick = function() {
     //   var popup_width = 312;
     //   var popup_height = 400;

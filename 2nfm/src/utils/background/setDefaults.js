@@ -55,7 +55,4 @@ export function setDefaults() {
   setViewerCount("0");
 
   // chrome.runtime.reload();
-  
-  // TODO: not defined yet
-  init();
 }

@@ -84,7 +84,8 @@ export function getUserMediaError(e) {
 }
 
 export function setViewerCount(viewerCount) {
-  document.getElementById("viewer-count-number").innerHTML = viewerCount;
+  // TODO: Convert this to work with Vue
+  // document.getElementById("viewer-count-number").innerHTML = viewerCount;
 }
 
 // TODO: figure out new placement for this line (vue mounted?)

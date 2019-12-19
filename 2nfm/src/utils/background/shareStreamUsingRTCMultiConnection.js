@@ -197,9 +197,6 @@ export function shareStreamUsingRTCMultiConnection(stream) {
         );
       }
     });
-
-    // TODO: this is not defined anywhere
-    init();
   }
 
   globals.connection.onSocketDisconnect = function(event) {
@@ -209,8 +206,6 @@ export function shareStreamUsingRTCMultiConnection(stream) {
     setDefaults();
 
     // chrome.runtime.reload();
-    // TODO: this is not defined anywhere
-    init();
   };
 
   globals.connection.onSocketError = function(event) {
@@ -219,9 +214,6 @@ export function shareStreamUsingRTCMultiConnection(stream) {
     setTimeout(function() {
       setDefaults();
       // chrome.runtime.reload();
-
-      // TODO: this is not defined anywhere
-      init();
     }, 1000);
   };
 
