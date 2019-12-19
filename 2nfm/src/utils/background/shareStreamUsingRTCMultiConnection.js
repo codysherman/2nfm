@@ -147,7 +147,7 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     }
 
     // any key-values set here should be reset in setDefaults.js
-    window.localStorage.setItem("sessionId", externalThis.connection.sessionid);
+    externalThis.sessionId = externalThis.connection.sessionid;
 
     // chrome.browserAction.enable();
     setViewerCount(0);

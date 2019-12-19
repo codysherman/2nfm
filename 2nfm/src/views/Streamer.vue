@@ -360,12 +360,12 @@ export default {
     return {
       stream: null,
       isSharingOn: false, // window.localStorage.getItem("isSharingOn")
+      // sessionId aka room name
       sessionId: null, // window.localStorage.getItem("sessionId")
-      roomName: window.localStorage.getItem('room_id') || '',
       desktop_id: null,
       constraints: null,
       room_password: '',
-      room_id: '',
+      room_id: window.localStorage.getItem('room_id') || '',
       codecs: 'default',
       bandwidth: null,
       enableTabCaptureAPI: false,
@@ -373,6 +373,11 @@ export default {
       enableAudio: false,
       streaming_method: 'RTCMultiConnection',
       room_url_box: 'true',
+    }
+  },
+  computed: {
+    roomName() {
+      return this.room_id || this.sessionId;
     }
   },
   methods: {
