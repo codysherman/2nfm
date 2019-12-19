@@ -363,7 +363,7 @@ video {
 </template>
 
 <script>
-import io from "@/utils/background/helpers/socket.io.js";
+import io from 'socket.io-client';
 import adapter from "@/utils/background/helpers/adapter.js";
 import RTCMultiConnection from "@/utils/background/helpers/RTCMultiConnection.js";
 
