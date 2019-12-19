@@ -2,7 +2,7 @@ import { setDefaults } from './setDefaults';
 import { gotStream } from './gotStream';
 import { captureDesktop } from './captureDesktop';
 
-export function onAccessApproved(chromeMediaSourceId, opts) {
+export function onAccessApproved(externalThis) {
   // if (!chromeMediaSourceId) {
   //   setDefaults();
   //   return;
@@ -12,7 +12,7 @@ export function onAccessApproved(chromeMediaSourceId, opts) {
 
   // console.log(navigator.mediaDevices.getSupportedConstraints());
 
-  constraints = {
+  let constraints = {
     video: {
       // displaySurface: ["application", "browser", "monitor", "window"] // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
     },
@@ -41,17 +41,19 @@ export function onAccessApproved(chromeMediaSourceId, opts) {
   //   getUserMediaError
   // );
 
-  async function startScreenCapture() {
+  async function startScreenCapture(externalThis) {
+    let captureStream;
     try {
       captureStream = await navigator.mediaDevices.getDisplayMedia(constraints);
     } catch (err) {
-      setDefaults();
+      setDefaults(externalThis);
     }
     return captureStream;
   }
 
-  async function startCapturing(e) {
-    let stream = await startScreenCapture();
+
+  async function startCapturing(externalThis) {
+    let stream = await startScreenCapture(externalThis);
     // console.log(stream.getTracks()[0].getCapabilities());
     // console.log(stream.getTracks()[0].getSettings());
     if (
@@ -60,7 +62,7 @@ export function onAccessApproved(chromeMediaSourceId, opts) {
     ) {
       alert(`Make sure the check the "Share audio" box in Google Chrome`);
     }
-    gotStream(stream);
+    gotStream(stream, externalThis);
   }
-  startCapturing();
+  startCapturing(externalThis);
 }

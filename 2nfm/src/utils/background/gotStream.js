@@ -2,7 +2,7 @@ import { setDefaults } from './setDefaults';
 import { addStreamStopListener } from './common';
 import { shareStreamUsingRTCMultiConnection } from './shareStreamUsingRTCMultiConnection';
 
-export function gotStream(stream) {
+export function gotStream(stream, externalThis) {
   if (!stream) {
     setDefaults();
 
@@ -31,7 +31,7 @@ export function gotStream(stream) {
     // chrome.runtime.reload();
   });
 
-  shareStreamUsingRTCMultiConnection(stream);
+  shareStreamUsingRTCMultiConnection(stream, externalThis);
 
   // chrome.browserAction.setIcon({
   //   path: "images/icon-active_128.png",

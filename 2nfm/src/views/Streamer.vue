@@ -326,7 +326,7 @@ body {
         </section>
       </section>
       <section id="stop-section" v-if="isSharingOn">
-        <router-link id="public-link" to="{query: { s: sessionId, p: roomPassword }}`}" target="_blank">
+        <router-link id="public-link" to="{query: { s: sessionId, p: room_password }}`}" target="_blank">
           {{`2n.fm/?s=${window.localStorage.getItem("sessionId")}`}}
         </router-link>
         <div class="viewer-count">
@@ -361,30 +361,42 @@ export default {
       isSharingOn: window.localStorage.getItem("isSharingOn") === "true", // window.localStorage.getItem("isSharingOn")
       sessionId: null, // window.localStorage.getItem("sessionId")
       roomName: window.localStorage.getItem('room_id') || '',
-      roomPassword: null, 
+      desktop_id: null,
+      constraints: null,
+      room_password: '',
+      room_id: '',
+      codecs: 'default',
+      bandwidth: null,
+      enableTabCaptureAPI: null,
+      enableVideo: null,
+      enableAudio: null,
+      isSharingOn: null,
+      streaming_method: 'RTCMultiConnection',
+      room_url_box: true,
+      test: 'test',
     }
   },
   methods: {
     startVideoStream() {
-      setDefaults();
+      setDefaults(this);
       const streamFlags = {
-        enableTabCaptureAPI: "false",
-        isSharingOn: "true",
-        enableVideo: "true",
-        enableAudio: "true",
+        enableTabCaptureAPI: 'false',
+        isSharingOn: 'true',
+        enableVideo: 'true',
+        enableAudio: 'true',
       };
       Object.keys(streamFlags).forEach(function(key) {
         window.localStorage.setItem(key, streamFlags[key]);
       });
-      captureDesktop();
+      captureDesktop(this);
     },
     startAudioStream() {
-      setDefaults();
+      setDefaults(this);
       const streamFlags = {
-        enableTabCaptureAPI: "false",
-        isSharingOn: "true",
-        enableVideo: "false",
-        enableAudio: "true",
+        enableTabCaptureAPI: 'false',
+        isSharingOn: 'true',
+        enableVideo: 'false',
+        enableAudio: 'true',
       };
       Object.keys(streamFlags).forEach(function(key) {
         window.localStorage.setItem(key, streamFlags[key]);

@@ -1,57 +1,57 @@
-import * as globals from './globals';
 import { setDefaults } from './setDefaults';
 import { setViewerCount } from './common';
 import { CodecsHandler } from './helpers/CodecsHandler';
 import { IceServersHandler } from './helpers/IceServersHandler';
+import io from 'socket.io-client';
 import RTCMultiConnection from "rtcmulticonnection";
 
-export function shareStreamUsingRTCMultiConnection(stream) {
+export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
   // www.RTCMultiConnection.org/docs/
-  globals.connection = new RTCMultiConnection();
-  globals.connection.socketURL = "https://api.2n.fm:9001/";
-  globals.connection.autoCloseEntireSession = true;
+  externalThis.connection = new RTCMultiConnection();
+  externalThis.connection.socketURL = "https://api.2n.fm:9001/";
+  externalThis.connection.autoCloseEntireSession = true;
 
   // this must match the viewer page
-  globals.connection.socketMessageEvent = "desktopCapture";
+  externalThis.connection.socketMessageEvent = "desktopCapture";
 
-  globals.connection.password = null;
-  if (globals.room_password && globals.room_password.length) {
-    globals.connection.password = globals.room_password;
+  externalThis.connection.password = null;
+  if (externalThis.room_password && externalThis.room_password.length) {
+    externalThis.connection.password = externalThis.room_password;
   }
 
-  globals.connection.enableLogs = false;
-  globals.connection.session = {
+  externalThis.connection.enableLogs = false;
+  externalThis.connection.session = {
     audio: true,
     video: true,
     data: true,
     oneway: true
   };
 
-  globals.connection.candidates = {
+  externalThis.connection.candidates = {
     stun: true,
     turn: true
   };
 
-  globals.connection.iceProtocols = {
+  externalThis.connection.iceProtocols = {
     tcp: true,
     udp: true
   };
 
-  globals.connection.optionalArgument = {
+  externalThis.connection.optionalArgument = {
     optional: [],
     mandatory: {}
   };
 
-  globals.connection.channel = globals.connection.sessionid = globals.connection.userid;
+  externalThis.connection.channel = externalThis.connection.sessionid = externalThis.connection.userid;
 
-  if (globals.room_id && globals.room_id.length) {
-    globals.connection.channel = globals.connection.sessionid = globals.connection.userid = globals.room_id;
+  if (externalThis.room_id && externalThis.room_id.length) {
+    externalThis.connection.channel = externalThis.connection.sessionid = externalThis.connection.userid = externalThis.room_id;
   }
 
-  globals.connection.autoReDialOnFailure = true;
-  globals.connection.getExternalIceServers = false;
+  externalThis.connection.autoReDialOnFailure = true;
+  externalThis.connection.getExternalIceServers = false;
 
-  globals.connection.iceServers = IceServersHandler.getIceServers();
+  externalThis.connection.iceServers = IceServersHandler.getIceServers();
 
   function setBandwidth(sdp, value) {
     sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "");
@@ -62,41 +62,41 @@ export function shareStreamUsingRTCMultiConnection(stream) {
     return sdp;
   }
 
-  globals.connection.processSdp = function(sdp) {
-    if (globals.bandwidth) {
+  externalThis.connection.processSdp = function(sdp) {
+    if (externalThis.bandwidth) {
       try {
-        globals.bandwidth = parseInt(globals.bandwidth);
+        externalThis.bandwidth = parseInt(externalThis.bandwidth);
       } catch (e) {
-        globals.bandwidth = null;
+        externalThis.bandwidth = null;
       }
 
       if (
-        globals.bandwidth &&
-        globals.bandwidth != NaN &&
-        globals.bandwidth != "NaN" &&
-        typeof globals.bandwidth == "number"
+        externalThis.bandwidth &&
+        externalThis.bandwidth != NaN &&
+        externalThis.bandwidth != "NaN" &&
+        typeof externalThis.bandwidth == "number"
       ) {
-        sdp = setBandwidth(sdp, globals.bandwidth);
+        sdp = setBandwidth(sdp, externalThis.bandwidth);
         sdp = BandwidthHandler.setVideoBitrates(sdp, {
-          min: globals.bandwidth,
-          max: globals.bandwidth
+          min: externalThis.bandwidth,
+          max: externalThis.bandwidth
         });
       }
     }
 
-    if (!!globals.codecs && globals.codecs !== "default") {
-      sdp = CodecsHandler.preferCodec(sdp, globals.codecs);
+    if (!!externalThis.codecs && externalThis.codecs !== "default") {
+      sdp = CodecsHandler.preferCodec(sdp, externalThis.codecs);
     }
     return sdp;
   };
 
-  // www.rtcmultiglobals.connection.org/docs/sdpConstraints/
-  globals.connection.sdpConstraints.mandatory = {
+  // www.rtcmultiexternalThis.connection.org/docs/sdpConstraints/
+  externalThis.connection.sdpConstraints.mandatory = {
     OfferToReceiveAudio: false,
     OfferToReceiveVideo: false
   };
 
-  globals.connection.onstream = globals.connection.onstreamended = function(event) {
+  externalThis.connection.onstream = externalThis.connection.onstreamended = function(event) {
     try {
       event.mediaElement.pause();
       delete event.mediaElement;
@@ -104,27 +104,27 @@ export function shareStreamUsingRTCMultiConnection(stream) {
   };
 
   // www.RTCMultiConnection.org/docs/dontCaptureUserMedia/
-  globals.connection.dontCaptureUserMedia = true;
+  externalThis.connection.dontCaptureUserMedia = true;
 
   // www.RTCMultiConnection.org/docs/attachStreams/
-  globals.connection.attachStreams.push(stream);
+  externalThis.connection.attachStreams.push(stream);
 
-  if (!globals.enableVideo && globals.connection.attachStreams[0].getVideoTracks().length > 0) {
-    globals.connection.attachStreams[0].removeTrack(
-      globals.connection.attachStreams[0].getVideoTracks()[0]
+  if (!externalThis.enableVideo && externalThis.connection.attachStreams[0].getVideoTracks().length > 0) {
+    externalThis.connection.attachStreams[0].removeTrack(
+      externalThis.connection.attachStreams[0].getVideoTracks()[0]
     );
   }
 
-  // console.log("connectionHere", globals.connection.attachStreams[0].getAudioTracks());
+  // console.log("connectionHere", externalThis.connection.attachStreams[0].getAudioTracks());
 
   var text = "-";
   (function looper() {
-    if (!globals.connection) {
+    if (!externalThis.connection) {
       setViewerCount(0);
       return;
     }
 
-    if (globals.connection.isInitiator) {
+    if (externalThis.connection.isInitiator) {
       setViewerCount(0);
       return;
     }
@@ -139,7 +139,7 @@ export function shareStreamUsingRTCMultiConnection(stream) {
   })();
 
   // www.RTCMultiConnection.org/docs/open/
-  globals.connection.socketCustomEvent = globals.connection.sessionid;
+  externalThis.connection.socketCustomEvent = externalThis.connection.sessionid;
 
   function roomOpenCallback(isRoomOpened, roomid, error) {
     if (error) {
@@ -147,25 +147,25 @@ export function shareStreamUsingRTCMultiConnection(stream) {
     }
 
     // any key-values set here should be reset in setDefaults.js
-    window.localStorage.setItem("sessionId", globals.connection.sessionid);
+    window.localStorage.setItem("sessionId", externalThis.connection.sessionid);
 
     // chrome.browserAction.enable();
     setViewerCount(0);
 
     if (room_url_box === true) {
-      var resultingURL = "https://2n.fm/?s=" + globals.connection.sessionid;
+      var resultingURL = "https://2n.fm/?s=" + externalThis.connection.sessionid;
 
-      // resultingURL = 'http://localhost:9001/?s=' + globals.connection.sessionid;
+      // resultingURL = 'http://localhost:9001/?s=' + externalThis.connection.sessionid;
 
-      if (globals.room_password && globals.room_password.length) {
-        resultingURL += "&p=" + globals.room_password;
+      if (externalThis.room_password && externalThis.room_password.length) {
+        resultingURL += "&p=" + externalThis.room_password;
       }
 
-      if (globals.bandwidth) {
-        resultingURL += "&bandwidth=" + globals.bandwidth;
+      if (externalThis.bandwidth) {
+        resultingURL += "&bandwidth=" + externalThis.bandwidth;
       }
-      if (!!globals.codecs && globals.codecs !== "default") {
-        resultingURL += "&codecs=" + globals.codecs;
+      if (!!externalThis.codecs && externalThis.codecs !== "default") {
+        resultingURL += "&codecs=" + externalThis.codecs;
       }
 
       var popup_width = 600;
@@ -190,25 +190,25 @@ export function shareStreamUsingRTCMultiConnection(stream) {
       // );
     }
 
-    globals.connection.socket.on(globals.connection.socketCustomEvent, function(message) {
+    externalThis.connection.socket.on(externalThis.connection.socketCustomEvent, function(message) {
       if (message.receivedYourScreen) {
         setViewerCount(
-          globals.connection.isInitiator ? globals.connection.getAllParticipants().length : 0
+          externalThis.connection.isInitiator ? externalThis.connection.getAllParticipants().length : 0
         );
       }
     });
   }
 
-  globals.connection.onSocketDisconnect = function(event) {
-    // alert('globals.connection to the server is closed.');
-    if (globals.connection.getAllParticipants().length > 0) return;
+  externalThis.connection.onSocketDisconnect = function(event) {
+    // alert('externalThis.connection to the server is closed.');
+    if (externalThis.connection.getAllParticipants().length > 0) return;
 
     setDefaults();
 
     // chrome.runtime.reload();
   };
 
-  globals.connection.onSocketError = function(event) {
+  externalThis.connection.onSocketError = function(event) {
     alert("Unable to connect to the server. Please try again.");
 
     setTimeout(function() {
@@ -217,25 +217,25 @@ export function shareStreamUsingRTCMultiConnection(stream) {
     }, 1000);
   };
 
-  globals.connection.onopen = function(event) {
+  externalThis.connection.onopen = function(event) {
     //
   };
 
-  globals.connection.onmessage = function(event) {
+  externalThis.connection.onmessage = function(event) {
     if (event.data.newChatMessage) {
-      globals.runtimePort.postMessage({
+      externalThis.runtimePort.postMessage({
         messageFromContentScript1234: true,
         newChatMessage: event.data.newChatMessage
       });
 
-      globals.connection.send({
+      externalThis.connection.send({
         receivedChatMessage: true,
         checkmark_id: event.data.checkmark_id
       });
     }
 
     if (event.data.receivedChatMessage) {
-      globals.runtimePort.postMessage({
+      externalThis.runtimePort.postMessage({
         messageFromContentScript1234: true,
         receivedChatMessage: true,
         checkmark_id: event.data.checkmark_id
@@ -243,14 +243,14 @@ export function shareStreamUsingRTCMultiConnection(stream) {
     }
   };
 
-  globals.connection.open(globals.connection.sessionid, roomOpenCallback);
+  externalThis.connection.open(externalThis.connection.sessionid, roomOpenCallback);
 
   var oldLength = 0;
-  globals.connection.onleave = globals.connection.onPeerStateChanged = function() {
-    var participantsCount = globals.connection.getAllParticipants().length;
+  externalThis.connection.onleave = externalThis.connection.onPeerStateChanged = function() {
+    var participantsCount = externalThis.connection.getAllParticipants().length;
     if (oldLength != participantsCount) {
       // sendTabTitle();
     }
-    setViewerCount(globals.connection.isInitiator ? participantsCount : 0);
+    setViewerCount(externalThis.connection.isInitiator ? participantsCount : 0);
   };
 }

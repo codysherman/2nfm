@@ -1,71 +1,70 @@
 
-import * as globals from './globals';
 import { setDefaults } from './setDefaults';
 import { onAccessApproved } from './onAccessApproved';
 
-export function captureDesktop() {
-  if (globals.connection && globals.connection.attachStreams[0]) {
-    setDefaults();
+export function captureDesktop(externalThis) {
+  if (externalThis.connection && externalThis.connection.attachStreams[0]) {
+    setDefaults(externalThis);
     return;
   }
 
-  globals.desktop_id = null;
-  globals.constraints = null;
-  globals.room_password = "";
-  globals.room_id = "";
-  globals.codecs = "default";
-  globals.bandwidth = null;
+  externalThis.desktop_id = null;
+  externalThis.constraints = null;
+  externalThis.room_password = "";
+  externalThis.room_id = "";
+  externalThis.codecs = "default";
+  externalThis.bandwidth = null;
 
-  globals.enableTabCaptureAPI = null;
-  globals.enableVideo = null;
-  globals.enableAudio = null;
-  globals.isSharingOn = null;
+  externalThis.enableTabCaptureAPI = null;
+  externalThis.enableVideo = null;
+  externalThis.enableAudio = null;
+  externalThis.isSharingOn = null;
 
-  globals.streaming_method = "RTCMultiConnection";
+  externalThis.streaming_method = "RTCMultiConnection";
 
-  globals.room_url_box = true;
+  externalThis.room_url_box = true;
 
   var resolutions = {};
 
   if (window.localStorage.getItem("room_password")) {
-    globals.room_password = window.localStorage.getItem("room_password");
+    externalThis.room_password = window.localStorage.getItem("room_password");
   }
 
   if (window.localStorage.getItem("room_id")) {
-    globals.room_id = window.localStorage.getItem("room_id");
+    externalThis.room_id = window.localStorage.getItem("room_id");
   }
 
   if (window.localStorage.getItem("streaming_method")) {
-    globals.streaming_method = window.localStorage.getItem("streaming_method");
+    externalThis.streaming_method = window.localStorage.getItem("streaming_method");
   }
 
   if (window.localStorage.getItem("room_url_box") === "false") {
-    globals.room_url_box = false;
+    externalThis.room_url_box = false;
   }
 
   if (window.localStorage.getItem("codecs")) {
-    globals.codecs = window.localStorage.getItem("codecs");
+    externalThis.codecs = window.localStorage.getItem("codecs");
   }
 
   if (window.localStorage.getItem("bandwidth")) {
-    globals.bandwidth = window.localStorage.getItem("bandwidth");
+    externalThis.bandwidth = window.localStorage.getItem("bandwidth");
   }
 
   if (window.localStorage.getItem("enableVideo") == "true") {
-    globals.enableVideo = window.localStorage.getItem("enableVideo");
+    externalThis.enableVideo = window.localStorage.getItem("enableVideo");
   }
 
   if (window.localStorage.getItem("enableAudio") == "true") {
-    globals.enableAudio = window.localStorage.getItem("enableAudio");
+    externalThis.enableAudio = window.localStorage.getItem("enableAudio");
   }
 
   if (window.localStorage.getItem("enableTabCaptureAPI") == "true") {
-    globals.enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
+    externalThis.enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
   }
 
-  if (window.localStorage.getItem("isSharingOn") == "true") {
-    globals.isSharingOn = window.localStorage.getItem("isSharingOn");
-  }
+  // if (window.localStorage.getItem("isSharingOn") == "true") {
+  //   externalThis.isSharingOn = window.localStorage.getItem("isSharingOn");
+  // }
 
   var _resolutions = window.localStorage.getItem("resolutions");
   if (!_resolutions) {
@@ -123,16 +122,16 @@ export function captureDesktop() {
     "tab"
   ];
 
-  if (globals.enableAudio) {
+  if (externalThis.enableAudio) {
     sources.push("audio");
   }
 
-  // if (globals.enableTabCaptureAPI) {
+  // if (externalThis.enableTabCaptureAPI) {
   //   captureTabUsingTabCapture(resolutions);
   //   return;
   // }
 
-  // globals.desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(
+  // externalThis.desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(
   //   chromeMediaSourceId,
   //   opts
   // ) {
@@ -140,5 +139,5 @@ export function captureDesktop() {
   //   opts.resolutions = resolutions;
   //   onAccessApproved(chromeMediaSourceId, opts);
   // });
-  onAccessApproved();
+  onAccessApproved(externalThis);
 }
