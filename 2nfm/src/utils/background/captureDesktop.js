@@ -8,53 +8,12 @@ export function captureDesktop(externalThis) {
     return;
   }
 
-  externalThis.desktop_id = null;
-  externalThis.constraints = null;
-  externalThis.room_password = "";
   externalThis.room_id = "";
-  externalThis.codecs = "default";
-  externalThis.bandwidth = null;
-
-  externalThis.enableTabCaptureAPI = null;
-  externalThis.enableAudio = null;
-  externalThis.isSharingOn = null;
-
-  externalThis.streaming_method = "RTCMultiConnection";
-
-  externalThis.room_url_box = true;
 
   var resolutions = {};
 
-  if (window.localStorage.getItem("room_password")) {
-    externalThis.room_password = window.localStorage.getItem("room_password");
-  }
-
   if (window.localStorage.getItem("room_id")) {
     externalThis.room_id = window.localStorage.getItem("room_id");
-  }
-
-  if (window.localStorage.getItem("streaming_method")) {
-    externalThis.streaming_method = window.localStorage.getItem("streaming_method");
-  }
-
-  if (window.localStorage.getItem("room_url_box") === "false") {
-    externalThis.room_url_box = false;
-  }
-
-  if (window.localStorage.getItem("codecs")) {
-    externalThis.codecs = window.localStorage.getItem("codecs");
-  }
-
-  if (window.localStorage.getItem("bandwidth")) {
-    externalThis.bandwidth = window.localStorage.getItem("bandwidth");
-  }
-
-  if (window.localStorage.getItem("enableAudio") == "true") {
-    externalThis.enableAudio = window.localStorage.getItem("enableAudio");
-  }
-
-  if (window.localStorage.getItem("enableTabCaptureAPI") == "true") {
-    externalThis.enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
   }
 
   // TODO: why would we need to do this?
