@@ -3,6 +3,7 @@ import { setDefaults } from './setDefaults';
 import { setViewerCount } from './common';
 import { CodecsHandler } from './helpers/CodecsHandler';
 import { IceServersHandler } from './helpers/IceServersHandler';
+import RTCMultiConnection from './helpers/RTCMultiConnection';
 
 export function shareStreamUsingRTCMultiConnection(stream) {
   // www.RTCMultiConnection.org/docs/
