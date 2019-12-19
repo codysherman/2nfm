@@ -342,23 +342,13 @@ body {
 </template>
 
 <script>
-import "@/utils/background/helpers/socket.io.js";
-import "@/utils/background/helpers/adapter.js";
-import "@/utils/background/helpers/RTCMultiConnection.js";
-import "@/utils/background/helpers/CodecsHandler.js";
-import "@/utils/background/helpers/IceServersHandler.js";
-import "@/utils/background/helpers/MultiStreamsMixer.js";
-import "@/utils/background/globals.js";
-import "@/utils/background/common.js";
-// import "@/utils/background/runtimePort.js";
-import "@/utils/background/online-offline.js";
-import "@/utils/background/gotTabCaptureStream.js";
-import "@/utils/background/gotStream.js";
-import "@/utils/background/onAccessApproved.js";
-import "@/utils/background/shareStreamUsingRTCMultiConnection.js";
-import "@/utils/background/setDefaults.js";
-import "@/utils/background/captureDesktop.js";
-// import "@/utils/background/captureTabUsingTabCapture.js";
+import io from "@/utils/background/helpers/socket.io.js";
+import adapter from "@/utils/background/helpers/adapter.js";
+import RTCMultiConnection from "@/utils/background/helpers/RTCMultiConnection.js";
+
+// import * as globals from "@/utils/background/globals.js";
+import { setDefaults } from "@/utils/background/setDefaults.js";
+import { captureDesktop } from "@/utils/background/captureDesktop.js";
 
 export default {
   name: "Streamer",
@@ -401,7 +391,7 @@ export default {
         enableTabCaptureAPI: "false",
         isSharingOn: "true",
         enableVideo: "true",
-        enableAudio: "true"
+        enableAudio: "true",
       };
       Object.keys(streamFlags).forEach(function(key) {
         window.localStorage.setItem(key, streamFlags[key]);
@@ -416,7 +406,7 @@ export default {
         enableTabCaptureAPI: "false",
         isSharingOn: "true",
         enableVideo: "false",
-        enableAudio: "true"
+        enableAudio: "true",
       };
       Object.keys(streamFlags).forEach(function(key) {
         window.localStorage.setItem(key, streamFlags[key]);
