@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "frow": "^3.1.4",
+    "rtcmulticonnection": "^3.6.9",
     "socket.io-client": "2.1.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",

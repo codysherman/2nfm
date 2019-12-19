@@ -344,7 +344,7 @@ body {
 <script>
 import io from 'socket.io-client';
 import adapter from "webrtc-adapter";
-import RTCMultiConnection from "@/utils/background/helpers/RTCMultiConnection.js";
+import RTCMultiConnection from "rtcmulticonnection";
 
 // import * as globals from "@/utils/background/globals.js";
 import { setDefaults } from "@/utils/background/setDefaults.js";

@@ -365,7 +365,7 @@ video {
 <script>
 import io from 'socket.io-client';
 import adapter from "webrtc-adapter";
-import RTCMultiConnection from "@/utils/background/helpers/RTCMultiConnection.js";
+import RTCMultiConnection from "rtcmulticonnection";
 
 import { CodecsHandler } from "@/utils/background/helpers/CodecsHandler.js";
 import { IceServersHandler } from "@/utils/background/helpers/IceServersHandler.js";
