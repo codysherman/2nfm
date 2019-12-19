@@ -87,8 +87,3 @@ export function setViewerCount(viewerCount) {
   // TODO: Convert this to work with Vue
   // document.getElementById("viewer-count-number").innerHTML = viewerCount;
 }
-
-// TODO: figure out new placement for this line (vue mounted?)
-// sometimes extension unexpectedly crashes or reloads
-// in this case, making sure to remove "ON" status
-window.localStorage.setItem("isSharingOn", false);
