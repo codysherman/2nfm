@@ -363,12 +363,18 @@ video {
 </template>
 
 <script>
-import "@/utils/background/helpers/socket.io.js";
-import "@/utils/background/helpers/adapter.js";
-import "@/utils/background/helpers/RTCMultiConnection.js";
-import "@/utils/background/helpers/CodecsHandler.js";
-import "@/utils/background/helpers/IceServersHandler.js";
-import "@/utils/background/helpers/getStats.js";
+import io from "@/utils/background/helpers/socket.io.js";
+import adapter from "@/utils/background/helpers/adapter.js";
+import RTCMultiConnection from "@/utils/background/helpers/RTCMultiConnection.js";
+
+import { CodecsHandler } from "@/utils/background/helpers/CodecsHandler.js";
+import { IceServersHandler } from "@/utils/background/helpers/IceServersHandler.js";
+import { getStats } from "@/utils/background/helpers/getStats.js";
+
+// NOTE: SM: since this file is the receiver, and not the receiver, only background/helpers should
+// be necessary (during migration from no-vuejs), nothing from background/* itself needed
+//
+// TODO: switch from document.* DOM manipulation to Vue; possibly broken
 export default {
   name: "Receiver",
   mounted() {
