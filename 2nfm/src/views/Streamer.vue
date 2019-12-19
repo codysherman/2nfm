@@ -114,6 +114,7 @@ body {
 }
 
 .stream-button {
+  cursor: pointer;
   transition: color 0.3s;
 }
 
@@ -194,7 +195,7 @@ body {
     </div>
     <div class="col-md-1-2">
       <section id="setup-section">
-        <label id="room-id-label" class="row-start">
+        <label id="room-id-label" class="row-start" @change="setRoomName">
           <span class="shrink-0">2n.fm/?s=</span>
           <input type="text" id="room-id" placeholder="Random" />
         </label>
@@ -282,7 +283,7 @@ body {
 
             <div class="frow gutters">
               <div class="col-xs-1-2">
-                <div id="video-button" class="stream-button clickable">
+                <div id="video-button" class="stream-button" @click="startVideoStream">
                   <div class="frow column-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -309,7 +310,7 @@ body {
                 </div>
               </div>
               <div class="col-xs-1-2">
-                <div id="audio-button" class="stream-button clickable">
+                <div id="audio-button" class="stream-button" @click="startAudioStream">
                   <div class="frow column-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                       <path
@@ -329,7 +330,7 @@ body {
         <div class="viewer-count">
           <span id="viewer-count-number"></span> Viewers
         </div>
-        <button type="button" id="stop-sharing" class="">
+        <button type="button" id="stop-sharing" @click="stopStream">
           End Sharing
         </button>
         <!-- <div id="enable-chat"">
@@ -352,6 +353,53 @@ import { captureDesktop } from "@/utils/background/captureDesktop.js";
 
 export default {
   name: "Streamer",
+  data() {
+    return {
+      
+    }
+  },
+  methods: {
+    startVideoStream() {
+      setDefaults();
+      const streamFlags = {
+        enableTabCaptureAPI: "false",
+        isSharingOn: "true",
+        enableVideo: "true",
+        enableAudio: "true",
+      };
+      Object.keys(streamFlags).forEach(function(key) {
+        window.localStorage.setItem(key, streamFlags[key]);
+      });
+      captureDesktop();
+      // init();
+    },
+    startAudioStream() {
+      setDefaults();
+      const streamFlags = {
+        enableTabCaptureAPI: "false",
+        isSharingOn: "true",
+        enableVideo: "false",
+        enableAudio: "true",
+      };
+      Object.keys(streamFlags).forEach(function(key) {
+        window.localStorage.setItem(key, streamFlags[key]);
+      });
+      captureDesktop();
+      // init();
+    },
+    stopStream() {
+      window.localStorage.setItem("isSharingOn", false);
+      captureDesktop();
+      init();
+      // runtimePort.postMessage({
+      //   messageFromContentScript1234: true,
+      //   stopSharing: true,
+      // });
+    },
+    setRoomName(event) {
+      window.localStorage.setItem("room_id", event.target.value);
+    },
+  },
   mounted() {
     let stream = null;
 
@@ -384,51 +432,6 @@ export default {
       }
     }
     init();
-
-    document.getElementById("video-button").onclick = function() {
-      setDefaults();
-      const streamFlags = {
-        enableTabCaptureAPI: "false",
-        isSharingOn: "true",
-        enableVideo: "true",
-        enableAudio: "true",
-      };
-      Object.keys(streamFlags).forEach(function(key) {
-        window.localStorage.setItem(key, streamFlags[key]);
-      });
-      captureDesktop();
-      // init();
-    };
-
-    document.getElementById("audio-button").onclick = function() {
-      setDefaults();
-      const streamFlags = {
-        enableTabCaptureAPI: "false",
-        isSharingOn: "true",
-        enableVideo: "false",
-        enableAudio: "true",
-      };
-      Object.keys(streamFlags).forEach(function(key) {
-        window.localStorage.setItem(key, streamFlags[key]);
-      });
-      captureDesktop();
-      // init();
-    };
-
-    document.getElementById("stop-sharing").onclick = function() {
-      window.localStorage.setItem("isSharingOn", false);
-      captureDesktop();
-      init();
-      // runtimePort.postMessage({
-      //   messageFromContentScript1234: true,
-      //   stopSharing: true,
-      // });
-    };
-
-    document.getElementById("room-id").onchange = function(event) {
-      event && event.stopPropagation();
-      window.localStorage.setItem("room_id", this.value);
-    };
 
     // document.getElementById('enable-chat').onclick = function() {
     //   var popup_width = 312;
