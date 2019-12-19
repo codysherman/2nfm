@@ -6,44 +6,18 @@ function onAccessApproved(chromeMediaSourceId, opts) {
 
   // var resolutions = opts.resolutions;
 
-  constraints = {
-    audio: false,
-    video: {
-      mandatory: {
-        // maxWidth: resolutions.maxWidth,
-        // maxHeight: resolutions.maxHeight,
-        // minWidth: resolutions.minWidth,
-        // minHeight: resolutions.minHeight,
-        // minAspectRatio: getAspectRatio(
-        //   resolutions.maxWidth,
-        //   resolutions.maxHeight
-        // ),
-        // maxAspectRatio: getAspectRatio(
-        //   resolutions.maxWidth,
-        //   resolutions.maxHeight
-        // ),
-        // minFrameRate: 64,
-        // maxFrameRate: 128,
-      },
-      optional: [],
-    },
-  };
+  // console.log(navigator.mediaDevices.getSupportedConstraints());
 
-  constraints.audio = {
-    echoCancellation: false,
-    noiseSuppression: false,
-    autoGainControl: false,
-    googAutoGainControl: false,
-    googAutoGainControl2: false,
-    googEchoCancellation: false,
-    googEchoCancellation2: false,
-    googNoiseSupression: false,
-    googNoiseSupression2: false,
-    googNoiseSuppression: false,
-    googNoiseSuppression2: false,
-    googHighpassFilter: false,
-    googAudioMirroring: false,
-    googDisableLocalEcho: false, // https://www.chromestatus.com/feature/5056629556903936
+  constraints = {
+    video: {
+      // displaySurface: ["application", "browser", "monitor", "window"] // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+    },
+    audio: {
+      autoGainControl: false,
+      echoCancellation: false,
+      noiseSuppression: false,
+      googDisableLocalEcho: false // https://www.chromestatus.com/feature/5056629556903936
+    }
   };
 
   // navigator.webkitGetUserMedia(
@@ -74,6 +48,14 @@ function onAccessApproved(chromeMediaSourceId, opts) {
 
   async function startCapturing(e) {
     let stream = await startScreenCapture();
+    // console.log(stream.getTracks()[0].getCapabilities());
+    // console.log(stream.getTracks()[0].getSettings());
+    if (
+      window.localStorage.getItem("enableVideo") == "false" &&
+      stream.getAudioTracks().length === 0
+    ) {
+      alert(`Make sure the check the "Share audio" box in Google Chrome`);
+    }
     gotStream(stream);
   }
   startCapturing();
