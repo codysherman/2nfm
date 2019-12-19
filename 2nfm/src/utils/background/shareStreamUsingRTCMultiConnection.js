@@ -1,50 +1,56 @@
-function shareStreamUsingRTCMultiConnection(stream) {
+import * as globals from './globals';
+import { setDefaults } from './setDefaults';
+import { setViewerCount } from './common';
+import { CodecsHandler } from './helpers/CodecsHandler';
+import { IceServersHandler } from './helpers/IceServersHandler';
+
+export function shareStreamUsingRTCMultiConnection(stream) {
   // www.RTCMultiConnection.org/docs/
-  connection = new RTCMultiConnection();
-  connection.socketURL = "https://api.2n.fm:9001/";
-  connection.autoCloseEntireSession = true;
+  globals.connection = new RTCMultiConnection();
+  globals.connection.socketURL = "https://api.2n.fm:9001/";
+  globals.connection.autoCloseEntireSession = true;
 
   // this must match the viewer page
-  connection.socketMessageEvent = "desktopCapture";
+  globals.connection.socketMessageEvent = "desktopCapture";
 
-  connection.password = null;
-  if (room_password && room_password.length) {
-    connection.password = room_password;
+  globals.connection.password = null;
+  if (globals.room_password && globals.room_password.length) {
+    globals.connection.password = globals.room_password;
   }
 
-  connection.enableLogs = false;
-  connection.session = {
+  globals.connection.enableLogs = false;
+  globals.connection.session = {
     audio: true,
     video: true,
     data: true,
     oneway: true
   };
 
-  connection.candidates = {
+  globals.connection.candidates = {
     stun: true,
     turn: true
   };
 
-  connection.iceProtocols = {
+  globals.connection.iceProtocols = {
     tcp: true,
     udp: true
   };
 
-  connection.optionalArgument = {
+  globals.connection.optionalArgument = {
     optional: [],
     mandatory: {}
   };
 
-  connection.channel = connection.sessionid = connection.userid;
+  globals.connection.channel = globals.connection.sessionid = globals.connection.userid;
 
-  if (room_id && room_id.length) {
-    connection.channel = connection.sessionid = connection.userid = room_id;
+  if (globals.room_id && globals.room_id.length) {
+    globals.connection.channel = globals.connection.sessionid = globals.connection.userid = globals.room_id;
   }
 
-  connection.autoReDialOnFailure = true;
-  connection.getExternalIceServers = false;
+  globals.connection.autoReDialOnFailure = true;
+  globals.connection.getExternalIceServers = false;
 
-  connection.iceServers = IceServersHandler.getIceServers();
+  globals.connection.iceServers = IceServersHandler.getIceServers();
 
   function setBandwidth(sdp, value) {
     sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "");
@@ -55,41 +61,41 @@ function shareStreamUsingRTCMultiConnection(stream) {
     return sdp;
   }
 
-  connection.processSdp = function(sdp) {
-    if (bandwidth) {
+  globals.connection.processSdp = function(sdp) {
+    if (globals.bandwidth) {
       try {
-        bandwidth = parseInt(bandwidth);
+        globals.bandwidth = parseInt(globals.bandwidth);
       } catch (e) {
-        bandwidth = null;
+        globals.bandwidth = null;
       }
 
       if (
-        bandwidth &&
-        bandwidth != NaN &&
-        bandwidth != "NaN" &&
-        typeof bandwidth == "number"
+        globals.bandwidth &&
+        globals.bandwidth != NaN &&
+        globals.bandwidth != "NaN" &&
+        typeof globals.bandwidth == "number"
       ) {
-        sdp = setBandwidth(sdp, bandwidth);
+        sdp = setBandwidth(sdp, globals.bandwidth);
         sdp = BandwidthHandler.setVideoBitrates(sdp, {
-          min: bandwidth,
-          max: bandwidth
+          min: globals.bandwidth,
+          max: globals.bandwidth
         });
       }
     }
 
-    if (!!codecs && codecs !== "default") {
-      sdp = CodecsHandler.preferCodec(sdp, codecs);
+    if (!!globals.codecs && globals.codecs !== "default") {
+      sdp = CodecsHandler.preferCodec(sdp, globals.codecs);
     }
     return sdp;
   };
 
-  // www.rtcmulticonnection.org/docs/sdpConstraints/
-  connection.sdpConstraints.mandatory = {
+  // www.rtcmultiglobals.connection.org/docs/sdpConstraints/
+  globals.connection.sdpConstraints.mandatory = {
     OfferToReceiveAudio: false,
     OfferToReceiveVideo: false
   };
 
-  connection.onstream = connection.onstreamended = function(event) {
+  globals.connection.onstream = globals.connection.onstreamended = function(event) {
     try {
       event.mediaElement.pause();
       delete event.mediaElement;
@@ -97,27 +103,27 @@ function shareStreamUsingRTCMultiConnection(stream) {
   };
 
   // www.RTCMultiConnection.org/docs/dontCaptureUserMedia/
-  connection.dontCaptureUserMedia = true;
+  globals.connection.dontCaptureUserMedia = true;
 
   // www.RTCMultiConnection.org/docs/attachStreams/
-  connection.attachStreams.push(stream);
+  globals.connection.attachStreams.push(stream);
 
-  if (!enableVideo && connection.attachStreams[0].getVideoTracks().length > 0) {
-    connection.attachStreams[0].removeTrack(
-      connection.attachStreams[0].getVideoTracks()[0]
+  if (!globals.enableVideo && globals.connection.attachStreams[0].getVideoTracks().length > 0) {
+    globals.connection.attachStreams[0].removeTrack(
+      globals.connection.attachStreams[0].getVideoTracks()[0]
     );
   }
 
-  // console.log("connectionHere", connection.attachStreams[0].getAudioTracks());
+  // console.log("connectionHere", globals.connection.attachStreams[0].getAudioTracks());
 
   var text = "-";
   (function looper() {
-    if (!connection) {
+    if (!globals.connection) {
       setViewerCount(0);
       return;
     }
 
-    if (connection.isInitiator) {
+    if (globals.connection.isInitiator) {
       setViewerCount(0);
       return;
     }
@@ -132,7 +138,7 @@ function shareStreamUsingRTCMultiConnection(stream) {
   })();
 
   // www.RTCMultiConnection.org/docs/open/
-  connection.socketCustomEvent = connection.sessionid;
+  globals.connection.socketCustomEvent = globals.connection.sessionid;
 
   function roomOpenCallback(isRoomOpened, roomid, error) {
     if (error) {
@@ -140,25 +146,25 @@ function shareStreamUsingRTCMultiConnection(stream) {
     }
 
     // any key-values set here should be reset in setDefaults.js
-    window.localStorage.setItem("sessionId", connection.sessionid);
+    window.localStorage.setItem("sessionId", globals.connection.sessionid);
 
     // chrome.browserAction.enable();
     setViewerCount(0);
 
     if (room_url_box === true) {
-      var resultingURL = "https://2n.fm/?s=" + connection.sessionid;
+      var resultingURL = "https://2n.fm/?s=" + globals.connection.sessionid;
 
-      // resultingURL = 'http://localhost:9001/?s=' + connection.sessionid;
+      // resultingURL = 'http://localhost:9001/?s=' + globals.connection.sessionid;
 
-      if (room_password && room_password.length) {
-        resultingURL += "&p=" + room_password;
+      if (globals.room_password && globals.room_password.length) {
+        resultingURL += "&p=" + globals.room_password;
       }
 
-      if (bandwidth) {
-        resultingURL += "&bandwidth=" + bandwidth;
+      if (globals.bandwidth) {
+        resultingURL += "&bandwidth=" + globals.bandwidth;
       }
-      if (!!codecs && codecs !== "default") {
-        resultingURL += "&codecs=" + codecs;
+      if (!!globals.codecs && globals.codecs !== "default") {
+        resultingURL += "&codecs=" + globals.codecs;
       }
 
       var popup_width = 600;
@@ -183,55 +189,60 @@ function shareStreamUsingRTCMultiConnection(stream) {
       // );
     }
 
-    connection.socket.on(connection.socketCustomEvent, function(message) {
+    globals.connection.socket.on(globals.connection.socketCustomEvent, function(message) {
       if (message.receivedYourScreen) {
         setViewerCount(
-          connection.isInitiator ? connection.getAllParticipants().length : 0
+          globals.connection.isInitiator ? globals.connection.getAllParticipants().length : 0
         );
       }
     });
 
+    // TODO: this is not defined anywhere
     init();
   }
 
-  connection.onSocketDisconnect = function(event) {
-    // alert('Connection to the server is closed.');
-    if (connection.getAllParticipants().length > 0) return;
+  globals.connection.onSocketDisconnect = function(event) {
+    // alert('globals.connection to the server is closed.');
+    if (globals.connection.getAllParticipants().length > 0) return;
 
     setDefaults();
+
     // chrome.runtime.reload();
+    // TODO: this is not defined anywhere
     init();
   };
 
-  connection.onSocketError = function(event) {
+  globals.connection.onSocketError = function(event) {
     alert("Unable to connect to the server. Please try again.");
 
     setTimeout(function() {
       setDefaults();
       // chrome.runtime.reload();
+
+      // TODO: this is not defined anywhere
       init();
     }, 1000);
   };
 
-  connection.onopen = function(event) {
+  globals.connection.onopen = function(event) {
     //
   };
 
-  connection.onmessage = function(event) {
+  globals.connection.onmessage = function(event) {
     if (event.data.newChatMessage) {
-      runtimePort.postMessage({
+      globals.runtimePort.postMessage({
         messageFromContentScript1234: true,
         newChatMessage: event.data.newChatMessage
       });
 
-      connection.send({
+      globals.connection.send({
         receivedChatMessage: true,
         checkmark_id: event.data.checkmark_id
       });
     }
 
     if (event.data.receivedChatMessage) {
-      runtimePort.postMessage({
+      globals.runtimePort.postMessage({
         messageFromContentScript1234: true,
         receivedChatMessage: true,
         checkmark_id: event.data.checkmark_id
@@ -239,14 +250,14 @@ function shareStreamUsingRTCMultiConnection(stream) {
     }
   };
 
-  connection.open(connection.sessionid, roomOpenCallback);
+  globals.connection.open(globals.connection.sessionid, roomOpenCallback);
 
   var oldLength = 0;
-  connection.onleave = connection.onPeerStateChanged = function() {
-    var participantsCount = connection.getAllParticipants().length;
+  globals.connection.onleave = globals.connection.onPeerStateChanged = function() {
+    var participantsCount = globals.connection.getAllParticipants().length;
     if (oldLength != participantsCount) {
       // sendTabTitle();
     }
-    setViewerCount(connection.isInitiator ? participantsCount : 0);
+    setViewerCount(globals.connection.isInitiator ? participantsCount : 0);
   };
 }

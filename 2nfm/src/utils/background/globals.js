@@ -1,25 +1,26 @@
-var runtimePort;
+// TODO: probably not needed anymore
+export let runtimePort;
 
-var desktop_id;
-var constraints;
-var room_password = "";
-var room_id = "";
-var codecs = "default";
-var bandwidth;
+export let desktop_id;
+export let constraints;
+export let room_password = "";
+export let room_id = "";
+export let codecs = "default";
+export let bandwidth;
 
-var enableTabCaptureAPI;
-var enableVideo;
-var enableAudio;
-var isSharingOn;
+export let enableTabCaptureAPI;
+export let enableVideo;
+export let enableAudio;
+export let isSharingOn;
 
-var streaming_method = "RTCMultiConnection";
+export let streaming_method = "RTCMultiConnection";
 
-var room_url_box = true;
+export let room_url_box = true;
 
-var connection; // RTCMultiConnection
-var popup_id;
+export let connection; // RTCMultiConnection
+export let popup_id;
 
-var videoPlayers = [];
+export let videoPlayers = [];
 
-var microphoneDevice = false;
-var cameraDevice = false;
+export let microphoneDevice = false;
+export let cameraDevice = false;

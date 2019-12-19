@@ -1,3 +1,5 @@
+import { connection, runtimePort } from './globals';
+
 chrome.runtime.onConnect.addListener(function(port) {
   runtimePort = port;
 

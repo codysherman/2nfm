@@ -1,65 +1,70 @@
-function captureDesktop() {
-  if (connection && connection.attachStreams[0]) {
+
+import * as globals from './globals';
+import { setDefaults } from './setDefaults';
+import { onAccessApproved } from './onAccessApproved';
+
+export function captureDesktop() {
+  if (globals.connection && globals.connection.attachStreams[0]) {
     setDefaults();
     return;
   }
 
-  desktop_id = null;
-  constraints = null;
-  room_password = "";
-  room_id = "";
-  codecs = "default";
-  bandwidth = null;
+  globals.desktop_id = null;
+  globals.constraints = null;
+  globals.room_password = "";
+  globals.room_id = "";
+  globals.codecs = "default";
+  globals.bandwidth = null;
 
-  enableTabCaptureAPI = null;
-  enableVideo = null;
-  enableAudio = null;
-  isSharingOn = null;
+  globals.enableTabCaptureAPI = null;
+  globals.enableVideo = null;
+  globals.enableAudio = null;
+  globals.isSharingOn = null;
 
-  streaming_method = "RTCMultiConnection";
+  globals.streaming_method = "RTCMultiConnection";
 
-  room_url_box = true;
+  globals.room_url_box = true;
 
   var resolutions = {};
 
   if (window.localStorage.getItem("room_password")) {
-    room_password = window.localStorage.getItem("room_password");
+    globals.room_password = window.localStorage.getItem("room_password");
   }
 
   if (window.localStorage.getItem("room_id")) {
-    room_id = window.localStorage.getItem("room_id");
+    globals.room_id = window.localStorage.getItem("room_id");
   }
 
   if (window.localStorage.getItem("streaming_method")) {
-    streaming_method = window.localStorage.getItem("streaming_method");
+    globals.streaming_method = window.localStorage.getItem("streaming_method");
   }
 
   if (window.localStorage.getItem("room_url_box") === "false") {
-    room_url_box = false;
+    globals.room_url_box = false;
   }
 
   if (window.localStorage.getItem("codecs")) {
-    codecs = window.localStorage.getItem("codecs");
+    globals.codecs = window.localStorage.getItem("codecs");
   }
 
   if (window.localStorage.getItem("bandwidth")) {
-    bandwidth = window.localStorage.getItem("bandwidth");
+    globals.bandwidth = window.localStorage.getItem("bandwidth");
   }
 
   if (window.localStorage.getItem("enableVideo") == "true") {
-    enableVideo = window.localStorage.getItem("enableVideo");
+    globals.enableVideo = window.localStorage.getItem("enableVideo");
   }
 
   if (window.localStorage.getItem("enableAudio") == "true") {
-    enableAudio = window.localStorage.getItem("enableAudio");
+    globals.enableAudio = window.localStorage.getItem("enableAudio");
   }
 
   if (window.localStorage.getItem("enableTabCaptureAPI") == "true") {
-    enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
+    globals.enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
   }
 
   if (window.localStorage.getItem("isSharingOn") == "true") {
-    isSharingOn = window.localStorage.getItem("isSharingOn");
+    globals.isSharingOn = window.localStorage.getItem("isSharingOn");
   }
 
   var _resolutions = window.localStorage.getItem("resolutions");
@@ -118,16 +123,16 @@ function captureDesktop() {
     "tab"
   ];
 
-  if (enableAudio) {
+  if (globals.enableAudio) {
     sources.push("audio");
   }
 
-  // if (enableTabCaptureAPI) {
+  // if (globals.enableTabCaptureAPI) {
   //   captureTabUsingTabCapture(resolutions);
   //   return;
   // }
 
-  // desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(
+  // globals.desktop_id = chrome.desktopCapture.chooseDesktopMedia(sources, function(
   //   chromeMediaSourceId,
   //   opts
   // ) {

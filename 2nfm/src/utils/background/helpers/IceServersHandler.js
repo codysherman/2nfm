@@ -1,6 +1,6 @@
 // IceServersHandler.js
 
-var IceServersHandler = (function() {
+export const IceServersHandler = (function() {
   function getIceServers(connection) {
     var iceServers = [
       {

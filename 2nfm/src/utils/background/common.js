@@ -1,4 +1,7 @@
-function getAspectRatio(w, h) {
+import * as globals from './globals';
+import { setDefaults } from './setDefaults';
+
+export function getAspectRatio(w, h) {
   function gcd(a, b) {
     return b == 0 ? a : gcd(b, a % b);
   }
@@ -6,7 +9,7 @@ function getAspectRatio(w, h) {
   return w / r / (h / r);
 }
 
-function openVideoPreview(stream) {
+export function openVideoPreview(stream) {
   // var win = window.open("extension-pages/video.html?src=" + URL.createObjectURL(stream), "_blank", "top=0,left=0");
   var win = window.open("extension-pages/video.html", "_blank", "top=0,left=0");
   var timer = setInterval(function() {
@@ -20,16 +23,16 @@ function openVideoPreview(stream) {
   return win;
 }
 
-function initVideoPlayer(stream) {
+export function initVideoPlayer(stream) {
   var videoPlayer = document.createElement("video");
   videoPlayer.muted = !enableTabCaptureAPI;
   videoPlayer.volume = !!enableTabCaptureAPI;
   videoPlayer.autoplay = true;
   videoPlayer.srcObject = stream;
-  videoPlayers.push(videoPlayer);
+  globals.videoPlayers.push(videoPlayer);
 }
 
-function addStreamStopListener(stream, callback) {
+export function addStreamStopListener(stream, callback) {
   var streamEndedEvent = "ended";
   if ("oninactive" in stream) {
     streamEndedEvent = "inactive";
@@ -64,7 +67,7 @@ function addStreamStopListener(stream, callback) {
   });
 }
 
-function getUserMediaError(e) {
+export function getUserMediaError(e) {
   setDefaults();
 
   chrome.windows.create({
@@ -80,10 +83,11 @@ function getUserMediaError(e) {
   });
 }
 
-function setViewerCount(viewerCount) {
+export function setViewerCount(viewerCount) {
   document.getElementById("viewer-count-number").innerHTML = viewerCount;
 }
 
+// TODO: figure out new placement for this line (vue mounted?)
 // sometimes extension unexpectedly crashes or reloads
 // in this case, making sure to remove "ON" status
 window.localStorage.setItem("isSharingOn", false);

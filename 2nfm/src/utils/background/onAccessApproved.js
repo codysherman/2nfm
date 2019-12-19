@@ -1,4 +1,8 @@
-function onAccessApproved(chromeMediaSourceId, opts) {
+import { setDefaults } from './setDefaults';
+import { gotStream } from './gotStream';
+import { captureDesktop } from './captureDesktop';
+
+export function onAccessApproved(chromeMediaSourceId, opts) {
   // if (!chromeMediaSourceId) {
   //   setDefaults();
   //   return;

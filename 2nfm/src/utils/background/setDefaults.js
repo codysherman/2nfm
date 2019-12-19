@@ -1,4 +1,7 @@
-function setDefaults() {
+import * as globals from './globals';
+import { setViewerCount } from './common';
+
+export function setDefaults() {
   const defaults = {
     enableTabCaptureAPI: "false",
     isSharingOn: "false",
@@ -11,8 +14,8 @@ function setDefaults() {
     window.localStorage.setItem(key, defaults[key]);
   });
 
-  if (connection) {
-    connection.attachStreams.forEach(function(stream) {
+  if (globals.connection) {
+    globals.connection.attachStreams.forEach(function(stream) {
       try {
         stream.getTracks().forEach(function(track) {
           try {
@@ -23,14 +26,14 @@ function setDefaults() {
     });
 
     try {
-      connection.close();
+      globals.connection.close();
     } catch (e) {}
 
     try {
-      connection.closeSocket();
+      globals.connection.closeSocket();
     } catch (e) {}
 
-    connection = null;
+    globals.connection = null;
   }
 
   // chrome.browserAction.setIcon({
@@ -52,5 +55,7 @@ function setDefaults() {
   setViewerCount("0");
 
   // chrome.runtime.reload();
+  
+  // TODO: not defined yet
   init();
 }

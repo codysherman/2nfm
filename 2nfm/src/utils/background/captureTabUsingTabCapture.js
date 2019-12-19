@@ -1,9 +1,12 @@
-var tabId;
-var tabTitle;
-var tabListener;
-var tabCaptureListener;
+import { connection, enableSpeakers, enableVideo } from './globals';
+import { gotTabCaptureStream } from './gotTabCaptureStream';
 
-function captureTabUsingTabCapture(resolutions) {
+export let tabId;
+export let tabTitle;
+export let tabListener;
+export let tabCaptureListener;
+
+export function captureTabUsingTabCapture(resolutions) {
   chrome.tabs.query(
     {
       active: true,
@@ -106,7 +109,7 @@ function captureTabUsingTabCapture(resolutions) {
   );
 }
 
-function sendTabTitle() {
+export function sendTabTitle() {
   if (connection) {
     // connection.send({ openChat: true });
     connection.send({ newChatMessage: tabTitle });

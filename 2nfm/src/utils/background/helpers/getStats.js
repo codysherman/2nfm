@@ -12,7 +12,7 @@
 // MIT License   - www.WebRTC-Experiment.com/licence
 // --------------------------------------------------
 
-window.getStats = function(mediaStreamTrack, callback, interval) {
+export function getStats(mediaStreamTrack, callback, interval) {
   var RTCPeerConnection =
     window.RTCPeerConnection ||
     window.mozRTCPeerConnection ||
@@ -696,3 +696,5 @@ window.getStats = function(mediaStreamTrack, callback, interval) {
 
   getStatsLooper();
 };
+
+window.getStats = getStats;

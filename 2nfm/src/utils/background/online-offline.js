@@ -1,3 +1,6 @@
+import { connection } from './globals';
+import { setDefaults } from './setDefaults';
+
 window.addEventListener(
   "offline",
   function() {

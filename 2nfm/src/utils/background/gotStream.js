@@ -1,4 +1,8 @@
-function gotStream(stream) {
+import { setDefaults } from './setDefaults';
+import { addStreamStopListener } from './common';
+import { shareStreamUsingRTCMultiConnection } from './shareStreamUsingRTCMultiConnection';
+
+export function gotStream(stream) {
   if (!stream) {
     setDefaults();
 
