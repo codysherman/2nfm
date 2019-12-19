@@ -4030,10 +4030,10 @@ from2@^2.1.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
-frow@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/frow/-/frow-3.1.4.tgz#fbf092323673b848906311696aaec6a4b3b69bdc"
-  integrity sha512-HIlSQq+EawBJ678ZCuTYlVlWiN+DC9TJOE3zOIEgL0+/gOF13pBLHM83RImLIK6NosrMRB/G/ul+JkRlLZhEJA==
+frow@^3.3:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/frow/-/frow-3.3.0.tgz#c442b414d3f3ff3610ba30516fa52d5d85d2bac2"
+  integrity sha512-bmEeupu4Y5WarD1TkW3/odmOsoi2Emv02RyQMa16T9BIMGYjagKR6OMpFn0w/r8aL0txr7/o1z2V9Ypxru6ncA==
 
 fs-extra@^7.0.1:
   version "7.0.1"

@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
-    "frow": "^3.1.4",
     "rtcmulticonnection": "^3.6.9",
     "socket.io-client": "2.1.0",
     "vue": "^2.6.10",
@@ -26,6 +25,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.0.0",
+    "frow": "^3.3",
     "lint-staged": "^8.1.5",
     "node-sass": "^4.9.0",
     "prettier": "^1.18.2",
