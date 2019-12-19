@@ -9,6 +9,7 @@ export function setDefaults(externalThis) {
     sessionId: "",
   };
 
+  // TODO: change to externalThis
   Object.keys(defaults).forEach(function(key) {
     window.localStorage.setItem(key, defaults[key]);
   });

@@ -191,10 +191,10 @@ body {
           />
         </g>
       </svg>
-      <div id="live-indicator" :class="{ live: isSharingOn }">LIVE</div>
+      <div id="live-indicator" :class="{ live: isSharingOn == 'true' }">LIVE</div>
     </div>
     <div class="col-md-1-2">
-      <section id="setup-section" v-if="!isSharingOn">
+      <section id="setup-section" v-if="!(isSharingOn == 'true')">
         <label id="room-id-label" class="row-start">
           <span class="shrink-0">2n.fm/?s=</span>
           <input type="text" id="room-id" placeholder="Random" :value="roomName" @change="setRoomName"/>
@@ -325,9 +325,9 @@ body {
           </div>
         </section>
       </section>
-      <section id="stop-section" v-if="isSharingOn">
+      <section id="stop-section" v-if="isSharingOn == 'true'">
         <router-link id="public-link" to="{query: { s: sessionId, p: room_password }}`}" target="_blank">
-          {{`2n.fm/?s=${window.localStorage.getItem("sessionId")}`}}
+          {{`2n.fm/?s=${sessionId}`}}
         </router-link>
         <div class="viewer-count">
           <span id="viewer-count-number"></span> Viewers
@@ -359,7 +359,7 @@ export default {
   data() {
     return {
       stream: null,
-      isSharingOn: window.localStorage.getItem("isSharingOn") === "true", // window.localStorage.getItem("isSharingOn")
+      isSharingOn: 'false', // window.localStorage.getItem("isSharingOn")
       sessionId: null, // window.localStorage.getItem("sessionId")
       roomName: window.localStorage.getItem('room_id') || '',
       desktop_id: null,
@@ -372,38 +372,30 @@ export default {
       enableVideo: null,
       enableAudio: null,
       streaming_method: 'RTCMultiConnection',
-      room_url_box: true,
+      room_url_box: 'true',
     }
   },
   methods: {
     startVideoStream() {
       setDefaults(this);
-      const streamFlags = {
-        enableTabCaptureAPI: 'false',
-        isSharingOn: 'true',
-        enableVideo: 'true',
-        enableAudio: 'true',
-      };
-      Object.keys(streamFlags).forEach(function(key) {
-        window.localStorage.setItem(key, streamFlags[key]);
-      });
+      this.enableTabCaptureAPI = 'false';
+      this.isSharingOn = 'true';
+      this.enableVideo = 'true';
+      this.enableAudio = 'true';
+      
       captureDesktop(this);
     },
     startAudioStream() {
       setDefaults(this);
-      const streamFlags = {
-        enableTabCaptureAPI: 'false',
-        isSharingOn: 'true',
-        enableVideo: 'false',
-        enableAudio: 'true',
-      };
-      Object.keys(streamFlags).forEach(function(key) {
-        window.localStorage.setItem(key, streamFlags[key]);
-      });
+      this.enableTabCaptureAPI = 'false';
+      this.isSharingOn = 'true';
+      this.enableVideo = 'false';
+      this.enableAudio = 'true';
+
       captureDesktop(this);
     },
     stopStream() {
-      window.localStorage.setItem("isSharingOn", false);
+      this.isSharingOn = "false";
       captureDesktop(this);
       // runtimePort.postMessage({
       //   messageFromContentScript1234: true,
@@ -411,6 +403,7 @@ export default {
       // });
     },
     setRoomName(event) {
+      this.room_id = event.target.value;
       window.localStorage.setItem("room_id", event.target.value);
     },
   },

@@ -62,9 +62,9 @@ export function captureDesktop(externalThis) {
     externalThis.enableTabCaptureAPI = window.localStorage.getItem("enableTabCaptureAPI");
   }
 
-  // if (window.localStorage.getItem("isSharingOn") == "true") {
-  //   externalThis.isSharingOn = window.localStorage.getItem("isSharingOn");
-  // }
+  // TODO: why would we need to do this?
+  //   - Cody: we don't need to worry about this because it was here for Chrome Extension
+  externalThis.isSharingOn = 'true';
 
   var _resolutions = window.localStorage.getItem("resolutions");
   if (!_resolutions) {
