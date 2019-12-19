@@ -371,10 +371,8 @@ export default {
       enableTabCaptureAPI: null,
       enableVideo: null,
       enableAudio: null,
-      isSharingOn: null,
       streaming_method: 'RTCMultiConnection',
       room_url_box: true,
-      test: 'test',
     }
   },
   methods: {
