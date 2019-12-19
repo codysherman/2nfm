@@ -4,7 +4,7 @@ import { shareStreamUsingRTCMultiConnection } from './shareStreamUsingRTCMultiCo
 
 export function gotStream(stream, externalThis) {
   if (!stream) {
-    setDefaults();
+    setDefaults(externalThis);
 
     // chrome.windows.create({
     //   url:
@@ -23,11 +23,11 @@ export function gotStream(stream, externalThis) {
   // chrome.browserAction.disable();
 
   stream.addEventListener("inactive", e => {
-    setDefaults();
+    setDefaults(externalThis);
   });
 
   addStreamStopListener(stream, function() {
-    setDefaults();
+    setDefaults(externalThis);
     // chrome.runtime.reload();
   });
 
