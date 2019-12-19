@@ -16,7 +16,6 @@ export function captureDesktop(externalThis) {
   externalThis.bandwidth = null;
 
   externalThis.enableTabCaptureAPI = null;
-  externalThis.enableVideo = null;
   externalThis.enableAudio = null;
   externalThis.isSharingOn = null;
 
@@ -48,10 +47,6 @@ export function captureDesktop(externalThis) {
 
   if (window.localStorage.getItem("bandwidth")) {
     externalThis.bandwidth = window.localStorage.getItem("bandwidth");
-  }
-
-  if (window.localStorage.getItem("enableVideo") == "true") {
-    externalThis.enableVideo = window.localStorage.getItem("enableVideo");
   }
 
   if (window.localStorage.getItem("enableAudio") == "true") {

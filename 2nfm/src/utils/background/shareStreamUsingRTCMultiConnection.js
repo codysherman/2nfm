@@ -109,7 +109,7 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
   // www.RTCMultiConnection.org/docs/attachStreams/
   externalThis.connection.attachStreams.push(stream);
 
-  if (!externalThis.enableVideo && externalThis.connection.attachStreams[0].getVideoTracks().length > 0) {
+  if (!(externalThis.enableVideo == 'true') && externalThis.connection.attachStreams[0].getVideoTracks().length > 0) {
     externalThis.connection.attachStreams[0].removeTrack(
       externalThis.connection.attachStreams[0].getVideoTracks()[0]
     );
