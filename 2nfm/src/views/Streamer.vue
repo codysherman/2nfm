@@ -346,6 +346,7 @@ body {
 
 <script>
 import io from 'socket.io-client';
+// TODO: Remove need to do this
 window.io = io;
 import adapter from "webrtc-adapter";
 import RTCMultiConnection from "rtcmulticonnection";

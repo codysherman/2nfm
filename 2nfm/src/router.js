@@ -25,11 +25,14 @@ export default new Router({
     {
       path: "/streamer",
       name: "streamer",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Streamer.vue")
-    }
+        import(/* webpackChunkName: "streamer" */ "./views/Streamer.vue")
+    },
+    {
+      path: "/receiver",
+      name: "receiver",
+      component: () =>
+        import(/* webpackChunkName: "receiver" */ "./views/Receiver.vue")
+    },
   ]
 });
