@@ -16,9 +16,9 @@ export function captureDesktop(externalThis) {
     externalThis.room_id = window.localStorage.getItem("room_id");
   }
 
-  // TODO: why would we need to do this?
-  //   - Cody: we don't need to worry about this because it was here for Chrome Extension
-  externalThis.isSharingOn = true;
+  // TODO: review me
+  // old todo: this may need to change (or be removed) because captureDesktop will be called to end a stream
+  // externalThis.isSharingOn = true;
 
   var _resolutions = window.localStorage.getItem("resolutions");
   if (!_resolutions) {
