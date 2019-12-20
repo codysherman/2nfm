@@ -324,8 +324,10 @@ video {
     </div>
 
     <div class="frow centered-column nowrap">
+      {{ roomName }}
       <svg
         id="loading-logo"
+        v-if="!isPlaying"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 92 53"
         width="92"
@@ -356,7 +358,7 @@ video {
       </svg>
       <svg
         id="logo"
-        hidden
+        v-if="isPlaying"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 61.9 34.3"
         width="61.9"
@@ -385,26 +387,26 @@ video {
       </div>
 
       <video
-        id="video"
         class="shadow-light"
+        ref="this.$refs.videoPlayer"
         playsinline
-        onclick="togglePlayback()"
-        hidden
+        @click="togglePlayback"
       >
         Your browser does not support the video element.
       </video>
-      <audio id="audio" hidden>
+      <audio ref="this.$refs.audioPlayer">
         Your browser does not support the audio element.
       </audio>
 
-      <div id="media-controls" class="frow nowrap">
+      <div id="media-controls" class="frow nowrap" :class="{ 'justify-between': isVideo }">
         <div class="frow nowrap">
           <button
             type="button"
             id="play-button-container"
             class="frow nowrap button-none"
-            onclick="togglePlayback()"
-            disabled
+            :class="{ playing: isPlaying }"
+            @click="togglePlayback"
+            :disabled="!isPlaying || (isPlaying && isVideo)"
           >
             <div class="play-button play-button-before"></div>
             <div class="play-button play-button-after"></div>
@@ -412,19 +414,20 @@ video {
           <input
             type="range"
             id="volume-slider"
+            v-if="isPlaying"
             min="0"
             max="1"
             value="0.5"
             step="0.01"
-            oninput="setVolume(this.value)"
-            disabled
+            @change="setVolume"
           />
         </div>
         <button
           type="button"
           id="fullscreen-button"
           class="button-none"
-          hidden
+          v-if="isVideo"
+          @click="fullscreenVideo"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -439,7 +442,7 @@ video {
         </button>
       </div>
 
-      <div id="info-bar">&nbsp;</div>
+      <div id="info-bar" ref="infoBar">&nbsp;</div>
       <a id="create-message" href="/streamer">Create your own room</a>
     </div>
 
@@ -456,7 +459,6 @@ video {
 </template>
 
 <script>
-//   <script src="receiver/receiver.js"></script>
 import io from 'socket.io-client';
 // TODO: Remove need to do this
 window.io = io;
@@ -468,503 +470,458 @@ import { setDefaults } from "@/utils/background/setDefaults.js";
 import { captureDesktop } from "@/utils/background/captureDesktop.js";
 
 import { CodecsHandler } from "@/utils/background/helpers/CodecsHandler.js";
-import { IceServerHandler } from "@/utils/background/helpers/IceServersHandler.js";
+import { IceServersHandler } from "@/utils/background/helpers/IceServersHandler.js";
 import { getStats } from "@/utils/background/helpers/getStats.js";
 
 export default {
   name: "Receiver",
   data() {
     return {
+      roomName: 'test',
+      stream: null,
+      isPlaying: false,
+      isVideo: false,
+      isAudio: false,
+      connection: null,
+      params: {},
     }
   },
   computed: {
   },
   methods: {
+    togglePlayback() {
+      if (this.stream.isVideo) {
+        this.$refs.videoPlayer.paused ? this.$refs.videoPlayer.play() : this.$refs.videoPlayer.pause();
+      } else {
+        this.$refs.audioPlayer.paused ? this.$refs.audioPlayer.play() : this.$refs.audioPlayer.pause();
+      }
+    },
+    setVolume(input) {
+      this.$refs.audioPlayer.volume = input;
+      this.$refs.videoPlayer.volume = input;
+    },
+    fullscreenVideo() {
+      if (this.$refs.videoPlayer.requestFullscreen) this.$refs.videoPlayer.requestFullscreen();
+      else if (this.$refs.videoPlayer.mozRequestFullScreen) this.$refs.videoPlayer.mozRequestFullScreen();
+      else if (this.$refs.videoPlayer.webkitRequestFullScreen) this.$refs.videoPlayer.webkitRequestFullScreen();
+      else if (this.$refs.videoPlayer.msRequestFullscreen) this.$refs.videoPlayer.msRequestFullscreen();
+    },
+    checkPresence() {
+      this.connection.checkPresence(this.roomName, (isRoomExist, roomid, extra) => {
+        if (isRoomExist === false) {
+          document.getElementById("create-message").hidden = false;
+          let noHostMessage = "Waiting for someone to host the room: " + this.roomName;
+          if (this.$refs.infoBar.innerHTML != noHostMessage) {
+            this.$refs.infoBar.innerHTML = noHostMessage;
+          }
+
+          setTimeout(() => {
+            presenceCheckWait < 60000 &&
+              (presenceCheckWait = presenceCheckWait * 2);
+            setTimeout(checkPresence, presenceCheckWait);
+          }, presenceCheckWait);
+          return;
+        }
+  
+        this.$refs.infoBar.innerHTML = "Joining room: " + this.roomName;
+
+        this.connection.password = null;
+        if (this.params.p) {
+          this.connection.password = this.params.p;
+        }
+
+        this.connection.join(this.roomName);
+      });
+    },
   },
   mounted() {
-    (function() {
-      var params = {},
-        r = /([^&=]+)=?([^&]*)/g,
-        DEFAULTS = { bandwidth: 8192 };
+    let r;
+    let DEFAULTS;
+    let tempParams;
+    tempParams = {},
+      r = /([^&=]+)=?([^&]*)/g,
+      DEFAULTS = { bandwidth: 8192 };
 
-      function d(s) {
-        return decodeURIComponent(s.replace(/\+/g, " "));
-      }
+    function d(s) {
+      return decodeURIComponent(s.replace(/\+/g, " "));
+    }
 
-      var match,
-        search = window.location.search;
-      while ((match = r.exec(search.substring(1))))
-        params[d(match[1])] = d(match[2]);
+    var match,
+      search = window.location.search;
+    while ((match = r.exec(search.substring(1))))
+      tempParams[d(match[1])] = d(match[2]);
 
-      window.params = Object.assign({}, DEFAULTS, params);
-    })();
+    this.params = Object.assign({}, DEFAULTS, tempParams);
+    // TODO: Set this.roomName;
 
-    if (params.s) {
-      document.getElementById("receiver").hidden = false;
-      var infoBar = document.getElementById("info-bar");
-      var body = document.getElementsByTagName("BODY")[0];
+    // http://www.rtcmulticonnection.org/docs/constructor/
+    this.connection = new RTCMultiConnection(this.roomName);
+    this.connection.socketURL = "https://api.2n.fm:9001/";
+    this.connection.autoCloseEntireSession = true;
 
-      // http://www.rtcmulticonnection.org/docs/constructor/
-      var connection = new RTCMultiConnection(params.s);
-      connection.socketURL = "https://api.2n.fm:9001/";
-      connection.autoCloseEntireSession = true;
+    // this must match the extension page
+    this.connection.socketMessageEvent = "desktopCapture";
 
-      // this must match the extension page
-      connection.socketMessageEvent = "desktopCapture";
+    this.connection.enableLogs = true;
+    this.connection.session = {
+      audio: true,
+      video: true,
+      data: true,
+      oneway: true
+    };
 
-      connection.enableLogs = true;
-      connection.session = {
-        audio: true,
-        video: true,
-        data: true,
-        oneway: true
-      };
+    // www.rtcmulticonnection.org/docs/sdpConstraints/
+    this.connection.sdpConstraints.mandatory = {
+      OfferToReceiveAudio: true,
+      OfferToReceiveVideo: true
+    };
 
-      // www.rtcmulticonnection.org/docs/sdpConstraints/
-      connection.sdpConstraints.mandatory = {
-        OfferToReceiveAudio: true,
-        OfferToReceiveVideo: true
-      };
+    this.connection.getExternalIceServers = false;
+    this.connection.iceServers = IceServersHandler.getIceServers();
 
-      connection.getExternalIceServers = false;
-      connection.iceServers = IceServersHandler.getIceServers();
+    function setBandwidth(sdp) {
+      sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "");
+      sdp = sdp.replace(/a=mid:video\r\n/g, "a=mid:video\r\nb=AS:10000\r\n");
+      return sdp;
+    }
 
-      function setBandwidth(sdp) {
-        sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "");
-        sdp = sdp.replace(/a=mid:video\r\n/g, "a=mid:video\r\nb=AS:10000\r\n");
-        return sdp;
-      }
+    this.connection.processSdp = (sdp) => {
+      var bandwidth = this.params.bandwidth;
+      var codecs = this.params.codecs;
 
-      connection.processSdp = function(sdp) {
-        var bandwidth = params.bandwidth;
-        var codecs = params.codecs;
-
-        if (bandwidth) {
-          try {
-            bandwidth = parseInt(bandwidth);
-          } catch (e) {
-            bandwidth = null;
-          }
-
-          if (
-            bandwidth &&
-            bandwidth != NaN &&
-            bandwidth != "NaN" &&
-            typeof bandwidth == "number"
-          ) {
-            sdp = setBandwidth(sdp, bandwidth);
-            sdp = BandwidthHandler.setVideoBitrates(sdp, {
-              min: bandwidth,
-              max: bandwidth
-            });
-          }
-        }
-
-        if (!!codecs && codecs !== "default") {
-          sdp = CodecsHandler.preferCodec(sdp, codecs);
-        }
-        return sdp;
-      };
-
-      connection.optionalArgument = {
-        optional: [],
-        mandatory: {}
-      };
-
-      connection.onstatechange = function(state) {
-        infoBar.innerHTML = state.name + ": " + state.reason;
-
-        if (state.name == "request-rejected" && params.p) {
-          infoBar.innerHTML =
-            "Password (" +
-            params.p +
-            ") did not match with broadcaster, that is why your participation request has been rejected.<br>Please contact him and ask for valid password.";
-        }
-
-        if (state.name === "room-not-available") {
-          infoBar.innerHTML =
-            "Screen share session is closed or paused. You will join automatically when share session is resumed.";
-        }
-      };
-
-      connection.onstreamid = function(event) {
-        infoBar.innerHTML = "Remote peer is about to send his screen.";
-      };
-
-      var mediaControls = document.getElementById("media-controls");
-      var playButton = document.getElementById("play-button-container");
-      var volumeSlider = document.getElementById("volume-slider");
-      var fullscreenButton = document.getElementById("fullscreen-button");
-
-      var video = document.getElementById("video");
-      var audio = document.getElementById("audio");
-
-      video.onplay = event => {
-        playButton.classList.add("playing");
-        playButton.disabled = true;
-      };
-
-      video.onpause = event => {
-        playButton.classList.remove("playing");
-        playButton.disabled = false;
-      };
-
-      audio.onplay = event => {
-        playButton.classList.add("playing");
-      };
-
-      audio.onpause = event => {
-        playButton.classList.remove("playing");
-      };
-
-      var loadingLogo = document.getElementById("loading-logo");
-      var logo = document.getElementById("logo");
-
-      var stream = null;
-      connection.onstream = function(e) {
-        loadingLogo.setAttribute("hidden", "");
-        logo.removeAttribute("hidden");
-        video.srcObject = null;
-        audio.srcObject = null;
-        stream = e.stream;
-        stream.mute();
-        if (stream.isVideo) {
-          video.removeAttribute("hidden");
-          video.srcObject = stream;
-          video.srcObject.getVideoTracks()[0].enabled = true;
-          if (video.srcObject.getAudioTracks().length) {
-            video.srcObject.getAudioTracks()[0].enabled = true;
-          }
-          video.volume = 0.5;
-          video.play();
-          fullscreenButton.removeAttribute("hidden");
-          mediaControls.classList.add("justify-between");
-        } else {
-          audio.removeAttribute("hidden");
-          audio.srcObject = stream;
-          audio.srcObject.getAudioTracks()[0].enabled = true;
-          audio.volume = 0.5;
-          audio.play();
-          playButton.disabled = false;
-        }
-        volumeSlider.removeAttribute("disabled");
-        body.classList.add("stream-live");
-      };
-
-      togglePlayback = function() {
-        if (stream.isVideo) {
-          video.paused ? video.play() : video.pause();
-        } else {
-          audio.paused ? audio.play() : audio.pause();
-        }
-      };
-
-      setVolume = function(input) {
-        audio.volume = input;
-        video.volume = input;
-      };
-
-      fullscreenButton.addEventListener("click", function(e) {
-        if (video.requestFullscreen) video.requestFullscreen();
-        else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
-        else if (video.webkitRequestFullScreen) video.webkitRequestFullScreen();
-        else if (video.msRequestFullscreen) video.msRequestFullscreen();
-      });
-
-      // if user left
-      connection.onleave = connection.onstreamended = connection.onSessionClosed = function(
-        e
-      ) {
-        if (e.userid !== params.s) return;
-
-        video.srcObject = null;
-
-        infoBar.innerHTML = "Screen sharing has been closed.";
-        body.classList.remove("stream-live");
-        statsBar.setAttribute("hidden", "");
-        connection.close();
-        connection.closeSocket();
-        connection.userid = connection.token();
-
-        location.reload();
-      };
-
-      connection.onJoinWithPassword = function(remoteUserId) {
-        if (!params.p) {
-          params.p = prompt(
-            remoteUserId + " is password protected. Please enter the pasword:"
-          );
-        }
-
-        connection.password = params.p;
-        connection.join(remoteUserId);
-      };
-
-      connection.onInvalidPassword = function(remoteUserId, oldPassword) {
-        var password = prompt(
-          remoteUserId +
-            " is password protected. Your entered wrong password (" +
-            oldPassword +
-            "). Please enter valid pasword:"
-        );
-        connection.password = password;
-        connection.join(remoteUserId);
-      };
-
-      connection.onPasswordMaxTriesOver = function(remoteUserId) {
-        alert(
-          remoteUserId +
-            " is password protected. Your max password tries exceeded the limit."
-        );
-      };
-
-      connection.onSocketDisconnect = function(event) {
-        // alert('Connection to the server is closed.');
-        if (connection.getAllParticipants().length > 0) return;
-        location.reload();
-      };
-
-      connection.onSocketError = function(event) {
-        alert("Unable to connect to the server. Please try again.");
-
-        setTimeout(function() {
-          location.reload();
-        }, 1000);
-      };
-
-      connection.onopen = function(event) {
-        //
-      };
-
-      var chatContainer = document.getElementById("chat-container");
-      var lastMessage = "";
-      connection.onmessage = function(event) {
-        if (event.data.openChat === true) {
-          chatContainer.removeAttribute("hidden");
-        }
-
-        if (event.data.closeChat === true) {
-          chatContainer.setAttribute("hidden", "");
-        }
-
-        if (event.data.newChatMessage && event.data.newChatMessage != lastMessage) {
-          lastMessage = event.data.newChatMessage;
-
-          // there is a possibility that broadcaster did not send "openChat:true" signal
-          // chatContainer.removeAttribute('hidden');
-
-          appendChatMessage("Broadcaster", event.data.newChatMessage);
-          updateTitle(event.data.newChatMessage);
-          connection.send({
-            receivedChatMessage: true,
-            checkmark_id: event.data.checkmark_id
-          });
-        }
-
-        if (event.data.receivedChatMessage) {
-          if (document.getElementById(event.data.checkmark_id)) {
-            document.getElementById(event.data.checkmark_id).style.display = "";
-          }
-        }
-      };
-
-      var txtChatMessage = document.getElementById("txt-chat-message");
-      var chatMessages = document.getElementById("chat-messages");
-
-      txtChatMessage.onkeyup = function(e) {
-        if (e.keyCode === 13) {
-          var checkmark_id = (Math.random() * 100).toString().replace(".", "");
-          appendChatMessage("You", this.value, checkmark_id);
-          connection.send({
-            newChatMessage: this.value
-          });
-          this.value = "";
-        }
-      };
-
-      function appendChatMessage(name, message, checkmark_id) {
-        var div = document.createElement("div");
-        if (checkmark_id) {
-          div.innerHTML =
-            '<p><span class="name">' +
-            name +
-            ': <img class="checkmark" id="' +
-            checkmark_id +
-            '" title="Received" src="images/checkmark.png"></span></p><p>' +
-            message +
-            "</p>";
-        } else {
-          div.innerHTML =
-            '<p><span class="name">' + name + ":</span></p><p>" + message + "</p>";
-        }
-        chatMessages.appendChild(div);
-
-        chatMessages.scrollTop = chatMessages.clientHeight;
-        chatMessages.scrollTop = chatMessages.scrollHeight - chatMessages.scrollTop;
-      }
-
-      var tabTitle = document.getElementById("tab-title");
-      function updateTitle(message) {
-        tabTitle.innerHTML = message;
-      }
-
-      connection.socketCustomEvent = params.s;
-
-      let presenceCheckWait = 1000;
-
-      function checkPresence() {
-        // infoBar.innerHTML = 'Checking room: ' + params.s;
-
-        connection.checkPresence(params.s, function(isRoomExist, roomid, extra) {
-          if (isRoomExist === false) {
-            document.getElementById("create-message").hidden = false;
-            let noHostMessage = "Waiting for someone to host the room: " + params.s;
-            if (infoBar.innerHTML != noHostMessage) {
-              infoBar.innerHTML = noHostMessage;
-            }
-
-            setTimeout(function() {
-              presenceCheckWait < 60000 &&
-                (presenceCheckWait = presenceCheckWait * 2);
-              setTimeout(checkPresence, presenceCheckWait);
-            }, presenceCheckWait);
-            return;
-          }
-
-          infoBar.innerHTML = "Joining room: " + params.s;
-
-          connection.password = null;
-          if (params.p) {
-            connection.password = params.p;
-          }
-
-          connection.join(params.s);
-        });
-      }
-
-      if (params.s) {
-        checkPresence();
-      }
-
-      var dontDuplicate = {};
-      connection.onPeerStateChanged = function(event) {
-        if (!connection.getRemoteStreams(params.s).length) {
-          if (event.signalingState === "have-remote-offer") {
-            infoBar.innerHTML = "Received WebRTC offer from: " + params.s;
-          } else if (
-            event.iceGatheringState === "complete" &&
-            event.iceConnectionState === "connected"
-          ) {
-            infoBar.innerHTML =
-              "WebRTC handshake is completed. Waiting for remote video from: " +
-              params.s;
-          }
+      if (bandwidth) {
+        try {
+          bandwidth = parseInt(bandwidth);
+        } catch (e) {
+          bandwidth = null;
         }
 
         if (
-          event.iceConnectionState === "connected" &&
-          event.signalingState === "stable"
+          bandwidth &&
+          bandwidth != NaN &&
+          bandwidth != "NaN" &&
+          typeof bandwidth == "number"
         ) {
-          if (dontDuplicate[event.userid]) return;
-          dontDuplicate[event.userid] = true;
-
-          var peer = connection.peers[event.userid].peer;
-
-          getStats(
-            peer,
-            function(stats) {
-              onGettingWebRCStats(stats, event.userid);
-            },
-            1000
-          );
-
-          // statsBar.removeAttribute('hidden');
+          sdp = setBandwidth(sdp, bandwidth);
+          sdp = BandwidthHandler.setVideoBitrates(sdp, {
+            min: bandwidth,
+            max: bandwidth
+          });
         }
-      };
-
-      var statsBar = document.getElementById("stats-bar");
-      var statsBarHTML = document.getElementById("stats-bar-html");
-      var NO_MORE = false;
-
-      document.getElementById("show-stats-bar").onclick = function() {
-        statsBar.toggleAttribute("hidden");
-        NO_MORE = false;
-      };
-
-      document.getElementById("hide-stats-bar").onclick = function() {
-        statsBar.setAttribute("hidden", "");
-        NO_MORE = true;
-      };
-
-      // document.getElementById("show-chats").onclick = function() {
-      //   chatContainer.toggleAttribute("hidden");
-      //   chatMessages.scrollTo(0, chatMessages.scrollHeight);
-      // };
-
-      function onGettingWebRCStats(stats, userid) {
-        if (!connection.peers[userid] || NO_MORE) {
-          stats.nomore();
-          return;
-        }
-
-        var html = "Video: " + stats.video.recv.codecs;
-        html += "<br>";
-        html +=
-          "Resolution: " +
-          stats.resolutions.recv.width +
-          "x" +
-          stats.resolutions.recv.height;
-        html += "<br>";
-        html += "Audio: " + stats.audio.recv.codecs;
-        html += "<br>";
-        html +=
-          "Data: " +
-          bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived);
-        // html += '<br>';
-        // html += 'Speed: ' + bytesToSize(stats.bandwidth.speed || 0);
-        statsBarHTML.innerHTML = html;
       }
 
-      function bytesToSize(bytes) {
-        var k = 1000;
-        var sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-        if (bytes === 0) {
-          return "0 Bytes";
-        }
-        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
-        return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
+      if (!!codecs && codecs !== "default") {
+        sdp = CodecsHandler.preferCodec(sdp, codecs);
+      }
+      return sdp;
+    };
+
+    this.connection.optionalArgument = {
+      optional: [],
+      mandatory: {}
+    };
+
+    this.connection.onstatechange = (state) => {
+      this.$refs.infoBar.innerHTML = state.name + ": " + state.reason;
+      if (state.name == "request-rejected" && this.params.p) {
+        this.$refs.infoBar.innerHTML =
+          "Password (" +
+          this.params.p +
+          ") did not match with broadcaster, that is why your participation request has been rejected.<br>Please contact him and ask for valid password.";
       }
 
-      window.addEventListener(
-        "offline",
-        function() {
-          infoBar.innerHTML = "You seem to be offline.";
-        },
-        false
-      );
+      if (state.name === "room-not-available") {
+        this.$refs.infoBar.innerHTML =
+          "Screen share session is closed or paused. You will join automatically when share session is resumed.";
+      }
+    };
 
-      window.addEventListener(
-        "online",
-        function() {
-          infoBar.innerHTML = "You are back online. Reloading the page...";
-          location.reload();
-        },
-        false
-      );
+    this.connection.onstreamid = (event) => {
+      this.$refs.infoBar.innerHTML = "Remote peer is about to send his screen.";
+    };
 
-      document.addEventListener("copy", function(e) {
-        e.clipboardData.setData("text/plain", e.target.textContent);
-        e.preventDefault();
-      });
-    } else {
-      document.getElementById("home").hidden = false;
-      document.getElementById("join-form").addEventListener("submit", function(e) {
-        e.preventDefault();
-        window.location.href = `/?s=${document.getElementById("room-input").value}`;
-      });
-      // document.getElementById("room-input").focus();
+    var stream = null;
+    
+    this.connection.onstream = (e) => {
+      console.log('refs', this.$refs);
+      console.log(JSON.parse(JSON.stringify(this.$refs)));
+      this.$refs.videoPlayer.srcObject = null;
+      this.$refs.audioPlayer.srcObject = null;
+      stream = e.stream;
+      stream.mute();
+      if (stream.isVideo) {
+        this.isVideo = true;
+        console.log('hannggggg');
+        this.$refs.videoPlayer.srcObject = stream;
+        this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
+        if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
+          this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
+        }
+        this.$refs.videoPlayer.volume = 0.5;
+        this.$refs.videoPlayer.play();
+      } else {
+        this.isAudio = true;
+        this.$refs.audioPlayer.srcObject = stream;
+        this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
+        this.$refs.audioPlayer.volume = 0.5;
+        this.$refs.audioPlayer.play();
+        playButton.disabled = false;
+      }
+      body.classList.add("stream-live");
+    };
+
+    // if user left
+    this.connection.onleave = this.connection.onstreamended = this.connection.onSessionClosed = (
+      e
+    ) => {
+      if (e.userid !== this.roomName) return;
+
+      this.$refs.videoPlayer.srcObject = null;
+
+      this.$refs.infoBar.innerHTML = "Screen sharing has been closed.";
+      body.classList.remove("stream-live");
+      statsBar.setAttribute("hidden", "");
+      this.connection.close();
+      this.connection.closeSocket();
+      this.connection.userid = this.connection.token();
+
+      location.reload();
+    };
+
+    this.connection.onJoinWithPassword = (remoteUserId) => {
+      if (!this.params.p) {
+        this.params.p = prompt(
+          remoteUserId + " is password protected. Please enter the pasword:"
+        );
+      }
+
+      this.connection.password = this.params.p;
+      this.connection.join(remoteUserId);
+    };
+
+    this.connection.onInvalidPassword = (remoteUserId, oldPassword) => {
+      var password = prompt(
+        remoteUserId +
+          " is password protected. Your entered wrong password (" +
+          oldPassword +
+          "). Please enter valid pasword:"
+      );
+      this.connection.password = password;
+      this.connection.join(remoteUserId);
+    };
+
+    this.connection.onPasswordMaxTriesOver = (remoteUserId) => {
+      alert(
+        remoteUserId +
+          " is password protected. Your max password tries exceeded the limit."
+      );
+    };
+
+    this.connection.onSocketDisconnect = (event) => {
+      // alert('Connection to the server is closed.');
+      if (this.connection.getAllParticipants().length > 0) return;
+      location.reload();
+    };
+
+    this.connection.onSocketError = (event) => {
+      alert("Unable to connect to the server. Please try again.");
+
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    };
+
+    this.connection.onopen = (event) => {
+      //
+    };
+
+    // Start chat feature
+    // var chatContainer = document.getElementById("chat-container");
+    // var lastMessage = "";
+    // this.connection.onmessage = (event) => {
+    //   if (event.data.openChat === true) {
+    //     chatContainer.removeAttribute("hidden");
+    //   }
+
+    //   if (event.data.closeChat === true) {
+    //     chatContainer.setAttribute("hidden", "");
+    //   }
+
+    //   if (event.data.newChatMessage && event.data.newChatMessage != lastMessage) {
+    //     lastMessage = event.data.newChatMessage;
+
+    //     // there is a possibility that broadcaster did not send "openChat:true" signal
+    //     // chatContainer.removeAttribute('hidden');
+
+    //     appendChatMessage("Broadcaster", event.data.newChatMessage);
+    //     updateTitle(event.data.newChatMessage);
+    //     this.connection.send({
+    //       receivedChatMessage: true,
+    //       checkmark_id: event.data.checkmark_id
+    //     });
+    //   }
+
+    //   if (event.data.receivedChatMessage) {
+    //     if (document.getElementById(event.data.checkmark_id)) {
+    //       document.getElementById(event.data.checkmark_id).style.display = "";
+    //     }
+    //   }
+    // };
+
+    // var txtChatMessage = document.getElementById("txt-chat-message");
+    // var chatMessages = document.getElementById("chat-messages");
+
+    // txtChatMessage.onkeyup = (e) => {
+    //   if (e.keyCode === 13) {
+    //     var checkmark_id = (Math.random() * 100).toString().replace(".", "");
+    //     appendChatMessage("You", this.value, checkmark_id);
+    //     this.connection.send({
+    //       newChatMessage: this.value
+    //     });
+    //     this.value = "";
+    //   }
+    // };
+
+    // function appendChatMessage(name, message, checkmark_id) {
+    //   var div = document.createElement("div");
+    //   if (checkmark_id) {
+    //     div.innerHTML =
+    //       '<p><span class="name">' +
+    //       name +
+    //       ': <img class="checkmark" id="' +
+    //       checkmark_id +
+    //       '" title="Received" src="images/checkmark.png"></span></p><p>' +
+    //       message +
+    //       "</p>";
+    //   } else {
+    //     div.innerHTML =
+    //       '<p><span class="name">' + name + ":</span></p><p>" + message + "</p>";
+    //   }
+    //   chatMessages.appendChild(div);
+
+    //   chatMessages.scrollTop = chatMessages.clientHeight;
+    //   chatMessages.scrollTop = chatMessages.scrollHeight - chatMessages.scrollTop;
+    // }
+
+    // var tabTitle = document.getElementById("tab-title");
+    // function updateTitle(message) {
+    //   tabTitle.innerHTML = message;
+    // }
+    // End chat feature
+
+    this.connection.socketCustomEvent = this.roomName;
+
+    let presenceCheckWait = 1000;
+
+    if (this.roomName) {
+      this.checkPresence();
     }
 
+    var dontDuplicate = {};
+    this.connection.onPeerStateChanged = (event) => {
+      if (!this.connection.getRemoteStreams(this.roomName).length) {
+        if (event.signalingState === "have-remote-offer") {
+          this.$refs.infoBar.innerHTML = "Received WebRTC offer from: " + this.roomName;
+        } else if (
+          event.iceGatheringState === "complete" &&
+          event.iceConnectionState === "connected"
+        ) {
+          this.$refs.infoBar.innerHTML =
+            "WebRTC handshake is completed. Waiting for remote video from: " +
+            this.roomName;
+        }
+      }
+
+      if (
+        event.iceConnectionState === "connected" &&
+        event.signalingState === "stable"
+      ) {
+        if (dontDuplicate[event.userid]) return;
+        dontDuplicate[event.userid] = true;
+
+        var peer = this.connection.peers[event.userid].peer;
+
+        getStats(
+          peer,
+          (stats) => {
+            onGettingWebRCStats(stats, event.userid);
+          },
+          1000
+        );
+
+        // statsBar.removeAttribute('hidden');
+      }
+    };
+
+    var statsBar = document.getElementById("stats-bar");
+    var statsBarHTML = document.getElementById("stats-bar-html");
+    var NO_MORE = false;
+
+    document.getElementById("show-stats-bar").onclick = () => {
+      statsBar.toggleAttribute("hidden");
+      NO_MORE = false;
+    };
+
+    document.getElementById("hide-stats-bar").onclick = () => {
+      statsBar.setAttribute("hidden", "");
+      NO_MORE = true;
+    };
+
+    // document.getElementById("show-chats").onclick = () => {
+    //   chatContainer.toggleAttribute("hidden");
+    //   chatMessages.scrollTo(0, chatMessages.scrollHeight);
+    // };
+
+    let onGettingWebRCStats = (stats, userid) => {
+      if (!this.connection.peers[userid] || NO_MORE) {
+        stats.nomore();
+        return;
+      }
+
+      var html = "Video: " + stats.video.recv.codecs;
+      html += "<br>";
+      html +=
+        "Resolution: " +
+        stats.resolutions.recv.width +
+        "x" +
+        stats.resolutions.recv.height;
+      html += "<br>";
+      html += "Audio: " + stats.audio.recv.codecs;
+      html += "<br>";
+      html +=
+        "Data: " +
+        bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived);
+      // html += '<br>';
+      // html += 'Speed: ' + bytesToSize(stats.bandwidth.speed || 0);
+      statsBarHTML.innerHTML = html;
+    }
+
+    function bytesToSize(bytes) {
+      var k = 1000;
+      var sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+      if (bytes === 0) {
+        return "0 Bytes";
+      }
+      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
+      return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
+    }
+
+    window.addEventListener(
+      "offline",
+      () => {
+        this.$refs.infoBar.innerHTML = "You seem to be offline.";
+      },
+      false
+    );
+
+    window.addEventListener(
+      "online",
+      () => {
+        this.$refs.infoBar.innerHTML = "You are back online. Reloading the page...";
+        location.reload();
+      },
+      false
+    );
   }
 };
 </script>
