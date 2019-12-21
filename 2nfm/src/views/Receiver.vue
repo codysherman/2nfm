@@ -163,7 +163,7 @@ video
   max-width: 120px
 
 #fullscreen-button svg
-  fill: 4f4f51
+  fill: #4f4f51
   transition: transform 0.4s
 
 #fullscreen-button:hover,
@@ -182,48 +182,46 @@ video
   text-decoration: underline
   transition: fade-in 0.4s
 
-#chat-container
-  position: fixed
-  right: 20px
-  bottom: 20px
-  height: 370px
-  width: 300px
-  background: white
-  z-index: 9
-  border-radius: 5px
-  text-align: left
-  -moz-box-shadow: 0px 0px 1px 7px #b9b9b9
-  -webkit-box-shadow: 0px 0px 1px 7px #b9b9b9
-  box-shadow: 0px 0px 1px 7px #b9b9b9
+// #chat-container
+//   position: fixed
+//   right: 20px
+//   bottom: 20px
+//   height: 370px
+//   width: 300px
+//   background: white
+//   z-index: 9
+//   border-radius: 5px
+//   text-align: left
+//   box-shadow: 0px 0px 1px 7px #b9b9b9
 
-#chat-container,
-#chat-container *
-  padding: 0
+// #chat-container,
+// #chat-container *
+//   padding: 0
 
-#chat-messages
-  height: 335px
-  overflow-x: hidden
-  overflow-y: auto
-  width: 300px
+// #chat-messages
+//   height: 335px
+//   overflow-x: hidden
+//   overflow-y: auto
+//   width: 300px
 
-#chat-messages div
-  border-bottom: 1px solid lightgray
-  padding: 2px 5px
-  font-size: 20px
+// #chat-messages div
+//   border-bottom: 1px solid lightgray
+//   padding: 2px 5px
+//   font-size: 20px
 
-#chat-messages div span.name
-  font-weight: bold
+// #chat-messages div span.name
+//   font-weight: bold
 
-#txt-chat-message
-  width: 300px
-  border: 0
-  border-top: 1px solid lightgray
-  font-size: 20px
-  padding: 2px 5px
+// #txt-chat-message
+//   width: 300px
+//   border: 0
+//   border-top: 1px solid lightgray
+//   font-size: 20px
+//   padding: 2px 5px
 
-.checkmark
-  width: 18px
-  vertical-align: middle
+// .checkmark
+//   width: 18px
+//   vertical-align: middle
 </style>
 
 <template lang="pug">
@@ -308,17 +306,30 @@ export default {
       presenceCheckWait: 1000
     };
   },
-  computed: {},
-  methods: {
-    togglePlayback() {
+  computed: {
+    player() {
       if (this.stream.isVideo) {
-        this.$refs.videoPlayer.paused
-          ? this.$refs.videoPlayer.play()
-          : this.$refs.videoPlayer.pause();
+        return this.$refs.videoPlayer;
+      } else if (this.stream.isAudio) {
+        return this.$refs.audioPlayer;
       } else {
-        this.$refs.audioPlayer.paused
-          ? this.$refs.audioPlayer.play()
-          : this.$refs.audioPlayer.pause();
+        return null;
+      }
+    },
+  },
+  methods: {
+    async playMedia() {
+      try {
+        await this.player.play();
+      } catch(err) {
+        // Playback Failed
+      }
+    },
+    togglePlayback() {
+      if (this.player.paused) {
+        this.playMedia();
+      } else {
+        this.player.pause();
       }
     },
     setVolume(input) {
@@ -517,14 +528,13 @@ export default {
           this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
         }
         this.$refs.videoPlayer.volume = 0.5;
-        this.$refs.videoPlayer.play();
       } else {
         this.$refs.audioPlayer.srcObject = this.stream;
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
         this.$refs.audioPlayer.volume = 0.5;
-        this.$refs.audioPlayer.play();
       }
       this.isStream = true;
+      this.playMedia();
     };
 
     // if user left
