@@ -263,7 +263,7 @@ video
         button#play-button-container.frow.nowrap.button-none(type='button' :class='{ playing: isStream }' @click='togglePlayback' :disabled='!isStream || (isStream && stream.isVideo)')
           .play-button.play-button-before
           .play-button.play-button-after
-        input#volume-slider(type='range' v-if='isStream' min='0' max='1' value='0.5' step='0.01' @change='setVolume')
+        input#volume-slider(type='range' min='0' max='100' value='50' step='1' @change='setVolume')
       button#fullscreen-button.button-none(type='button' v-if='stream.isVideo' @click='fullscreenVideo')
         svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24')
           path(d='M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z')
@@ -332,9 +332,9 @@ export default {
         this.player.pause();
       }
     },
-    setVolume(input) {
-      this.$refs.audioPlayer.volume = input;
-      this.$refs.videoPlayer.volume = input;
+    setVolume(event) {
+      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
+      this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
     },
     fullscreenVideo() {
       if (this.$refs.videoPlayer.requestFullscreen)
