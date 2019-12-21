@@ -247,13 +247,17 @@ video
 #receiver.height-100(:class="{ 'stream-live': isPlaying }")
   .menu-bar
     .frow.row-start
-      button#show-stats-bar.button-link Stats
+      button#show-stats-bar.button-link(@click="showStats") Stats
       // <button id="show-chats" class="button-link">Past Tabs</button>
-  #stats-bar.shadow-light(hidden)
-    #hide-stats-bar
+  #stats-bar.shadow-light(v-if="statsVisible")
+    #hide-stats-bar(@click="hideStats")
       svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24')
         path(d='M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z')
     #stats-bar-html
+      div {{ `Video: ${stats.video.recv.codecs.length > 0 ? stats.video.recv.codecs : 'N/A'}` }}
+      div {{ `Resolution: ${stats.resolutions.recv.width}x${stats.resolutions.recv.height}` }}
+      div {{ `Audio: ${stats.audio.recv.codecs.length > 0 ? stats.audio.recv.codecs : 'N/A'}` }}
+      div {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
     svg#loading-logo(v-if='!isPlaying' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 92 53' width='92' height='53' isolation='isolate')
       defs
@@ -315,7 +319,10 @@ export default {
       isVideo: false,
       isAudio: false,
       connection: null,
-      params: {}
+      params: {},
+      statsVisible: false,
+      NO_MORE: false,
+      stats: {},
     };
   },
   computed: {
@@ -376,7 +383,48 @@ export default {
           this.connection.join(this.roomName);
         }
       );
-    }
+    },
+    showStats() {
+      this.statsVisible = true;
+      this.NO_MORE = false;
+    },
+    hideStats() {
+      this.statsVisible = false;
+      this.NO_MORE = true;
+    },
+    bytesToSize(bytes) {
+      // TODO: Should this by 1024?
+      var k = 1000;
+      var sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+      if (bytes === 0) {
+        return "0 Bytes";
+      }
+      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
+      return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
+    },
+    onGettingWebRCStats(stats, userid) {
+      if (!this.connection.peers[userid] || this.NO_MORE) {
+        stats.nomore();
+        return;
+      }
+      this.stats = stats;
+      // var html = "Video: " + stats.video.recv.codecs;
+      // html += "<br>";
+      // html +=
+      //   "Resolution: " +
+      //   stats.resolutions.recv.width +
+      //   "x" +
+      //   stats.resolutions.recv.height;
+      // html += "<br>";
+      // html += "Audio: " + stats.audio.recv.codecs;
+      // html += "<br>";
+      // html +=
+      //   "Data: " +
+      //   bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived);
+      // // html += '<br>';
+      // // html += 'Speed: ' + bytesToSize(stats.bandwidth.speed || 0);
+      // statsBarHTML.innerHTML = html;
+    },
   },
   mounted() {
     let r;
@@ -517,7 +565,7 @@ export default {
       this.$refs.videoPlayer.srcObject = null;
 
       this.$refs.infoBar.innerHTML = "Screen sharing has been closed.";
-      statsBar.setAttribute("hidden", "");
+      this.hideStats();
       this.connection.close();
       this.connection.closeSocket();
       this.connection.userid = this.connection.token();
@@ -682,65 +730,17 @@ export default {
         getStats(
           peer,
           stats => {
-            onGettingWebRCStats(stats, event.userid);
+            this.onGettingWebRCStats(stats, event.userid);
           },
           1000
         );
       }
     };
 
-    var statsBar = document.getElementById("stats-bar");
-    var statsBarHTML = document.getElementById("stats-bar-html");
-    var NO_MORE = false;
-
-    document.getElementById("show-stats-bar").onclick = () => {
-      statsBar.toggleAttribute("hidden");
-      NO_MORE = false;
-    };
-
-    document.getElementById("hide-stats-bar").onclick = () => {
-      statsBar.setAttribute("hidden", "");
-      NO_MORE = true;
-    };
-
     // document.getElementById("show-chats").onclick = () => {
     //   chatContainer.toggleAttribute("hidden");
     //   chatMessages.scrollTo(0, chatMessages.scrollHeight);
     // };
-
-    let onGettingWebRCStats = (stats, userid) => {
-      if (!this.connection.peers[userid] || NO_MORE) {
-        stats.nomore();
-        return;
-      }
-
-      var html = "Video: " + stats.video.recv.codecs;
-      html += "<br>";
-      html +=
-        "Resolution: " +
-        stats.resolutions.recv.width +
-        "x" +
-        stats.resolutions.recv.height;
-      html += "<br>";
-      html += "Audio: " + stats.audio.recv.codecs;
-      html += "<br>";
-      html +=
-        "Data: " +
-        bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived);
-      // html += '<br>';
-      // html += 'Speed: ' + bytesToSize(stats.bandwidth.speed || 0);
-      statsBarHTML.innerHTML = html;
-    };
-
-    function bytesToSize(bytes) {
-      var k = 1000;
-      var sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-      if (bytes === 0) {
-        return "0 Bytes";
-      }
-      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
-      return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
-    }
 
     window.addEventListener(
       "offline",
