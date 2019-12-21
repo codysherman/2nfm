@@ -396,22 +396,6 @@ export default {
         return;
       }
       this.stats = stats;
-      // var html = "Video: " + stats.video.recv.codecs;
-      // html += "<br>";
-      // html +=
-      //   "Resolution: " +
-      //   stats.resolutions.recv.width +
-      //   "x" +
-      //   stats.resolutions.recv.height;
-      // html += "<br>";
-      // html += "Audio: " + stats.audio.recv.codecs;
-      // html += "<br>";
-      // html +=
-      //   "Data: " +
-      //   bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived);
-      // // html += '<br>';
-      // // html += 'Speed: ' + bytesToSize(stats.bandwidth.speed || 0);
-      // statsBarHTML.innerHTML = html;
     }
   },
   mounted() {
