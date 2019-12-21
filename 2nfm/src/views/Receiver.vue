@@ -398,7 +398,11 @@ video {
         Your browser does not support the audio element.
       </audio>
 
-      <div id="media-controls" class="frow nowrap" :class="{ 'justify-between': isVideo }">
+      <div
+        id="media-controls"
+        class="frow nowrap"
+        :class="{ 'justify-between': isVideo }"
+      >
         <div class="frow nowrap">
           <button
             type="button"
@@ -459,7 +463,7 @@ video {
 </template>
 
 <script>
-import io from 'socket.io-client';
+import io from "socket.io-client";
 // TODO: Remove need to do this
 window.io = io;
 import adapter from "webrtc-adapter";
@@ -477,23 +481,26 @@ export default {
   name: "Receiver",
   data() {
     return {
-      roomName: 'test',
+      roomName: "test",
       stream: {},
       isPlaying: false,
       isVideo: false,
       isAudio: false,
       connection: null,
-      params: {},
-    }
+      params: {}
+    };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     togglePlayback() {
       if (this.stream.isVideo) {
-        this.$refs.videoPlayer.paused ? this.$refs.videoPlayer.play() : this.$refs.videoPlayer.pause();
+        this.$refs.videoPlayer.paused
+          ? this.$refs.videoPlayer.play()
+          : this.$refs.videoPlayer.pause();
       } else {
-        this.$refs.audioPlayer.paused ? this.$refs.audioPlayer.play() : this.$refs.audioPlayer.pause();
+        this.$refs.audioPlayer.paused
+          ? this.$refs.audioPlayer.play()
+          : this.$refs.audioPlayer.pause();
       }
     },
     setVolume(input) {
@@ -501,46 +508,54 @@ export default {
       this.$refs.videoPlayer.volume = input;
     },
     fullscreenVideo() {
-      if (this.$refs.videoPlayer.requestFullscreen) this.$refs.videoPlayer.requestFullscreen();
-      else if (this.$refs.videoPlayer.mozRequestFullScreen) this.$refs.videoPlayer.mozRequestFullScreen();
-      else if (this.$refs.videoPlayer.webkitRequestFullScreen) this.$refs.videoPlayer.webkitRequestFullScreen();
-      else if (this.$refs.videoPlayer.msRequestFullscreen) this.$refs.videoPlayer.msRequestFullscreen();
+      if (this.$refs.videoPlayer.requestFullscreen)
+        this.$refs.videoPlayer.requestFullscreen();
+      else if (this.$refs.videoPlayer.mozRequestFullScreen)
+        this.$refs.videoPlayer.mozRequestFullScreen();
+      else if (this.$refs.videoPlayer.webkitRequestFullScreen)
+        this.$refs.videoPlayer.webkitRequestFullScreen();
+      else if (this.$refs.videoPlayer.msRequestFullscreen)
+        this.$refs.videoPlayer.msRequestFullscreen();
     },
     checkPresence() {
-      this.connection.checkPresence(this.roomName, (isRoomExist, roomid, extra) => {
-        if (isRoomExist === false) {
-          document.getElementById("create-message").hidden = false;
-          let noHostMessage = "Waiting for someone to host the room: " + this.roomName;
-          if (this.$refs.infoBar.innerHTML != noHostMessage) {
-            this.$refs.infoBar.innerHTML = noHostMessage;
+      this.connection.checkPresence(
+        this.roomName,
+        (isRoomExist, roomid, extra) => {
+          if (isRoomExist === false) {
+            document.getElementById("create-message").hidden = false;
+            let noHostMessage =
+              "Waiting for someone to host the room: " + this.roomName;
+            if (this.$refs.infoBar.innerHTML != noHostMessage) {
+              this.$refs.infoBar.innerHTML = noHostMessage;
+            }
+
+            setTimeout(() => {
+              presenceCheckWait < 60000 &&
+                (presenceCheckWait = presenceCheckWait * 2);
+              setTimeout(checkPresence, presenceCheckWait);
+            }, presenceCheckWait);
+            return;
           }
 
-          setTimeout(() => {
-            presenceCheckWait < 60000 &&
-              (presenceCheckWait = presenceCheckWait * 2);
-            setTimeout(checkPresence, presenceCheckWait);
-          }, presenceCheckWait);
-          return;
-        }
-  
-        this.$refs.infoBar.innerHTML = "Joining room: " + this.roomName;
+          this.$refs.infoBar.innerHTML = "Joining room: " + this.roomName;
 
-        this.connection.password = null;
-        if (this.params.p) {
-          this.connection.password = this.params.p;
-        }
+          this.connection.password = null;
+          if (this.params.p) {
+            this.connection.password = this.params.p;
+          }
 
-        this.connection.join(this.roomName);
-      });
-    },
+          this.connection.join(this.roomName);
+        }
+      );
+    }
   },
   mounted() {
     let r;
     let DEFAULTS;
     let tempParams;
-    tempParams = {},
-      r = /([^&=]+)=?([^&]*)/g,
-      DEFAULTS = { bandwidth: 8192 };
+    (tempParams = {}),
+      (r = /([^&=]+)=?([^&]*)/g),
+      (DEFAULTS = { bandwidth: 8192 });
 
     function d(s) {
       return decodeURIComponent(s.replace(/\+/g, " "));
@@ -585,7 +600,7 @@ export default {
       return sdp;
     }
 
-    this.connection.processSdp = (sdp) => {
+    this.connection.processSdp = sdp => {
       var bandwidth = this.params.bandwidth;
       var codecs = this.params.codecs;
 
@@ -621,7 +636,7 @@ export default {
       mandatory: {}
     };
 
-    this.connection.onstatechange = (state) => {
+    this.connection.onstatechange = state => {
       this.$refs.infoBar.innerHTML = state.name + ": " + state.reason;
       if (state.name == "request-rejected" && this.params.p) {
         this.$refs.infoBar.innerHTML =
@@ -636,22 +651,19 @@ export default {
       }
     };
 
-    this.connection.onstreamid = (event) => {
+    this.connection.onstreamid = event => {
       this.$refs.infoBar.innerHTML = "Remote peer is about to send his screen.";
     };
 
     this.stream = null;
-    
-    this.connection.onstream = (e) => {
-      console.log('refs', this.$refs);
-      console.log(JSON.parse(JSON.stringify(this.$refs)));
+
+    this.connection.onstream = e => {
       this.$refs.videoPlayer.srcObject = null;
       this.$refs.audioPlayer.srcObject = null;
       this.stream = e.stream;
       this.stream.mute();
       if (this.stream.isVideo) {
         this.isVideo = true;
-        console.log('hannggggg');
         this.$refs.videoPlayer.srcObject = this.stream;
         this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
         if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
@@ -670,9 +682,7 @@ export default {
     };
 
     // if user left
-    this.connection.onleave = this.connection.onstreamended = this.connection.onSessionClosed = (
-      e
-    ) => {
+    this.connection.onleave = this.connection.onstreamended = this.connection.onSessionClosed = e => {
       if (e.userid !== this.roomName) return;
 
       this.$refs.videoPlayer.srcObject = null;
@@ -686,7 +696,7 @@ export default {
       location.reload();
     };
 
-    this.connection.onJoinWithPassword = (remoteUserId) => {
+    this.connection.onJoinWithPassword = remoteUserId => {
       if (!this.params.p) {
         this.params.p = prompt(
           remoteUserId + " is password protected. Please enter the pasword:"
@@ -708,20 +718,20 @@ export default {
       this.connection.join(remoteUserId);
     };
 
-    this.connection.onPasswordMaxTriesOver = (remoteUserId) => {
+    this.connection.onPasswordMaxTriesOver = remoteUserId => {
       alert(
         remoteUserId +
           " is password protected. Your max password tries exceeded the limit."
       );
     };
 
-    this.connection.onSocketDisconnect = (event) => {
+    this.connection.onSocketDisconnect = event => {
       // alert('Connection to the server is closed.');
       if (this.connection.getAllParticipants().length > 0) return;
       location.reload();
     };
 
-    this.connection.onSocketError = (event) => {
+    this.connection.onSocketError = event => {
       alert("Unable to connect to the server. Please try again.");
 
       setTimeout(() => {
@@ -729,7 +739,7 @@ export default {
       }, 1000);
     };
 
-    this.connection.onopen = (event) => {
+    this.connection.onopen = event => {
       //
     };
 
@@ -816,10 +826,11 @@ export default {
     }
 
     var dontDuplicate = {};
-    this.connection.onPeerStateChanged = (event) => {
+    this.connection.onPeerStateChanged = event => {
       if (!this.connection.getRemoteStreams(this.roomName).length) {
         if (event.signalingState === "have-remote-offer") {
-          this.$refs.infoBar.innerHTML = "Received WebRTC offer from: " + this.roomName;
+          this.$refs.infoBar.innerHTML =
+            "Received WebRTC offer from: " + this.roomName;
         } else if (
           event.iceGatheringState === "complete" &&
           event.iceConnectionState === "connected"
@@ -841,7 +852,7 @@ export default {
 
         getStats(
           peer,
-          (stats) => {
+          stats => {
             onGettingWebRCStats(stats, event.userid);
           },
           1000
@@ -890,7 +901,7 @@ export default {
       // html += '<br>';
       // html += 'Speed: ' + bytesToSize(stats.bandwidth.speed || 0);
       statsBarHTML.innerHTML = html;
-    }
+    };
 
     function bytesToSize(bytes) {
       var k = 1000;
@@ -913,7 +924,8 @@ export default {
     window.addEventListener(
       "online",
       () => {
-        this.$refs.infoBar.innerHTML = "You are back online. Reloading the page...";
+        this.$refs.infoBar.innerHTML =
+          "You are back online. Reloading the page...";
         location.reload();
       },
       false
