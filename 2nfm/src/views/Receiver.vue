@@ -286,8 +286,8 @@ video
       button#fullscreen-button.button-none(type='button' v-if='isVideo' @click='fullscreenVideo')
         svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24')
           path(d='M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z')
-    #info-bar(ref='infoBar') &nbsp;
-    a#create-message(href='/streamer') Create your own room
+    #info-bar {{ infoBarMessage }}
+    router-link#create-message(v-if="!isPlaying", to='/streamer') Create your own room
   #chat-container(hidden)
     #chat-messages
     input#txt-chat-message(type='text' placeholder='Enter Chat Message' hidden)
@@ -323,6 +323,8 @@ export default {
       statsVisible: false,
       NO_MORE: false,
       stats: {},
+      infoBarMessage: '',
+      presenceCheckWait: 1000,
     };
   },
   computed: {
@@ -358,22 +360,17 @@ export default {
         this.roomName,
         (isRoomExist, roomid, extra) => {
           if (isRoomExist === false) {
-            document.getElementById("create-message").hidden = false;
-            let noHostMessage =
-              "Waiting for someone to host the room: " + this.roomName;
-            if (this.$refs.infoBar.innerHTML != noHostMessage) {
-              this.$refs.infoBar.innerHTML = noHostMessage;
-            }
+            this.infoBarMessage = `Waiting for someone to host the room: ${this.roomName}`;
 
             setTimeout(() => {
-              presenceCheckWait < 60000 &&
-                (presenceCheckWait = presenceCheckWait * 2);
-              setTimeout(checkPresence, presenceCheckWait);
-            }, presenceCheckWait);
+              this.presenceCheckWait < 60000 &&
+                (this.presenceCheckWait = this.presenceCheckWait * 2);
+              setTimeout(this.checkPresence, this.presenceCheckWait);
+            }, this.presenceCheckWait);
             return;
           }
 
-          this.$refs.infoBar.innerHTML = "Joining room: " + this.roomName;
+          this.infoBarMessage = `Joining room: ${this.roomName}`;
 
           this.connection.password = null;
           if (this.params.p) {
@@ -444,7 +441,6 @@ export default {
       tempParams[d(match[1])] = d(match[2]);
 
     this.params = Object.assign({}, DEFAULTS, tempParams);
-    // TODO: Set this.roomName;
 
     // http://www.rtcmulticonnection.org/docs/constructor/
     this.connection = new RTCMultiConnection(this.roomName);
@@ -514,25 +510,20 @@ export default {
     };
 
     this.connection.onstatechange = state => {
-      this.$refs.infoBar.innerHTML = state.name + ": " + state.reason;
+      this.infoBarMessage = `${state.name}: ${state.reason}`;
       if (state.name == "request-rejected" && this.params.p) {
-        this.$refs.infoBar.innerHTML =
-          "Password (" +
-          this.params.p +
-          ") did not match with broadcaster, that is why your participation request has been rejected.<br>Please contact him and ask for valid password.";
+        this.infoBarMessage = 'Incorrect password';
       }
 
       if (state.name === "room-not-available") {
-        this.$refs.infoBar.innerHTML =
+        this.infoBarMessage = 
           "Screen share session is closed or paused. You will join automatically when share session is resumed.";
       }
     };
 
     this.connection.onstreamid = event => {
-      this.$refs.infoBar.innerHTML = "Remote peer is about to send his screen.";
+      this.infoBarMessage = "Remote peer is about to send his screen.";
     };
-
-    this.stream = null;
 
     this.connection.onstream = e => {
       this.$refs.videoPlayer.srcObject = null;
@@ -564,7 +555,7 @@ export default {
 
       this.$refs.videoPlayer.srcObject = null;
 
-      this.$refs.infoBar.innerHTML = "Screen sharing has been closed.";
+      this.infoBarMessage = "Screen sharing has been closed.";
       this.hideStats();
       this.connection.close();
       this.connection.closeSocket();
@@ -696,8 +687,6 @@ export default {
 
     this.connection.socketCustomEvent = this.roomName;
 
-    let presenceCheckWait = 1000;
-
     if (this.roomName) {
       this.checkPresence();
     }
@@ -706,15 +695,12 @@ export default {
     this.connection.onPeerStateChanged = event => {
       if (!this.connection.getRemoteStreams(this.roomName).length) {
         if (event.signalingState === "have-remote-offer") {
-          this.$refs.infoBar.innerHTML =
-            "Received WebRTC offer from: " + this.roomName;
+          this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
         } else if (
           event.iceGatheringState === "complete" &&
           event.iceConnectionState === "connected"
         ) {
-          this.$refs.infoBar.innerHTML =
-            "WebRTC handshake is completed. Waiting for remote video from: " +
-            this.roomName;
+          this.infoBarMessage = `WebRTC handshake is completed. Waiting for remote video from: ${this.roomName}`;
         }
       }
 
@@ -745,7 +731,7 @@ export default {
     window.addEventListener(
       "offline",
       () => {
-        this.$refs.infoBar.innerHTML = "You seem to be offline.";
+        this.infoBarMessage = 'You seem to be offline.';
       },
       false
     );
@@ -753,8 +739,7 @@ export default {
     window.addEventListener(
       "online",
       () => {
-        this.$refs.infoBar.innerHTML =
-          "You are back online. Reloading the page...";
+        this.infoBarMessage = 'You are back online. Reloading the page...';
         location.reload();
       },
       false
