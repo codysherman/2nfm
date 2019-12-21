@@ -29,7 +29,7 @@ export default new Router({
         import(/* webpackChunkName: "streamer" */ "./views/Streamer.vue")
     },
     {
-      path: "/receiver",
+      path: "/:room",
       name: "receiver",
       component: () =>
         import(/* webpackChunkName: "receiver" */ "./views/Receiver.vue")

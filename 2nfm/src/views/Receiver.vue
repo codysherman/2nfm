@@ -324,7 +324,6 @@ video {
     </div>
 
     <div class="frow centered-column nowrap">
-      {{ roomName }}
       <svg
         id="loading-logo"
         v-if="!isPlaying"
@@ -481,7 +480,7 @@ export default {
   name: "Receiver",
   data() {
     return {
-      roomName: "test",
+      roomName: this.$route.params.room,
       stream: {},
       isPlaying: false,
       isVideo: false,
@@ -490,7 +489,8 @@ export default {
       params: {}
     };
   },
-  computed: {},
+  computed: {
+  },
   methods: {
     togglePlayback() {
       if (this.stream.isVideo) {

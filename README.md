@@ -2,7 +2,7 @@
 
 To start a stream visit: https://2n.fm/streamer
 
-Visit https://2N.fm/?s={{room-name-here}} to view someone else's tab.
+Visit https://2N.fm/{{room-name-here}} to view someone else's tab.
 
 <!-- # Disclaimer
 

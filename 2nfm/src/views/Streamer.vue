@@ -196,7 +196,7 @@ body {
     <div class="col-md-1-2">
       <section id="setup-section" v-if="!isSharingOn">
         <label id="room-id-label" class="row-start">
-          <span class="shrink-0">2n.fm/?s=</span>
+          <span class="shrink-0">2n.fm/</span>
           <input type="text" id="room-id" placeholder="Random" :value="roomName" @change="setRoomName"/>
         </label>
         <section id="options">
@@ -327,7 +327,7 @@ body {
       </section>
       <section id="stop-section" v-if="isSharingOn">
         <router-link id="public-link" to="{query: { s: sessionId, p: room_password }}`}" target="_blank">
-          {{`2n.fm/?s=${sessionId}`}}
+          {{`2n.fm/${sessionId}`}}
         </router-link>
         <div class="viewer-count">
           <span id="viewer-count-number"></span> Viewers

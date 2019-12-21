@@ -153,7 +153,7 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     setViewerCount(0);
 
     if (externalThis.room_url_box === true) {
-      var resultingURL = "https://2n.fm/?s=" + externalThis.connection.sessionid;
+      var resultingURL = "https://2n.fm/" + externalThis.connection.sessionid;
 
       // resultingURL = 'http://localhost:9001/?s=' + externalThis.connection.sessionid;
 
