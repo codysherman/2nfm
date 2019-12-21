@@ -1,0 +1,47 @@
+// Animations
+@keyframes pop-in
+  0%
+    transform: scale(0)
+  80%
+    transform: scale(1.1)
+  100%
+    transform: scale(1)
+
+.animate-pop-in
+  animation: pop-in $animate-speed
+
+@keyframes fade-in
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+.animate-fade-in
+  animation: fade-in $animate-speed
+
+@keyframes slide-down
+  from
+    transform: translateY(-100%)
+  to
+    transform: translateY(0)
+
+.animate-slide-down
+  animation: slide-down $animate-speed
+
+@keyframes slide-up
+  from
+    transform: translateY(100%)
+  to
+    transform: translateY(0)
+
+.animate-slide-up
+  animation: slide-up $animate-speed
+
+@keyframes pulse
+  from
+    opacity: 1
+  to
+    opacity: 0.4
+
+.animate-pulse
+  animation: pulse ($animate-speed * 4) ease-in-out infinite alternate

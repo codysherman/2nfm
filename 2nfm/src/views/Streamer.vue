@@ -1,173 +1,141 @@
-<style scoped lang="scss">
-body {
-  padding-top: 20px;
-}
+<style scoped lang="sass">
+body
+  padding-top: 20px
 
-.card {
-  background-color: #ffffff;
-  padding: 15px;
-  text-align: center;
-}
+.card
+  background-color: #ffffff
+  padding: 15px
+  text-align: center
 
-#logo {
-  margin: 0 auto;
-  width: 228px;
-  height: auto;
-  fill: #4f4f51;
-}
+#logo
+  margin: 0 auto
+  width: 228px
+  height: auto
+  fill: #4f4f51
 
-#live-indicator {
-  margin: 15px auto 0;
-  width: 228px;
-  color: #eaeaea;
-  border-radius: 20px;
-  border: 6px solid #eaeaea;
-  font-weight: bold;
-  font-size: 91px;
-  text-align: center;
-}
+#live-indicator
+  margin: 15px auto 0
+  width: 228px
+  color: #eaeaea
+  border-radius: 20px
+  border: 6px solid #eaeaea
+  font-weight: bold
+  font-size: 91px
+  text-align: center
 
-#live-indicator.live {
-  color: red;
-  border-color: red;
-  animation: pulse 3s infinite alternate;
-}
+#live-indicator.live
+  color: red
+  border-color: red
+  animation: pulse 1.5s ease-in-out infinite alternate
 
-/* XS */
-@media (max-width: 767px) {
-  #logo {
-    margin: 0 auto;
-    width: 114px;
-  }
+/* XS
+@media (max-width: 767px)
+  #logo
+    margin: 0 auto
+    width: 114px
+  #live-indicator
+    width: 114px
+    border-radius: 10px
+    border: 3px solid #eaeaea
+    font-size: 45px
+    margin-bottom: 30px
 
-  #live-indicator {
-    width: 114px;
-    border-radius: 10px;
-    border: 3px solid #eaeaea;
-    font-size: 45px;
-    margin-bottom: 30px;
-  }
-}
+#room-id-label
+  font-size: 40px
+  color: #4f4f51
 
-#room-id-label {
-  font-size: 40px;
-  color: #4f4f51;
-}
+#room-id-label input
+  font-size: 40px
+  border-width: 4px
 
-#room-id-label input {
-  font-size: 40px;
-  border-width: 4px;
-}
+/* XS
+@media (max-width: 767px)
+  #room-id-label
+    font-size: 30px
+  #room-id-label input
+    font-size: 30px
+    border-width: 2px
 
-/* XS */
-@media (max-width: 767px) {
-  #room-id-label {
-    font-size: 30px;
-  }
+#options
+  border: 2px solid #eaeaea
+  border-radius: 10px
+  padding: 40px
+  margin: 40px 0
+  position: relative
 
-  #room-id-label input {
-    font-size: 30px;
-    border-width: 2px;
-  }
-}
+#options .label
+  position: absolute
+  top: -9px
+  left: 30px
+  background-color: #fff
+  padding: 0 8px
+  width: auto
 
-#options {
-  border: 2px solid #eaeaea;
-  border-radius: 10px;
-  padding: 40px;
-  margin: 40px 0;
-  position: relative;
-}
+.settings-item
+  margin-bottom: 40px
 
-#options .label {
-  position: absolute;
-  top: -9px;
-  left: 30px;
-  background-color: #fff;
-  padding: 0 8px;
-  width: auto;
-}
+.settings-item label
+  margin-bottom: 0
 
-.settings-item {
-  margin-bottom: 40px;
-}
+#start
+  border: 2px solid #eaeaea
+  border-radius: 10px
+  padding: 40px
+  margin-top: 40px
+  position: relative
 
-.settings-item label {
-  margin-bottom: 0;
-}
+#start .label
+  position: absolute
+  top: -9px
+  left: 30px
+  background-color: #fff
+  padding: 0 8px
+  width: auto
 
-#start {
-  border: 2px solid #eaeaea;
-  border-radius: 10px;
-  padding: 40px;
-  margin: 40px 0;
-  position: relative;
-}
+.stream-button
+  transition: color 0.3s
 
-#start .label {
-  position: absolute;
-  top: -9px;
-  left: 30px;
-  background-color: #fff;
-  padding: 0 8px;
-  width: auto;
-}
+.stream-button:hover
+  color: #000
 
-.stream-button {
-  cursor: pointer;
-  transition: color 0.3s;
-}
+.stream-button svg
+  width: auto
+  height: 40px
+  margin-bottom: 10px
 
-.stream-button:hover {
-  color: #000;
-}
+.stream-button svg path
+  fill: #4f4f51
+  transition: fill 0.3s
 
-.stream-button svg {
-  width: auto;
-  height: 40px;
-  margin-bottom: 10px;
-}
+.stream-button:hover svg path
+  fill: #000
 
-.stream-button svg path {
-  fill: #4f4f51;
-  transition: fill 0.3s;
-}
+#public-link
+  display: block
+  font-size: 40px
+  color: #4f4f51
+  margin: 0 auto
+  text-align: center
 
-.stream-button:hover svg path {
-  fill: #000;
-}
+/* XS
+@media (max-width: 767px)
+  #public-link
+    font-size: 30px
 
-#public-link {
-  display: block;
-  font-size: 40px;
-  color: #4f4f51;
-  margin: 0 auto;
-  text-align: center;
-}
+.viewer-count
+  margin: 5px auto 60px
+  text-align: center
+  font-size: 20px
+  font-weight: bold
 
-/* XS */
-@media (max-width: 767px) {
-  #public-link {
-    font-size: 30px;
-  }
-}
-
-.viewer-count {
-  margin: 5px auto 60px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-#stop-sharing {
-  margin: 0 auto;
-  font-size: 40px;
-  padding: 20px;
-  background: none;
-  border: 3px solid #4f4f51;
-  color: #4f4f51;
-  border-radius: 10px;
-}
+#stop-sharing
+  margin: 0 auto
+  font-size: 40px
+  padding: 20px
+  background: none
+  border: 3px solid #4f4f51
+  color: #4f4f51
+  border-radius: 10px
 </style>
 
 <template>
@@ -199,7 +167,7 @@ body {
           <span class="shrink-0">2n.fm/</span>
           <input type="text" id="room-id" placeholder="Random" :value="roomName" @change="setRoomName"/>
         </label>
-        <section id="options">
+        <section id="options" hidden>
           <div class="label">Options</div>
           <div class="frow row-start gutters">
             <div class="col-xs-1-2">

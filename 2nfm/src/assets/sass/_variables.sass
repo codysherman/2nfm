@@ -1,0 +1,30 @@
+$font-family: 'Arvo', serif
+$border-radius-large: 12px
+$border-radius-small: 7px
+$theme-fade-speed: 0.8s
+
+// font-weights
+$bold: 700
+
+// z-index
+$z-page: 2 // For any elements on random pages
+$z-footer: 3
+$z-header-dropdown: 4
+$z-photo-viewer-background: 5
+$z-photo-viewer: 6
+$z-modal-background: 7
+$z-modal: 8
+$z-sidebar-background: 9
+$z-sidebar: 10
+
+\:root
+  --theme-color: #{$white}
+  --theme-off-color: #{$background-color}
+  --inverse-color: #{$off-black}
+  --inverse-off-color: #222
+
+[data-theme="dark"]
+  --theme-color: #{$off-black}
+  --theme-off-color: #222
+  --inverse-color:  #{$white}
+  --inverse-off-color: #{$background-color}

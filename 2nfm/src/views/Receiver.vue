@@ -1,301 +1,246 @@
-<style scoped lang="scss">
-body {
-  text-align: center;
-}
+<style scoped lang="sass">
+body
+  text-align: center
 
-#home-logo {
-  height: 70px;
-  width: auto;
-  margin: 0 auto;
-  fill: #4f4f51;
-  animation: fade-in 2s ease-out;
-}
+#home-logo
+  height: 70px
+  width: auto
+  margin: 0 auto
+  fill: #4f4f51
+  animation: fade-in 2s ease-out
 
-/* XS */
-@media (max-width: 767px) {
-  #home-logo {
-    height: 50px;
-  }
-}
+/* XS
+@media (max-width: 767px)
+  #home-logo
+    height: 50px
 
-.home-half {
-  width: 45%;
-  padding: 20px 0;
-}
+.home-half
+  width: 45%
+  padding: 20px 0
 
-/* XS */
-@media (max-width: 767px) {
-  .home-half {
-    width: 100%;
-  }
-
-  .home-half > .frow {
-    flex-direction: row;
-    justify-content: center;
-  }
-}
+/* XS
+@media (max-width: 767px)
+  .home-half
+    width: 100%
+  .home-half > .frow
+    flex-direction: row
+    justify-content: center
 
 .stream-button,
-#enter-room {
-  font-size: 40px;
-}
+#enter-room
+  font-size: 40px
 
-/* XS */
-@media (max-width: 767px) {
+/* XS
+@media (max-width: 767px)
   .stream-button,
-  #enter-room {
-    font-size: 30px;
-  }
-}
+  #enter-room
+    font-size: 30px
 
-.stream-button {
-  width: 200px;
-  margin: 0 auto;
-  background-color: red;
-  border-color: red;
-  animation: pulse 1.5s ease-in-out infinite alternate;
-}
+.stream-button
+  width: 200px
+  margin: 0 auto
+  background-color: red
+  border-color: red
+  animation: pulse 1.5s ease-in-out infinite alternate
 
-.stream-button:hover {
-  animation: none;
-  background-color: red;
-  border-color: red;
-}
+.stream-button:hover
+  animation: none
+  background-color: red
+  border-color: red
 
-.line-divider {
-  margin: 0 30px;
-  background-color: #eaeaea;
-  width: 2px;
-}
+.line-divider
+  margin: 0 30px
+  background-color: #eaeaea
+  width: 2px
 
-/* XS */
-@media (max-width: 767px) {
-  .line-divider {
-    margin: 30px 30px;
-    width: 100%;
-    height: 2px;
-  }
-}
+/* XS
+@media (max-width: 767px)
+  .line-divider
+    margin: 30px 30px
+    width: 100%
+    height: 2px
 
-#room-input {
-  font-size: 30px;
-  width: 205px;
-}
+#room-input
+  font-size: 30px
+  width: 205px
 
-#enter-room {
-  width: 70px;
-  margin-left: 10px;
-}
+#enter-room
+  width: 70px
+  margin-left: 10px
 
-.menu-bar {
-  position: fixed;
-  left: 10px;
-  top: 5px;
-}
+.menu-bar
+  position: fixed
+  left: 10px
+  top: 5px
 
-.menu-bar button {
-  color: gray;
-  margin-right: 10px;
-}
+.menu-bar button
+  color: gray
+  margin-right: 10px
 
-#stats-bar {
-  background-color: rgba(255, 255, 255, 0.92);
-  top: 35px;
-  left: 20px;
-  position: absolute;
-  text-align: left;
-  padding: 10px;
-}
+#stats-bar
+  background-color: rgba(255, 255, 255, 0.92)
+  top: 35px
+  left: 20px
+  position: absolute
+  text-align: left
+  padding: 10px
 
-#stats-bar-html {
-  padding: 5px 10px;
-}
+#stats-bar-html
+  padding: 5px 10px
 
-#hide-stats-bar {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  cursor: pointer;
-}
+#hide-stats-bar
+  position: absolute
+  top: 5px
+  right: 5px
+  cursor: pointer
 
-#hide-stats-bar svg {
-  width: 10px;
-  height: 10px;
-}
+#hide-stats-bar svg
+  width: 10px
+  height: 10px
 
-#loading-logo {
-  height: 53px;
-  width: auto;
-}
+#loading-logo
+  height: 53px
+  width: auto
 
-@keyframes dash {
-  90% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
+@keyframes dash
+  90%
+    stroke-dashoffset: 0
+  100%
+    stroke-dashoffset: 0
 
-#loading-logo path {
-  stroke: #bebebe;
-  stroke-width: 1.5;
-  stroke-dasharray: 495;
-  stroke-dashoffset: 990;
-  animation: dash 15s ease-in-out 1.5s infinite;
-}
 
-@keyframes fade-in {
-  0% {
-    opacity: 0.1;
-  }
-  100% {
-    opactity: 1;
-  }
-}
+#loading-logo path
+  stroke: #bebebe
+  stroke-width: 1.5
+  stroke-dasharray: 495
+  stroke-dashoffset: 990
+  animation: dash 15s ease-in-out 1.5s infinite
 
-#logo {
-  height: 50px;
-  width: auto;
-  fill: #4f4f51;
-  animation: fade-in 2s ease-out;
-}
+@keyframes fade-in
+  0%
+    opacity: 0.1
+  100%
+    opactity: 1
 
-video {
-  width: 60%;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 20px;
-  background-color: #eaeaea;
-}
 
-#media-controls {
-  width: 60%;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
+#logo
+  height: 50px
+  width: auto
+  fill: #4f4f51
+  animation: fade-in 2s ease-out
 
-.stream-live #media-controls {
-  opacity: 1;
-}
+video
+  width: 60%
+  height: auto
+  object-fit: contain
+  margin-bottom: 20px
+  background-color: #eaeaea
 
-#play-button-container {
-  width: 30px;
-  height: 30px;
-  margin-right: 20px;
-}
+#media-controls
+  width: 60%
+  opacity: 0
+  transition: opacity 0.4s
 
-#play-button-container:disabled {
-  display: none;
-}
+.stream-live #media-controls
+  opacity: 1
 
-.play-button {
-  width: 15px;
-  height: 30px;
-  background: #4f4f51;
-  transition: clip-path 0.3s ease;
-}
+#play-button-container
+  width: 30px
+  height: 30px
+  margin-right: 20px
 
-.play-button-before {
-  clip-path: polygon(0 0, 100% 25%, 100% 75%, 0% 100%);
-}
+#play-button-container:disabled
+  display: none
 
-.play-button-after {
-  clip-path: polygon(0% 25%, 100% 50%, 100% 50%, 0% 75%);
-}
+.play-button
+  width: 15px
+  height: 30px
+  background: #4f4f51
+  transition: clip-path 0.3s ease
 
-#play-button-container.playing .play-button-before {
-  clip-path: polygon(0 0, 70% 0, 70% 100%, 0% 100%);
-}
+.play-button-before
+  clip-path: polygon(0 0, 100% 25%, 100% 75%, 0% 100%)
 
-#play-button-container.playing .play-button-after {
-  clip-path: polygon(30% 0, 100% 0, 100% 100%, 30% 100%);
-}
+.play-button-after
+  clip-path: polygon(0% 25%, 100% 50%, 100% 50%, 0% 75%)
 
-#volume-slider {
-  max-width: 120px;
-}
+#play-button-container.playing .play-button-before
+  clip-path: polygon(0 0, 70% 0, 70% 100%, 0% 100%)
 
-#fullscreen-button svg {
-  fill: 4f4f51;
-  transition: transform 0.4s;
-}
+#play-button-container.playing .play-button-after
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 30% 100%)
+
+#volume-slider
+  max-width: 120px
+
+#fullscreen-button svg
+  fill: 4f4f51
+  transition: transform 0.4s
 
 #fullscreen-button:hover,
 #fullscreen-button:active,
-#fullscreen-button:focus {
-  transform: scale(1.1);
-}
+#fullscreen-button:focus
+  transform: scale(1.1)
 
-#info-bar {
-  font-size: 24px;
-  margin-top: 20px;
-  opacity: 1;
-  transition: opacity 0.4s;
-}
+#info-bar
+  font-size: 24px
+  margin-top: 20px
+  opacity: 1
+  transition: opacity 0.4s
 
-#create-message {
-  font-size: 24px;
-  margin-top: 20px;
-  opacity: 1;
-  text-decoration: underline;
-  transition: opacity 0.4s;
-}
+#create-message
+  font-size: 24px
+  margin-top: 20px
+  opacity: 1
+  text-decoration: underline
+  transition: opacity 0.4s
 
 .stream-live #info-bar,
-.stream-live #create-message {
-  opacity: 0;
-}
+.stream-live #create-message
+  opacity: 0
 
-#chat-container {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  height: 370px;
-  width: 300px;
-  background: white;
-  z-index: 9;
-  border-radius: 5px;
-  text-align: left;
-  -moz-box-shadow: 0px 0px 1px 7px #b9b9b9;
-  -webkit-box-shadow: 0px 0px 1px 7px #b9b9b9;
-  box-shadow: 0px 0px 1px 7px #b9b9b9;
-}
+#chat-container
+  position: fixed
+  right: 20px
+  bottom: 20px
+  height: 370px
+  width: 300px
+  background: white
+  z-index: 9
+  border-radius: 5px
+  text-align: left
+  -moz-box-shadow: 0px 0px 1px 7px #b9b9b9
+  -webkit-box-shadow: 0px 0px 1px 7px #b9b9b9
+  box-shadow: 0px 0px 1px 7px #b9b9b9
 
 #chat-container,
-#chat-container * {
-  padding: 0;
-}
+#chat-container *
+  padding: 0
 
-#chat-messages {
-  height: 335px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 300px;
-}
+#chat-messages
+  height: 335px
+  overflow-x: hidden
+  overflow-y: auto
+  width: 300px
 
-#chat-messages div {
-  border-bottom: 1px solid lightgray;
-  padding: 2px 5px;
-  font-size: 20px;
-}
+#chat-messages div
+  border-bottom: 1px solid lightgray
+  padding: 2px 5px
+  font-size: 20px
 
-#chat-messages div span.name {
-  font-weight: bold;
-}
+#chat-messages div span.name
+  font-weight: bold
 
-#txt-chat-message {
-  width: 300px;
-  border: 0;
-  border-top: 1px solid lightgray;
-  font-size: 20px;
-  padding: 2px 5px;
-}
+#txt-chat-message
+  width: 300px
+  border: 0
+  border-top: 1px solid lightgray
+  font-size: 20px
+  padding: 2px 5px
 
-.checkmark {
-  width: 18px;
-  vertical-align: middle;
-}
+.checkmark
+  width: 18px
+  vertical-align: middle
 </style>
 
 <template>

@@ -1,0 +1,181 @@
+@mixin arrow()
+  content: ''
+  border-style: solid
+  border-width: 7px 6.5px 0 6.5px
+  border-color: darken($tertiary-color, 20%) transparent transparent transparent
+  margin: 5px
+
+@mixin border($sides: all, $width: 1px)
+  @if $sides == all
+    border: $width solid $gray-light
+  @else
+    @each $side in $sides
+      border-#{$side}: $width solid $gray-light
+
+@mixin input
+  background-color: $white
+  border-radius: $border-radius-small
+  height: 60px
+  padding: 17px 20px
+  margin-bottom: 28px
+  +border
+
+@mixin theme-solid
+  background-color: var(--inverse-color)
+  border-color: transparent
+  color: var(--theme-color)
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+    background-color: var(--inverse-off-color)
+    color: var(--theme-color)
+
+  &:disabled
+    &,
+    &:hover,
+    &:active,
+    &:focus
+      text-decoration: none
+      border-color: transparent
+      background: var(--theme-off-color)
+      color: var(--inverse-off-color)
+  
+@mixin button-solid($color: $primary-color)
+  background-color: $color
+  border-color: transparent
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+    background-color: rgba($color, 0.9)
+    color: rgba($white, 0.9)
+
+  &:disabled
+    &,
+    &:hover,
+    &:active,
+    &:focus
+      text-decoration: none
+      border-color: transparent
+      background: rgba($color, 0.5)
+      color: rgba($white, 0.5)
+
+@mixin theme-outline
+  background-color: transparent
+  color: var(--inverse-color)
+  border: solid var(--inverse-color) 2px
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+    border-color: var(--inverse-off-color)
+    color: var(--inverse-off-color)
+
+  &:disabled
+    &,
+    &:hover,
+    &:active,
+    &:focus
+      text-decoration: none
+      border-color: var(--theme-off-color)
+      color: var(--theme-off-color)
+      background: transparent
+
+
+@mixin button-outline($color: $primary-color)
+  background-color: transparent
+  color: $color
+  border: solid $color 2px
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+    border-color: rgba($color, 0.8)
+    color: rgba($color, 0.8)
+
+  &:disabled
+    &,
+    &:hover,
+    &:active,
+    &:focus
+      text-decoration: none
+      border-color: rgba($color, 0.5)
+      color: rgba($color, 0.5)
+      background: transparent
+
+@mixin button-text($color: $tertiary-color)
+  background: none
+  color: $color
+  border: solid transparent 2px
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+    color: lighten($color, 10%)
+
+  &:disabled
+    &,
+    &:hover,
+    &:active,
+    &:focus
+      text-decoration: none
+      background: none
+      border: solid transparent 2px
+      color: rgba($color, 0.5)
+
+@mixin button-white($color: $primary-color)
+  background-color: $white
+  color: $color
+  border: solid transparent 2px
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+    background: rgba($white, 0.9)
+    border-color: transparent
+    color: rgba($color, 0.9)
+
+  &:disabled
+    &,
+    &:hover,
+    &:active,
+    &:focus
+      text-decoration: none
+      background: rgba($white, 0.5)
+      border: rgba($white, 0.5)
+      color: rgba($color, 0.5)
+
+@mixin button-tab
+  color: $off-black
+  border: 0
+  border-radius: 0
+  background-color: transparent
+  padding-left: 0
+  padding-right: 0
+  margin-right: 60px
+  border-bottom: 2px solid transparent
+  font-size: 20px
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+    border: 0
+    border-bottom: 2px solid transparent
+
+  &:disabled
+    &,
+    &:hover,
+    &:active,
+    &:focus
+      text-decoration: none
+      border-bottom: 2px solid $primary-color
+      color: $primary-color
+      background: none
