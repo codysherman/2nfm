@@ -247,16 +247,16 @@ video
 #receiver.height-100(:class="{ 'stream-live': isPlaying }")
   .menu-bar
     .frow.row-start
-      button#show-stats-bar.button-link(@click="showStats") Stats
+      button#show-stats-bar.button-link(v-if="isPlaying" @click="showStats") Stats
       // <button id="show-chats" class="button-link">Past Tabs</button>
   #stats-bar.shadow-light(v-if="statsVisible")
     #hide-stats-bar(@click="hideStats")
       svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24')
         path(d='M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z')
     #stats-bar-html
-      div {{ `Video: ${stats.video.recv.codecs.length > 0 ? stats.video.recv.codecs : 'N/A'}` }}
-      div {{ `Resolution: ${stats.resolutions.recv.width}x${stats.resolutions.recv.height}` }}
-      div {{ `Audio: ${stats.audio.recv.codecs.length > 0 ? stats.audio.recv.codecs : 'N/A'}` }}
+      div(v-if="stats.video.recv.codecs.length > 0") {{ `Video: ${stats.video.recv.codecs}` }}
+      div(v-if="stats.video.recv.codecs.length > 0") {{ `Resolution: ${stats.resolutions.recv.width}x${stats.resolutions.recv.height}` }}
+      div(v-if="stats.audio.recv.codecs.length > 0") {{ `Audio: ${stats.audio.recv.codecs}` }}
       div {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
     svg#loading-logo(v-if='!isPlaying' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 92 53' width='92' height='53' isolation='isolate')
@@ -323,12 +323,11 @@ export default {
       statsVisible: false,
       NO_MORE: false,
       stats: {},
-      infoBarMessage: '',
-      presenceCheckWait: 1000,
+      infoBarMessage: "",
+      presenceCheckWait: 1000
     };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     togglePlayback() {
       if (this.stream.isVideo) {
@@ -421,7 +420,7 @@ export default {
       // // html += '<br>';
       // // html += 'Speed: ' + bytesToSize(stats.bandwidth.speed || 0);
       // statsBarHTML.innerHTML = html;
-    },
+    }
   },
   mounted() {
     let r;
@@ -512,11 +511,11 @@ export default {
     this.connection.onstatechange = state => {
       this.infoBarMessage = `${state.name}: ${state.reason}`;
       if (state.name == "request-rejected" && this.params.p) {
-        this.infoBarMessage = 'Incorrect password';
+        this.infoBarMessage = "Incorrect password";
       }
 
       if (state.name === "room-not-available") {
-        this.infoBarMessage = 
+        this.infoBarMessage =
           "Screen share session is closed or paused. You will join automatically when share session is resumed.";
       }
     };
@@ -731,7 +730,7 @@ export default {
     window.addEventListener(
       "offline",
       () => {
-        this.infoBarMessage = 'You seem to be offline.';
+        this.infoBarMessage = "You seem to be offline.";
       },
       false
     );
@@ -739,7 +738,7 @@ export default {
     window.addEventListener(
       "online",
       () => {
-        this.infoBarMessage = 'You are back online. Reloading the page...';
+        this.infoBarMessage = "You are back online. Reloading the page...";
         location.reload();
       },
       false
