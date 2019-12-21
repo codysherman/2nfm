@@ -230,7 +230,7 @@ video
 #receiver.height-100
   .menu-bar
     .frow.row-start
-      button#show-stats-bar.button-link(v-if="isPlaying" @click="showStats") Stats
+      button#show-stats-bar.button-link(v-if="isStream" @click="showStats") Stats
       // <button id="show-chats" class="button-link">Past Tabs</button>
   #stats-bar.shadow-light(v-if="statsVisible")
     #hide-stats-bar(@click="hideStats")
@@ -242,14 +242,14 @@ video
       div(v-if="stats.audio.recv.codecs.length > 0") {{ `Audio: ${stats.audio.recv.codecs}` }}
       div {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
-    svg#loading-logo(v-if='!isPlaying' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 92 53' width='92' height='53' isolation='isolate')
+    svg#loading-logo(v-if='!isStream' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 92 53' width='92' height='53' isolation='isolate')
       defs
         clippath
           rect(width='92' height='53')
       g(clip-path='url(#_clipPath_DBKJNQ6ncz1fVktbefDVInZnlBu8kyHj)')
         rect(width='92' height='53' fill-opacity='0' fill='rgb(185,187,189)')
         path(d='M2.6 17.5C3.2 13.8 4.2 10.8 5.8 8.8 7.2 6.7 9.4 5.1 12.1 3.9 14.8 2.8 18.6 2.2 23.4 2.2 28.4 2.2 32.3 2.8 35 3.8 37.9 4.9 40.1 6.5 41.6 8.8 43.2 11 44.1 13.4 44.1 16.3 44.1 19.1 43.2 22 41.3 24.6 39.5 27.3 36.2 30.2 31.3 33.5 28.4 35.3 26.6 36.6 25.6 37.3 24.6 38 23.4 39 22.1 40.2L45.4 40.2 45.4 1.9C49.7 2.5 53.8 3.9 57.5 6.5Q60.4 8.4 67.1 15.7C68.3 17.1 69.6 18.7 70.9 20.6 72.9 23.6 74.3 25.6 75.2 26.4 76 27.4 77 28.7 78.3 30L78.3 1.9 90.4 1.9 90.4 51.1C85.9 50.7 81.9 49.1 78 46.5 75.3 44.6 72 41.6 68.6 37.3L68.6 37.3C67.3 35.9 66.1 34.3 64.8 32.4 62.7 29.4 58.5 24.4 57.3 23L57.3 51.1 1.6 51.1C2.1 47.2 3.6 43.5 6.1 39.9 8.5 36.5 13.3 32.3 20.1 27.6 24.3 24.7 27 22.4 28.2 21 29.3 19.4 29.9 18 29.9 16.7 29.9 15.2 29.3 14 28.2 13 27 11.8 25.6 11.4 23.7 11.4 22 11.4 20.4 12 19.3 13 18.1 14.1 17.6 14.8 17.1 17.5L2.6 17.5Z' fill='none' vector-effect='non-scaling-stroke' stroke-linejoin='miter' stroke-linecap='butt' stroke-miterlimit='4')
-    svg#logo(v-if='isPlaying' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 61.9 34.3' width='61.9' height='34.3' isolation='isolate')
+    svg#logo(v-if='isStream' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 61.9 34.3' width='61.9' height='34.3' isolation='isolate')
       defs
         clippath
           rect(width='61.9' height='34.3')
@@ -260,17 +260,17 @@ video
       | Your browser does not support the video element.
     audio(ref='audioPlayer' :hidden="!stream.isAudio")
       | Your browser does not support the audio element.
-    #media-controls.frow.nowrap(v-if="isPlaying" :class="{ 'justify-between': stream.isVideo }")
+    #media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
       .frow.nowrap
-        button#play-button-container.frow.nowrap.button-none(type='button' :class='{ playing: isPlaying }' @click='togglePlayback' :disabled='!isPlaying || (isPlaying && stream.isVideo)')
+        button#play-button-container.frow.nowrap.button-none(type='button' :class='{ playing: isStream }' @click='togglePlayback' :disabled='!isStream || (isStream && stream.isVideo)')
           .play-button.play-button-before
           .play-button.play-button-after
-        input#volume-slider(type='range' v-if='isPlaying' min='0' max='1' value='0.5' step='0.01' @change='setVolume')
+        input#volume-slider(type='range' v-if='isStream' min='0' max='1' value='0.5' step='0.01' @change='setVolume')
       button#fullscreen-button.button-none(type='button' v-if='stream.isVideo' @click='fullscreenVideo')
         svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24')
           path(d='M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z')
-    #info-bar(v-if="!isPlaying") {{ infoBarMessage }}
-    router-link#create-message(v-if="!isPlaying", to='/streamer') Create your own room
+    #info-bar(v-if="!isStream") {{ infoBarMessage }}
+    router-link#create-message(v-if="!isStream", to='/streamer') Create your own room
   #chat-container(hidden)
     #chat-messages
     input#txt-chat-message(type='text' placeholder='Enter Chat Message' hidden)
@@ -298,7 +298,7 @@ export default {
     return {
       roomName: this.$route.params.room,
       stream: {},
-      isPlaying: false,
+      isStream: false,
       connection: null,
       params: {},
       statsVisible: false,
@@ -524,7 +524,7 @@ export default {
         this.$refs.audioPlayer.volume = 0.5;
         this.$refs.audioPlayer.play();
       }
-      this.isPlaying = true;
+      this.isStream = true;
     };
 
     // if user left
