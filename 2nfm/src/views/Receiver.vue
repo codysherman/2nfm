@@ -116,13 +116,6 @@ body
   stroke-dashoffset: 990
   animation: dash 15s ease-in-out 1.5s infinite
 
-@keyframes fade-in
-  0%
-    opacity: 0.1
-  100%
-    opactity: 1
-
-
 #logo
   height: 50px
   width: auto
@@ -138,11 +131,7 @@ video
 
 #media-controls
   width: 60%
-  opacity: 0
-  transition: opacity 0.4s
-
-.stream-live #media-controls
-  opacity: 1
+  animation: fade-in 0.4s
 
 #play-button-container
   width: 30px
@@ -185,19 +174,13 @@ video
 #info-bar
   font-size: 24px
   margin-top: 20px
-  opacity: 1
-  transition: opacity 0.4s
+  transition: fade-in 0.4s
 
 #create-message
   font-size: 24px
   margin-top: 20px
-  opacity: 1
   text-decoration: underline
-  transition: opacity 0.4s
-
-.stream-live #info-bar,
-.stream-live #create-message
-  opacity: 0
+  transition: fade-in 0.4s
 
 #chat-container
   position: fixed
@@ -244,7 +227,7 @@ video
 </style>
 
 <template lang="pug">
-#receiver.height-100(:class="{ 'stream-live': isPlaying }")
+#receiver.height-100
   .menu-bar
     .frow.row-start
       button#show-stats-bar.button-link(v-if="isPlaying" @click="showStats") Stats
@@ -277,16 +260,16 @@ video
       | Your browser does not support the video element.
     audio(ref='audioPlayer')
       | Your browser does not support the audio element.
-    #media-controls.frow.nowrap(:class="{ 'justify-between': isVideo }")
+    #media-controls.frow.nowrap(v-if="isPlaying" :class="{ 'justify-between': stream.isVideo }")
       .frow.nowrap
-        button#play-button-container.frow.nowrap.button-none(type='button' :class='{ playing: isPlaying }' @click='togglePlayback' :disabled='!isPlaying || (isPlaying && isVideo)')
+        button#play-button-container.frow.nowrap.button-none(type='button' :class='{ playing: isPlaying }' @click='togglePlayback' :disabled='!isPlaying || (isPlaying && stream.isVideo)')
           .play-button.play-button-before
           .play-button.play-button-after
         input#volume-slider(type='range' v-if='isPlaying' min='0' max='1' value='0.5' step='0.01' @change='setVolume')
-      button#fullscreen-button.button-none(type='button' v-if='isVideo' @click='fullscreenVideo')
+      button#fullscreen-button.button-none(type='button' v-if='stream.isVideo' @click='fullscreenVideo')
         svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24')
           path(d='M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z')
-    #info-bar {{ infoBarMessage }}
+    #info-bar(v-if="!isPlaying") {{ infoBarMessage }}
     router-link#create-message(v-if="!isPlaying", to='/streamer') Create your own room
   #chat-container(hidden)
     #chat-messages
@@ -316,8 +299,6 @@ export default {
       roomName: this.$route.params.room,
       stream: {},
       isPlaying: false,
-      isVideo: false,
-      isAudio: false,
       connection: null,
       params: {},
       statsVisible: false,
@@ -530,7 +511,6 @@ export default {
       this.stream = e.stream;
       this.stream.mute();
       if (this.stream.isVideo) {
-        this.isVideo = true;
         this.$refs.videoPlayer.srcObject = this.stream;
         this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
         if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
@@ -539,13 +519,13 @@ export default {
         this.$refs.videoPlayer.volume = 0.5;
         this.$refs.videoPlayer.play();
       } else {
-        this.isAudio = true;
         this.$refs.audioPlayer.srcObject = this.stream;
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
         this.$refs.audioPlayer.volume = 0.5;
         this.$refs.audioPlayer.play();
         playButton.disabled = false;
       }
+      this.isPlaying = true;
     };
 
     // if user left
