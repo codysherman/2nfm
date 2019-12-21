@@ -299,7 +299,7 @@ video {
 </style>
 
 <template>
-  <div id="receiver" class="height-100">
+  <div id="receiver" class="height-100" :class="{ 'stream-live': isPlaying }">
     <div class="menu-bar">
       <div class="frow row-start">
         <button id="show-stats-bar" class="button-link">Stats</button>
@@ -388,13 +388,13 @@ video {
 
       <video
         class="shadow-light"
-        ref="this.$refs.videoPlayer"
+        ref="videoPlayer"
         playsinline
         @click="togglePlayback"
       >
         Your browser does not support the video element.
       </video>
-      <audio ref="this.$refs.audioPlayer">
+      <audio ref="audioPlayer">
         Your browser does not support the audio element.
       </audio>
 
@@ -478,7 +478,7 @@ export default {
   data() {
     return {
       roomName: 'test',
-      stream: null,
+      stream: {},
       isPlaying: false,
       isVideo: false,
       isAudio: false,
@@ -640,19 +640,19 @@ export default {
       this.$refs.infoBar.innerHTML = "Remote peer is about to send his screen.";
     };
 
-    var stream = null;
+    this.stream = null;
     
     this.connection.onstream = (e) => {
       console.log('refs', this.$refs);
       console.log(JSON.parse(JSON.stringify(this.$refs)));
       this.$refs.videoPlayer.srcObject = null;
       this.$refs.audioPlayer.srcObject = null;
-      stream = e.stream;
-      stream.mute();
-      if (stream.isVideo) {
+      this.stream = e.stream;
+      this.stream.mute();
+      if (this.stream.isVideo) {
         this.isVideo = true;
         console.log('hannggggg');
-        this.$refs.videoPlayer.srcObject = stream;
+        this.$refs.videoPlayer.srcObject = this.stream;
         this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
         if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
           this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
@@ -661,13 +661,12 @@ export default {
         this.$refs.videoPlayer.play();
       } else {
         this.isAudio = true;
-        this.$refs.audioPlayer.srcObject = stream;
+        this.$refs.audioPlayer.srcObject = this.stream;
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
         this.$refs.audioPlayer.volume = 0.5;
         this.$refs.audioPlayer.play();
         playButton.disabled = false;
       }
-      body.classList.add("stream-live");
     };
 
     // if user left
@@ -679,7 +678,6 @@ export default {
       this.$refs.videoPlayer.srcObject = null;
 
       this.$refs.infoBar.innerHTML = "Screen sharing has been closed.";
-      body.classList.remove("stream-live");
       statsBar.setAttribute("hidden", "");
       this.connection.close();
       this.connection.closeSocket();
@@ -848,8 +846,6 @@ export default {
           },
           1000
         );
-
-        // statsBar.removeAttribute('hidden');
       }
     };
 
