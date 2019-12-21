@@ -138,9 +138,6 @@ video
   height: 30px
   margin-right: 20px
 
-#play-button-container:disabled
-  display: none
-
 .play-button
   width: 15px
   height: 30px
@@ -260,18 +257,23 @@ video
       | Your browser does not support the audio element.
     #media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
       .frow.nowrap
-        button#play-button-container.frow.nowrap.button-none(type='button' :class='{ playing: isStream }' @click='togglePlayback' :disabled='!isStream || (isStream && stream.isVideo)')
+        button#play-button-container.frow.nowrap.button-none(
+          type="button"
+          :class="{ playing: isPlaying }"
+          v-if="(stream.isAudio) || (stream.isVideo && !isPlaying)"
+          @click="togglePlayback"
+        )
           .play-button.play-button-before
           .play-button.play-button-after
-        input#volume-slider(type='range' min='0' max='100' value='50' step='1' @change='setVolume')
-      button#fullscreen-button.button-none(type='button' v-if='stream.isVideo' @click='fullscreenVideo')
-        svg(xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24')
-          path(d='M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z')
+        input#volume-slider(type="range" min="0" max="100" value="50" step="1" @change="setVolume")
+      button#fullscreen-button.button-none(type="button" v-if="stream.isVideo" @click="fullscreenVideo")
+        svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
+          path(d="M24 9h-2v-4h-4v-2h6v6zm-6 12v-2h4v-4h2v6h-6zm-18-6h2v4h4v2h-6v-6zm6-12v2h-4v4h-2v-6h6z")
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
-    router-link#create-message(v-if="!isStream", to='/streamer') Create your own room
+    router-link#create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
     #chat-messages
-    input#txt-chat-message(type='text' placeholder='Enter Chat Message' hidden)
+    input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
 
 </template>
 
@@ -297,6 +299,7 @@ export default {
       roomName: this.$route.params.room,
       stream: {},
       isStream: false,
+      isPlaying: false,
       connection: null,
       params: {},
       statsVisible: false,
@@ -321,6 +324,7 @@ export default {
     async playMedia() {
       try {
         await this.player.play();
+        this.isPlaying = true;
       } catch(err) {
         // Playback Failed
       }
@@ -330,6 +334,7 @@ export default {
         this.playMedia();
       } else {
         this.player.pause();
+        this.isPlaying = false;
       }
     },
     setVolume(event) {
