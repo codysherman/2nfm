@@ -14,6 +14,7 @@
 .home-half
   width: 45%
   padding: 20px 0
+  text-align: center
 
 /* XS
 @media (max-width: 767px)
@@ -40,10 +41,10 @@
   border-color: red
   animation: pulse 1.5s ease-in-out infinite alternate
 
-.stream-button:hover
-  animation: none
-  background-color: red
-  border-color: red
+  &:hover
+    animation: none
+    background-color: red
+    border-color: red
 
 .line-divider
   margin: 0 30px

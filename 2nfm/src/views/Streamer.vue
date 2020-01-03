@@ -1,7 +1,4 @@
 <style scoped lang="sass">
-body
-  padding-top: 20px
-
 .card
   background-color: #ffffff
   padding: 15px
@@ -23,10 +20,10 @@ body
   font-size: 91px
   text-align: center
 
-#live-indicator.live
-  color: red
-  border-color: red
-  animation: pulse 1.5s ease-in-out infinite alternate
+  &.live
+    color: red
+    border-color: red
+    animation: pulse 1.5s ease-in-out infinite alternate
 
 /* XS
 @media (max-width: 767px)
@@ -44,17 +41,18 @@ body
   font-size: 40px
   color: #4f4f51
 
-#room-id-label input
-  font-size: 40px
-  border-width: 4px
+  input
+    font-size: 40px
+    border-width: 4px
 
 /* XS
 @media (max-width: 767px)
   #room-id-label
     font-size: 30px
-  #room-id-label input
-    font-size: 30px
-    border-width: 2px
+
+    input
+      font-size: 30px
+      border-width: 2px
 
 #options
   border: 2px solid #eaeaea
@@ -63,19 +61,19 @@ body
   margin: 40px 0
   position: relative
 
-#options .label
-  position: absolute
-  top: -9px
-  left: 30px
-  background-color: #fff
-  padding: 0 8px
-  width: auto
+  .label
+    position: absolute
+    top: -9px
+    left: 30px
+    background-color: #fff
+    padding: 0 8px
+    width: auto
 
 .settings-item
   margin-bottom: 40px
 
-.settings-item label
-  margin-bottom: 0
+  label
+    margin-bottom: 0
 
 #start
   border: 2px solid #eaeaea
@@ -84,31 +82,31 @@ body
   margin-top: 40px
   position: relative
 
-#start .label
-  position: absolute
-  top: -9px
-  left: 30px
-  background-color: #fff
-  padding: 0 8px
-  width: auto
+  .label
+    position: absolute
+    top: -9px
+    left: 30px
+    background-color: #fff
+    padding: 0 8px
+    width: auto
 
 .stream-button
   transition: color 0.3s
 
-.stream-button:hover
-  color: #000
+  &:hover
+    color: #000
 
-.stream-button svg
-  width: auto
-  height: 40px
-  margin-bottom: 10px
+  svg
+    width: auto
+    height: 40px
+    margin-bottom: 10px
 
-.stream-button svg path
-  fill: #4f4f51
-  transition: fill 0.3s
+  path
+    fill: #4f4f51
+    transition: fill 0.3s
 
-.stream-button:hover svg path
-  fill: #000
+  &:hover svg path
+    fill: #000
 
 #public-link
   display: block
