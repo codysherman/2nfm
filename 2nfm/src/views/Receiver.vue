@@ -227,7 +227,7 @@ export default {
       NO_MORE: false,
       stats: {},
       infoBarMessage: "",
-      presenceCheckWait: 1000
+      presenceCheckWait: 3750
     };
   },
   computed: {
@@ -277,13 +277,15 @@ export default {
         this.roomName,
         (isRoomExist, roomid, extra) => {
           if (isRoomExist === false) {
-            this.infoBarMessage = `Waiting for someone to host the room: ${this.roomName}`;
-
-            setTimeout(() => {
-              this.presenceCheckWait < 60000 &&
-                (this.presenceCheckWait = this.presenceCheckWait * 2);
+            if ( this.presenceCheckWait < 60000 ) {
+              (this.presenceCheckWait = this.presenceCheckWait * 2);
+            }
+            this.infoBarMessage = 
+              `Room: ${this.roomName} isn't hosted yet.
+              Checking again ${this.presenceCheckWait === 60000 ? 'every' : 'in'}
+              ${this.presenceCheckWait / 1000} seconds.`;
+              
               setTimeout(this.checkPresence, this.presenceCheckWait);
-            }, this.presenceCheckWait);
             return;
           }
 
