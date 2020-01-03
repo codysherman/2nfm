@@ -69,23 +69,10 @@ video
   height: 30px
   margin-right: 20px
 
-.play-button
-  width: 15px
-  height: 30px
-  background: #4f4f51
-  transition: clip-path 0.3s ease
-
-.play-button-before
-  clip-path: polygon(0 0, 100% 25%, 100% 75%, 0% 100%)
-
-.play-button-after
-  clip-path: polygon(0% 25%, 100% 50%, 100% 50%, 0% 75%)
-
-#play-button-container.playing .play-button-before
-  clip-path: polygon(0 0, 70% 0, 70% 100%, 0% 100%)
-
-#play-button-container.playing .play-button-after
-  clip-path: polygon(30% 0, 100% 0, 100% 100%, 30% 100%)
+  svg
+    width: 30px
+    height: 30px
+    fill: #4f4f51
 
 #volume-slider
   max-width: 120px
@@ -191,12 +178,11 @@ video
       .frow.nowrap
         button#play-button-container.frow.nowrap.button-none(
           type="button"
-          :class="{ playing: isPlaying }"
           v-if="(stream.isAudio) || (stream.isVideo && !isPlaying)"
           @click="togglePlayback"
         )
-          .play-button.play-button-before
-          .play-button.play-button-after
+          PlaySvg(v-if="!isPlaying")
+          PauseSvg(v-else)
         input#volume-slider(type="range" min="0" max="100" value="50" step="1" @change="setVolume")
       button#fullscreen-button.button-none(type="button" v-if="stream.isVideo" @click="fullscreenVideo")
         svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24")
@@ -210,6 +196,9 @@ video
 </template>
 
 <script>
+import PlaySvg from '@/assets/svgs/play.svg';
+import PauseSvg from '@/assets/svgs/pause.svg';
+
 import io from "socket.io-client";
 // TODO: Remove need to do this
 window.io = io;
@@ -226,6 +215,10 @@ import { getStats } from "@/utils/background/helpers/getStats.js";
 
 export default {
   name: "Receiver",
+  components: {
+    PlaySvg,
+    PauseSvg,
+  },
   data() {
     return {
       roomName: this.$route.params.room,
