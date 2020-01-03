@@ -4,9 +4,9 @@
   left: 10px
   top: 5px
 
-.menu-bar button
-  color: gray
-  margin-right: 10px
+  button
+    color: gray
+    margin-right: 10px
 
 #stats-bar
   background-color: rgba(255, 255, 255, 0.92)
@@ -25,9 +25,9 @@
   right: 5px
   cursor: pointer
 
-#hide-stats-bar svg
-  width: 10px
-  height: 10px
+  svg
+    width: 10px
+    height: 10px
 
 #loading-logo
   height: 53px
@@ -90,14 +90,15 @@ video
 #volume-slider
   max-width: 120px
 
-#fullscreen-button svg
-  fill: #4f4f51
-  transition: transform 0.4s
+#fullscreen-button
+  svg
+    fill: #4f4f51
+    transition: transform 0.4s
 
-#fullscreen-button:hover,
-#fullscreen-button:active,
-#fullscreen-button:focus
-  transform: scale(1.1)
+  &:hover,
+  &:active,
+  &:focus
+    transform: scale(1.1)
 
 #info-bar
   font-size: 24px
