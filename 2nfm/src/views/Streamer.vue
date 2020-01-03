@@ -139,12 +139,7 @@
 <template lang="pug">
 .frow.centered
   .col-md-1-2
-    svg#logo(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 61.9 34.3" width="61.9" height="34.3" isolation="isolate")
-      defs
-        clippath
-          rect(width="61.9" height="34.3")
-      g(clip-path="url(#_clipPath_tcUaJZ4siK7ZJPj4ATDJEfxLNlNwtkyj)")
-        path(d="M30.5 26.7L30.5 0C33.5 0.4 36.4 1.4 39 3.2 41 4.5 43.2 6.7 45.7 9.7L45.7 9.6C46.5 10.6 47.4 11.7 48.3 13 49.7 15.1 50.7 16.5 51.3 17.1 51.9 17.8 52.6 18.7 53.5 19.6L53.5 0 61.9 0 61.9 34.3C58.8 34 56 32.9 53.3 31.1 51.4 29.8 49.1 27.7 46.7 24.7L46.7 24.7C45.8 23.7 45 22.6 44.1 21.3 42.6 19.2 41.6 17.9 41.1 17.2 40.5 16.5 39.7 15.7 38.8 14.7L38.8 34.3 30.5 34.3 30.5 34.3 0 34.3C0.3 31.6 1.4 29 3.1 26.5 4.8 24.1 8.1 21.2 12.9 17.9 15.8 15.9 17.7 14.3 18.5 13.3 19.3 12.2 19.7 11.2 19.7 10.3 19.7 9.3 19.3 8.4 18.5 7.7 17.7 6.9 16.7 6.6 15.4 6.6 14.2 6.6 13.1 7 12.3 7.7 11.5 8.5 11.1 9 10.8 10.9L0.7 10.9C1.1 8.3 1.8 6.2 2.9 4.8 3.9 3.3 5.4 2.2 7.3 1.4 9.2 0.6 11.8 0.2 15.2 0.2 18.7 0.2 21.4 0.6 23.3 1.3 25.3 2.1 26.8 3.2 27.9 4.8 29 6.3 29.6 8 29.6 10 29.6 12 29 14 27.7 15.8 26.4 17.7 24.1 19.7 20.7 22 18.7 23.3 17.4 24.2 16.7 24.7 16 25.2 15.2 25.9 14.3 26.7L30.5 26.7Z" fill-rule="evenodd")
+    LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn }") LIVE
   .col-md-1-2
     section#setup-section(v-if="!isSharingOn")
@@ -206,18 +201,12 @@
             .col-xs-1-2
               #video-button.stream-button(@click="startVideoStream")
                 .frow.column-center
-                  svg(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" version="1.1")
-                    g(stroke="none" stroke-width="1" fill="none" fill-rule="evenodd")
-                      path(d="M1 18L1 21 4 21C4 19.3 2.7 18 1 18L1 18ZM1 14L1 16C3.8 16 6 18.2 6 21L8 21C8 17.1 4.9 14 1 14L1 14ZM1 10L1 12C6 12 10 16 10 21L12 21C12 14.9 7.1 10 1 10L1 10ZM21 3L3 3C1.9 3 1 3.9 1 5L1 8 3 8 3 5 21 5 21 19 14 19 14 21 21 21C22.1 21 23 20.1 23 19L23 5C23 3.9 22.1 3 21 3L21 3Z")
-                      rect(x="0" y="0" width="24" height="24")
-                      g(transform="translate(-208.000000, -106.000000)")
-                        g(transform="translate(0.000000, 114.000000)")
+                  VideoSvg
                   | Video
             .col-xs-1-2
               #audio-button.stream-button(@click="startAudioStream")
                 .frow.column-center
-                  svg(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24")
-                    path(d="M2 6h3.828c-1.335 2.905-1.335 9.096 0 12h-3.828c-1.311-1.108-2-3.551-2-5.995 0-2.45.692-4.9 2-6.005zm22 6.005c.005 8.031-3.145 12.864-6.121 11.864-.774-.26-9.567-5.579-9.567-5.579-1.993-2.22-1.993-10.288 0-12.508 0 0 9.161-5.476 9.548-5.633 2.691-1.086 6.136 3.82 6.14 11.856zm-3.383-7.693c-1.053-2.264-3.002-2.226-4.034.002-.588 1.271-.993 3.165-1.21 4.797h.527c1.587 0 2.873 1.287 2.873 2.875s-1.286 2.875-2.873 2.875h-.515c.217 1.603.616 3.538 1.206 4.89.988 2.271 3.062 2.232 4.033-.002 1.946-4.477 1.772-11.609-.007-15.437z")
+                  AudioSvg
                   | Audio Only
     section#stop-section(v-if="isSharingOn")
       router-link#public-link(to="{query: { s: sessionId, p: room_password }}`}" target="_blank")
@@ -235,6 +224,10 @@
 </template>
 
 <script>
+import LogoSvg from '@/assets/svgs/logo.svg';
+import VideoSvg from '@/assets/svgs/video.svg';
+import AudioSvg from '@/assets/svgs/audio.svg'
+;
 import io from 'socket.io-client';
 // TODO: Remove need to do this
 window.io = io;
@@ -247,6 +240,11 @@ import { captureDesktop } from "@/utils/background/captureDesktop.js";
 
 export default {
   name: "Streamer",
+  components: {
+    LogoSvg,
+    VideoSvg,
+    AudioSvg,
+  },
   data() {
     return {
       stream: null,
