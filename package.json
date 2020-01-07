@@ -1,28 +1,46 @@
 {
   "name": "2nfm",
-  "version": "1.0.0",
-  "description": "No more maintaining this extension; as of 2019. So please use at your own risk.",
-  "main": "server.js",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "prepare": "mkdir -p frow && cp node_modules/frow/dist/* frow/",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:server": "node server.js",
-    "start": "nodemon --ext css,html,js,json --exec npm run start:server"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/codysherman/2NFM.git"
-  },
-  "author": "cody@codysherman.com",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/codysherman/2NFM/issues"
-  },
-  "homepage": "https://github.com/codysherman/2NFM#readme",
-  "devDependencies": {
-    "nodemon": "^1.19.2"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "frow": "^3.1.4"
+    "core-js": "^2.6.5",
+    "rtcmulticonnection": "^3.6.9",
+    "socket.io-client": "2.1.0",
+    "vue": "^2.6.11",
+    "vue-router": "^3.0.3",
+    "vuex": "^3.0.1",
+    "webrtc-adapter": "^7.3.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-eslint": "^3.11.0",
+    "@vue/cli-service": "^3.11.0",
+    "@vue/eslint-config-prettier": "^5.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "frow": "^3.3.0",
+    "lint-staged": "^8.1.5",
+    "node-sass": "^4.13.0",
+    "prettier": "^1.18.2",
+    "sass-loader": "^7.0.0",
+    "vue-cli-plugin-pug": "^1.0.7",
+    "vue-svg-loader": "^0.15.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
   }
 }

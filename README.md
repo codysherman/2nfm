@@ -4,6 +4,34 @@ To start a stream visit: https://2n.fm/streamer
 
 Visit https://2N.fm/{{room-name-here}} to view someone else's tab.
 
+## Project setup
+```
+yarn install
+```
+
+### Compiles and hot-reloads for development
+```
+yarn run serve
+```
+
+### Compiles and minifies for production
+```
+yarn run build
+```
+
+### Run your tests
+```
+yarn run test
+```
+
+### Lints and fixes files
+```
+yarn run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
 <!-- # Disclaimer
 
 No more maintaining this extension; as of 2019. So please use at your own risk.
