@@ -91,6 +91,7 @@
     width: auto
 
 .stream-button
+  cursor: pointer
   transition: color 0.3s
 
   &:hover
@@ -217,7 +218,7 @@
       button#stop-sharing(type="button" @click="stopStream")
         | End Sharing
     .frow.width-100.mt-20
-      a.text-underline(href="https://caniuse.com/#search=getDisplayMedia" rel="noreferrer")
+      a.text-underline(href="https://caniuse.com/#search=getDisplayMedia" rel="noreferrer" target="_blank")
         | OS and Browser Limitations
       //
         <div id="enable-chat">
