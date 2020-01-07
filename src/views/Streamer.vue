@@ -210,8 +210,9 @@
                   AudioSvg
                   | Audio Only
     section#stop-section(v-if="isSharingOn")
-      router-link#public-link(to="{query: { s: sessionId, p: room_password }}`}" target="_blank")
-        | {{&grave;2n.fm/${sessionId}&grave;}}
+      //- router-link#public-link(to="{query: { s: sessionId, p: room_password }}`}" target="_blank")
+      router-link#public-link(:to="sessionId" target="_blank")
+        | {{ `2n.fm/${sessionId}` }}
       .viewer-count
         span#viewer-count-number
         | Viewers
