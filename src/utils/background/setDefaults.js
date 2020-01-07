@@ -40,7 +40,7 @@ export function setDefaults(externalThis) {
   //     title: '2N Streamer'
   // });
 
-  setViewerCount("0");
+  setViewerCount(0, externalThis);
 
   // chrome.runtime.reload();
 }

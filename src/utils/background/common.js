@@ -83,7 +83,8 @@ export function getUserMediaError(e) {
   });
 }
 
-export function setViewerCount(viewerCount) {
+export function setViewerCount(viewerCount, externalThis) {
   // TODO: Convert this to work with Vue
-  // document.getElementById("viewer-count-number").innerHTML = viewerCount;
+  // console.log(externalThis);
+  externalThis.viewerCount = viewerCount;
 }

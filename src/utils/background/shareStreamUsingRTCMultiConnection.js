@@ -127,12 +127,12 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
   var text = "-";
   (function looper() {
     if (!externalThis.connection) {
-      setViewerCount(0);
+      setViewerCount(0, externalThis);
       return;
     }
 
     if (externalThis.connection.isInitiator) {
-      setViewerCount(0);
+      setViewerCount(0, externalThis);
       return;
     }
 
@@ -141,7 +141,7 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
       text = "-";
     }
 
-    setViewerCount(text);
+    setViewerCount(text, externalThis);
     setTimeout(looper, 500);
   })();
 
@@ -157,7 +157,7 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     externalThis.sessionId = externalThis.connection.sessionid;
 
     // chrome.browserAction.enable();
-    setViewerCount(0);
+    setViewerCount(0, externalThis);
 
     if (externalThis.room_url_box === true) {
       var resultingURL = "https://2n.fm/" + externalThis.connection.sessionid;
@@ -204,7 +204,8 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
           setViewerCount(
             externalThis.connection.isInitiator
               ? externalThis.connection.getAllParticipants().length
-              : 0
+              : 0,
+            externalThis
           );
         }
       }
@@ -266,6 +267,9 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     if (oldLength != participantsCount) {
       // sendTabTitle();
     }
-    setViewerCount(externalThis.connection.isInitiator ? participantsCount : 0);
+    setViewerCount(
+      externalThis.connection.isInitiator ? participantsCount : 0,
+      externalThis
+    );
   };
 }

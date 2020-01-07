@@ -141,9 +141,9 @@
 .frow.centered
   .col-md-1-2
     LogoSvg#logo
-    #live-indicator(:class="{ live: isSharingOn }") LIVE
+    #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
-    section#setup-section(v-if="!isSharingOn")
+    section#setup-section(v-if="!isSharingOn || !sessionId")
       label#room-id-label.row-start
         span.shrink-0 2n.fm/
         input#room-id(type="text" placeholder="Random" :value="roomName" @change="setRoomName")
@@ -209,13 +209,13 @@
                 .frow.column-center
                   AudioSvg
                   | Audio Only
-    section#stop-section(v-if="isSharingOn")
+    section#stop-section(v-if="isSharingOn && sessionId")
       //- router-link#public-link(to="{query: { s: sessionId, p: room_password }}`}" target="_blank")
       router-link#public-link(:to="sessionId" target="_blank")
         | {{ `2n.fm/${sessionId}` }}
       .viewer-count
         span#viewer-count-number
-        | Viewers
+        | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }} 
       button#stop-sharing(type="button" @click="stopStream")
         | End Sharing
     .frow.width-100.mt-20
@@ -261,11 +261,11 @@ export default {
       room_id: window.localStorage.getItem("room_id") || "",
       codecs: "default",
       bandwidth: null,
-      enableTabCaptureAPI: false,
       enableVideo: false,
       enableAudio: false,
       streaming_method: "RTCMultiConnection",
-      room_url_box: "true"
+      room_url_box: "true",
+      viewerCount: 0
     };
   },
   computed: {
@@ -276,20 +276,16 @@ export default {
   methods: {
     startVideoStream() {
       setDefaults(this);
-      this.enableTabCaptureAPI = false;
       this.isSharingOn = true;
       this.enableVideo = true;
       this.enableAudio = true;
-
       captureDesktop(this);
     },
     startAudioStream() {
       setDefaults(this);
-      this.enableTabCaptureAPI = false;
       this.isSharingOn = true;
       this.enableVideo = false;
       this.enableAudio = true;
-
       captureDesktop(this);
     },
     stopStream() {
