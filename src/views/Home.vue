@@ -68,34 +68,38 @@
 </style>
 
 <template lang="pug">
-#home.frow-container.height-100
-  .frow.centered-column.align-between.width-100
-    LogoSvg#home-logo
-    .frow.items-stretch.width-100.mt-50
-      .home-half
-        .frow.column-end
-          div
-            h1.mb-30 Start a Room
-            router-link.stream-button(type="button" to="/streamer")
-              | Stream
-      .line-divider
-      .home-half
-        .frow.column-start
-          div
-            h1.mb-30 Join a Room
-            form#join-form.frow.nowrap
-              input#room-input(type="text" v-model="roomId" placeholder="Room Name")
-              router-link#enter-room(type="button" :to="roomId")
-                | Go
+.height-100
+  GitHubCorner
+  #home.frow-container.height-100
+    .frow.centered-column.align-between.width-100
+      LogoSvg#home-logo
+      .frow.items-stretch.width-100.mt-50
+        .home-half
+          .frow.column-end
+            div
+              h1.mb-30 Start a Room
+              router-link.stream-button(type="button" to="/streamer")
+                | Stream
+        .line-divider
+        .home-half
+          .frow.column-start
+            div
+              h1.mb-30 Join a Room
+              form#join-form.frow.nowrap
+                input#room-input(type="text" v-model="roomId" placeholder="Room Name")
+                router-link#enter-room(type="button" :to="roomId")
+                  | Go
 </template>
 
 <script>
 import LogoSvg from "@/assets/svgs/logo.svg";
+import GitHubCorner from "@/components/GitHubCorner";
 
 export default {
   name: "home",
   components: {
-    LogoSvg
+    LogoSvg,
+    GitHubCorner
   },
   data() {
     return {
