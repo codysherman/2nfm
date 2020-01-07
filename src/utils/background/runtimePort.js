@@ -1,4 +1,4 @@
-import { connection, runtimePort } from './globals';
+import { connection, runtimePort } from "./globals";
 
 chrome.runtime.onConnect.addListener(function(port) {
   runtimePort = port;
@@ -15,7 +15,7 @@ chrome.runtime.onConnect.addListener(function(port) {
     if (message.openChat) {
       if (connection) {
         connection.send({
-          openChat: true,
+          openChat: true
         });
       }
     }
@@ -23,7 +23,7 @@ chrome.runtime.onConnect.addListener(function(port) {
     if (message.closeChat) {
       if (connection) {
         connection.send({
-          closeChat: true,
+          closeChat: true
         });
       }
     }
@@ -31,7 +31,7 @@ chrome.runtime.onConnect.addListener(function(port) {
     if (message.newChatMessage) {
       if (connection) {
         connection.send({
-          newChatMessage: message.newChatMessage,
+          newChatMessage: message.newChatMessage
         });
       }
     }

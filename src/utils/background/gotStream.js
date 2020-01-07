@@ -1,6 +1,6 @@
-import { setDefaults } from './setDefaults';
-import { addStreamStopListener } from './common';
-import { shareStreamUsingRTCMultiConnection } from './shareStreamUsingRTCMultiConnection';
+import { setDefaults } from "./setDefaults";
+import { addStreamStopListener } from "./common";
+import { shareStreamUsingRTCMultiConnection } from "./shareStreamUsingRTCMultiConnection";
 
 export function gotStream(stream, externalThis) {
   if (!stream) {
@@ -22,7 +22,7 @@ export function gotStream(stream, externalThis) {
 
   // chrome.browserAction.disable();
 
-  stream.addEventListener("inactive", e => {
+  stream.addEventListener("inactive", () => {
     setDefaults(externalThis);
   });
 

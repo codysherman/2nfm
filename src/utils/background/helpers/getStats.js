@@ -33,32 +33,32 @@ export function getStats(mediaStreamTrack, callback, interval) {
         tracks: [],
         codecs: [],
         availableBandwidth: 0,
-        streams: 0,
+        streams: 0
       },
       recv: {
         tracks: [],
         codecs: [],
         availableBandwidth: 0,
-        streams: 0,
+        streams: 0
       },
       bytesSent: 0,
-      bytesReceived: 0,
+      bytesReceived: 0
     },
     video: {
       send: {
         tracks: [],
         codecs: [],
         availableBandwidth: 0,
-        streams: 0,
+        streams: 0
       },
       recv: {
         tracks: [],
         codecs: [],
         availableBandwidth: 0,
-        streams: 0,
+        streams: 0
       },
       bytesSent: 0,
-      bytesReceived: 0,
+      bytesReceived: 0
     },
     bandwidth: {
       systemBandwidth: 0,
@@ -66,9 +66,9 @@ export function getStats(mediaStreamTrack, callback, interval) {
       encodedPerSecond: 0,
       helper: {
         audioBytesSent: 0,
-        videoBytestSent: 0,
+        videoBytestSent: 0
       },
-      speed: 0,
+      speed: 0
     },
     results: {},
     connectionType: {
@@ -78,39 +78,39 @@ export function getStats(mediaStreamTrack, callback, interval) {
         candidateType: [],
         transport: [],
         ipAddress: [],
-        networkType: [],
+        networkType: []
       },
       remote: {
         candidateType: [],
         transport: [],
         ipAddress: [],
-        networkType: [],
-      },
+        networkType: []
+      }
     },
     resolutions: {
       send: {
         width: 0,
-        height: 0,
+        height: 0
       },
       recv: {
         width: 0,
-        height: 0,
-      },
+        height: 0
+      }
     },
     internal: {
       audio: {
         send: {},
-        recv: {},
+        recv: {}
       },
       video: {
         send: {},
-        recv: {},
+        recv: {}
       },
-      candidates: {},
+      candidates: {}
     },
     nomore: function() {
       nomore = true;
-    },
+    }
   };
 
   var getStatsParser = {
@@ -118,7 +118,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       if (result.type === "googLibjingleSession") {
         getStatsResult.isOfferer = result.googInitiator;
       }
-    },
+    }
   };
 
   var peer = this;
@@ -126,7 +126,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
   if (arguments[0] instanceof RTCPeerConnection) {
     peer = arguments[0];
 
-    if (!!navigator.mozGetUserMedia) {
+    if (navigator.mozGetUserMedia) {
       mediaStreamTrack = arguments[1];
       callback = arguments[2];
       interval = arguments[3];
@@ -246,7 +246,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
     if (result.type !== "datachannel") return;
 
     getStatsResult.datachannel = {
-      state: result.state, // open or connecting
+      state: result.state // open or connecting
     };
   };
 
@@ -275,7 +275,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
     if (result.bytesSent) {
       var kilobytes = 0;
-      if (!!result.bytesSent) {
+      if (result.bytesSent) {
         if (!getStatsResult.internal.audio[sendrecvType].prevBytesSent) {
           getStatsResult.internal.audio[sendrecvType].prevBytesSent =
             result.bytesSent;
@@ -297,7 +297,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
     if (result.bytesReceived) {
       var kilobytes = 0;
-      if (!!result.bytesReceived) {
+      if (result.bytesReceived) {
         if (!getStatsResult.internal.audio[sendrecvType].prevBytesReceived) {
           getStatsResult.internal.audio[sendrecvType].prevBytesReceived =
             result.bytesReceived;
@@ -344,7 +344,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       getStatsResult.video[sendrecvType].codecs.push(result.googCodecName);
     }
 
-    if (!!result.bytesSent) {
+    if (result.bytesSent) {
       var kilobytes = 0;
       if (!getStatsResult.internal.video[sendrecvType].prevBytesSent) {
         getStatsResult.internal.video[sendrecvType].prevBytesSent =
@@ -360,7 +360,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       kilobytes = bytes / 1024;
     }
 
-    if (!!result.bytesReceived) {
+    if (result.bytesReceived) {
       var kilobytes = 0;
       if (!getStatsResult.internal.video[sendrecvType].prevBytesReceived) {
         getStatsResult.internal.video[sendrecvType].prevBytesReceived =
@@ -557,7 +557,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       transport: LOCAL_transport[result.id],
       timestamp: result.timestamp,
       id: result.id,
-      type: result.type,
+      type: result.type
     };
 
     getStatsResult.connectionType.local.candidateType =
@@ -635,7 +635,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       transport: REMOTE_transport[result.id],
       timestamp: result.timestamp,
       id: result.id,
-      type: result.type,
+      type: result.type
     };
 
     getStatsResult.connectionType.remote.candidateType =
@@ -655,11 +655,11 @@ export function getStats(mediaStreamTrack, callback, interval) {
     )
       return;
 
-    if (!!result.bytesSent) {
+    if (result.bytesSent) {
       getStatsResult[result.mediaType].bytesSent = parseInt(result.bytesSent);
     }
 
-    if (!!result.bytesReceived) {
+    if (result.bytesReceived) {
       getStatsResult[result.mediaType].bytesReceived = parseInt(
         result.bytesReceived
       );
@@ -669,12 +669,12 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var SSRC = {
     audio: {
       send: [],
-      recv: [],
+      recv: []
     },
     video: {
       send: [],
-      recv: [],
-    },
+      recv: []
+    }
   };
 
   getStatsParser.ssrc = function(result) {
@@ -695,6 +695,6 @@ export function getStats(mediaStreamTrack, callback, interval) {
   };
 
   getStatsLooper();
-};
+}
 
 window.getStats = getStats;

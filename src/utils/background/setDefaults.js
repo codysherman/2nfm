@@ -1,4 +1,4 @@
-import { setViewerCount } from './common';
+import { setViewerCount } from "./common";
 
 // TODO: rename me
 export function setDefaults(externalThis) {

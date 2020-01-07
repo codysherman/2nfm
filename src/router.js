@@ -24,6 +24,6 @@ export default new Router({
       name: "receiver",
       component: () =>
         import(/* webpackChunkName: "receiver" */ "./views/Receiver.vue")
-    },
+    }
   ]
 });

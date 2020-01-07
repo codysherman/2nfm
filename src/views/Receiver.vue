@@ -184,12 +184,12 @@ video
 </template>
 
 <script>
-import XSvg from '@/assets/svgs/x.svg';
-import LoadingSvg from '@/assets/svgs/loading.svg';
-import LogoSvg from '@/assets/svgs/logo.svg';
-import PlaySvg from '@/assets/svgs/play.svg';
-import PauseSvg from '@/assets/svgs/pause.svg';
-import FullscreenSvg from '@/assets/svgs/fullscreen.svg';
+import XSvg from "@/assets/svgs/x.svg";
+import LoadingSvg from "@/assets/svgs/loading.svg";
+import LogoSvg from "@/assets/svgs/logo.svg";
+import PlaySvg from "@/assets/svgs/play.svg";
+import PauseSvg from "@/assets/svgs/pause.svg";
+import FullscreenSvg from "@/assets/svgs/fullscreen.svg";
 
 import io from "socket.io-client";
 // TODO: Remove need to do this
@@ -213,7 +213,7 @@ export default {
     LogoSvg,
     PlaySvg,
     PauseSvg,
-    FullscreenSvg,
+    FullscreenSvg
   },
   data() {
     return {
@@ -239,14 +239,14 @@ export default {
       } else {
         return null;
       }
-    },
+    }
   },
   methods: {
     async playMedia() {
       try {
         await this.player.play();
         this.isPlaying = true;
-      } catch(err) {
+      } catch (err) {
         // Playback Failed
       }
     },
@@ -277,15 +277,16 @@ export default {
         this.roomName,
         (isRoomExist, roomid, extra) => {
           if (isRoomExist === false) {
-            if ( this.presenceCheckWait < 60000 ) {
-              (this.presenceCheckWait = this.presenceCheckWait * 2);
+            if (this.presenceCheckWait < 60000) {
+              this.presenceCheckWait = this.presenceCheckWait * 2;
             }
-            this.infoBarMessage = 
-              `Room: ${this.roomName} isn't hosted yet.
-              Checking again ${this.presenceCheckWait === 60000 ? 'every' : 'in'}
+            this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
+              Checking again ${
+                this.presenceCheckWait === 60000 ? "every" : "in"
+              }
               ${this.presenceCheckWait / 1000} seconds.`;
-              
-              setTimeout(this.checkPresence, this.presenceCheckWait);
+
+            setTimeout(this.checkPresence, this.presenceCheckWait);
             return;
           }
 

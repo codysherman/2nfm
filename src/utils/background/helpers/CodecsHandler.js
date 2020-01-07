@@ -412,7 +412,7 @@ export var CodecsHandler = (function() {
       return preferCodec(sdp, "vp9");
     },
     preferCodec: preferCodec,
-    forceStereoAudio: forceStereoAudio,
+    forceStereoAudio: forceStereoAudio
   };
 })();
 

@@ -90,17 +90,17 @@
 </template>
 
 <script>
-import LogoSvg from '@/assets/svgs/logo.svg';
+import LogoSvg from "@/assets/svgs/logo.svg";
 
 export default {
   name: "home",
   components: {
-    LogoSvg,
+    LogoSvg
   },
   data() {
     return {
-      roomId: '',
-    }
-  },
+      roomId: ""
+    };
+  }
 };
 </script>

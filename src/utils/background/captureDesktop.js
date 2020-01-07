@@ -1,6 +1,5 @@
-
-import { setDefaults } from './setDefaults';
-import { onAccessApproved } from './onAccessApproved';
+import { setDefaults } from "./setDefaults";
+import { onAccessApproved } from "./onAccessApproved";
 
 export function captureDesktop(externalThis) {
   if (externalThis.connection && externalThis.connection.attachStreams[0]) {

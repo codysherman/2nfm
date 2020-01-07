@@ -1,6 +1,6 @@
-import { setDefaults } from './setDefaults';
-import { gotStream } from './gotStream';
-import { captureDesktop } from './captureDesktop';
+import { setDefaults } from "./setDefaults";
+import { gotStream } from "./gotStream";
+import { captureDesktop } from "./captureDesktop";
 
 export function onAccessApproved(externalThis) {
   // if (!chromeMediaSourceId) {
@@ -51,15 +51,11 @@ export function onAccessApproved(externalThis) {
     return captureStream;
   }
 
-
   async function startCapturing(externalThis) {
     let stream = await startScreenCapture(externalThis);
     // console.log(stream.getTracks()[0].getCapabilities());
     // console.log(stream.getTracks()[0].getSettings());
-    if (
-      !externalThis.enableVideo &&
-      stream.getAudioTracks().length === 0
-    ) {
+    if (!externalThis.enableVideo && stream.getAudioTracks().length === 0) {
       alert(`Make sure the check the "Share audio" box in Google Chrome`);
     }
     gotStream(stream, externalThis);

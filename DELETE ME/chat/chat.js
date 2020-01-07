@@ -10,7 +10,7 @@ txtChatMessage.onkeyup = function(e) {
     port.postMessage({
       messageFromContentScript1234: true,
       newChatMessage: this.value,
-      checkmark_id: checkmark_id,
+      checkmark_id: checkmark_id
     });
     this.value = "";
   }
@@ -56,6 +56,6 @@ port.onMessage.addListener(function(message) {
 window.onbeforeunload = function() {
   port.postMessage({
     messageFromContentScript1234: true,
-    closeChat: true,
+    closeChat: true
   });
 };

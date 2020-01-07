@@ -1,5 +1,5 @@
-import * as globals from './globals';
-import { setDefaults } from './setDefaults';
+import * as globals from "./globals";
+import { setDefaults } from "./setDefaults";
 
 export function getAspectRatio(w, h) {
   function gcd(a, b) {
@@ -79,7 +79,7 @@ export function getUserMediaError(e) {
       "</pre>",
     type: "popup",
     width: screen.width / 2,
-    height: 170,
+    height: 170
   });
 }
 

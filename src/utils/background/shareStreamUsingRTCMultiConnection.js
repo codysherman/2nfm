@@ -1,8 +1,8 @@
-import { setDefaults } from './setDefaults';
-import { setViewerCount } from './common';
-import { CodecsHandler } from './helpers/CodecsHandler';
-import { IceServersHandler } from './helpers/IceServersHandler';
-import io from 'socket.io-client';
+import { setDefaults } from "./setDefaults";
+import { setViewerCount } from "./common";
+import { CodecsHandler } from "./helpers/CodecsHandler";
+import { IceServersHandler } from "./helpers/IceServersHandler";
+import io from "socket.io-client";
 import RTCMultiConnection from "rtcmulticonnection";
 
 export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
@@ -42,10 +42,12 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     mandatory: {}
   };
 
-  externalThis.connection.channel = externalThis.connection.sessionid = externalThis.connection.userid;
+  externalThis.connection.channel = externalThis.connection.sessionid =
+    externalThis.connection.userid;
 
   if (externalThis.room_id && externalThis.room_id.length) {
-    externalThis.connection.channel = externalThis.connection.sessionid = externalThis.connection.userid = externalThis.room_id;
+    externalThis.connection.channel = externalThis.connection.sessionid = externalThis.connection.userid =
+      externalThis.room_id;
   }
 
   externalThis.connection.autoReDialOnFailure = true;
@@ -96,7 +98,9 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     OfferToReceiveVideo: false
   };
 
-  externalThis.connection.onstream = externalThis.connection.onstreamended = function(event) {
+  externalThis.connection.onstream = externalThis.connection.onstreamended = function(
+    event
+  ) {
     try {
       event.mediaElement.pause();
       delete event.mediaElement;
@@ -109,7 +113,10 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
   // www.RTCMultiConnection.org/docs/attachStreams/
   externalThis.connection.attachStreams.push(stream);
 
-  if (!externalThis.enableVideo && externalThis.connection.attachStreams[0].getVideoTracks().length > 0) {
+  if (
+    !externalThis.enableVideo &&
+    externalThis.connection.attachStreams[0].getVideoTracks().length > 0
+  ) {
     externalThis.connection.attachStreams[0].removeTrack(
       externalThis.connection.attachStreams[0].getVideoTracks()[0]
     );
@@ -190,13 +197,18 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
       // );
     }
 
-    externalThis.connection.socket.on(externalThis.connection.socketCustomEvent, function(message) {
-      if (message.receivedYourScreen) {
-        setViewerCount(
-          externalThis.connection.isInitiator ? externalThis.connection.getAllParticipants().length : 0
-        );
+    externalThis.connection.socket.on(
+      externalThis.connection.socketCustomEvent,
+      function(message) {
+        if (message.receivedYourScreen) {
+          setViewerCount(
+            externalThis.connection.isInitiator
+              ? externalThis.connection.getAllParticipants().length
+              : 0
+          );
+        }
       }
-    });
+    );
   }
 
   externalThis.connection.onSocketDisconnect = function(event) {
@@ -243,7 +255,10 @@ export function shareStreamUsingRTCMultiConnection(stream, externalThis) {
     }
   };
 
-  externalThis.connection.open(externalThis.connection.sessionid, roomOpenCallback);
+  externalThis.connection.open(
+    externalThis.connection.sessionid,
+    roomOpenCallback
+  );
 
   var oldLength = 0;
   externalThis.connection.onleave = externalThis.connection.onPeerStateChanged = function() {
