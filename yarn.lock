@@ -4095,10 +4095,10 @@ from2@^2.1.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
-frow@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/frow/-/frow-3.3.0.tgz#c442b414d3f3ff3610ba30516fa52d5d85d2bac2"
-  integrity sha512-bmEeupu4Y5WarD1TkW3/odmOsoi2Emv02RyQMa16T9BIMGYjagKR6OMpFn0w/r8aL0txr7/o1z2V9Ypxru6ncA==
+frow@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/frow/-/frow-3.3.1.tgz#8b274b13cc20dd094ff4196150fd5ba78b8c2e36"
+  integrity sha512-qHqVOlWnvv5XCXFoTAvpZYpBaW+UBas6lLr6onZ9hOsYPFNB7qaWJCC0Lx8llIU89gq3j7d18FL7Af50F8+2Dw==
 
 fs-extra@^7.0.1:
   version "7.0.1"
