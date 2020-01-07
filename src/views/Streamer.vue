@@ -13,9 +13,9 @@
 #live-indicator
   margin: 15px auto 0
   width: 228px
-  color: $background-color
+  color: $tertiary-color
   border-radius: 20px
-  border: 6px solid $background-color
+  border: 6px solid $tertiary-color
   font-weight: bold
   font-size: 91px
   text-align: center
@@ -33,7 +33,7 @@
   #live-indicator
     width: 114px
     border-radius: 10px
-    border: 3px solid $background-color
+    border: 3px solid $tertiary-color
     font-size: 45px
     margin-bottom: 30px
 
@@ -55,7 +55,7 @@
       border-width: 2px
 
 #options
-  border: 2px solid $background-color
+  border: 2px solid $tertiary-color
   border-radius: 10px
   padding: 40px
   margin: 40px 0
@@ -76,7 +76,7 @@
     margin-bottom: 0
 
 #start
-  border: 2px solid $background-color
+  border: 2px solid $tertiary-color
   border-radius: 10px
   padding: 40px
   margin-top: 40px

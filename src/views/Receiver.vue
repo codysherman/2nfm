@@ -58,7 +58,7 @@ video
   height: auto
   object-fit: contain
   margin-bottom: 20px
-  background-color: $background-color
+  background-color: $tertiary-color
 
 #media-controls
   width: 60%
