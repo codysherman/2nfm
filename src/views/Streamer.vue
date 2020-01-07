@@ -216,19 +216,21 @@
         | Viewers
       button#stop-sharing(type="button" @click="stopStream")
         | End Sharing
+    .frow.width-100.mt-20
+      a.text-underline(href="https://caniuse.com/#search=getDisplayMedia" rel="noreferrer")
+        | OS and Browser Limitations
       //
-        <div id="enable-chat"">
+        <div id="enable-chat">
         <img src="../images/chat.png">
         Open Chat Box
         </div>
 </template>
 
 <script>
-import LogoSvg from '@/assets/svgs/logo.svg';
-import VideoSvg from '@/assets/svgs/video.svg';
-import AudioSvg from '@/assets/svgs/audio.svg'
-;
-import io from 'socket.io-client';
+import LogoSvg from "@/assets/svgs/logo.svg";
+import VideoSvg from "@/assets/svgs/video.svg";
+import AudioSvg from "@/assets/svgs/audio.svg";
+import io from "socket.io-client";
 // TODO: Remove need to do this
 window.io = io;
 import adapter from "webrtc-adapter";
@@ -243,7 +245,7 @@ export default {
   components: {
     LogoSvg,
     VideoSvg,
-    AudioSvg,
+    AudioSvg
   },
   data() {
     return {
@@ -253,16 +255,16 @@ export default {
       sessionId: null, // window.localStorage.getItem("sessionId")
       desktop_id: null,
       constraints: null,
-      room_password: '',
-      room_id: window.localStorage.getItem('room_id') || '',
-      codecs: 'default',
+      room_password: "",
+      room_id: window.localStorage.getItem("room_id") || "",
+      codecs: "default",
       bandwidth: null,
       enableTabCaptureAPI: false,
       enableVideo: false,
       enableAudio: false,
-      streaming_method: 'RTCMultiConnection',
-      room_url_box: 'true',
-    }
+      streaming_method: "RTCMultiConnection",
+      room_url_box: "true"
+    };
   },
   computed: {
     roomName() {
@@ -276,7 +278,7 @@ export default {
       this.isSharingOn = true;
       this.enableVideo = true;
       this.enableAudio = true;
-      
+
       captureDesktop(this);
     },
     startAudioStream() {
@@ -299,18 +301,16 @@ export default {
     setRoomName(event) {
       this.room_id = event.target.value;
       window.localStorage.setItem("room_id", event.target.value);
-    },
+    }
   },
   mounted() {
     // document.getElementById('enable-chat').onclick = function() {
     //   var popup_width = 312;
     //   var popup_height = 400;
-
     //   runtimePort.postMessage({
     //     messageFromContentScript1234: true,
     //     openChat: true
     //   });
-
     //   window.open('chat.html','Chat','width='+popup_width+',height='+popup_height+',toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,top='+(screen.height - popup_height)+',left=' + (screen.width - popup_width - 30));
     //   window.close();
     // };
