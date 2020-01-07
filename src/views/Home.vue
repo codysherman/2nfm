@@ -3,7 +3,7 @@
   height: 70px
   width: auto
   margin: 0 auto
-  fill: #4f4f51
+  fill: $primary-color
   animation: fade-in 2s ease-out
 
 /* XS

@@ -1,6 +1,6 @@
 <style scoped lang="sass">
 .card
-  background-color: #ffffff
+  background-color: $white
   padding: 15px
   text-align: center
 
@@ -8,14 +8,14 @@
   margin: 0 auto
   width: 228px
   height: auto
-  fill: #4f4f51
+  fill: $primary-color
 
 #live-indicator
   margin: 15px auto 0
   width: 228px
-  color: #eaeaea
+  color: $background-color
   border-radius: 20px
-  border: 6px solid #eaeaea
+  border: 6px solid $background-color
   font-weight: bold
   font-size: 91px
   text-align: center
@@ -33,13 +33,13 @@
   #live-indicator
     width: 114px
     border-radius: 10px
-    border: 3px solid #eaeaea
+    border: 3px solid $background-color
     font-size: 45px
     margin-bottom: 30px
 
 #room-id-label
   font-size: 40px
-  color: #4f4f51
+  color: $primary-color
 
   input
     font-size: 40px
@@ -55,7 +55,7 @@
       border-width: 2px
 
 #options
-  border: 2px solid #eaeaea
+  border: 2px solid $background-color
   border-radius: 10px
   padding: 40px
   margin: 40px 0
@@ -65,7 +65,7 @@
     position: absolute
     top: -9px
     left: 30px
-    background-color: #fff
+    background-color: $white
     padding: 0 8px
     width: auto
 
@@ -76,7 +76,7 @@
     margin-bottom: 0
 
 #start
-  border: 2px solid #eaeaea
+  border: 2px solid $background-color
   border-radius: 10px
   padding: 40px
   margin-top: 40px
@@ -86,7 +86,7 @@
     position: absolute
     top: -9px
     left: 30px
-    background-color: #fff
+    background-color: $white
     padding: 0 8px
     width: auto
 
@@ -94,7 +94,7 @@
   transition: color 0.3s
 
   &:hover
-    color: #000
+    color: $black
 
   svg
     width: auto
@@ -102,16 +102,16 @@
     margin-bottom: 10px
 
   path
-    fill: #4f4f51
+    fill: $primary-color
     transition: fill 0.3s
 
   &:hover svg path
-    fill: #000
+    fill: $black
 
 #public-link
   display: block
   font-size: 40px
-  color: #4f4f51
+  color: $primary-color
   margin: 0 auto
   text-align: center
 
@@ -131,8 +131,8 @@
   font-size: 40px
   padding: 20px
   background: none
-  border: 3px solid #4f4f51
-  color: #4f4f51
+  border: 3px solid $primary-color
+  color: $primary-color
   border-radius: 10px
 </style>
 

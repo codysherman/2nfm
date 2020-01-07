@@ -11,8 +11,8 @@
     transform: rotate(10deg)
 
 .github-corner
-  fill:#4f4f51
-  color:#fff
+  fill: $primary-color
+  color: $white
   position: absolute
   top: 0
   border: 0

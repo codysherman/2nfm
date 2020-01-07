@@ -41,7 +41,7 @@
 
 
 #loading-logo path
-  stroke: #bebebe
+  stroke: $secondary-color
   stroke-width: 1.5
   stroke-dasharray: 495
   stroke-dashoffset: 990
@@ -50,7 +50,7 @@
 #logo
   height: 50px
   width: auto
-  fill: #4f4f51
+  fill: $primary-color
   animation: fade-in 2s ease-out
 
 video
@@ -58,7 +58,7 @@ video
   height: auto
   object-fit: contain
   margin-bottom: 20px
-  background-color: #eaeaea
+  background-color: $background-color
 
 #media-controls
   width: 60%
@@ -72,7 +72,7 @@ video
   svg
     width: 30px
     height: 30px
-    fill: #4f4f51
+    fill: $primary-color
 
 #volume-slider
   max-width: 120px
@@ -80,7 +80,7 @@ video
 #fullscreen-button
   svg
     width: 30px
-    fill: #4f4f51
+    fill: $primary-color
     transition: transform 0.4s
 
   &:hover,
