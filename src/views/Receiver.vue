@@ -91,6 +91,7 @@ video
 #info-bar
   font-size: 24px
   margin-top: 20px
+  text-align: center
   transition: fade-in 0.4s
 
 #create-message
