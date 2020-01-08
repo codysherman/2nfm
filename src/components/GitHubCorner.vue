@@ -31,9 +31,6 @@
 
 .octo-arm
   transform-origin: 130px 106px;
-
-  @media (max-width: 767px)
-    animation: 560ms ease-in-out 1s octocat-wave
 </style>
 
 <template lang="pug">
