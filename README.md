@@ -6,7 +6,7 @@ Visit https://2N.fm/{{room-name-here}} to view someone else's tab.
 
 ## Project setup
 ```
-yarn install
+yarn install --no-engines
 ```
 
 ### Compiles and hot-reloads for development
