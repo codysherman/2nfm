@@ -19,7 +19,7 @@
   right: 0
 
   &:hover .octo-arm
-    animation: octocat-wave 560ms ease-in-out
+    animation: 560ms ease-in-out octocat-wave
 
   svg
     width: 80px
@@ -32,11 +32,8 @@
 .octo-arm
   transform-origin: 130px 106px;
 
-@media (max-width: 500px)
-  .github-corner:hover .octo-arm
-    animation: none
-  .github-corner .octo-arm
-    animation: octocat-wave 560ms ease-in-out
+  @media (max-width: 767px)
+    animation: 560ms ease-in-out 1s octocat-wave
 </style>
 
 <template lang="pug">
