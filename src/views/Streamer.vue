@@ -252,9 +252,9 @@ export default {
   data() {
     return {
       stream: null,
-      isSharingOn: false, // window.localStorage.getItem("isSharingOn")
+      isSharingOn: false,
       // sessionId aka room name
-      sessionId: null, // window.localStorage.getItem("sessionId")
+      sessionId: null,
       desktop_id: null,
       constraints: null,
       room_password: "",
