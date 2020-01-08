@@ -85,9 +85,9 @@
           .frow.column-start
             div
               h1.mb-30 Join a Room
-              form#join-form.frow.nowrap
+              form#join-form.frow.nowrap(@submit.prevent="goToRoom")
                 input#room-input(type="text" v-model="roomId" placeholder="Room Name")
-                router-link#enter-room(type="button" :to="roomId")
+                button#enter-room(type="submit")
                   | Go
 </template>
 
@@ -105,6 +105,11 @@ export default {
     return {
       roomId: ""
     };
+  },
+  methods: {
+    goToRoom() {
+      this.$router.push(this.roomId);
+    }
   }
 };
 </script>
