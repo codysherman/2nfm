@@ -447,7 +447,6 @@ export default {
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
         this.$refs.audioPlayer.volume = 0.5;
       }
-      this.isStream = true;
       this.playMedia();
     };
 
@@ -614,6 +613,7 @@ export default {
         dontDuplicate[event.userid] = true;
 
         var peer = this.connection.peers[event.userid].peer;
+        this.isStream = true;
 
         getStats(
           peer,
