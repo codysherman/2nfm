@@ -622,6 +622,9 @@ export default {
           },
           1000
         );
+      } else if (event.iceConnectionState === "disconnected") {
+        this.isStream = false;
+        this.infoBarMessage = "You've been disconnected. Please try again.";
       }
     };
 
