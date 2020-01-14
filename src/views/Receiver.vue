@@ -198,10 +198,6 @@ window.io = io;
 import adapter from "webrtc-adapter";
 import RTCMultiConnection from "rtcmulticonnection";
 
-// import * as globals from "@/utils/background/globals.js";
-import { setDefaults } from "@/utils/background/setDefaults.js";
-import { captureDesktop } from "@/utils/background/captureDesktop.js";
-
 import { CodecsHandler } from "@/utils/background/helpers/CodecsHandler.js";
 import { IceServersHandler } from "@/utils/background/helpers/IceServersHandler.js";
 import { getStats } from "@/utils/background/helpers/getStats.js";
