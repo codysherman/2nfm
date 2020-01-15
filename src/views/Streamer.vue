@@ -297,7 +297,10 @@ export default {
       // });
     },
     setRoomName(event) {
-      this.room_id = event.target.value;
+      this.room_id = event.target.value
+        .replace(/\s+/g, "-")
+        .replace(/[^a-zA-Z0-9-_]/g, "")
+        .toLowerCase();
       window.localStorage.setItem("room_id", event.target.value);
     }
   },
