@@ -5,8 +5,7 @@
 @import ~frow
 </style>
 
-<template>
-  <div id="app" class="frow-container height-100">
-    <router-view />
-  </div>
+<template lang="pug">
+  #app.frow-container.height-100
+    router-view
 </template>
