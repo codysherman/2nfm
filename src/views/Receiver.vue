@@ -198,10 +198,6 @@ window.io = io;
 import adapter from "webrtc-adapter";
 import RTCMultiConnection from "rtcmulticonnection";
 
-// import * as globals from "@/utils/background/globals.js";
-import { setDefaults } from "@/utils/background/setDefaults.js";
-import { captureDesktop } from "@/utils/background/captureDesktop.js";
-
 import { CodecsHandler } from "@/utils/background/helpers/CodecsHandler.js";
 import { IceServersHandler } from "@/utils/background/helpers/IceServersHandler.js";
 import { getStats } from "@/utils/background/helpers/getStats.js";
@@ -447,7 +443,6 @@ export default {
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
         this.$refs.audioPlayer.volume = 0.5;
       }
-      this.isStream = true;
       this.playMedia();
     };
 
@@ -498,6 +493,10 @@ export default {
     this.connection.onSocketDisconnect = event => {
       // alert('Connection to the server is closed.');
       if (this.connection.getAllParticipants().length > 0) return;
+
+      // This is required only when ending a stream using the "share tab chrome bar" while the receiver is open.
+      this.isStream = false;
+
       location.reload();
     };
 
@@ -614,6 +613,7 @@ export default {
         dontDuplicate[event.userid] = true;
 
         var peer = this.connection.peers[event.userid].peer;
+        this.isStream = true;
 
         getStats(
           peer,
@@ -622,6 +622,9 @@ export default {
           },
           1000
         );
+      } else if (event.iceConnectionState === "disconnected") {
+        this.isStream = false;
+        this.infoBarMessage = "You've been disconnected. Please try again.";
       }
     };
 
