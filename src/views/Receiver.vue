@@ -493,6 +493,10 @@ export default {
     this.connection.onSocketDisconnect = event => {
       // alert('Connection to the server is closed.');
       if (this.connection.getAllParticipants().length > 0) return;
+
+      // This is required only when ending a stream using the "share tab chrome bar" while the receiver is open.
+      this.isStream = false;
+
       location.reload();
     };
 
