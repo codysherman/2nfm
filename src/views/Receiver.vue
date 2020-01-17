@@ -144,6 +144,13 @@ video
 
 <template lang="pug">
 #receiver.height-100
+  Connection(
+    :roomName="roomName"
+    @state="onConnectionStateChanged"
+    @stream="onStream"
+    @presenceCheckWait="onPresenceCheckWait"
+    @stats="onStats"
+  )
   .menu-bar
     .frow.row-start
       button#show-stats-bar.button-link(v-if="isStream" @click="showStats") Stats
@@ -192,15 +199,7 @@ import PlaySvg from "@/assets/svgs/play.svg";
 import PauseSvg from "@/assets/svgs/pause.svg";
 import FullscreenSvg from "@/assets/svgs/fullscreen.svg";
 
-import io from "socket.io-client";
-// TODO: Remove need to do this
-window.io = io;
-import adapter from "webrtc-adapter";
-import RTCMultiConnection from "rtcmulticonnection";
-
-import { CodecsHandler } from "@/utils/background/helpers/CodecsHandler.js";
-import { IceServersHandler } from "@/utils/background/helpers/IceServersHandler.js";
-import { getStats } from "@/utils/background/helpers/getStats.js";
+import Connection from "@/components/Connection";
 
 export default {
   name: "Receiver",
@@ -210,7 +209,8 @@ export default {
     LogoSvg,
     PlaySvg,
     PauseSvg,
-    FullscreenSvg
+    FullscreenSvg,
+    Connection
   },
   data() {
     return {
@@ -218,13 +218,11 @@ export default {
       stream: {},
       isStream: false,
       isPlaying: false,
-      connection: null,
-      params: {},
       statsVisible: false,
       NO_MORE: false,
       stats: {},
       infoBarMessage: "",
-      presenceCheckWait: 3750
+      presenceCheckWait: null // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
     };
   },
   computed: {
@@ -239,6 +237,95 @@ export default {
     }
   },
   methods: {
+    onConnectionStateChanged(state) {
+      switch (state) {
+        case Connection.STATE.NOT_HOSTED:
+          this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
+            Checking again ${this.presenceCheckWait === 60000 ? "every" : "in"}
+            ${this.presenceCheckWait / 1000} seconds.`;
+          break;
+        case Connection.STATE.JOINING:
+          this.infoBarMessage = `Joining room: ${this.roomName}`;
+          break;
+        case Connection.STATE.UNAUTHORIZED:
+          this.infoBarMessage = "Incorrect password";
+          break;
+        case Connection.STATE.NOT_HOSTED:
+          this.infoBarMessage =
+            "Screen share session is closed or paused. You will join automatically when share session is resumed.";
+          break;
+        case Connection.STATE.PEER_WILL_SEND:
+          this.infoBarMessage = "Remote peer is about to send his screen.";
+          break;
+        case Connection.STATE.SOCKET_CLOSED:
+          this.$refs.videoPlayer.srcObject = null;
+
+          this.infoBarMessage = "Screen sharing has been closed.";
+          this.hideStats();
+
+          location.reload();
+          break;
+        case Connection.STATE.SOCKET_DISCONNECT:
+          // This is required only when ending a stream using the "share tab chrome bar" while the receiver is open.
+          this.isStream = false;
+
+          location.reload();
+          break;
+        case Connection.STATE.SOCKET_ERROR:
+          alert("Unable to connect to the server. Please try again.");
+
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          break;
+        case Connection.STATE.HAVE_OFFER:
+          this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
+          break;
+        case Connection.STATE.HANDSHAKE_COMPLETE:
+          this.infoBarMessage = `WebRTC handshake is completed. Waiting for remote video from: ${this.roomName}`;
+          break;
+        case Connection.STATE.CONNECTED:
+          this.isStream = true;
+          break;
+        case Connection.STATE.DISCONNECTED:
+          this.isStream = false;
+          this.infoBarMessage = "You've been disconnected. Please try again.";
+          break;
+        case Connection.STATE.GENERIC:
+          this.infoBarMessage = `${state.name}: ${state.reason}`;
+          break;
+      }
+    },
+    onStream(stream) {
+      this.$refs.videoPlayer.srcObject = null;
+      this.$refs.audioPlayer.srcObject = null;
+      this.stream = stream;
+      this.stream.mute();
+
+      if (this.stream.isVideo) {
+        this.$refs.videoPlayer.srcObject = this.stream;
+        this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
+        if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
+          this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
+        }
+        this.$refs.videoPlayer.volume = 0.5;
+      } else {
+        this.$refs.audioPlayer.srcObject = this.stream;
+        this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
+        this.$refs.audioPlayer.volume = 0.5;
+      }
+      this.playMedia();
+    },
+    onPresenceCheckWait(newValue) {
+      this.presenceCheckWait = newValue;
+    },
+    onStats(stats) {
+      if (this.NO_MORE) {
+        stats.nomore();
+        return;
+      }
+      this.stats = stats;
+    },
     async playMedia() {
       try {
         await this.player.play();
@@ -269,35 +356,6 @@ export default {
       else if (this.$refs.videoPlayer.msRequestFullscreen)
         this.$refs.videoPlayer.msRequestFullscreen();
     },
-    checkPresence() {
-      this.connection.checkPresence(
-        this.roomName,
-        (isRoomExist, roomid, extra) => {
-          if (isRoomExist === false) {
-            if (this.presenceCheckWait < 60000) {
-              this.presenceCheckWait = this.presenceCheckWait * 2;
-            }
-            this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
-              Checking again ${
-                this.presenceCheckWait === 60000 ? "every" : "in"
-              }
-              ${this.presenceCheckWait / 1000} seconds.`;
-
-            setTimeout(this.checkPresence, this.presenceCheckWait);
-            return;
-          }
-
-          this.infoBarMessage = `Joining room: ${this.roomName}`;
-
-          this.connection.password = null;
-          if (this.params.p) {
-            this.connection.password = this.params.p;
-          }
-
-          this.connection.join(this.roomName);
-        }
-      );
-    },
     showStats() {
       this.statsVisible = true;
       this.NO_MORE = false;
@@ -315,324 +373,9 @@ export default {
       }
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
       return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
-    },
-    onGettingWebRCStats(stats, userid) {
-      if (!this.connection.peers[userid] || this.NO_MORE) {
-        stats.nomore();
-        return;
-      }
-      this.stats = stats;
     }
   },
   mounted() {
-    let r;
-    let DEFAULTS;
-    let tempParams;
-    (tempParams = {}),
-      (r = /([^&=]+)=?([^&]*)/g),
-      (DEFAULTS = { bandwidth: 8192 });
-
-    function d(s) {
-      return decodeURIComponent(s.replace(/\+/g, " "));
-    }
-
-    var match,
-      search = window.location.search;
-    while ((match = r.exec(search.substring(1))))
-      tempParams[d(match[1])] = d(match[2]);
-
-    this.params = Object.assign({}, DEFAULTS, tempParams);
-
-    // http://www.rtcmulticonnection.org/docs/constructor/
-    this.connection = new RTCMultiConnection(this.roomName);
-    this.connection.socketURL = "https://api.2n.fm:9001/";
-    this.connection.autoCloseEntireSession = true;
-
-    // this must match the extension page
-    this.connection.socketMessageEvent = "desktopCapture";
-
-    this.connection.enableLogs = true;
-    this.connection.session = {
-      audio: true,
-      video: true,
-      data: true,
-      oneway: true
-    };
-
-    // www.rtcmulticonnection.org/docs/sdpConstraints/
-    this.connection.sdpConstraints.mandatory = {
-      OfferToReceiveAudio: true,
-      OfferToReceiveVideo: true
-    };
-
-    this.connection.getExternalIceServers = false;
-    this.connection.iceServers = IceServersHandler.getIceServers();
-
-    function setBandwidth(sdp) {
-      sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "");
-      sdp = sdp.replace(/a=mid:video\r\n/g, "a=mid:video\r\nb=AS:10000\r\n");
-      return sdp;
-    }
-
-    this.connection.processSdp = sdp => {
-      var bandwidth = this.params.bandwidth;
-      var codecs = this.params.codecs;
-
-      if (bandwidth) {
-        try {
-          bandwidth = parseInt(bandwidth);
-        } catch (e) {
-          bandwidth = null;
-        }
-
-        if (
-          bandwidth &&
-          bandwidth != NaN &&
-          bandwidth != "NaN" &&
-          typeof bandwidth == "number"
-        ) {
-          sdp = setBandwidth(sdp, bandwidth);
-          sdp = BandwidthHandler.setVideoBitrates(sdp, {
-            min: bandwidth,
-            max: bandwidth
-          });
-        }
-      }
-
-      if (!!codecs && codecs !== "default") {
-        sdp = CodecsHandler.preferCodec(sdp, codecs);
-      }
-      return sdp;
-    };
-
-    this.connection.optionalArgument = {
-      optional: [],
-      mandatory: {}
-    };
-
-    this.connection.onstatechange = state => {
-      this.infoBarMessage = `${state.name}: ${state.reason}`;
-      if (state.name == "request-rejected" && this.params.p) {
-        this.infoBarMessage = "Incorrect password";
-      }
-
-      if (state.name === "room-not-available") {
-        this.infoBarMessage =
-          "Screen share session is closed or paused. You will join automatically when share session is resumed.";
-      }
-    };
-
-    this.connection.onstreamid = event => {
-      this.infoBarMessage = "Remote peer is about to send his screen.";
-    };
-
-    this.connection.onstream = e => {
-      this.$refs.videoPlayer.srcObject = null;
-      this.$refs.audioPlayer.srcObject = null;
-      this.stream = e.stream;
-      this.stream.mute();
-      if (this.stream.isVideo) {
-        this.$refs.videoPlayer.srcObject = this.stream;
-        this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
-        if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
-          this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        }
-        this.$refs.videoPlayer.volume = 0.5;
-      } else {
-        this.$refs.audioPlayer.srcObject = this.stream;
-        this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        this.$refs.audioPlayer.volume = 0.5;
-      }
-      this.playMedia();
-    };
-
-    // if user left
-    this.connection.onleave = this.connection.onstreamended = this.connection.onSessionClosed = e => {
-      if (e.userid !== this.roomName) return;
-
-      this.$refs.videoPlayer.srcObject = null;
-
-      this.infoBarMessage = "Screen sharing has been closed.";
-      this.hideStats();
-      this.connection.close();
-      this.connection.closeSocket();
-      this.connection.userid = this.connection.token();
-
-      location.reload();
-    };
-
-    this.connection.onJoinWithPassword = remoteUserId => {
-      if (!this.params.p) {
-        this.params.p = prompt(
-          remoteUserId + " is password protected. Please enter the pasword:"
-        );
-      }
-
-      this.connection.password = this.params.p;
-      this.connection.join(remoteUserId);
-    };
-
-    this.connection.onInvalidPassword = (remoteUserId, oldPassword) => {
-      var password = prompt(
-        remoteUserId +
-          " is password protected. Your entered wrong password (" +
-          oldPassword +
-          "). Please enter valid pasword:"
-      );
-      this.connection.password = password;
-      this.connection.join(remoteUserId);
-    };
-
-    this.connection.onPasswordMaxTriesOver = remoteUserId => {
-      alert(
-        remoteUserId +
-          " is password protected. Your max password tries exceeded the limit."
-      );
-    };
-
-    this.connection.onSocketDisconnect = event => {
-      // alert('Connection to the server is closed.');
-      if (this.connection.getAllParticipants().length > 0) return;
-
-      // This is required only when ending a stream using the "share tab chrome bar" while the receiver is open.
-      this.isStream = false;
-
-      location.reload();
-    };
-
-    this.connection.onSocketError = event => {
-      alert("Unable to connect to the server. Please try again.");
-
-      setTimeout(() => {
-        location.reload();
-      }, 1000);
-    };
-
-    this.connection.onopen = event => {
-      //
-    };
-
-    // Start chat feature
-    // var chatContainer = document.getElementById("chat-container");
-    // var lastMessage = "";
-    // this.connection.onmessage = (event) => {
-    //   if (event.data.openChat === true) {
-    //     chatContainer.removeAttribute("hidden");
-    //   }
-
-    //   if (event.data.closeChat === true) {
-    //     chatContainer.setAttribute("hidden", "");
-    //   }
-
-    //   if (event.data.newChatMessage && event.data.newChatMessage != lastMessage) {
-    //     lastMessage = event.data.newChatMessage;
-
-    //     // there is a possibility that broadcaster did not send "openChat:true" signal
-    //     // chatContainer.removeAttribute('hidden');
-
-    //     appendChatMessage("Broadcaster", event.data.newChatMessage);
-    //     updateTitle(event.data.newChatMessage);
-    //     this.connection.send({
-    //       receivedChatMessage: true,
-    //       checkmark_id: event.data.checkmark_id
-    //     });
-    //   }
-
-    //   if (event.data.receivedChatMessage) {
-    //     if (document.getElementById(event.data.checkmark_id)) {
-    //       document.getElementById(event.data.checkmark_id).style.display = "";
-    //     }
-    //   }
-    // };
-
-    // var txtChatMessage = document.getElementById("txt-chat-message");
-    // var chatMessages = document.getElementById("chat-messages");
-
-    // txtChatMessage.onkeyup = (e) => {
-    //   if (e.keyCode === 13) {
-    //     var checkmark_id = (Math.random() * 100).toString().replace(".", "");
-    //     appendChatMessage("You", this.value, checkmark_id);
-    //     this.connection.send({
-    //       newChatMessage: this.value
-    //     });
-    //     this.value = "";
-    //   }
-    // };
-
-    // function appendChatMessage(name, message, checkmark_id) {
-    //   var div = document.createElement("div");
-    //   if (checkmark_id) {
-    //     div.innerHTML =
-    //       '<p><span class="name">' +
-    //       name +
-    //       ': <img class="checkmark" id="' +
-    //       checkmark_id +
-    //       '" title="Received" src="images/checkmark.png"></span></p><p>' +
-    //       message +
-    //       "</p>";
-    //   } else {
-    //     div.innerHTML =
-    //       '<p><span class="name">' + name + ":</span></p><p>" + message + "</p>";
-    //   }
-    //   chatMessages.appendChild(div);
-
-    //   chatMessages.scrollTop = chatMessages.clientHeight;
-    //   chatMessages.scrollTop = chatMessages.scrollHeight - chatMessages.scrollTop;
-    // }
-
-    // var tabTitle = document.getElementById("tab-title");
-    // function updateTitle(message) {
-    //   tabTitle.innerHTML = message;
-    // }
-    // End chat feature
-
-    this.connection.socketCustomEvent = this.roomName;
-
-    if (this.roomName) {
-      this.checkPresence();
-    }
-
-    var dontDuplicate = {};
-    this.connection.onPeerStateChanged = event => {
-      if (!this.connection.getRemoteStreams(this.roomName).length) {
-        if (event.signalingState === "have-remote-offer") {
-          this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
-        } else if (
-          event.iceGatheringState === "complete" &&
-          event.iceConnectionState === "connected"
-        ) {
-          this.infoBarMessage = `WebRTC handshake is completed. Waiting for remote video from: ${this.roomName}`;
-        }
-      }
-
-      if (
-        event.iceConnectionState === "connected" &&
-        event.signalingState === "stable"
-      ) {
-        if (dontDuplicate[event.userid]) return;
-        dontDuplicate[event.userid] = true;
-
-        var peer = this.connection.peers[event.userid].peer;
-        this.isStream = true;
-
-        getStats(
-          peer,
-          stats => {
-            this.onGettingWebRCStats(stats, event.userid);
-          },
-          1000
-        );
-      } else if (event.iceConnectionState === "disconnected") {
-        this.isStream = false;
-        this.infoBarMessage = "You've been disconnected. Please try again.";
-      }
-    };
-
-    // document.getElementById("show-chats").onclick = () => {
-    //   chatContainer.toggleAttribute("hidden");
-    //   chatMessages.scrollTo(0, chatMessages.scrollHeight);
-    // };
-
     window.addEventListener(
       "offline",
       () => {
