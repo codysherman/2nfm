@@ -138,7 +138,8 @@ export default {
 
       let constraints = {
         video: {
-          // displaySurface: ["application", "browser", "monitor", "window"] // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+          // TODO: displaySurface support is waiting on browser support https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
+          // displaySurface: ["application", "browser", "monitor", "window"]
         },
         audio: {
           autoGainControl: false,
