@@ -154,6 +154,7 @@
     :room_password="room_password"
     :room_url_box="room_url_box"
     @sessionId="onSessionId"
+    @viewerCount="onViewerCount"
   )
   .col-md-1-2
     LogoSvg#logo
@@ -337,6 +338,9 @@ export default {
     },
     onIsSharing(isSharing) {
       this.isSharingOn = isSharing;
+    },
+    onViewerCount(count) {
+      this.viewerCount = count;
     }
   },
   mounted() {
