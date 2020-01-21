@@ -183,7 +183,7 @@ export default {
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
         if (!this.enableVideo && stream.getAudioTracks().length === 0) {
-          alert(`Make sure the check the "Share audio" box in Google Chrome`);
+          alert(`Make sure to check the "Share audio" box in Google Chrome`);
         }
         this.gotStream(stream);
       };
