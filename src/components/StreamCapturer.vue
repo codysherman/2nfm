@@ -7,22 +7,16 @@ export default {
   name: "StreamCapturer",
   data() {
     return {
-      _isSharing: false,
+      isSharing: false,
       enableAudio: false
     };
   },
   props: {
     enableVideo: Boolean
   },
-  computed: {
-    isSharing: {
-      get() {
-        return this._isSharing;
-      },
-      set(newValue) {
-        this._isSharing = newValue;
-        this.$emit("isSharing", newValue);
-      }
+  watch: {
+    isSharing(newValue) {
+      this.$emit("isSharing", newValue);
     }
   },
   methods: {

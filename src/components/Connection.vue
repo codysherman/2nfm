@@ -45,18 +45,12 @@ export default {
     return {
       params: {},
       connection: null,
-      _presenceCheckWait: 3750 // managed by computed
+      presenceCheckWait: 3750
     };
   },
-  computed: {
-    presenceCheckWait: {
-      get: function() {
-        return this._presenceCheckWait;
-      },
-      set: function(newValue) {
-        this._presenseCheckWait = newValue;
-        this.$emit("presenceCheckWait", newValue);
-      }
+  watch: {
+    presenceCheckWait(newValue) {
+      this.$emit("presenceCheckWait", newValue);
     }
   },
   methods: {
@@ -69,8 +63,14 @@ export default {
               this.presenceCheckWait = this.presenceCheckWait * 2;
             }
 
-            this.$emit("state", { value: STATE.NOT_HOSTED });
-            setTimeout(this.checkPresence, this.presenceCheckWait);
+            // FIXME: ensure presenceCheckWait watcher is triggered before sending state update
+            // (maybe, this could also be solved by just making the infobarMessage a computed in Receiver.vue)
+            setTimeout(
+              () => this.$emit("state", { value: STATE.NOT_HOSTED }),
+              0
+            );
+
+            setTimeout(() => this.checkPresence(), this.presenceCheckWait);
             return;
           }
 
