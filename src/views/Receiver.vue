@@ -238,7 +238,7 @@ export default {
   },
   methods: {
     onConnectionStateChanged(state) {
-      switch (state) {
+      switch (state.value) {
         case Connection.STATE.NOT_HOSTED:
           this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
             Checking again ${this.presenceCheckWait === 60000 ? "every" : "in"}

@@ -259,7 +259,7 @@ export default {
         if (dontDuplicate[event.userid]) return;
         dontDuplicate[event.userid] = true;
 
-        this.$emit("state", STATE.CONNECTED);
+        this.$emit("state", { value: STATE.CONNECTED });
 
         getStats(
           this.connection.peers[event.userid].peer,
@@ -269,7 +269,7 @@ export default {
           1000
         );
       } else if (event.iceConnectionState === "disconnected") {
-        this.$emit("state", STATE.DISCONNECTED);
+        this.$emit("state", { value: STATE.DISCONNECTED });
       }
     };
   }
