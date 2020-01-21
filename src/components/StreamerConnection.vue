@@ -75,7 +75,7 @@ export default {
 
       this.connection.iceServers = IceServersHandler.getIceServers();
 
-      this.connection.processSdp = function(sdp) {
+      this.connection.processSdp = sdp => {
         if (this.bandwidth) {
           if (
             this.bandwidth &&
@@ -103,9 +103,7 @@ export default {
         OfferToReceiveVideo: false
       };
 
-      this.connection.onstream = this.connection.onstreamended = function(
-        event
-      ) {
+      this.connection.onstream = this.connection.onstreamended = event => {
         try {
           event.mediaElement.pause();
           delete event.mediaElement;
@@ -263,9 +261,9 @@ export default {
       if (this.connection) {
         // TODO: this is getting into StreamCapturer teritory, not sure how to move/refactor/highlight this
         // (this effectively ends StreamCapturer and any getDisplayMedia side-effects)
-        this.connection.attachStreams.forEach(function(stream) {
+        this.connection.attachStreams.forEach(stream => {
           try {
-            stream.getTracks().forEach(function(track) {
+            stream.getTracks().forEach(track => {
               try {
                 track.stop();
               } catch (e) {}
