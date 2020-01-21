@@ -1,5 +1,8 @@
-import * as globals from "./globals";
-import { setDefaults } from "./setDefaults";
+import { videoPlayers } from "./globals";
+
+function setDefaults() {
+  // TODO: unimplemented outside of Vue
+}
 
 export function getAspectRatio(w, h) {
   function gcd(a, b) {
@@ -29,42 +32,7 @@ export function initVideoPlayer(stream) {
   videoPlayer.volume = !!enableTabCaptureAPI;
   videoPlayer.autoplay = true;
   videoPlayer.srcObject = stream;
-  globals.videoPlayers.push(videoPlayer);
-}
-
-export function addStreamStopListener(stream, callback) {
-  var streamEndedEvent = "ended";
-  if ("oninactive" in stream) {
-    streamEndedEvent = "inactive";
-  }
-  stream.addEventListener(
-    streamEndedEvent,
-    function() {
-      callback();
-      callback = function() {};
-    },
-    false
-  );
-  stream.getAudioTracks().forEach(function(track) {
-    track.addEventListener(
-      streamEndedEvent,
-      function() {
-        callback();
-        callback = function() {};
-      },
-      false
-    );
-  });
-  stream.getVideoTracks().forEach(function(track) {
-    track.addEventListener(
-      streamEndedEvent,
-      function() {
-        callback();
-        callback = function() {};
-      },
-      false
-    );
-  });
+  videoPlayers.push(videoPlayer);
 }
 
 export function getUserMediaError(e) {
@@ -81,10 +49,4 @@ export function getUserMediaError(e) {
     width: screen.width / 2,
     height: 170
   });
-}
-
-export function setViewerCount(viewerCount, externalThis) {
-  // TODO: Convert this to work with Vue
-  // console.log(externalThis);
-  externalThis.viewerCount = viewerCount;
 }

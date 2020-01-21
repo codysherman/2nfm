@@ -139,6 +139,22 @@
 
 <template lang="pug">
 .frow.centered
+  StreamCapturer(
+    ref="capturer"
+    :enableVideo="isVideo"
+    @isSharing="onIsSharing"
+    @gotStream="onGotStream"
+    @setDefaults="onSetDefaults"
+  )
+  StreamerConnection(
+    ref="connection"
+    :bandwidth="bandwidth"
+    :codecs="codecs"
+    :room_id="room_id"
+    :room_password="room_password"
+    :room_url_box="room_url_box"
+    @sessionId="onSessionId"
+  )
   .col-md-1-2
     LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
@@ -165,7 +181,7 @@
             .settings-item
               label
                 | Codec
-                select#codecs
+                select#codecs(@change="setCodecs")
                   option(value="default" selected="") Default (VP8)
                   option(value="vp8") VP8
                   option(value="vp9") VP9
@@ -174,7 +190,7 @@
             .settings-item.mb-0
               label
                 | Bandwidth
-                input#bandwidth(type="text" value="" placeholder="Optional: 8192, 1048, 512, etc.")
+                input#bandwidth(type="text" value="" placeholder="Optional: 8192, 1048, 512, etc." @change="setBandwidth")
           .col-xs-1-2
             .settings-item.mb-0
               label
@@ -200,12 +216,12 @@
           .label Start
           .frow.gutters
             .col-xs-1-2
-              #video-button.stream-button(@click="startVideoStream")
+              #video-button.stream-button(@click="startStream(true)")
                 .frow.column-center
                   VideoSvg
                   | Video
             .col-xs-1-2
-              #audio-button.stream-button(@click="startAudioStream")
+              #audio-button.stream-button(@click="startStream()")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
@@ -232,26 +248,21 @@
 import LogoSvg from "@/assets/svgs/logo.svg";
 import VideoSvg from "@/assets/svgs/video.svg";
 import AudioSvg from "@/assets/svgs/audio.svg";
-import io from "socket.io-client";
-// TODO: Remove need to do this
-window.io = io;
-import adapter from "webrtc-adapter";
-import RTCMultiConnection from "rtcmulticonnection";
 
-// import * as globals from "@/utils/background/globals.js";
-import { setDefaults } from "@/utils/background/setDefaults.js";
-import { captureDesktop } from "@/utils/background/captureDesktop.js";
+import StreamCapturer from "@/components/StreamCapturer";
+import StreamerConnection from "@/components/StreamerConnection";
 
 export default {
   name: "Streamer",
   components: {
     LogoSvg,
     VideoSvg,
-    AudioSvg
+    AudioSvg,
+    StreamCapturer,
+    StreamerConnection
   },
   data() {
     return {
-      stream: null,
       isSharingOn: false,
       // sessionId aka room name
       sessionId: null,
@@ -261,10 +272,9 @@ export default {
       room_id: window.localStorage.getItem("room_id") || "",
       codecs: "default",
       bandwidth: null,
-      enableVideo: false,
-      enableAudio: false,
+      isVideo: false,
       streaming_method: "RTCMultiConnection",
-      room_url_box: "true",
+      room_url_box: true,
       viewerCount: 0
     };
   },
@@ -274,27 +284,27 @@ export default {
     }
   },
   methods: {
-    startVideoStream() {
-      setDefaults(this);
-      this.isSharingOn = true;
-      this.enableVideo = true;
-      this.enableAudio = true;
-      captureDesktop(this);
-    },
-    startAudioStream() {
-      setDefaults(this);
-      this.isSharingOn = true;
-      this.enableVideo = false;
-      this.enableAudio = true;
-      captureDesktop(this);
+    startStream(isVideo = false) {
+      this.isVideo = isVideo;
+
+      if (
+        this.$refs.connection.connection &&
+        this.$refs.connection.connection.attachStreams[0]
+      ) {
+        this.onSetDefaults();
+        return;
+      }
+
+      this.room_id = "";
+
+      if (window.localStorage.getItem("room_id")) {
+        this.room_id = window.localStorage.getItem("room_id");
+      }
+
+      this.$refs.capturer.startStream();
     },
     stopStream() {
-      this.isSharingOn = false;
-      captureDesktop(this);
-      // runtimePort.postMessage({
-      //   messageFromContentScript1234: true,
-      //   stopSharing: true,
-      // });
+      this.$refs.capturer.stopStream();
     },
     setRoomName(event) {
       this.room_id = event.target.value
@@ -302,6 +312,31 @@ export default {
         .replace(/[^a-zA-Z0-9-_]/g, "")
         .toLowerCase();
       window.localStorage.setItem("room_id", event.target.value);
+    },
+    setBandwidth(value) {
+      try {
+        this.bandwidth = parseInt(externalThis.bandwidth);
+      } catch (e) {
+        this.bandwidth = null;
+      }
+    },
+    setCodecs(codec) {
+      this.codecs = codec;
+    },
+    onGotStream(stream) {
+      this.$refs.connection.shareStreamUsingRTCMultiConnection(
+        stream,
+        this.isVideo
+      );
+    },
+    onSessionId(id) {
+      this.sessionId = id;
+    },
+    onSetDefaults() {
+      this.$refs.connection.setDefaults();
+    },
+    onIsSharing(isSharing) {
+      this.isSharingOn = isSharing;
     }
   },
   mounted() {
