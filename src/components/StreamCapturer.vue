@@ -100,12 +100,6 @@ export default {
         resolutions.maxHeight = 360;
       }
 
-      if (_resolutions === "4K") {
-        alert(
-          '"4K" resolutions is not stable in Chrome. Please try "fit-screen" instead.'
-        );
-      }
-
       // TODO: review: sources are no longer used
       var sources = [
         // 'screen',
