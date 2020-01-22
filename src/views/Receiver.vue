@@ -159,15 +159,24 @@ video
     #hide-stats-bar(@click="hideStats")
       XSvg
     #stats-bar-html
-      div(v-if="stats.video.recv.codecs.length > 0") {{ `Video: ${stats.video.recv.codecs}` }}
-      div(v-if="stats.video.recv.codecs.length > 0") {{ `Resolution: ${stats.resolutions.recv.width}x${stats.resolutions.recv.height}` }}
-      div(v-if="stats.audio.recv.codecs.length > 0") {{ `Audio: ${stats.audio.recv.codecs}` }}
-      div {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
+      div(v-if="stats.video.recv.codecs.length > 0")
+        {{ `Video: ${stats.video.recv.codecs}` }}
+      div(v-if="stats.video.recv.codecs.length > 0")
+        {{ `Resolution: ${stats.resolutions.recv.width}x${stats.resolutions.recv.height}` }}
+      div(v-if="stats.audio.recv.codecs.length > 0")
+        {{ `Audio: ${stats.audio.recv.codecs}` }}
+      div
+        {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
     LoadingSvg#loading-logo(v-if="!isStream")
     LogoSvg#logo(v-if="isStream")
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
-    video.shadow-light(ref='videoPlayer' @click='togglePlayback' playsinline :hidden="!stream.isVideo")
+    video.shadow-light(
+      ref='videoPlayer'
+      @click='togglePlayback'
+      playsinline
+      :hidden="!stream.isVideo"
+    )
       | Your browser does not support the video element.
     audio(ref='audioPlayer' :hidden="!stream.isAudio")
       | Your browser does not support the audio element.
@@ -181,7 +190,11 @@ video
           PlaySvg(v-if="!isPlaying")
           PauseSvg(v-else)
         input#volume-slider(type="range" min="0" max="100" value="50" step="1" @change="setVolume")
-      button#fullscreen-button.button-none(type="button" v-if="stream.isVideo" @click="fullscreenVideo")
+      button#fullscreen-button.button-none(
+        type="button"
+        v-if="stream.isVideo"
+        @click="fullscreenVideo"
+      )
         FullscreenSvg
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link#create-message(v-if="!isStream", to="/streamer") Create your own room
@@ -222,7 +235,8 @@ export default {
       NO_MORE: false,
       stats: {},
       infoBarMessage: '',
-      presenceCheckWait: null, // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
+      // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
+      presenceCheckWait: null,
     };
   },
   computed: {
@@ -269,8 +283,10 @@ export default {
         this.infoBarMessage = 'Incorrect password';
         break;
       case ReceiverConnection.STATE.UNAVAILABLE:
-        this.infoBarMessage =
-            'Screen share session is closed or paused. You will join automatically when share session is resumed.';
+        this.infoBarMessage = `
+          Screen share session is closed or paused.
+          You will join automatically when share session is resumed.
+        `;
         break;
       case ReceiverConnection.STATE.PEER_WILL_SEND:
         this.infoBarMessage = 'Remote peer is about to send his screen.';
@@ -284,7 +300,7 @@ export default {
         location.reload();
         break;
       case ReceiverConnection.STATE.SOCKET_DISCONNECT:
-        // This is required only when ending a stream using the "share tab chrome bar" while the receiver is open.
+        // Required only when ending a stream using "share tab chrome bar" while a receiver is open.
         this.isStream = false;
 
         location.reload();
@@ -300,7 +316,10 @@ export default {
         this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
         break;
       case ReceiverConnection.STATE.HANDSHAKE_COMPLETE:
-        this.infoBarMessage = `WebRTC handshake is completed. Waiting for remote video from: ${this.roomName}`;
+        this.infoBarMessage = `
+          WebRTC handshake is completed.
+          Waiting for remote video from: ${this.roomName}
+        `;
         break;
       case ReceiverConnection.STATE.CONNECTED:
         this.isStream = true;

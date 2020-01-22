@@ -5,6 +5,9 @@
 import io from 'socket.io-client';
 // TODO: Remove need to do this
 window.io = io;
+
+// NOTE: needs to be imported for back-compat, but not referenced
+// eslint-disable-next-line no-unused-vars
 import adapter from 'webrtc-adapter';
 
 import RTCMultiConnection from 'rtcmulticonnection';
@@ -13,7 +16,8 @@ import { CodecsHandler } from '@/utils/background/helpers/CodecsHandler.js';
 import { IceServersHandler } from '@/utils/background/helpers/IceServersHandler.js';
 
 /**
- * @event state { value: Connection.STATE, name?: string, reason?: string } the current state of the connection:
+ * @event state { value: Connection.STATE, name?: string, reason?: string }
+ *   the current state of the connection:
  *     - props other than `value` (name, reason) only sent on GENERIC
  * @event presenceCheckWait number how many seconds until the the room is checked again
  * @event stream RTCMultiConnection.?.Stream the stream that can be hooked up to an HTML element
@@ -32,7 +36,8 @@ const STATE = {
   HANDSHAKE_COMPLETE: 'HANDSHAKE_COMPLETE',
   CONNECTED: 'CONNECTED',
   DISCONNECTED: 'DISCONNECTED',
-  GENERIC: 'GENERIC', // when RTCMultiConnection.onstatechanged sends a value we don't explicitly interpret
+  // when RTCMultiConnection.onstatechanged sends a value we don't explicitly interpret
+  GENERIC: 'GENERIC',
 };
 
 export default {
@@ -94,7 +99,7 @@ export default {
 
         if (
           bandwidth &&
-          bandwidth != NaN &&
+          !isNaN(bandwidth) &&
           bandwidth != 'NaN' &&
           typeof bandwidth == 'number'
         ) {
@@ -128,7 +133,7 @@ export default {
       }
     };
 
-    this.connection.onstreamid = (event) => {
+    this.connection.onstreamid = () => {
       this.$emit('state', { value: STATE.PEER_WILL_SEND });
     };
 
@@ -137,10 +142,10 @@ export default {
     };
 
     // if user left
-    this.connection.onleave = this.connection.onstreamended = this.connection.onSessionClosed = (e) => {
+    this.connection.onleave = (e) => {
       if (e.userid !== this.roomName) return;
 
-      // TODO: possibly split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing connection
+      // TODO: maybe split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing
       this.connection.close();
       this.connection.closeSocket();
       this.connection.userid = this.connection.token();
@@ -148,7 +153,7 @@ export default {
       this.$emit('state', { value: STATE.SOCKET_CLOSED });
     };
 
-    // TODO: refactor so synchronous `prompt`'s (or better alternative) is done from the Receiver.vue
+    // TODO: refactor so synchronous `prompt`'s (or better alternative) is done from the Receiver
     this.connection.onJoinWithPassword = (remoteUserId) => {
       if (!this.params.p) {
         this.params.p = prompt(
@@ -159,6 +164,7 @@ export default {
       this.connection.password = this.params.p;
       this.connection.join(remoteUserId);
     };
+    this.connection.onstreamended = this.connection.onSessionClosed = this.connection.onleave;
 
     this.connection.onInvalidPassword = (remoteUserId, oldPassword) => {
       var password = prompt(
@@ -178,17 +184,17 @@ export default {
       );
     };
 
-    this.connection.onSocketDisconnect = (event) => {
+    this.connection.onSocketDisconnect = () => {
       if (this.connection.getAllParticipants().length > 0) return;
 
       this.$emit('state', { value: STATE.SOCKET_DISCONNECT });
     };
 
-    this.connection.onSocketError = (_) => {
+    this.connection.onSocketError = () => {
       this.$emit('state', { value: STATE.SOCKET_ERROR });
     };
 
-    this.connection.onopen = (event) => {
+    this.connection.onopen = () => {
       //
     };
 
@@ -237,6 +243,8 @@ export default {
     checkPresence() {
       this.connection.checkPresence(
         this.roomName,
+        // Keeping these parameters here for documentation
+        // eslint-disable-next-line no-unused-vars
         (isRoomExist, roomid, extra) => {
           if (isRoomExist === false) {
             if (this.presenceCheckWait < 60000) {
@@ -244,7 +252,7 @@ export default {
             }
 
             // FIXME: ensure presenceCheckWait watcher is triggered before sending state update
-            // (maybe, this could also be solved by just making the infobarMessage a computed in Receiver.vue)
+            // (or, this could be solved by making the infobarMessage a computed in Receiver)
             setTimeout(
               () => this.$emit('state', { value: STATE.NOT_HOSTED }),
               0,
@@ -274,10 +282,6 @@ export default {
     },
   },
 };
-
-function d(s) {
-  return decodeURIComponent(s.replace(/\+/g, ' '));
-}
 
 function setBandwidth(sdp) {
   sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');

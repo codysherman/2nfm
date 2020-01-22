@@ -166,6 +166,7 @@ export var CodecsHandler = (function() {
       return sdp;
     }
 
+    // eslint-disable-next-line no-undef
     if (typeof isFirefox !== 'undefined' && isFirefox) {
       return sdp;
     }
@@ -173,11 +174,13 @@ export var CodecsHandler = (function() {
     if (isScreen) {
       if (!bandwidth.screen) {
         console.warn(
-          'It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.',
+          'It seems that you are not using bandwidth for screen.',
+          'Screen sharing is expected to fail.',
         );
       } else if (bandwidth.screen < 300) {
         console.warn(
-          'It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.',
+          'It seems that you are using wrong bandwidth value for screen.',
+          'Screen sharing is expected to fail.',
         );
       }
     }
@@ -366,31 +369,33 @@ export var CodecsHandler = (function() {
     return sdp;
   }
 
+  // TODO: from Sam: extractSdp is not defined, so this is commented out.
   // forceStereoAudio => via webrtcexample.com
   // requires getUserMedia => echoCancellation:false
   function forceStereoAudio(sdp) {
-    var sdpLines = sdp.split('\r\n');
-    var fmtpLineIndex = null;
-    for (var i = 0; i < sdpLines.length; i++) {
-      if (sdpLines[i].search('opus/48000') !== -1) {
-        var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
-        break;
-      }
-    }
-    for (var i = 0; i < sdpLines.length; i++) {
-      if (sdpLines[i].search('a=fmtp') !== -1) {
-        var payload = extractSdp(sdpLines[i], /a=fmtp:(\d+)/);
-        if (payload === opusPayload) {
-          fmtpLineIndex = i;
-          break;
-        }
-      }
-    }
-    if (fmtpLineIndex === null) return sdp;
-    sdpLines[fmtpLineIndex] = sdpLines[fmtpLineIndex].concat(
-      '; stereo=1; sprop-stereo=1',
-    );
-    sdp = sdpLines.join('\r\n');
+    // var sdpLines = sdp.split('\r\n');
+    // var fmtpLineIndex = null;
+    // for (var i = 0; i < sdpLines.length; i++) {
+    //   if (sdpLines[i].search('opus/48000') !== -1) {
+    //     var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
+    //     break;
+    //   }
+    // }
+    // for (var i = 0; i < sdpLines.length; i++) {
+    //   if (sdpLines[i].search('a=fmtp') !== -1) {
+    //     var payload = extractSdp(sdpLines[i], /a=fmtp:(\d+)/);
+    //     if (payload === opusPayload) {
+    //       fmtpLineIndex = i;
+    //       break;
+    //     }
+    //   }
+    // }
+    // if (fmtpLineIndex === null) return sdp;
+    // sdpLines[fmtpLineIndex] = sdpLines[fmtpLineIndex].concat(
+    //   '; stereo=1; sprop-stereo=1',
+    // );
+    // sdp = sdpLines.join('\r\n');
+    console.warn('forceStereoAudio not implemented; forwarding provided sdp');
     return sdp;
   }
 

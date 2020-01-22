@@ -6,7 +6,11 @@
 import io from 'socket.io-client';
 // TODO: Remove need to do this
 window.io = io;
+
+// NOTE: needs to be imported for back-compat, but not referenced
+// eslint-disable-next-line no-unused-vars
 import adapter from 'webrtc-adapter';
+
 import RTCMultiConnection from 'rtcmulticonnection';
 
 import { CodecsHandler } from '../utils/background/helpers/CodecsHandler';
@@ -101,7 +105,7 @@ export default {
         if (this.bandwidth) {
           if (
             this.bandwidth &&
-            this.bandwidth != NaN &&
+            !isNaN(this.bandwidth) &&
             this.bandwidth != 'NaN' &&
             typeof this.bandwidth == 'number'
           ) {
@@ -186,24 +190,24 @@ export default {
         // chrome.browserAction.enable();
         this.setViewerCount(0);
 
-        if (this.room_url_box === true) {
-          let resultingURL = 'https://2n.fm/' + this.connection.sessionid;
+        // if (this.room_url_box === true) {
+        //   let resultingURL = 'https://2n.fm/' + this.connection.sessionid;
 
-          // resultingURL = 'http://localhost:9001/?s=' + externalThis.connection.sessionid;
+        //   // resultingURL = 'http://localhost:9001/?s=' + externalThis.connection.sessionid;
 
-          if (this.room_password && this.room_password.length) {
-            resultingURL += '&p=' + this.room_password;
-          }
+        //   if (this.room_password && this.room_password.length) {
+        //     resultingURL += '&p=' + this.room_password;
+        //   }
 
-          if (this.bandwidth) {
-            resultingURL += '&bandwidth=' + this.bandwidth;
-          }
-          if (!!this.codecs && this.codecs !== 'default') {
-            resultingURL += '&codecs=' + this.codecs;
-          }
+        //   if (this.bandwidth) {
+        //     resultingURL += '&bandwidth=' + this.bandwidth;
+        //   }
+        //   if (!!this.codecs && this.codecs !== 'default') {
+        //     resultingURL += '&codecs=' + this.codecs;
+        //   }
 
-          // TODO: previous chrome.windows code that showed URL went here
-        }
+        //   // TODO: previous chrome.windows code that showed URL went here
+        // }
 
         this.connection.socket.on(
           this.connection.socketCustomEvent,
@@ -219,7 +223,7 @@ export default {
         );
       };
 
-      this.connection.onSocketDisconnect = (event) => {
+      this.connection.onSocketDisconnect = () => {
         // alert('externalThis.connection to the server is closed.');
         if (this.connection.getAllParticipants().length > 0) return;
 
@@ -228,7 +232,7 @@ export default {
         // chrome.runtime.reload();
       };
 
-      this.connection.onSocketError = (event) => {
+      this.connection.onSocketError = () => {
         alert('Unable to connect to the server. Please try again.');
 
         setTimeout(() => {
@@ -237,9 +241,9 @@ export default {
         }, 1000);
       };
 
-      this.connection.onopen = (event) => {
-        //
-      };
+      // this.connection.onopen = (event) => {
+      //   //
+      // };
 
       this.connection.onmessage = (event) => {
         if (event.data.newChatMessage) {
@@ -281,7 +285,7 @@ export default {
     },
     setDefaults() {
       if (this.connection) {
-        // TODO: this is getting into DesktopCapturer teritory, not sure how to move/refactor/highlight this
+        // TODO: this is getting into DesktopCapturer teritory, not sure how to refactor/highlight
         // (this effectively ends DesktopCapturer and any getDisplayMedia side-effects)
         this.connection.attachStreams.forEach((stream) => {
           try {

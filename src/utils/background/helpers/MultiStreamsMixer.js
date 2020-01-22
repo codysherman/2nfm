@@ -10,7 +10,7 @@
 // MIT License   - www.WebRTC-Experiment.com/licence
 // --------------------------------------------------
 
-function MultiStreamsMixer(arrayOfMediaStreams) {
+export function MultiStreamsMixer(arrayOfMediaStreams) {
   // requires: chrome://flags/#enable-experimental-web-platform-features
 
   var videos = [];
@@ -19,7 +19,8 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
   canvas.style =
-    'opacity:0;position:absolute;z-index:-1;top: -100000000;left:-1000000000; margin-top:-1000000000;margin-left:-1000000000;';
+    'opacity:0;position:absolute;z-index:-1;top: -100000000;left:-1000000000;' +
+    'margin-top:-1000000000;margin-left:-1000000000;';
   (document.body || document.documentElement).appendChild(canvas);
 
   this.disableLogs = false;
@@ -41,12 +42,14 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
 
   if (typeof AudioContext === 'undefined') {
     if (typeof webkitAudioContext !== 'undefined') {
-      /*global AudioContext:true */
+      // eslint-disable-next-line no-unused-vars 
+      /*global webkitAudioContext:true */
       AudioContext = webkitAudioContext;
     }
 
     if (typeof mozAudioContext !== 'undefined') {
-      /*global AudioContext:true */
+      // eslint-disable-next-line no-unused-vars 
+      /*global mozAudioContext:true */
       AudioContext = mozAudioContext;
     }
   }
@@ -55,7 +58,8 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
   var URL = window.URL;
 
   if (typeof URL === 'undefined' && typeof webkitURL !== 'undefined') {
-    /*global URL:true */
+    // eslint-disable-next-line no-unused-vars 
+    /*global webkitURL:true */
     URL = webkitURL;
   }
 
@@ -79,10 +83,10 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
     typeof MediaStream === 'undefined' &&
     typeof webkitMediaStream !== 'undefined'
   ) {
+    /*global webkitMediaStream:true*/
     MediaStream = webkitMediaStream;
   }
 
-  /*global MediaStream:true */
   if (typeof MediaStream !== 'undefined') {
     // override "stop" method for all browsers
     if (typeof MediaStream.prototype.stop === 'undefined') {
@@ -254,6 +258,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
         });
     }
 
+    // eslint-disable-next-line no-unused-vars 
     var fullcanvas;
     arrayOfMediaStreams.forEach(function(stream) {
       if (stream.fullcanvas) {
@@ -275,7 +280,8 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
       capturedStream = canvas.mozCaptureStream();
     } else if (!self.disableLogs) {
       console.error(
-        'Upgrade to latest Chrome or otherwise enable this flag: chrome://flags/#enable-experimental-web-platform-features',
+        'Upgrade to latest Chrome or otherwise enable this flag:',
+        'chrome://flags/#enable-experimental-web-platform-features',
       );
     }
 

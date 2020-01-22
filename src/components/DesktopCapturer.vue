@@ -33,7 +33,7 @@ export default {
     stopStream() {
       this.isSharing = false;
 
-      // SM: post Vue migration, the logic that would previously run in captureDesktop can instead be executed via setDefaults
+      // SM: post Vue migration, what previously ran in captureDesktop is instead in setDefaults
       // this.captureDesktop();
       this.setDefaults();
 
@@ -46,8 +46,11 @@ export default {
       // TODO: resolutions no longer passed to anything, unnecessary now?
       var resolutions = {};
 
-      // TODO: review me
-      // old todo: this may need to change (or be removed) because captureDesktop will be called to end a stream
+      /**
+       * TODO: review me
+       * old todo: this may need to change (or be removed) because captureDesktop will be called to
+       * end a stream
+       */
       // this.isSharing = true;
 
       var _resolutions = window.localStorage.getItem('resolutions');
@@ -132,7 +135,8 @@ export default {
 
       let constraints = {
         video: {
-          // TODO: displaySurface support is waiting on browser support https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
+          // TODO: displaySurface support is waiting on browser support
+          // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
           // displaySurface: ["application", "browser", "monitor", "window"]
         },
         audio: {

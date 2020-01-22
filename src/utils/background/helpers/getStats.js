@@ -19,6 +19,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
     window.webkitRTCPeerConnection;
 
   if (typeof MediaStreamTrack === 'undefined') {
+    // eslint-disable-next-line
     MediaStreamTrack = {}; // todo?
   }
 
@@ -273,15 +274,17 @@ export function getStats(mediaStreamTrack, callback, interval) {
       getStatsResult.audio[sendrecvType].codecs.push(result.googCodecName);
     }
 
+    var kilobytes, bytes;
+
     if (result.bytesSent) {
-      var kilobytes = 0;
+      kilobytes = 0;
       if (result.bytesSent) {
         if (!getStatsResult.internal.audio[sendrecvType].prevBytesSent) {
           getStatsResult.internal.audio[sendrecvType].prevBytesSent =
             result.bytesSent;
         }
 
-        var bytes =
+        bytes =
           result.bytesSent -
           getStatsResult.internal.audio[sendrecvType].prevBytesSent;
         getStatsResult.internal.audio[sendrecvType].prevBytesSent =
@@ -296,14 +299,14 @@ export function getStats(mediaStreamTrack, callback, interval) {
     }
 
     if (result.bytesReceived) {
-      var kilobytes = 0;
+      kilobytes = 0;
       if (result.bytesReceived) {
         if (!getStatsResult.internal.audio[sendrecvType].prevBytesReceived) {
           getStatsResult.internal.audio[sendrecvType].prevBytesReceived =
             result.bytesReceived;
         }
 
-        var bytes =
+        bytes =
           result.bytesReceived -
           getStatsResult.internal.audio[sendrecvType].prevBytesReceived;
         getStatsResult.internal.audio[sendrecvType].prevBytesReceived =
@@ -344,14 +347,16 @@ export function getStats(mediaStreamTrack, callback, interval) {
       getStatsResult.video[sendrecvType].codecs.push(result.googCodecName);
     }
 
+    var kilobytes, bytes;
+
     if (result.bytesSent) {
-      var kilobytes = 0;
+      kilobytes = 0;
       if (!getStatsResult.internal.video[sendrecvType].prevBytesSent) {
         getStatsResult.internal.video[sendrecvType].prevBytesSent =
           result.bytesSent;
       }
 
-      var bytes =
+      bytes =
         result.bytesSent -
         getStatsResult.internal.video[sendrecvType].prevBytesSent;
       getStatsResult.internal.video[sendrecvType].prevBytesSent =
@@ -361,13 +366,13 @@ export function getStats(mediaStreamTrack, callback, interval) {
     }
 
     if (result.bytesReceived) {
-      var kilobytes = 0;
+      kilobytes = 0;
       if (!getStatsResult.internal.video[sendrecvType].prevBytesReceived) {
         getStatsResult.internal.video[sendrecvType].prevBytesReceived =
           result.bytesReceived;
       }
 
-      var bytes =
+      bytes =
         result.bytesReceived -
         getStatsResult.internal.video[sendrecvType].prevBytesReceived;
       getStatsResult.internal.video[sendrecvType].prevBytesReceived =
@@ -425,6 +430,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       return;
 
     // result.googActiveConnection means either STUN or TURN is used.
+    var localCandidate, remoteCandidate;
 
     if (result.googActiveConnection == 'true') {
       // id === 'Conn-audio-1-0'
@@ -454,8 +460,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
       getStatsResult.connectionType.transport = result.googTransportType;
 
-      var localCandidate =
-        getStatsResult.internal.candidates[result.localCandidateId];
+      localCandidate = getStatsResult.internal.candidates[result.localCandidateId];
       if (localCandidate) {
         if (localCandidate.ipAddress) {
           getStatsResult.connectionType.systemIpAddress =
@@ -463,8 +468,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
         }
       }
 
-      var remoteCandidate =
-        getStatsResult.internal.candidates[result.remoteCandidateId];
+      remoteCandidate = getStatsResult.internal.candidates[result.remoteCandidateId];
       if (remoteCandidate) {
         if (remoteCandidate.ipAddress) {
           getStatsResult.connectionType.systemIpAddress =
@@ -480,10 +484,8 @@ export function getStats(mediaStreamTrack, callback, interval) {
         result.state === 'succeeded'
       ) {
         // remoteCandidateId, localCandidateId, componentId
-        var localCandidate =
-          getStatsResult.internal.candidates[result.remoteCandidateId];
-        var remoteCandidate =
-          getStatsResult.internal.candidates[result.remoteCandidateId];
+        localCandidate = getStatsResult.internal.candidates[result.remoteCandidateId];
+        remoteCandidate = getStatsResult.internal.candidates[result.remoteCandidateId];
 
         // Firefox used above two pairs for connection
       }

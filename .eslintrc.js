@@ -20,6 +20,7 @@ module.exports = {
     // we should always disable console logs and debugging in production
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'arrow-parens': ['error', 'always'],
     // must expand out comma-dangle to get `functions` option enabled
     'comma-dangle': ['error', {
       'arrays': 'always-multiline',
@@ -28,9 +29,9 @@ module.exports = {
       'exports': 'always-multiline',
       'functions': 'always-multiline',
     }],
-    'arrow-parens': ['error', 'always'],
     'indent': ['error', 2],
     'max-len': ['error', { 'code': 100, 'tabWidth': 2 }],
     'quotes': ['error', 'single'],
+    'no-empty': ['error', { 'allowEmptyCatch': true }],
   },
 };

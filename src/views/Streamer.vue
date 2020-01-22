@@ -191,7 +191,12 @@
             .settings-item.mb-0
               label
                 | Bandwidth
-                input#bandwidth(type="text" value="" placeholder="Optional: 8192, 1048, 512, etc." @change="setBandwidth")
+                input#bandwidth(
+                  type="text"
+                  value=""
+                  placeholder="Optional: 8192, 1048, 512, etc."
+                  @change="setBandwidth"
+                )
           .col-xs-1-2
             .settings-item.mb-0
               label
@@ -227,7 +232,9 @@
                   AudioSvg
                   | Audio Only
     section#stop-section(v-if="isSharingOn && sessionId")
-      //- router-link#public-link(to="{query: { s: sessionId, p: room_password }}`}" target="_blank")
+      //- router-link#public-link(
+      //-   to="{query: { s: sessionId, p: room_password }}`}" target="_blank"
+      //- )
       router-link#public-link(:to="sessionId" target="_blank")
         | {{ `2n.fm/${sessionId}` }}
       .viewer-count
@@ -236,7 +243,11 @@
       button#stop-sharing(type="button" @click="stopStream")
         | End Sharing
     .frow.width-100.mt-20
-      a.text-underline(href="https://caniuse.com/#search=getDisplayMedia" rel="noreferrer" target="_blank")
+      a.text-underline(
+        href="https://caniuse.com/#search=getDisplayMedia"
+        rel="noreferrer"
+        target="_blank"
+      )
         | OS and Browser Limitations
       //
         <div id="enable-chat">
@@ -292,7 +303,9 @@ export default {
     //     messageFromContentScript1234: true,
     //     openChat: true
     //   });
-    //   window.open('chat.html','Chat','width='+popup_width+',height='+popup_height+',toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,top='+(screen.height - popup_height)+',left=' + (screen.width - popup_width - 30));
+    //   window.open('chat.html','Chat','width='+popup_width+',height='+popup_height
+    //     +',toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,top='
+    //     +(screen.height - popup_height)+',left=' + (screen.width - popup_width - 30));
     //   window.close();
     // };
   },
@@ -328,7 +341,7 @@ export default {
     },
     setBandwidth(value) {
       try {
-        this.bandwidth = parseInt(this.bandwidth);
+        this.bandwidth = parseInt(value);
       } catch (e) {
         this.bandwidth = null;
       }
