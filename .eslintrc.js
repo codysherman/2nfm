@@ -1,14 +1,28 @@
 module.exports = {
   root: true,
   env: {
-    node: true
-  },
-  extends: ["plugin:vue/essential", "@vue/prettier"],
-  rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"
+    // this section will be used to determine which APIs are available to us
+    // (i.e are we running in a browser environment or a node.js env)
+    node: true,
+    browser: true,
   },
   parserOptions: {
-    parser: "babel-eslint"
-  }
+    parser: 'babel-eslint',
+    // specifying a module sourcetype prevent eslint from marking import statements as errors
+    sourceType: 'module',
+  },
+  extends: [
+    // use the recommended rule set for both plain javascript and vue
+    'eslint:recommended',
+    'plugin:vue/recommended',
+  ],
+  rules: {
+    // we should always disable console logs and debugging in production
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'comma-dangle': ['error', 'always',],
+    'indent': ['error', 2,],
+    'max-len': ['error', { 'code': 100, 'tabWidth': 2, },],
+    'quotes': ['error', 'single',],
+  },
 };
