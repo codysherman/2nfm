@@ -144,7 +144,7 @@ video
 
 <template lang="pug">
 #receiver.height-100
-  Connection(
+  ReceiverConnection(
     :roomName="roomName"
     @state="onConnectionStateChanged"
     @stream="onStream"
@@ -199,7 +199,7 @@ import PlaySvg from '@/assets/svgs/play.svg';
 import PauseSvg from '@/assets/svgs/pause.svg';
 import FullscreenSvg from '@/assets/svgs/fullscreen.svg';
 
-import Connection from '@/components/Connection';
+import ReceiverConnection from '@/components/ReceiverConnection';
 
 export default {
   name: 'Receiver',
@@ -210,7 +210,7 @@ export default {
     PlaySvg,
     PauseSvg,
     FullscreenSvg,
-    Connection,
+    ReceiverConnection,
   },
   data() {
     return {
@@ -257,25 +257,25 @@ export default {
   methods: {
     onConnectionStateChanged(state,) {
       switch (state.value) {
-      case Connection.STATE.NOT_HOSTED:
+      case ReceiverConnection.STATE.NOT_HOSTED:
         this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
             Checking again ${this.presenceCheckWait === 60000 ? 'every' : 'in'}
             ${this.presenceCheckWait / 1000} seconds.`;
         break;
-      case Connection.STATE.JOINING:
+      case ReceiverConnection.STATE.JOINING:
         this.infoBarMessage = `Joining room: ${this.roomName}`;
         break;
-      case Connection.STATE.UNAUTHORIZED:
+      case ReceiverConnection.STATE.UNAUTHORIZED:
         this.infoBarMessage = 'Incorrect password';
         break;
-      case Connection.STATE.UNAVAILABLE:
+      case ReceiverConnection.STATE.UNAVAILABLE:
         this.infoBarMessage =
             'Screen share session is closed or paused. You will join automatically when share session is resumed.';
         break;
-      case Connection.STATE.PEER_WILL_SEND:
+      case ReceiverConnection.STATE.PEER_WILL_SEND:
         this.infoBarMessage = 'Remote peer is about to send his screen.';
         break;
-      case Connection.STATE.SOCKET_CLOSED:
+      case ReceiverConnection.STATE.SOCKET_CLOSED:
         this.$refs.videoPlayer.srcObject = null;
 
         this.infoBarMessage = 'Screen sharing has been closed.';
@@ -283,33 +283,33 @@ export default {
 
         location.reload();
         break;
-      case Connection.STATE.SOCKET_DISCONNECT:
+      case ReceiverConnection.STATE.SOCKET_DISCONNECT:
         // This is required only when ending a stream using the "share tab chrome bar" while the receiver is open.
         this.isStream = false;
 
         location.reload();
         break;
-      case Connection.STATE.SOCKET_ERROR:
+      case ReceiverConnection.STATE.SOCKET_ERROR:
         alert('Unable to connect to the server. Please try again.',);
 
         setTimeout(() => {
           location.reload();
         }, 1000,);
         break;
-      case Connection.STATE.HAVE_OFFER:
+      case ReceiverConnection.STATE.HAVE_OFFER:
         this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
         break;
-      case Connection.STATE.HANDSHAKE_COMPLETE:
+      case ReceiverConnection.STATE.HANDSHAKE_COMPLETE:
         this.infoBarMessage = `WebRTC handshake is completed. Waiting for remote video from: ${this.roomName}`;
         break;
-      case Connection.STATE.CONNECTED:
+      case ReceiverConnection.STATE.CONNECTED:
         this.isStream = true;
         break;
-      case Connection.STATE.DISCONNECTED:
+      case ReceiverConnection.STATE.DISCONNECTED:
         this.isStream = false;
         this.infoBarMessage = 'You\'ve been disconnected. Please try again.';
         break;
-      case Connection.STATE.GENERIC:
+      case ReceiverConnection.STATE.GENERIC:
         this.infoBarMessage = `${state.name}: ${state.reason}`;
         break;
       }

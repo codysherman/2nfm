@@ -36,7 +36,7 @@ const STATE = {
 };
 
 export default {
-  name: "Connection",
+  name: "ReceiverConnection",
   STATE, // export so Receiver.vue can compare values for `state` event/emitter
   props: {
     roomName: String
