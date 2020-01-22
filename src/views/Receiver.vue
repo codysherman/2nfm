@@ -236,6 +236,24 @@ export default {
       }
     }
   },
+  mounted() {
+    window.addEventListener(
+      "offline",
+      () => {
+        this.infoBarMessage = "You seem to be offline.";
+      },
+      false
+    );
+
+    window.addEventListener(
+      "online",
+      () => {
+        this.infoBarMessage = "You are back online. Reloading the page...";
+        location.reload();
+      },
+      false
+    );
+  },
   methods: {
     onConnectionStateChanged(state) {
       switch (state.value) {
@@ -250,7 +268,7 @@ export default {
         case Connection.STATE.UNAUTHORIZED:
           this.infoBarMessage = "Incorrect password";
           break;
-        case Connection.STATE.NOT_HOSTED:
+        case Connection.STATE.UNAVAILABLE:
           this.infoBarMessage =
             "Screen share session is closed or paused. You will join automatically when share session is resumed.";
           break;
@@ -374,24 +392,6 @@ export default {
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
       return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
     }
-  },
-  mounted() {
-    window.addEventListener(
-      "offline",
-      () => {
-        this.infoBarMessage = "You seem to be offline.";
-      },
-      false
-    );
-
-    window.addEventListener(
-      "online",
-      () => {
-        this.infoBarMessage = "You are back online. Reloading the page...";
-        location.reload();
-      },
-      false
-    );
   }
 };
 </script>
