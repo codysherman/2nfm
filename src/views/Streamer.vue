@@ -139,7 +139,7 @@
 
 <template lang="pug">
 .frow.centered
-  StreamCapturer(
+  DesktopCapturer(
     ref="capturer"
     :enableVideo="isVideo"
     @isSharing="onIsSharing"
@@ -250,7 +250,7 @@ import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
 
-import StreamCapturer from '@/components/StreamCapturer';
+import DesktopCapturer from '@/components/DesktopCapturer';
 import StreamerConnection from '@/components/StreamerConnection';
 
 export default {
@@ -259,7 +259,7 @@ export default {
     LogoSvg,
     VideoSvg,
     AudioSvg,
-    StreamCapturer,
+    DesktopCapturer,
     StreamerConnection,
   },
   data() {

@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'StreamCapturer',
+  name: 'DesktopCapturer',
   props: {
     enableVideo: Boolean,
   },

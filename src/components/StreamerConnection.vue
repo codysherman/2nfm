@@ -259,8 +259,8 @@ export default {
     },
     setDefaults() {
       if (this.connection) {
-        // TODO: this is getting into StreamCapturer teritory, not sure how to move/refactor/highlight this
-        // (this effectively ends StreamCapturer and any getDisplayMedia side-effects)
+        // TODO: this is getting into DesktopCapturer teritory, not sure how to move/refactor/highlight this
+        // (this effectively ends DesktopCapturer and any getDisplayMedia side-effects)
         this.connection.attachStreams.forEach(stream => {
           try {
             stream.getTracks().forEach(track => {
