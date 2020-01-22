@@ -4,24 +4,24 @@
 
 <script>
 export default {
-  name: "StreamCapturer",
+  name: 'StreamCapturer',
+  props: {
+    enableVideo: Boolean,
+  },
   data() {
     return {
       isSharing: false,
-      enableAudio: false
+      enableAudio: false,
     };
-  },
-  props: {
-    enableVideo: Boolean
   },
   watch: {
     isSharing(newValue) {
-      this.$emit("isSharing", newValue);
-    }
+      this.$emit('isSharing', newValue);
+    },
   },
   methods: {
     setDefaults() {
-      this.$emit("setDefaults");
+      this.$emit('setDefaults');
       this.isSharing = false;
     },
     startStream() {
@@ -50,9 +50,9 @@ export default {
       // old todo: this may need to change (or be removed) because captureDesktop will be called to end a stream
       // this.isSharing = true;
 
-      var _resolutions = window.localStorage.getItem("resolutions");
+      var _resolutions = window.localStorage.getItem('resolutions');
       if (!_resolutions) {
-        _resolutions = "fit-screen";
+        _resolutions = 'fit-screen';
         // chrome.storage.sync.set(
         //   {
         //     resolutions: "fit-screen",
@@ -61,7 +61,7 @@ export default {
         // );
       }
 
-      if (_resolutions === "fit-screen") {
+      if (_resolutions === 'fit-screen') {
         // resolutions.maxWidth = screen.availWidth;
         // resolutions.maxHeight = screen.availHeight;
 
@@ -69,27 +69,27 @@ export default {
         resolutions.maxHeight = screen.height;
       }
 
-      if (_resolutions === "4K") {
+      if (_resolutions === '4K') {
         resolutions.maxWidth = 3840;
         resolutions.maxHeight = 2160;
       }
 
-      if (_resolutions === "1080p") {
+      if (_resolutions === '1080p') {
         resolutions.maxWidth = 1920;
         resolutions.maxHeight = 1080;
       }
 
-      if (_resolutions === "720p") {
+      if (_resolutions === '720p') {
         resolutions.maxWidth = 1280;
         resolutions.maxHeight = 720;
       }
 
-      if (_resolutions === "480p") {
+      if (_resolutions === '480p') {
         resolutions.maxWidth = 853;
         resolutions.maxHeight = 480;
       }
 
-      if (_resolutions === "360p") {
+      if (_resolutions === '360p') {
         resolutions.maxWidth = 640;
         resolutions.maxHeight = 360;
       }
@@ -98,11 +98,11 @@ export default {
       var sources = [
         // 'screen',
         // 'window',
-        "tab"
+        'tab',
       ];
 
       if (this.enableAudio) {
-        sources.push("audio");
+        sources.push('audio');
       }
 
       // if (externalThis.enableTabCaptureAPI) {
@@ -139,8 +139,8 @@ export default {
           autoGainControl: false,
           echoCancellation: false,
           noiseSuppression: false,
-          googDisableLocalEcho: false // https://www.chromestatus.com/feature/5056629556903936
-        }
+          googDisableLocalEcho: false, // https://www.chromestatus.com/feature/5056629556903936
+        },
       };
 
       // navigator.webkitGetUserMedia(
@@ -177,7 +177,7 @@ export default {
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
         if (!this.enableVideo && stream.getAudioTracks().length === 0) {
-          alert(`Make sure to check the "Share audio" box in Google Chrome`);
+          alert('Make sure to check the "Share audio" box in Google Chrome');
         }
         this.gotStream(stream);
       };
@@ -203,7 +203,7 @@ export default {
 
       // chrome.browserAction.disable();
 
-      stream.addEventListener("inactive", () => {
+      stream.addEventListener('inactive', () => {
         this.setDefaults();
       });
 
@@ -212,16 +212,16 @@ export default {
         // chrome.runtime.reload();
       });
 
-      this.$emit("gotStream", stream);
+      this.$emit('gotStream', stream);
 
       // chrome.browserAction.setIcon({
       //   path: "images/icon-active_128.png",
       // });
     },
     addStreamStopListener(stream, callback) {
-      var streamEndedEvent = "ended";
-      if ("oninactive" in stream) {
-        streamEndedEvent = "inactive";
+      var streamEndedEvent = 'ended';
+      if ('oninactive' in stream) {
+        streamEndedEvent = 'inactive';
       }
       stream.addEventListener(
         streamEndedEvent,
@@ -251,7 +251,7 @@ export default {
           false
         );
       });
-    }
-  }
+    },
+  },
 };
 </script>

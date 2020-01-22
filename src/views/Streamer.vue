@@ -246,21 +246,21 @@
 </template>
 
 <script>
-import LogoSvg from "@/assets/svgs/logo.svg";
-import VideoSvg from "@/assets/svgs/video.svg";
-import AudioSvg from "@/assets/svgs/audio.svg";
+import LogoSvg from '@/assets/svgs/logo.svg';
+import VideoSvg from '@/assets/svgs/video.svg';
+import AudioSvg from '@/assets/svgs/audio.svg';
 
-import StreamCapturer from "@/components/StreamCapturer";
-import StreamerConnection from "@/components/StreamerConnection";
+import StreamCapturer from '@/components/StreamCapturer';
+import StreamerConnection from '@/components/StreamerConnection';
 
 export default {
-  name: "Streamer",
+  name: 'Streamer',
   components: {
     LogoSvg,
     VideoSvg,
     AudioSvg,
     StreamCapturer,
-    StreamerConnection
+    StreamerConnection,
   },
   data() {
     return {
@@ -269,20 +269,32 @@ export default {
       sessionId: null,
       desktop_id: null,
       constraints: null,
-      room_password: "",
-      room_id: window.localStorage.getItem("room_id") || "",
-      codecs: "default",
+      room_password: '',
+      room_id: window.localStorage.getItem('room_id') || '',
+      codecs: 'default',
       bandwidth: null,
       isVideo: false,
-      streaming_method: "RTCMultiConnection",
+      streaming_method: 'RTCMultiConnection',
       room_url_box: true,
-      viewerCount: 0
+      viewerCount: 0,
     };
   },
   computed: {
     roomName() {
       return this.room_id || this.sessionId;
-    }
+    },
+  },
+  mounted() {
+    // document.getElementById('enable-chat').onclick = function() {
+    //   var popup_width = 312;
+    //   var popup_height = 400;
+    //   runtimePort.postMessage({
+    //     messageFromContentScript1234: true,
+    //     openChat: true
+    //   });
+    //   window.open('chat.html','Chat','width='+popup_width+',height='+popup_height+',toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,top='+(screen.height - popup_height)+',left=' + (screen.width - popup_width - 30));
+    //   window.close();
+    // };
   },
   methods: {
     startStream(isVideo = false) {
@@ -296,10 +308,10 @@ export default {
         return;
       }
 
-      this.room_id = "";
+      this.room_id = '';
 
-      if (window.localStorage.getItem("room_id")) {
-        this.room_id = window.localStorage.getItem("room_id");
+      if (window.localStorage.getItem('room_id')) {
+        this.room_id = window.localStorage.getItem('room_id');
       }
 
       this.$refs.capturer.startStream();
@@ -309,14 +321,14 @@ export default {
     },
     setRoomName(event) {
       this.room_id = event.target.value
-        .replace(/\s+/g, "-")
-        .replace(/[^a-zA-Z0-9-_]/g, "")
+        .replace(/\s+/g, '-')
+        .replace(/[^a-zA-Z0-9-_]/g, '')
         .toLowerCase();
-      window.localStorage.setItem("room_id", event.target.value);
+      window.localStorage.setItem('room_id', event.target.value);
     },
     setBandwidth(value) {
       try {
-        this.bandwidth = parseInt(externalThis.bandwidth);
+        this.bandwidth = parseInt(this.bandwidth);
       } catch (e) {
         this.bandwidth = null;
       }
@@ -341,19 +353,7 @@ export default {
     },
     onViewerCount(count) {
       this.viewerCount = count;
-    }
+    },
   },
-  mounted() {
-    // document.getElementById('enable-chat').onclick = function() {
-    //   var popup_width = 312;
-    //   var popup_height = 400;
-    //   runtimePort.postMessage({
-    //     messageFromContentScript1234: true,
-    //     openChat: true
-    //   });
-    //   window.open('chat.html','Chat','width='+popup_width+',height='+popup_height+',toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,top='+(screen.height - popup_height)+',left=' + (screen.width - popup_width - 30));
-    //   window.close();
-    // };
-  }
 };
 </script>

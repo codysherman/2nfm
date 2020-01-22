@@ -192,17 +192,17 @@ video
 </template>
 
 <script>
-import XSvg from "@/assets/svgs/x.svg";
-import LoadingSvg from "@/assets/svgs/loading.svg";
-import LogoSvg from "@/assets/svgs/logo.svg";
-import PlaySvg from "@/assets/svgs/play.svg";
-import PauseSvg from "@/assets/svgs/pause.svg";
-import FullscreenSvg from "@/assets/svgs/fullscreen.svg";
+import XSvg from '@/assets/svgs/x.svg';
+import LoadingSvg from '@/assets/svgs/loading.svg';
+import LogoSvg from '@/assets/svgs/logo.svg';
+import PlaySvg from '@/assets/svgs/play.svg';
+import PauseSvg from '@/assets/svgs/pause.svg';
+import FullscreenSvg from '@/assets/svgs/fullscreen.svg';
 
-import Connection from "@/components/Connection";
+import Connection from '@/components/Connection';
 
 export default {
-  name: "Receiver",
+  name: 'Receiver',
   components: {
     XSvg,
     LoadingSvg,
@@ -210,7 +210,7 @@ export default {
     PlaySvg,
     PauseSvg,
     FullscreenSvg,
-    Connection
+    Connection,
   },
   data() {
     return {
@@ -221,8 +221,8 @@ export default {
       statsVisible: false,
       NO_MORE: false,
       stats: {},
-      infoBarMessage: "",
-      presenceCheckWait: null // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
+      infoBarMessage: '',
+      presenceCheckWait: null, // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
     };
   },
   computed: {
@@ -234,21 +234,21 @@ export default {
       } else {
         return null;
       }
-    }
+    },
   },
   mounted() {
     window.addEventListener(
-      "offline",
+      'offline',
       () => {
-        this.infoBarMessage = "You seem to be offline.";
+        this.infoBarMessage = 'You seem to be offline.';
       },
       false
     );
 
     window.addEventListener(
-      "online",
+      'online',
       () => {
-        this.infoBarMessage = "You are back online. Reloading the page...";
+        this.infoBarMessage = 'You are back online. Reloading the page...';
         location.reload();
       },
       false
@@ -257,61 +257,61 @@ export default {
   methods: {
     onConnectionStateChanged(state) {
       switch (state.value) {
-        case Connection.STATE.NOT_HOSTED:
-          this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
-            Checking again ${this.presenceCheckWait === 60000 ? "every" : "in"}
+      case Connection.STATE.NOT_HOSTED:
+        this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
+            Checking again ${this.presenceCheckWait === 60000 ? 'every' : 'in'}
             ${this.presenceCheckWait / 1000} seconds.`;
-          break;
-        case Connection.STATE.JOINING:
-          this.infoBarMessage = `Joining room: ${this.roomName}`;
-          break;
-        case Connection.STATE.UNAUTHORIZED:
-          this.infoBarMessage = "Incorrect password";
-          break;
-        case Connection.STATE.UNAVAILABLE:
-          this.infoBarMessage =
-            "Screen share session is closed or paused. You will join automatically when share session is resumed.";
-          break;
-        case Connection.STATE.PEER_WILL_SEND:
-          this.infoBarMessage = "Remote peer is about to send his screen.";
-          break;
-        case Connection.STATE.SOCKET_CLOSED:
-          this.$refs.videoPlayer.srcObject = null;
+        break;
+      case Connection.STATE.JOINING:
+        this.infoBarMessage = `Joining room: ${this.roomName}`;
+        break;
+      case Connection.STATE.UNAUTHORIZED:
+        this.infoBarMessage = 'Incorrect password';
+        break;
+      case Connection.STATE.UNAVAILABLE:
+        this.infoBarMessage =
+            'Screen share session is closed or paused. You will join automatically when share session is resumed.';
+        break;
+      case Connection.STATE.PEER_WILL_SEND:
+        this.infoBarMessage = 'Remote peer is about to send his screen.';
+        break;
+      case Connection.STATE.SOCKET_CLOSED:
+        this.$refs.videoPlayer.srcObject = null;
 
-          this.infoBarMessage = "Screen sharing has been closed.";
-          this.hideStats();
+        this.infoBarMessage = 'Screen sharing has been closed.';
+        this.hideStats();
 
+        location.reload();
+        break;
+      case Connection.STATE.SOCKET_DISCONNECT:
+        // This is required only when ending a stream using the "share tab chrome bar" while the receiver is open.
+        this.isStream = false;
+
+        location.reload();
+        break;
+      case Connection.STATE.SOCKET_ERROR:
+        alert('Unable to connect to the server. Please try again.');
+
+        setTimeout(() => {
           location.reload();
-          break;
-        case Connection.STATE.SOCKET_DISCONNECT:
-          // This is required only when ending a stream using the "share tab chrome bar" while the receiver is open.
-          this.isStream = false;
-
-          location.reload();
-          break;
-        case Connection.STATE.SOCKET_ERROR:
-          alert("Unable to connect to the server. Please try again.");
-
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-          break;
-        case Connection.STATE.HAVE_OFFER:
-          this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
-          break;
-        case Connection.STATE.HANDSHAKE_COMPLETE:
-          this.infoBarMessage = `WebRTC handshake is completed. Waiting for remote video from: ${this.roomName}`;
-          break;
-        case Connection.STATE.CONNECTED:
-          this.isStream = true;
-          break;
-        case Connection.STATE.DISCONNECTED:
-          this.isStream = false;
-          this.infoBarMessage = "You've been disconnected. Please try again.";
-          break;
-        case Connection.STATE.GENERIC:
-          this.infoBarMessage = `${state.name}: ${state.reason}`;
-          break;
+        }, 1000);
+        break;
+      case Connection.STATE.HAVE_OFFER:
+        this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
+        break;
+      case Connection.STATE.HANDSHAKE_COMPLETE:
+        this.infoBarMessage = `WebRTC handshake is completed. Waiting for remote video from: ${this.roomName}`;
+        break;
+      case Connection.STATE.CONNECTED:
+        this.isStream = true;
+        break;
+      case Connection.STATE.DISCONNECTED:
+        this.isStream = false;
+        this.infoBarMessage = 'You\'ve been disconnected. Please try again.';
+        break;
+      case Connection.STATE.GENERIC:
+        this.infoBarMessage = `${state.name}: ${state.reason}`;
+        break;
       }
     },
     onStream(stream) {
@@ -385,13 +385,13 @@ export default {
     bytesToSize(bytes) {
       // TODO: Should this by 1024?
       var k = 1000;
-      var sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB',];
       if (bytes === 0) {
-        return "0 Bytes";
+        return '0 Bytes';
       }
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
-      return (bytes / Math.pow(k, i)).toPrecision(3) + " " + sizes[i];
-    }
-  }
+      return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+    },
+  },
 };
 </script>
