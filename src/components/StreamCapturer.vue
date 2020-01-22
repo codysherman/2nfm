@@ -15,13 +15,13 @@ export default {
     };
   },
   watch: {
-    isSharing(newValue) {
-      this.$emit('isSharing', newValue);
+    isSharing(newValue,) {
+      this.$emit('isSharing', newValue,);
     },
   },
   methods: {
     setDefaults() {
-      this.$emit('setDefaults');
+      this.$emit('setDefaults',);
       this.isSharing = false;
     },
     startStream() {
@@ -50,7 +50,7 @@ export default {
       // old todo: this may need to change (or be removed) because captureDesktop will be called to end a stream
       // this.isSharing = true;
 
-      var _resolutions = window.localStorage.getItem('resolutions');
+      var _resolutions = window.localStorage.getItem('resolutions',);
       if (!_resolutions) {
         _resolutions = 'fit-screen';
         // chrome.storage.sync.set(
@@ -102,7 +102,7 @@ export default {
       ];
 
       if (this.enableAudio) {
-        sources.push('audio');
+        sources.push('audio',);
       }
 
       // if (externalThis.enableTabCaptureAPI) {
@@ -164,7 +164,7 @@ export default {
         let captureStream;
         try {
           captureStream = await navigator.mediaDevices.getDisplayMedia(
-            constraints
+            constraints,
           );
         } catch (err) {
           this.setDefaults();
@@ -177,13 +177,13 @@ export default {
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
         if (!this.enableVideo && stream.getAudioTracks().length === 0) {
-          alert('Make sure to check the "Share audio" box in Google Chrome');
+          alert('Make sure to check the "Share audio" box in Google Chrome',);
         }
-        this.gotStream(stream);
+        this.gotStream(stream,);
       };
       startCapturing();
     },
-    gotStream(stream) {
+    gotStream(stream,) {
       if (!stream) {
         this.setDefaults();
 
@@ -205,20 +205,20 @@ export default {
 
       stream.addEventListener('inactive', () => {
         this.setDefaults();
-      });
+      },);
 
       this.addStreamStopListener(stream, () => {
         this.setDefaults();
         // chrome.runtime.reload();
-      });
+      },);
 
-      this.$emit('gotStream', stream);
+      this.$emit('gotStream', stream,);
 
       // chrome.browserAction.setIcon({
       //   path: "images/icon-active_128.png",
       // });
     },
-    addStreamStopListener(stream, callback) {
+    addStreamStopListener(stream, callback,) {
       var streamEndedEvent = 'ended';
       if ('oninactive' in stream) {
         streamEndedEvent = 'inactive';
@@ -229,28 +229,28 @@ export default {
           callback();
           callback = function() {};
         },
-        false
+        false,
       );
-      stream.getAudioTracks().forEach(function(track) {
+      stream.getAudioTracks().forEach(function(track,) {
         track.addEventListener(
           streamEndedEvent,
           function() {
             callback();
             callback = function() {};
           },
-          false
+          false,
         );
-      });
-      stream.getVideoTracks().forEach(function(track) {
+      },);
+      stream.getVideoTracks().forEach(function(track,) {
         track.addEventListener(
           streamEndedEvent,
           function() {
             callback();
             callback = function() {};
           },
-          false
+          false,
         );
-      });
+      },);
     },
   },
 };

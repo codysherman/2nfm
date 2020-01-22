@@ -270,7 +270,7 @@ export default {
       desktop_id: null,
       constraints: null,
       room_password: '',
-      room_id: window.localStorage.getItem('room_id') || '',
+      room_id: window.localStorage.getItem('room_id',) || '',
       codecs: 'default',
       bandwidth: null,
       isVideo: false,
@@ -297,7 +297,7 @@ export default {
     // };
   },
   methods: {
-    startStream(isVideo = false) {
+    startStream(isVideo = false,) {
       this.isVideo = isVideo;
 
       if (
@@ -310,8 +310,8 @@ export default {
 
       this.room_id = '';
 
-      if (window.localStorage.getItem('room_id')) {
-        this.room_id = window.localStorage.getItem('room_id');
+      if (window.localStorage.getItem('room_id',)) {
+        this.room_id = window.localStorage.getItem('room_id',);
       }
 
       this.$refs.capturer.startStream();
@@ -319,39 +319,39 @@ export default {
     stopStream() {
       this.$refs.capturer.stopStream();
     },
-    setRoomName(event) {
+    setRoomName(event,) {
       this.room_id = event.target.value
-        .replace(/\s+/g, '-')
-        .replace(/[^a-zA-Z0-9-_]/g, '')
+        .replace(/\s+/g, '-',)
+        .replace(/[^a-zA-Z0-9-_]/g, '',)
         .toLowerCase();
-      window.localStorage.setItem('room_id', event.target.value);
+      window.localStorage.setItem('room_id', event.target.value,);
     },
-    setBandwidth(value) {
+    setBandwidth(value,) {
       try {
-        this.bandwidth = parseInt(this.bandwidth);
+        this.bandwidth = parseInt(this.bandwidth,);
       } catch (e) {
         this.bandwidth = null;
       }
     },
-    setCodecs(codec) {
+    setCodecs(codec,) {
       this.codecs = codec;
     },
-    onGotStream(stream) {
+    onGotStream(stream,) {
       this.$refs.connection.shareStreamUsingRTCMultiConnection(
         stream,
-        this.isVideo
+        this.isVideo,
       );
     },
-    onSessionId(id) {
+    onSessionId(id,) {
       this.sessionId = id;
     },
     onSetDefaults() {
       this.$refs.connection.setDefaults();
     },
-    onIsSharing(isSharing) {
+    onIsSharing(isSharing,) {
       this.isSharingOn = isSharing;
     },
-    onViewerCount(count) {
+    onViewerCount(count,) {
       this.viewerCount = count;
     },
   },
