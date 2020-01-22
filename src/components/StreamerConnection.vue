@@ -3,38 +3,60 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+import io from 'socket.io-client';
 // TODO: Remove need to do this
 window.io = io;
-import adapter from "webrtc-adapter";
-import RTCMultiConnection from "rtcmulticonnection";
+import adapter from 'webrtc-adapter';
+import RTCMultiConnection from 'rtcmulticonnection';
 
-import { CodecsHandler } from "../utils/background/helpers/CodecsHandler";
-import { IceServersHandler } from "../utils/background/helpers/IceServersHandler";
+import { CodecsHandler } from '../utils/background/helpers/CodecsHandler';
+import { IceServersHandler } from '../utils/background/helpers/IceServersHandler';
 
 export default {
-  name: "StreamerConnection",
-  data() {
-    return {
-      connection: null
-    };
-  },
+  name: 'StreamerConnection',
   props: {
     bandwidth: Number,
     codecs: String,
-    room_password: String,
-    room_id: String,
-    room_url_box: Boolean
+    roomPassword: String,
+    roomId: String,
+    roomUrlBox: Boolean,
+  },
+  data() {
+    return {
+      connection: null,
+    };
+  },
+  mounted() {
+    // TODO: should probably deregister the event listener on e.g. `unmounted`
+    window.addEventListener(
+      'offline',
+      () => {
+        if (!this.connection || !this.connection.attachStreams.length) return;
+
+        this.setDefaults();
+      },
+      false
+    );
+
+    window.addEventListener(
+      'online',
+      () => {
+        if (!this.connection) return;
+
+        this.setDefaults();
+      },
+      false
+    );
   },
   methods: {
     shareStreamUsingRTCMultiConnection(stream, isVideo = false) {
       // www.RTCMultiConnection.org/docs/
       this.connection = new RTCMultiConnection();
-      this.connection.socketURL = "https://api.2n.fm:9001/";
+      this.connection.socketURL = 'https://api.2n.fm:9001/';
       this.connection.autoCloseEntireSession = true;
 
       // this must match the viewer page
-      this.connection.socketMessageEvent = "desktopCapture";
+      this.connection.socketMessageEvent = 'desktopCapture';
 
       this.connection.password = null;
       if (this.room_password && this.room_password.length) {
@@ -46,22 +68,22 @@ export default {
         audio: true,
         video: true,
         data: true,
-        oneway: true
+        oneway: true,
       };
 
       this.connection.candidates = {
         stun: true,
-        turn: true
+        turn: true,
       };
 
       this.connection.iceProtocols = {
         tcp: true,
-        udp: true
+        udp: true,
       };
 
       this.connection.optionalArgument = {
         optional: [],
-        mandatory: {}
+        mandatory: {},
       };
 
       this.connection.channel = this.connection.sessionid = this.connection.userid;
@@ -75,23 +97,23 @@ export default {
 
       this.connection.iceServers = IceServersHandler.getIceServers();
 
-      this.connection.processSdp = sdp => {
+      this.connection.processSdp = (sdp) => {
         if (this.bandwidth) {
           if (
             this.bandwidth &&
             this.bandwidth != NaN &&
-            this.bandwidth != "NaN" &&
-            typeof this.bandwidth == "number"
+            this.bandwidth != 'NaN' &&
+            typeof this.bandwidth == 'number'
           ) {
             sdp = setBandwidth(sdp, this.bandwidth);
             sdp = CodecsHandler.setVideoBitrates(sdp, {
               min: this.bandwidth,
-              max: this.bandwidth
+              max: this.bandwidth,
             });
           }
         }
 
-        if (!!this.codecs && this.codecs !== "default") {
+        if (!!this.codecs && this.codecs !== 'default') {
           sdp = CodecsHandler.preferCodec(sdp, this.codecs);
         }
         return sdp;
@@ -100,10 +122,10 @@ export default {
       // www.rtcmultiexternalThis.connection.org/docs/sdpConstraints/
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: false,
-        OfferToReceiveVideo: false
+        OfferToReceiveVideo: false,
       };
 
-      this.connection.onstream = this.connection.onstreamended = event => {
+      this.connection.onstream = this.connection.onstreamended = (event) => {
         try {
           event.mediaElement.pause();
           delete event.mediaElement;
@@ -127,7 +149,7 @@ export default {
 
       // console.log("connectionHere", externalThis.connection.attachStreams[0].getAudioTracks());
 
-      var text = "-";
+      var text = '-';
       // TODO: convert to setInterval
       const looper = () => {
         if (!this.connection) {
@@ -140,9 +162,9 @@ export default {
           return;
         }
 
-        text += " -";
+        text += ' -';
         if (text.length > 6) {
-          text = "-";
+          text = '-';
         }
 
         this.setViewerCount(text);
@@ -159,25 +181,25 @@ export default {
         }
 
         // any key-values set here should be reset in setDefaults.js
-        this.$emit("sessionId", this.connection.sessionid);
+        this.$emit('sessionId', this.connection.sessionid);
 
         // chrome.browserAction.enable();
         this.setViewerCount(0);
 
         if (this.room_url_box === true) {
-          let resultingURL = "https://2n.fm/" + this.connection.sessionid;
+          let resultingURL = 'https://2n.fm/' + this.connection.sessionid;
 
           // resultingURL = 'http://localhost:9001/?s=' + externalThis.connection.sessionid;
 
           if (this.room_password && this.room_password.length) {
-            resultingURL += "&p=" + this.room_password;
+            resultingURL += '&p=' + this.room_password;
           }
 
           if (this.bandwidth) {
-            resultingURL += "&bandwidth=" + this.bandwidth;
+            resultingURL += '&bandwidth=' + this.bandwidth;
           }
-          if (!!this.codecs && this.codecs !== "default") {
-            resultingURL += "&codecs=" + this.codecs;
+          if (!!this.codecs && this.codecs !== 'default') {
+            resultingURL += '&codecs=' + this.codecs;
           }
 
           // TODO: previous chrome.windows code that showed URL went here
@@ -185,7 +207,7 @@ export default {
 
         this.connection.socket.on(
           this.connection.socketCustomEvent,
-          message => {
+          (message) => {
             if (message.receivedYourScreen) {
               this.setViewerCount(
                 this.connection.isInitiator
@@ -197,7 +219,7 @@ export default {
         );
       };
 
-      this.connection.onSocketDisconnect = event => {
+      this.connection.onSocketDisconnect = (event) => {
         // alert('externalThis.connection to the server is closed.');
         if (this.connection.getAllParticipants().length > 0) return;
 
@@ -206,8 +228,8 @@ export default {
         // chrome.runtime.reload();
       };
 
-      this.connection.onSocketError = event => {
-        alert("Unable to connect to the server. Please try again.");
+      this.connection.onSocketError = (event) => {
+        alert('Unable to connect to the server. Please try again.');
 
         setTimeout(() => {
           this.setDefaults();
@@ -215,11 +237,11 @@ export default {
         }, 1000);
       };
 
-      this.connection.onopen = event => {
+      this.connection.onopen = (event) => {
         //
       };
 
-      this.connection.onmessage = event => {
+      this.connection.onmessage = (event) => {
         if (event.data.newChatMessage) {
           // this.runtimePort.postMessage({
           //   messageFromContentScript1234: true,
@@ -228,7 +250,7 @@ export default {
 
           this.connection.send({
             receivedChatMessage: true,
-            checkmark_id: event.data.checkmark_id
+            checkmark_id: event.data.checkmark_id,
           });
         }
 
@@ -255,15 +277,15 @@ export default {
       };
     },
     setViewerCount(count) {
-      this.$emit("viewerCount", count);
+      this.$emit('viewerCount', count);
     },
     setDefaults() {
       if (this.connection) {
         // TODO: this is getting into DesktopCapturer teritory, not sure how to move/refactor/highlight this
         // (this effectively ends DesktopCapturer and any getDisplayMedia side-effects)
-        this.connection.attachStreams.forEach(stream => {
+        this.connection.attachStreams.forEach((stream) => {
           try {
-            stream.getTracks().forEach(track => {
+            stream.getTracks().forEach((track) => {
               try {
                 track.stop();
               } catch (e) {}
@@ -299,37 +321,15 @@ export default {
       // });
 
       this.setViewerCount(0);
-    }
+    },
   },
-  mounted() {
-    // TODO: should probably deregister the event listener on e.g. `unmounted`
-    window.addEventListener(
-      "offline",
-      () => {
-        if (!this.connection || !this.connection.attachStreams.length) return;
-
-        this.setDefaults();
-      },
-      false
-    );
-
-    window.addEventListener(
-      "online",
-      () => {
-        if (!this.connection) return;
-
-        this.setDefaults();
-      },
-      false
-    );
-  }
 };
 
 function setBandwidth(sdp, value) {
-  sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "");
+  sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
   sdp = sdp.replace(
     /a=mid:video\r\n/g,
-    "a=mid:video\r\nb=AS:" + value + "\r\n"
+    'a=mid:video\r\nb=AS:' + value + '\r\n'
   );
   return sdp;
 }

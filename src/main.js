@@ -15,5 +15,5 @@ new Vue({
       this.$router.push(redirect,);
     }
   },
-  render: h => h(App,),
+  render: (h) => h(App,),
 },).$mount('#app',);

@@ -39,12 +39,12 @@
 </template>
 
 <script>
-import GitHubSvg from "@/assets/svgs/github.svg";
+import GitHubSvg from '@/assets/svgs/github.svg';
 
 export default {
-  name: "GitHubCorner",
+  name: 'GitHubCorner',
   components: {
-    GitHubSvg
-  }
+    GitHubSvg,
+  },
 };
 </script>

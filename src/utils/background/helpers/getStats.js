@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // Last time updated: 2017-11-19 4:49:44 AM UTC
 
@@ -18,47 +18,47 @@ export function getStats(mediaStreamTrack, callback, interval) {
     window.mozRTCPeerConnection ||
     window.webkitRTCPeerConnection;
 
-  if (typeof MediaStreamTrack === "undefined") {
+  if (typeof MediaStreamTrack === 'undefined') {
     MediaStreamTrack = {}; // todo?
   }
 
-  var systemNetworkType = ((navigator.connection || {}).type || "unknown")
+  var systemNetworkType = ((navigator.connection || {}).type || 'unknown')
     .toString()
     .toLowerCase();
 
   var getStatsResult = {
-    encryption: "sha-256",
+    encryption: 'sha-256',
     audio: {
       send: {
         tracks: [],
         codecs: [],
         availableBandwidth: 0,
-        streams: 0
+        streams: 0,
       },
       recv: {
         tracks: [],
         codecs: [],
         availableBandwidth: 0,
-        streams: 0
+        streams: 0,
       },
       bytesSent: 0,
-      bytesReceived: 0
+      bytesReceived: 0,
     },
     video: {
       send: {
         tracks: [],
         codecs: [],
         availableBandwidth: 0,
-        streams: 0
+        streams: 0,
       },
       recv: {
         tracks: [],
         codecs: [],
         availableBandwidth: 0,
-        streams: 0
+        streams: 0,
       },
       bytesSent: 0,
-      bytesReceived: 0
+      bytesReceived: 0,
     },
     bandwidth: {
       systemBandwidth: 0,
@@ -66,59 +66,59 @@ export function getStats(mediaStreamTrack, callback, interval) {
       encodedPerSecond: 0,
       helper: {
         audioBytesSent: 0,
-        videoBytestSent: 0
+        videoBytestSent: 0,
       },
-      speed: 0
+      speed: 0,
     },
     results: {},
     connectionType: {
       systemNetworkType: systemNetworkType,
-      systemIpAddress: "192.168.1.2",
+      systemIpAddress: '192.168.1.2',
       local: {
         candidateType: [],
         transport: [],
         ipAddress: [],
-        networkType: []
+        networkType: [],
       },
       remote: {
         candidateType: [],
         transport: [],
         ipAddress: [],
-        networkType: []
-      }
+        networkType: [],
+      },
     },
     resolutions: {
       send: {
         width: 0,
-        height: 0
+        height: 0,
       },
       recv: {
         width: 0,
-        height: 0
-      }
+        height: 0,
+      },
     },
     internal: {
       audio: {
         send: {},
-        recv: {}
+        recv: {},
       },
       video: {
         send: {},
-        recv: {}
+        recv: {},
       },
-      candidates: {}
+      candidates: {},
     },
     nomore: function() {
       nomore = true;
-    }
+    },
   };
 
   var getStatsParser = {
     checkIfOfferer: function(result) {
-      if (result.type === "googLibjingleSession") {
+      if (result.type === 'googLibjingleSession') {
         getStatsResult.isOfferer = result.googInitiator;
       }
-    }
+    },
   };
 
   var peer = this;
@@ -136,13 +136,13 @@ export function getStats(mediaStreamTrack, callback, interval) {
       !(mediaStreamTrack instanceof MediaStreamTrack) &&
       !!navigator.mozGetUserMedia
     ) {
-      throw "2nd argument is not instance of MediaStreamTrack.";
+      throw '2nd argument is not instance of MediaStreamTrack.';
     }
   } else if (
     !(mediaStreamTrack instanceof MediaStreamTrack) &&
     !!navigator.mozGetUserMedia
   ) {
-    throw "1st argument is not instance of MediaStreamTrack.";
+    throw '1st argument is not instance of MediaStreamTrack.';
   }
 
   var nomore = false;
@@ -151,15 +151,15 @@ export function getStats(mediaStreamTrack, callback, interval) {
     getStatsWrapper(function(results) {
       results.forEach(function(result) {
         Object.keys(getStatsParser).forEach(function(key) {
-          if (typeof getStatsParser[key] === "function") {
+          if (typeof getStatsParser[key] === 'function') {
             getStatsParser[key](result);
           }
         });
 
         if (
-          result.type !== "local-candidate" &&
-          result.type !== "remote-candidate" &&
-          result.type !== "candidate-pair"
+          result.type !== 'local-candidate' &&
+          result.type !== 'remote-candidate' &&
+          result.type !== 'candidate-pair'
         ) {
           // console.error('result', result);
         }
@@ -176,7 +176,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
       if (nomore === true) {
         if (getStatsResult.datachannel) {
-          getStatsResult.datachannel.state = "close";
+          getStatsResult.datachannel.state = 'close';
         }
         getStatsResult.ended = true;
       }
@@ -212,7 +212,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
   function getStatsWrapper(cb) {
     // if !peer or peer.signalingState == 'closed' then return;
 
-    if (typeof window.InstallTrigger !== "undefined") {
+    if (typeof window.InstallTrigger !== 'undefined') {
       peer.getStats(
         mediaStreamTrack,
         function(res) {
@@ -243,27 +243,27 @@ export function getStats(mediaStreamTrack, callback, interval) {
   }
 
   getStatsParser.datachannel = function(result) {
-    if (result.type !== "datachannel") return;
+    if (result.type !== 'datachannel') return;
 
     getStatsResult.datachannel = {
-      state: result.state // open or connecting
+      state: result.state, // open or connecting
     };
   };
 
   getStatsParser.googCertificate = function(result) {
-    if (result.type == "googCertificate") {
+    if (result.type == 'googCertificate') {
       getStatsResult.encryption = result.googFingerprintAlgorithm;
     }
   };
 
-  var AUDIO_codecs = ["opus", "isac", "ilbc"];
+  var AUDIO_codecs = ['opus', 'isac', 'ilbc'];
 
   getStatsParser.checkAudioTracks = function(result) {
-    if (!result.googCodecName || result.mediaType !== "audio") return;
+    if (!result.googCodecName || result.mediaType !== 'audio') return;
 
     if (AUDIO_codecs.indexOf(result.googCodecName.toLowerCase()) === -1) return;
 
-    var sendrecvType = result.id.split("_").pop();
+    var sendrecvType = result.id.split('_').pop();
 
     if (
       getStatsResult.audio[sendrecvType].codecs.indexOf(
@@ -325,16 +325,16 @@ export function getStats(mediaStreamTrack, callback, interval) {
     }
   };
 
-  var VIDEO_codecs = ["vp9", "vp8", "h264"];
+  var VIDEO_codecs = ['vp9', 'vp8', 'h264'];
 
   getStatsParser.checkVideoTracks = function(result) {
-    if (!result.googCodecName || result.mediaType !== "video") return;
+    if (!result.googCodecName || result.mediaType !== 'video') return;
 
     if (VIDEO_codecs.indexOf(result.googCodecName.toLowerCase()) === -1) return;
 
     // googCurrentDelayMs, googRenderDelayMs, googTargetDelayMs
     // transportId === 'Channel-audio-1'
-    var sendrecvType = result.id.split("_").pop();
+    var sendrecvType = result.id.split('_').pop();
 
     if (
       getStatsResult.video[sendrecvType].codecs.indexOf(
@@ -403,7 +403,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
   };
 
   getStatsParser.bweforvideo = function(result) {
-    if (result.type !== "VideoBwe") return;
+    if (result.type !== 'VideoBwe') return;
 
     getStatsResult.bandwidth.availableSendBandwidth =
       result.googAvailableSendBandwidth;
@@ -421,12 +421,12 @@ export function getStats(mediaStreamTrack, callback, interval) {
   };
 
   getStatsParser.candidatePair = function(result) {
-    if (result.type !== "googCandidatePair" && result.type !== "candidate-pair")
+    if (result.type !== 'googCandidatePair' && result.type !== 'candidate-pair')
       return;
 
     // result.googActiveConnection means either STUN or TURN is used.
 
-    if (result.googActiveConnection == "true") {
+    if (result.googActiveConnection == 'true') {
       // id === 'Conn-audio-1-0'
       // localCandidateId, remoteCandidateId
 
@@ -473,11 +473,11 @@ export function getStats(mediaStreamTrack, callback, interval) {
       }
     }
 
-    if (result.type === "candidate-pair") {
+    if (result.type === 'candidate-pair') {
       if (
         result.selected === true &&
         result.nominated === true &&
-        result.state === "succeeded"
+        result.state === 'succeeded'
       ) {
         // remoteCandidateId, localCandidateId, componentId
         var localCandidate =
@@ -496,7 +496,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var LOCAL_networkType = {};
 
   getStatsParser.localcandidate = function(result) {
-    if (result.type !== "localcandidate" && result.type !== "local-candidate")
+    if (result.type !== 'localcandidate' && result.type !== 'local-candidate')
       return;
     if (!result.id) return;
 
@@ -533,11 +533,11 @@ export function getStats(mediaStreamTrack, callback, interval) {
     if (
       result.ipAddress &&
       LOCAL_ipAddress[result.id].indexOf(
-        result.ipAddress + ":" + result.portNumber
+        result.ipAddress + ':' + result.portNumber
       ) === -1
     ) {
       LOCAL_ipAddress[result.id].push(
-        result.ipAddress + ":" + result.portNumber
+        result.ipAddress + ':' + result.portNumber
       );
     }
 
@@ -557,7 +557,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       transport: LOCAL_transport[result.id],
       timestamp: result.timestamp,
       id: result.id,
-      type: result.type
+      type: result.type,
     };
 
     getStatsResult.connectionType.local.candidateType =
@@ -574,7 +574,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var REMOTE_networkType = {};
 
   getStatsParser.remotecandidate = function(result) {
-    if (result.type !== "remotecandidate" && result.type !== "remote-candidate")
+    if (result.type !== 'remotecandidate' && result.type !== 'remote-candidate')
       return;
     if (!result.id) return;
 
@@ -611,11 +611,11 @@ export function getStats(mediaStreamTrack, callback, interval) {
     if (
       result.ipAddress &&
       REMOTE_ipAddress[result.id].indexOf(
-        result.ipAddress + ":" + result.portNumber
+        result.ipAddress + ':' + result.portNumber
       ) === -1
     ) {
       REMOTE_ipAddress[result.id].push(
-        result.ipAddress + ":" + result.portNumber
+        result.ipAddress + ':' + result.portNumber
       );
     }
 
@@ -635,7 +635,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       transport: REMOTE_transport[result.id],
       timestamp: result.timestamp,
       id: result.id,
-      type: result.type
+      type: result.type,
     };
 
     getStatsResult.connectionType.remote.candidateType =
@@ -651,7 +651,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
   getStatsParser.dataSentReceived = function(result) {
     if (
       !result.googCodecName ||
-      (result.mediaType !== "video" && result.mediaType !== "audio")
+      (result.mediaType !== 'video' && result.mediaType !== 'audio')
     )
       return;
 
@@ -669,22 +669,22 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var SSRC = {
     audio: {
       send: [],
-      recv: []
+      recv: [],
     },
     video: {
       send: [],
-      recv: []
-    }
+      recv: [],
+    },
   };
 
   getStatsParser.ssrc = function(result) {
     if (
       !result.googCodecName ||
-      (result.mediaType !== "video" && result.mediaType !== "audio")
+      (result.mediaType !== 'video' && result.mediaType !== 'audio')
     )
       return;
-    if (result.type !== "ssrc") return;
-    var sendrecvType = result.id.split("_").pop();
+    if (result.type !== 'ssrc') return;
+    var sendrecvType = result.id.split('_').pop();
 
     if (SSRC[result.mediaType][sendrecvType].indexOf(result.ssrc) === -1) {
       SSRC[result.mediaType][sendrecvType].push(result.ssrc);

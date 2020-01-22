@@ -385,7 +385,7 @@ export default {
     bytesToSize(bytes,) {
       // TODO: Should this by 1024?
       var k = 1000;
-      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB',];
+      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
       if (bytes === 0) {
         return '0 Bytes';
       }
