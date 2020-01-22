@@ -20,7 +20,8 @@ module.exports = {
     // we should always disable console logs and debugging in production
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'comma-dangle': ['error', 'always',],
+    'comma-dangle': ['error', 'always-multiline',],
+    'arrow-parens': ['error', 'always',],
     'indent': ['error', 2,],
     'max-len': ['error', { 'code': 100, 'tabWidth': 2, },],
     'quotes': ['error', 'single',],
