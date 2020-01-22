@@ -152,7 +152,7 @@ export default {
     this.connection.onJoinWithPassword = (remoteUserId) => {
       if (!this.params.p) {
         this.params.p = prompt(
-          remoteUserId + ' is password protected. Please enter the pasword:'
+          remoteUserId + ' is password protected. Please enter the pasword:',
         );
       }
 
@@ -165,7 +165,7 @@ export default {
         remoteUserId +
           ' is password protected. Your entered wrong password (' +
           oldPassword +
-          '). Please enter valid pasword:'
+          '). Please enter valid pasword:',
       );
       this.connection.password = password;
       this.connection.join(remoteUserId);
@@ -174,7 +174,7 @@ export default {
     this.connection.onPasswordMaxTriesOver = (remoteUserId) => {
       alert(
         remoteUserId +
-          ' is password protected. Your max password tries exceeded the limit.'
+          ' is password protected. Your max password tries exceeded the limit.',
       );
     };
 
@@ -226,7 +226,7 @@ export default {
           (stats) => {
             this.onGettingWebRTCStats(stats, event.userid);
           },
-          1000
+          1000,
         );
       } else if (event.iceConnectionState === 'disconnected') {
         this.$emit('state', { value: STATE.DISCONNECTED });
@@ -247,7 +247,7 @@ export default {
             // (maybe, this could also be solved by just making the infobarMessage a computed in Receiver.vue)
             setTimeout(
               () => this.$emit('state', { value: STATE.NOT_HOSTED }),
-              0
+              0,
             );
 
             setTimeout(() => this.checkPresence(), this.presenceCheckWait);
@@ -262,7 +262,7 @@ export default {
           }
 
           this.connection.join(this.roomName);
-        }
+        },
       );
     },
     onGettingWebRTCStats(stats, userid) {

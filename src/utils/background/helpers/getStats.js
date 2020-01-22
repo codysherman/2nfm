@@ -222,7 +222,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
           });
           cb(items);
         },
-        cb
+        cb,
       );
     } else {
       peer.getStats(function(res) {
@@ -267,7 +267,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
     if (
       getStatsResult.audio[sendrecvType].codecs.indexOf(
-        result.googCodecName
+        result.googCodecName,
       ) === -1
     ) {
       getStatsResult.audio[sendrecvType].codecs.push(result.googCodecName);
@@ -291,7 +291,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       }
 
       getStatsResult.audio[sendrecvType].availableBandwidth = kilobytes.toFixed(
-        1
+        1,
       );
     }
 
@@ -313,7 +313,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       }
 
       getStatsResult.audio[sendrecvType].availableBandwidth = kilobytes.toFixed(
-        1
+        1,
       );
     }
 
@@ -338,7 +338,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
     if (
       getStatsResult.video[sendrecvType].codecs.indexOf(
-        result.googCodecName
+        result.googCodecName,
       ) === -1
     ) {
       getStatsResult.video[sendrecvType].codecs.push(result.googCodecName);
@@ -377,7 +377,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
     }
 
     getStatsResult.video[sendrecvType].availableBandwidth = kilobytes.toFixed(
-      1
+      1,
     );
 
     if (result.googFrameHeightReceived && result.googFrameWidthReceived) {
@@ -533,11 +533,11 @@ export function getStats(mediaStreamTrack, callback, interval) {
     if (
       result.ipAddress &&
       LOCAL_ipAddress[result.id].indexOf(
-        result.ipAddress + ':' + result.portNumber
+        result.ipAddress + ':' + result.portNumber,
       ) === -1
     ) {
       LOCAL_ipAddress[result.id].push(
-        result.ipAddress + ':' + result.portNumber
+        result.ipAddress + ':' + result.portNumber,
       );
     }
 
@@ -611,11 +611,11 @@ export function getStats(mediaStreamTrack, callback, interval) {
     if (
       result.ipAddress &&
       REMOTE_ipAddress[result.id].indexOf(
-        result.ipAddress + ':' + result.portNumber
+        result.ipAddress + ':' + result.portNumber,
       ) === -1
     ) {
       REMOTE_ipAddress[result.id].push(
-        result.ipAddress + ':' + result.portNumber
+        result.ipAddress + ':' + result.portNumber,
       );
     }
 
@@ -661,7 +661,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
     if (result.bytesReceived) {
       getStatsResult[result.mediaType].bytesReceived = parseInt(
-        result.bytesReceived
+        result.bytesReceived,
       );
     }
   };

@@ -275,7 +275,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
       capturedStream = canvas.mozCaptureStream();
     } else if (!self.disableLogs) {
       console.error(
-        'Upgrade to latest Chrome or otherwise enable this flag: chrome://flags/#enable-experimental-web-platform-features'
+        'Upgrade to latest Chrome or otherwise enable this flag: chrome://flags/#enable-experimental-web-platform-features',
       );
     }
 

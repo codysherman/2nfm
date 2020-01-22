@@ -35,7 +35,7 @@ export default {
 
         this.setDefaults();
       },
-      false
+      false,
     );
 
     window.addEventListener(
@@ -45,7 +45,7 @@ export default {
 
         this.setDefaults();
       },
-      false
+      false,
     );
   },
   methods: {
@@ -143,7 +143,7 @@ export default {
         this.connection.attachStreams[0].getVideoTracks().length > 0
       ) {
         this.connection.attachStreams[0].removeTrack(
-          this.connection.attachStreams[0].getVideoTracks()[0]
+          this.connection.attachStreams[0].getVideoTracks()[0],
         );
       }
 
@@ -212,10 +212,10 @@ export default {
               this.setViewerCount(
                 this.connection.isInitiator
                   ? this.connection.getAllParticipants().length
-                  : 0
+                  : 0,
               );
             }
-          }
+          },
         );
       };
 
@@ -272,7 +272,7 @@ export default {
           // sendTabTitle();
         }
         this.setViewerCount(
-          this.connection.isInitiator ? participantsCount : 0
+          this.connection.isInitiator ? participantsCount : 0,
         );
       };
     },
@@ -329,7 +329,7 @@ function setBandwidth(sdp, value) {
   sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
   sdp = sdp.replace(
     /a=mid:video\r\n/g,
-    'a=mid:video\r\nb=AS:' + value + '\r\n'
+    'a=mid:video\r\nb=AS:' + value + '\r\n',
   );
   return sdp;
 }

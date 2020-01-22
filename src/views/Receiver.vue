@@ -255,7 +255,7 @@ export default {
     );
   },
   methods: {
-    onConnectionStateChanged(state,) {
+    onConnectionStateChanged(state) {
       switch (state.value) {
       case ReceiverConnection.STATE.NOT_HOSTED:
         this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
@@ -290,11 +290,11 @@ export default {
         location.reload();
         break;
       case ReceiverConnection.STATE.SOCKET_ERROR:
-        alert('Unable to connect to the server. Please try again.',);
+        alert('Unable to connect to the server. Please try again.');
 
         setTimeout(() => {
           location.reload();
-        }, 1000,);
+        }, 1000);
         break;
       case ReceiverConnection.STATE.HAVE_OFFER:
         this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
@@ -314,7 +314,7 @@ export default {
         break;
       }
     },
-    onStream(stream,) {
+    onStream(stream) {
       this.$refs.videoPlayer.srcObject = null;
       this.$refs.audioPlayer.srcObject = null;
       this.stream = stream;
@@ -334,10 +334,10 @@ export default {
       }
       this.playMedia();
     },
-    onPresenceCheckWait(newValue,) {
+    onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
     },
-    onStats(stats,) {
+    onStats(stats) {
       if (this.NO_MORE) {
         stats.nomore();
         return;
@@ -360,7 +360,7 @@ export default {
         this.isPlaying = false;
       }
     },
-    setVolume(event,) {
+    setVolume(event) {
       this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
       this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
     },
@@ -382,15 +382,15 @@ export default {
       this.statsVisible = false;
       this.NO_MORE = true;
     },
-    bytesToSize(bytes,) {
+    bytesToSize(bytes) {
       // TODO: Should this by 1024?
       var k = 1000;
       var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
       if (bytes === 0) {
         return '0 Bytes';
       }
-      var i = parseInt(Math.floor(Math.log(bytes,) / Math.log(k,),), 10,);
-      return (bytes / Math.pow(k, i,)).toPrecision(3,) + ' ' + sizes[i];
+      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
+      return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
     },
   },
 };

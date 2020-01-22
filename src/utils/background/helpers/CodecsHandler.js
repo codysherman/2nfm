@@ -157,7 +157,7 @@ export var CodecsHandler = (function() {
   function removeNonG722(sdp) {
     return sdp.replace(
       /m=audio ([0-9]+) RTP\/SAVPF ([0-9 ]*)/g,
-      'm=audio $1 RTP/SAVPF 9'
+      'm=audio $1 RTP/SAVPF 9',
     );
   }
 
@@ -173,11 +173,11 @@ export var CodecsHandler = (function() {
     if (isScreen) {
       if (!bandwidth.screen) {
         console.warn(
-          'It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.'
+          'It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.',
         );
       } else if (bandwidth.screen < 300) {
         console.warn(
-          'It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.'
+          'It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.',
         );
       }
     }
@@ -187,7 +187,7 @@ export var CodecsHandler = (function() {
       sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
       sdp = sdp.replace(
         /a=mid:video\r\n/g,
-        'a=mid:video\r\nb=AS:' + bandwidth.screen + '\r\n'
+        'a=mid:video\r\nb=AS:' + bandwidth.screen + '\r\n',
       );
     }
 
@@ -199,19 +199,19 @@ export var CodecsHandler = (function() {
     if (bandwidth.audio) {
       sdp = sdp.replace(
         /a=mid:audio\r\n/g,
-        'a=mid:audio\r\nb=AS:' + bandwidth.audio + '\r\n'
+        'a=mid:audio\r\nb=AS:' + bandwidth.audio + '\r\n',
       );
     }
 
     if (bandwidth.screen) {
       sdp = sdp.replace(
         /a=mid:video\r\n/g,
-        'a=mid:video\r\nb=AS:' + bandwidth.screen + '\r\n'
+        'a=mid:video\r\nb=AS:' + bandwidth.screen + '\r\n',
       );
     } else if (bandwidth.video) {
       sdp = sdp.replace(
         /a=mid:video\r\n/g,
-        'a=mid:video\r\nb=AS:' + bandwidth.video + '\r\n'
+        'a=mid:video\r\nb=AS:' + bandwidth.video + '\r\n',
       );
     }
 
@@ -278,7 +278,7 @@ export var CodecsHandler = (function() {
 
     var rtxFmtpLineIndex = findLine(
       sdpLines,
-      'a=fmtp:' + rtxPayload.toString()
+      'a=fmtp:' + rtxPayload.toString(),
     );
     if (rtxFmtpLineIndex !== null) {
       var appendrtxNext = '\r\n';
@@ -290,7 +290,7 @@ export var CodecsHandler = (function() {
         '; x-google-max-bitrate=' +
         (xgoogle_max_bitrate || '228');
       sdpLines[rtxFmtpLineIndex] = sdpLines[rtxFmtpLineIndex].concat(
-        appendrtxNext
+        appendrtxNext,
       );
       sdp = sdpLines.join('\r\n');
     }
@@ -316,7 +316,7 @@ export var CodecsHandler = (function() {
 
     var opusFmtpLineIndex = findLine(
       sdpLines,
-      'a=fmtp:' + opusPayload.toString()
+      'a=fmtp:' + opusPayload.toString(),
     );
     if (opusFmtpLineIndex === null) {
       return sdp;
@@ -359,7 +359,7 @@ export var CodecsHandler = (function() {
     }
 
     sdpLines[opusFmtpLineIndex] = sdpLines[opusFmtpLineIndex].concat(
-      appendOpusNext
+      appendOpusNext,
     );
 
     sdp = sdpLines.join('\r\n');
@@ -388,7 +388,7 @@ export var CodecsHandler = (function() {
     }
     if (fmtpLineIndex === null) return sdp;
     sdpLines[fmtpLineIndex] = sdpLines[fmtpLineIndex].concat(
-      '; stereo=1; sprop-stereo=1'
+      '; stereo=1; sprop-stereo=1',
     );
     sdp = sdpLines.join('\r\n');
     return sdp;

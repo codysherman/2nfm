@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     goToRoom() {
-      this.$router.push(this.roomId,);
+      this.$router.push(this.roomId);
     },
   },
 };
