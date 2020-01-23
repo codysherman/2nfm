@@ -160,13 +160,13 @@ video
       XSvg
     #stats-bar-html
       div(v-if="stats.video.recv.codecs.length > 0")
-        {{ `Video: ${stats.video.recv.codecs}` }}
+        | {{ `Video: ${stats.video.recv.codecs}` }}
       div(v-if="stats.video.recv.codecs.length > 0")
-        {{ `Resolution: ${stats.resolutions.recv.width}x${stats.resolutions.recv.height}` }}
+        | {{ `Resolution: ${stats.resolutions.recv.width}x${stats.resolutions.recv.height}` }}
       div(v-if="stats.audio.recv.codecs.length > 0")
-        {{ `Audio: ${stats.audio.recv.codecs}` }}
+        | {{ `Audio: ${stats.audio.recv.codecs}` }}
       div
-        {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
+        | {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
     LoadingSvg#loading-logo(v-if="!isStream")
     LogoSvg#logo(v-if="isStream")
