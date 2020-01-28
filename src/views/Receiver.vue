@@ -189,7 +189,14 @@ video
         )
           PlaySvg(v-if="!isPlaying")
           PauseSvg(v-else)
-        input#volume-slider(type="range" min="0" max="100" value="50" step="1" @change="setVolume")
+        input#volume-slider(
+          type="range" 
+          min="0" 
+          max="100" 
+          v-model="value" 
+          step="1" 
+          @change="setVolume"
+        )
       button#fullscreen-button.button-none(
         type="button"
         v-if="stream.isVideo"
@@ -232,6 +239,7 @@ export default {
       isStream: false,
       isPlaying: false,
       statsVisible: false,
+      value: getVolLocalStorage() * 100,
       NO_MORE: false,
       stats: {},
       infoBarMessage: '',
@@ -240,6 +248,10 @@ export default {
     };
   },
   computed: {
+    // userVol() {
+    //   console.log('1',this.user_vol)
+    //   return this.user_vol
+    // },
     player() {
       if (this.stream.isVideo) {
         return this.$refs.videoPlayer;
@@ -345,11 +357,11 @@ export default {
         if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
           this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
         }
-        this.$refs.videoPlayer.volume = 0.5;
+        this.$refs.videoPlayer.volume = getVolLocalStorage();
       } else {
         this.$refs.audioPlayer.srcObject = this.stream;
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        this.$refs.audioPlayer.volume = 0.5;
+        this.$refs.audioPlayer.volume = getVolLocalStorage();
       }
       this.playMedia();
     },
@@ -382,6 +394,9 @@ export default {
     setVolume(event) {
       this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
       this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
+      localStorage.setItem('volume_num', event.srcElement.valueAsNumber / 100);
+      console.log('2',this.$refs.audioPlayer.volume)
+
     },
     fullscreenVideo() {
       if (this.$refs.videoPlayer.requestFullscreen)
@@ -413,4 +428,11 @@ export default {
     },
   },
 };
+
+function getVolLocalStorage () {
+  
+  const valueFromStorage = window.localStorage.getItem('volume_num')
+  const parsedNumVol= parseFloat(valueFromStorage)
+  return  isNaN(parsedNumVol) ? 0.5 : parsedNumVol
+}
 </script>
