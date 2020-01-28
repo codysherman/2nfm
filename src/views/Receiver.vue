@@ -248,10 +248,6 @@ export default {
     };
   },
   computed: {
-    // userVol() {
-    //   console.log('1',this.user_vol)
-    //   return this.user_vol
-    // },
     player() {
       if (this.stream.isVideo) {
         return this.$refs.videoPlayer;
@@ -395,7 +391,6 @@ export default {
       this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
       this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
       localStorage.setItem('volume_num', event.srcElement.valueAsNumber / 100);
-      console.log('2',this.$refs.audioPlayer.volume)
 
     },
     fullscreenVideo() {
