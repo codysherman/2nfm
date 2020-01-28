@@ -7,6 +7,5 @@
   ],
   "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true
-  },
-  "vetur.validation.template": false
+  }
 }
