@@ -16,6 +16,9 @@ module.exports = {
     'eslint:recommended',
     'plugin:vue/recommended',
   ],
+  plugins: [
+    'import',
+  ],
   rules: {
     // we should always disable console logs and debugging in production
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
@@ -29,6 +32,7 @@ module.exports = {
       'exports': 'always-multiline',
       'functions': 'always-multiline',
     }],
+    'import/extensions': ['error', 'ignorePackages'],
     'indent': ['error', 2],
     'max-len': ['error', { 'code': 100, 'tabWidth': 2 }],
     'quotes': ['error', 'single'],

@@ -13,8 +13,8 @@ import adapter from 'webrtc-adapter';
 
 import RTCMultiConnection from 'rtcmulticonnection';
 
-import { CodecsHandler } from '../utils/background/helpers/CodecsHandler';
-import { IceServersHandler } from '../utils/background/helpers/IceServersHandler';
+import { CodecsHandler } from '../utils/background/helpers/CodecsHandler.js';
+import { IceServersHandler } from '../utils/background/helpers/IceServersHandler.js';
 
 export default {
   name: 'StreamerConnection',
