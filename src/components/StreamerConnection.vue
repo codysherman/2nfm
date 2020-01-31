@@ -19,11 +19,26 @@ import { IceServersHandler } from '../utils/background/helpers/IceServersHandler
 export default {
   name: 'StreamerConnection',
   props: {
-    bandwidth: Number,
-    codecs: String,
-    roomPassword: String,
-    roomId: String,
-    roomUrlBox: Boolean,
+    bandwidth: {
+      type: Number,
+      default: 8192,
+    },
+    codecs: {
+      type: String,
+      default: 'default',
+    },
+    roomPassword: {
+      type: String,
+      default: '',
+    },
+    roomId: {
+      type: String,
+      default: '',
+    },
+    roomUrlBox: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {

@@ -44,7 +44,10 @@ export default {
   name: 'ReceiverConnection',
   STATE, // export so Receiver.vue can compare values for `state` event/emitter
   props: {
-    roomName: String,
+    roomName: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
