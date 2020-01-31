@@ -78,8 +78,8 @@ export default {
       this.connection.socketMessageEvent = 'desktopCapture';
 
       this.connection.password = null;
-      if (this.room_password && this.room_password.length) {
-        this.connection.password = this.room_password;
+      if (this.roomPassword && this.roomPassword.length) {
+        this.connection.password = this.roomPassword;
       }
 
       this.connection.enableLogs = false;
@@ -107,8 +107,8 @@ export default {
 
       this.connection.channel = this.connection.sessionid = this.connection.userid;
 
-      if (this.room_id && this.room_id.length) {
-        this.connection.channel = this.connection.sessionid = this.connection.userid = this.room_id;
+      if (this.roomId && this.roomId.length) {
+        this.connection.channel = this.connection.sessionid = this.connection.userid = this.roomId;
       }
 
       this.connection.autoReDialOnFailure = true;
@@ -205,13 +205,13 @@ export default {
         // chrome.browserAction.enable();
         this.setViewerCount(0);
 
-        // if (this.room_url_box === true) {
+        // if (this.roomUrlBox === true) {
         //   let resultingURL = 'https://2n.fm/' + this.connection.sessionid;
 
         //   // resultingURL = 'http://localhost:9001/?s=' + externalThis.connection.sessionid;
 
-        //   if (this.room_password && this.room_password.length) {
-        //     resultingURL += '&p=' + this.room_password;
+        //   if (this.roomPassword && this.roomPassword.length) {
+        //     resultingURL += '&p=' + this.roomPassword;
         //   }
 
         //   if (this.bandwidth) {

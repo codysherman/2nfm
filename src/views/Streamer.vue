@@ -150,9 +150,9 @@
     ref="connection"
     :bandwidth="bandwidth"
     :codecs="codecs"
-    :room_id="room_id"
-    :room_password="room_password"
-    :room_url_box="room_url_box"
+    :roomId="room_id"
+    :roomPassword="room_password"
+    :roomUrlBox="room_url_box"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
   )
