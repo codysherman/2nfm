@@ -93,7 +93,7 @@
 
 <script>
 import LogoSvg from '@/assets/svgs/logo.svg';
-import GitHubCorner from '@/components/GitHubCorner';
+import GitHubCorner from '@/components/GitHubCorner.vue';
 
 export default {
   name: 'Home',

@@ -261,8 +261,8 @@ import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
 
-import DesktopCapturer from '@/components/DesktopCapturer';
-import StreamerConnection from '@/components/StreamerConnection';
+import DesktopCapturer from '@/components/DesktopCapturer.vue';
+import StreamerConnection from '@/components/StreamerConnection.vue';
 
 export default {
   name: 'Streamer',

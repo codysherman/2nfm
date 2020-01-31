@@ -212,7 +212,7 @@ import PlaySvg from '@/assets/svgs/play.svg';
 import PauseSvg from '@/assets/svgs/pause.svg';
 import FullscreenSvg from '@/assets/svgs/fullscreen.svg';
 
-import ReceiverConnection from '@/components/ReceiverConnection';
+import ReceiverConnection from '@/components/ReceiverConnection.vue';
 
 export default {
   name: 'Receiver',
