@@ -28,6 +28,7 @@
     "lint-staged": "^8.1.5",
     "node-sass": "^4.13.0",
     "sass-loader": "^7.0.0",
+    "source-map": "^0.7.3",
     "vue-cli-plugin-pug": "^1.0.7",
     "vue-svg-loader": "^0.15.0",
     "vue-template-compiler": "^2.6.11"
