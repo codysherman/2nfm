@@ -152,7 +152,6 @@
     :codecs="codecs"
     :roomId="room_id"
     :roomPassword="room_password"
-    :roomUrlBox="room_url_box"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
   )
@@ -202,21 +201,6 @@
               label
                 | Room Password
                 input#room_password(type="password" value="" placeholder="Optional")
-          // NOTE: Keep this for now as example of checkbox
-          //
-            <div class="col-xs-1-2">
-            <div class="settings-item">
-            <label>
-            Show URL Share Popup
-            <input
-            type="checkbox"
-            id="room_url_box"
-            class="mt-10"
-            checked
-            />
-            </label>
-            </div>
-            </div>
       section#stream-section
         #start
           .label Start
@@ -286,7 +270,6 @@ export default {
       bandwidth: null,
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
-      room_url_box: true,
       viewerCount: 0,
     };
   },

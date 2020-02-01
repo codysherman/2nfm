@@ -35,10 +35,6 @@ export default {
       type: String,
       default: '',
     },
-    roomUrlBox: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -203,25 +199,6 @@ export default {
         this.$emit('sessionId', this.connection.sessionid);
 
         this.setViewerCount(0);
-
-        // if (this.roomUrlBox === true) {
-        //   let resultingURL = 'https://2n.fm/' + this.connection.sessionid;
-
-        //   // resultingURL = 'http://localhost:9001/?s=' + externalThis.connection.sessionid;
-
-        //   if (this.roomPassword && this.roomPassword.length) {
-        //     resultingURL += '&p=' + this.roomPassword;
-        //   }
-
-        //   if (this.bandwidth) {
-        //     resultingURL += '&bandwidth=' + this.bandwidth;
-        //   }
-        //   if (!!this.codecs && this.codecs !== 'default') {
-        //     resultingURL += '&codecs=' + this.codecs;
-        //   }
-
-        //   // TODO: previous chrome.windows code that showed URL went here
-        // }
 
         this.connection.socket.on(
           this.connection.socketCustomEvent,
