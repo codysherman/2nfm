@@ -2,10 +2,6 @@
 </template>
 
 <script>
-import io from 'socket.io-client';
-// TODO: Remove need to do this
-window.io = io;
-
 // NOTE: needs to be imported for back-compat, but not referenced
 // eslint-disable-next-line no-unused-vars
 import adapter from 'webrtc-adapter';
