@@ -269,8 +269,6 @@ export default {
     },
     setDefaults() {
       if (this.connection) {
-        // TODO: this is getting into DesktopCapturer teritory, not sure how to refactor/highlight
-        // (this effectively ends DesktopCapturer and any getDisplayMedia side-effects)
         this.connection.attachStreams.forEach((stream) => {
           try {
             stream.getTracks().forEach((track) => {
