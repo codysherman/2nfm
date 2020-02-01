@@ -402,7 +402,7 @@ export default {
       this.NO_MORE = true;
     },
     bytesToSize(bytes) {
-      // TODO: Should this by 1024?
+      // TODO: Should this be 1024?
       var k = 1000;
       var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
       if (bytes === 0) {
