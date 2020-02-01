@@ -20,7 +20,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
   if (typeof MediaStreamTrack === 'undefined') {
     // eslint-disable-next-line
-    MediaStreamTrack = {}; // todo?
+    MediaStreamTrack = {};
   }
 
   var systemNetworkType = ((navigator.connection || {}).type || 'unknown')
