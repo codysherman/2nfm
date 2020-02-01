@@ -92,24 +92,24 @@
 </template>
 
 <script>
-import LogoSvg from "@/assets/svgs/logo.svg";
-import GitHubCorner from "@/components/GitHubCorner";
+import LogoSvg from '@/assets/svgs/logo.svg';
+import GitHubCorner from '@/components/GitHubCorner.vue';
 
 export default {
-  name: "home",
+  name: 'Home',
   components: {
     LogoSvg,
-    GitHubCorner
+    GitHubCorner,
   },
   data() {
     return {
-      roomId: ""
+      roomId: '',
     };
   },
   methods: {
     goToRoom() {
       this.$router.push(this.roomId);
-    }
-  }
+    },
+  },
 };
 </script>

@@ -139,6 +139,22 @@
 
 <template lang="pug">
 .frow.centered
+  DesktopCapturer(
+    ref="capturer"
+    :enableVideo="isVideo"
+    @isSharing="onIsSharing"
+    @gotStream="onGotStream"
+    @setDefaults="onSetDefaults"
+  )
+  StreamerConnection(
+    ref="connection"
+    :bandwidth="bandwidth"
+    :codecs="codecs"
+    :roomId="room_id"
+    :roomPassword="room_password"
+    @sessionId="onSessionId"
+    @viewerCount="onViewerCount"
+  )
   .col-md-1-2
     LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
@@ -165,7 +181,7 @@
             .settings-item
               label
                 | Codec
-                select#codecs
+                select#codecs(@change="setCodecs")
                   option(value="default" selected="") Default (VP8)
                   option(value="vp8") VP8
                   option(value="vp9") VP9
@@ -174,43 +190,35 @@
             .settings-item.mb-0
               label
                 | Bandwidth
-                input#bandwidth(type="text" value="" placeholder="Optional: 8192, 1048, 512, etc.")
+                input#bandwidth(
+                  type="text"
+                  value=""
+                  placeholder="Optional: 8192, 1048, 512, etc."
+                  @change="setBandwidth"
+                )
           .col-xs-1-2
             .settings-item.mb-0
               label
                 | Room Password
                 input#room_password(type="password" value="" placeholder="Optional")
-          // NOTE: Keep this for now as example of checkbox
-          //
-            <div class="col-xs-1-2">
-            <div class="settings-item">
-            <label>
-            Show URL Share Popup
-            <input
-            type="checkbox"
-            id="room_url_box"
-            class="mt-10"
-            checked
-            />
-            </label>
-            </div>
-            </div>
       section#stream-section
         #start
           .label Start
           .frow.gutters
             .col-xs-1-2
-              #video-button.stream-button(@click="startVideoStream")
+              #video-button.stream-button(@click="startStream(true)")
                 .frow.column-center
                   VideoSvg
                   | Video
             .col-xs-1-2
-              #audio-button.stream-button(@click="startAudioStream")
+              #audio-button.stream-button(@click="startStream()")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
     section#stop-section(v-if="isSharingOn && sessionId")
-      //- router-link#public-link(to="{query: { s: sessionId, p: room_password }}`}" target="_blank")
+      //- router-link#public-link(
+      //-   to="{query: { s: sessionId, p: room_password }}`}" target="_blank"
+      //- )
       router-link#public-link(:to="sessionId" target="_blank")
         | {{ `2n.fm/${sessionId}` }}
       .viewer-count
@@ -219,7 +227,11 @@
       button#stop-sharing(type="button" @click="stopStream")
         | End Sharing
     .frow.width-100.mt-20
-      a.text-underline(href="https://caniuse.com/#search=getDisplayMedia" rel="noreferrer" target="_blank")
+      a.text-underline(
+        href="https://caniuse.com/#search=getDisplayMedia"
+        rel="noreferrer"
+        target="_blank"
+      )
         | OS and Browser Limitations
       //
         <div id="enable-chat">
@@ -229,80 +241,42 @@
 </template>
 
 <script>
-import LogoSvg from "@/assets/svgs/logo.svg";
-import VideoSvg from "@/assets/svgs/video.svg";
-import AudioSvg from "@/assets/svgs/audio.svg";
-import io from "socket.io-client";
-// TODO: Remove need to do this
-window.io = io;
-import adapter from "webrtc-adapter";
-import RTCMultiConnection from "rtcmulticonnection";
+import LogoSvg from '@/assets/svgs/logo.svg';
+import VideoSvg from '@/assets/svgs/video.svg';
+import AudioSvg from '@/assets/svgs/audio.svg';
 
-// import * as globals from "@/utils/background/globals.js";
-import { setDefaults } from "@/utils/background/setDefaults.js";
-import { captureDesktop } from "@/utils/background/captureDesktop.js";
+import DesktopCapturer from '@/components/DesktopCapturer.vue';
+import StreamerConnection from '@/components/StreamerConnection.vue';
 
 export default {
-  name: "Streamer",
+  name: 'Streamer',
   components: {
     LogoSvg,
     VideoSvg,
-    AudioSvg
+    AudioSvg,
+    DesktopCapturer,
+    StreamerConnection,
   },
   data() {
     return {
-      stream: null,
       isSharingOn: false,
       // sessionId aka room name
       sessionId: null,
       desktop_id: null,
       constraints: null,
-      room_password: "",
-      room_id: window.localStorage.getItem("room_id") || "",
-      codecs: "default",
+      room_password: '',
+      room_id: window.localStorage.getItem('room_id') || '',
+      codecs: 'default',
       bandwidth: null,
-      enableVideo: false,
-      enableAudio: false,
-      streaming_method: "RTCMultiConnection",
-      room_url_box: "true",
-      viewerCount: 0
+      isVideo: false,
+      streaming_method: 'RTCMultiConnection',
+      viewerCount: 0,
     };
   },
   computed: {
     roomName() {
       return this.room_id || this.sessionId;
-    }
-  },
-  methods: {
-    startVideoStream() {
-      setDefaults(this);
-      this.isSharingOn = true;
-      this.enableVideo = true;
-      this.enableAudio = true;
-      captureDesktop(this);
     },
-    startAudioStream() {
-      setDefaults(this);
-      this.isSharingOn = true;
-      this.enableVideo = false;
-      this.enableAudio = true;
-      captureDesktop(this);
-    },
-    stopStream() {
-      this.isSharingOn = false;
-      captureDesktop(this);
-      // runtimePort.postMessage({
-      //   messageFromContentScript1234: true,
-      //   stopSharing: true,
-      // });
-    },
-    setRoomName(event) {
-      this.room_id = event.target.value
-        .replace(/\s+/g, "-")
-        .replace(/[^a-zA-Z0-9-_]/g, "")
-        .toLowerCase();
-      window.localStorage.setItem("room_id", event.target.value);
-    }
   },
   mounted() {
     // document.getElementById('enable-chat').onclick = function() {
@@ -312,9 +286,70 @@ export default {
     //     messageFromContentScript1234: true,
     //     openChat: true
     //   });
-    //   window.open('chat.html','Chat','width='+popup_width+',height='+popup_height+',toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,top='+(screen.height - popup_height)+',left=' + (screen.width - popup_width - 30));
+    //   window.open('chat.html','Chat','width='+popup_width+',height='+popup_height
+    //     +',toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=0,top='
+    //     +(screen.height - popup_height)+',left=' + (screen.width - popup_width - 30));
     //   window.close();
     // };
-  }
+  },
+  methods: {
+    startStream(isVideo = false) {
+      this.isVideo = isVideo;
+
+      if (
+        this.$refs.connection.connection &&
+        this.$refs.connection.connection.attachStreams[0]
+      ) {
+        this.onSetDefaults();
+        return;
+      }
+
+      this.room_id = '';
+
+      if (window.localStorage.getItem('room_id')) {
+        this.room_id = window.localStorage.getItem('room_id');
+      }
+
+      this.$refs.capturer.startStream();
+    },
+    stopStream() {
+      this.$refs.capturer.stopStream();
+    },
+    setRoomName(event) {
+      this.room_id = event.target.value
+        .replace(/\s+/g, '-')
+        .replace(/[^a-zA-Z0-9-_]/g, '')
+        .toLowerCase();
+      window.localStorage.setItem('room_id', event.target.value);
+    },
+    setBandwidth(value) {
+      try {
+        this.bandwidth = parseInt(value);
+      } catch (e) {
+        this.bandwidth = null;
+      }
+    },
+    setCodecs(codec) {
+      this.codecs = codec;
+    },
+    onGotStream(stream) {
+      this.$refs.connection.shareStreamUsingRTCMultiConnection(
+        stream,
+        this.isVideo,
+      );
+    },
+    onSessionId(id) {
+      this.sessionId = id;
+    },
+    onSetDefaults() {
+      this.$refs.connection.setDefaults();
+    },
+    onIsSharing(isSharing) {
+      this.isSharingOn = isSharing;
+    },
+    onViewerCount(count) {
+      this.viewerCount = count;
+    },
+  },
 };
 </script>

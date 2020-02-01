@@ -10,16 +10,17 @@
 // MIT License   - www.WebRTC-Experiment.com/licence
 // --------------------------------------------------
 
-function MultiStreamsMixer(arrayOfMediaStreams) {
+export function MultiStreamsMixer(arrayOfMediaStreams) {
   // requires: chrome://flags/#enable-experimental-web-platform-features
 
   var videos = [];
   var isStopDrawingFrames = false;
 
-  var canvas = document.createElement("canvas");
-  var context = canvas.getContext("2d");
+  var canvas = document.createElement('canvas');
+  var context = canvas.getContext('2d');
   canvas.style =
-    "opacity:0;position:absolute;z-index:-1;top: -100000000;left:-1000000000; margin-top:-1000000000;margin-left:-1000000000;";
+    'opacity:0;position:absolute;z-index:-1;top: -100000000;left:-1000000000;' +
+    'margin-top:-1000000000;margin-left:-1000000000;';
   (document.body || document.documentElement).appendChild(canvas);
 
   this.disableLogs = false;
@@ -39,14 +40,16 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
   // WebAudio API representer
   var AudioContext = window.AudioContext;
 
-  if (typeof AudioContext === "undefined") {
-    if (typeof webkitAudioContext !== "undefined") {
-      /*global AudioContext:true */
+  if (typeof AudioContext === 'undefined') {
+    if (typeof webkitAudioContext !== 'undefined') {
+      // eslint-disable-next-line no-unused-vars 
+      /*global webkitAudioContext:true */
       AudioContext = webkitAudioContext;
     }
 
-    if (typeof mozAudioContext !== "undefined") {
-      /*global AudioContext:true */
+    if (typeof mozAudioContext !== 'undefined') {
+      // eslint-disable-next-line no-unused-vars 
+      /*global mozAudioContext:true */
       AudioContext = mozAudioContext;
     }
   }
@@ -54,21 +57,22 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
   /*jshint -W079 */
   var URL = window.URL;
 
-  if (typeof URL === "undefined" && typeof webkitURL !== "undefined") {
-    /*global URL:true */
+  if (typeof URL === 'undefined' && typeof webkitURL !== 'undefined') {
+    // eslint-disable-next-line no-unused-vars 
+    /*global webkitURL:true */
     URL = webkitURL;
   }
 
   if (
-    typeof navigator !== "undefined" &&
-    typeof navigator.getUserMedia === "undefined"
+    typeof navigator !== 'undefined' &&
+    typeof navigator.getUserMedia === 'undefined'
   ) {
     // maybe window.navigator?
-    if (typeof navigator.webkitGetUserMedia !== "undefined") {
+    if (typeof navigator.webkitGetUserMedia !== 'undefined') {
       navigator.getUserMedia = navigator.webkitGetUserMedia;
     }
 
-    if (typeof navigator.mozGetUserMedia !== "undefined") {
+    if (typeof navigator.mozGetUserMedia !== 'undefined') {
       navigator.getUserMedia = navigator.mozGetUserMedia;
     }
   }
@@ -76,16 +80,16 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
   var MediaStream = window.MediaStream;
 
   if (
-    typeof MediaStream === "undefined" &&
-    typeof webkitMediaStream !== "undefined"
+    typeof MediaStream === 'undefined' &&
+    typeof webkitMediaStream !== 'undefined'
   ) {
+    /*global webkitMediaStream:true*/
     MediaStream = webkitMediaStream;
   }
 
-  /*global MediaStream:true */
-  if (typeof MediaStream !== "undefined") {
+  if (typeof MediaStream !== 'undefined') {
     // override "stop" method for all browsers
-    if (typeof MediaStream.prototype.stop === "undefined") {
+    if (typeof MediaStream.prototype.stop === 'undefined') {
       MediaStream.prototype.stop = function() {
         this.getTracks().forEach(function(track) {
           track.stop();
@@ -96,16 +100,16 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
 
   var Storage = {};
 
-  if (typeof AudioContext !== "undefined") {
+  if (typeof AudioContext !== 'undefined') {
     Storage.AudioContext = AudioContext;
-  } else if (typeof webkitAudioContext !== "undefined") {
+  } else if (typeof webkitAudioContext !== 'undefined') {
     Storage.AudioContext = webkitAudioContext;
   }
 
   function setSrcObject(stream, element) {
-    if ("srcObject" in element) {
+    if ('srcObject' in element) {
       element.srcObject = stream;
-    } else if ("mozSrcObject" in element) {
+    } else if ('mozSrcObject' in element) {
       element.mozSrcObject = stream;
     } else {
       element.srcObject = stream;
@@ -215,25 +219,25 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
       y = video.height * 3;
     }
 
-    if (typeof video.stream.left !== "undefined") {
+    if (typeof video.stream.left !== 'undefined') {
       x = video.stream.left;
     }
 
-    if (typeof video.stream.top !== "undefined") {
+    if (typeof video.stream.top !== 'undefined') {
       y = video.stream.top;
     }
 
-    if (typeof video.stream.width !== "undefined") {
+    if (typeof video.stream.width !== 'undefined') {
       width = video.stream.width;
     }
 
-    if (typeof video.stream.height !== "undefined") {
+    if (typeof video.stream.height !== 'undefined') {
       height = video.stream.height;
     }
 
     context.drawImage(video, x, y, width, height);
 
-    if (typeof video.stream.onRender === "function") {
+    if (typeof video.stream.onRender === 'function') {
       video.stream.onRender(context, x, y, width, height, idx);
     }
   }
@@ -247,13 +251,14 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
       mixedAudioStream
         .getTracks()
         .filter(function(t) {
-          return t.kind === "audio";
+          return t.kind === 'audio';
         })
         .forEach(function(track) {
           mixedVideoStream.addTrack(track);
         });
     }
 
+    // eslint-disable-next-line no-unused-vars 
     var fullcanvas;
     arrayOfMediaStreams.forEach(function(stream) {
       if (stream.fullcanvas) {
@@ -269,13 +274,14 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
 
     var capturedStream;
 
-    if ("captureStream" in canvas) {
+    if ('captureStream' in canvas) {
       capturedStream = canvas.captureStream();
-    } else if ("mozCaptureStream" in canvas) {
+    } else if ('mozCaptureStream' in canvas) {
       capturedStream = canvas.mozCaptureStream();
     } else if (!self.disableLogs) {
       console.error(
-        "Upgrade to latest Chrome or otherwise enable this flag: chrome://flags/#enable-experimental-web-platform-features"
+        'Upgrade to latest Chrome or otherwise enable this flag:',
+        'chrome://flags/#enable-experimental-web-platform-features',
       );
     }
 
@@ -284,7 +290,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
     capturedStream
       .getTracks()
       .filter(function(t) {
-        return t.kind === "video";
+        return t.kind === 'video';
       })
       .forEach(function(track) {
         videoStream.addTrack(track);
@@ -315,7 +321,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
     arrayOfMediaStreams.forEach(function(stream) {
       if (
         !stream.getTracks().filter(function(t) {
-          return t.kind === "audio";
+          return t.kind === 'audio';
         }).length
       ) {
         return;
@@ -344,7 +350,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
   }
 
   function getVideo(stream) {
-    var video = document.createElement("video");
+    var video = document.createElement('video');
 
     setSrcObject(stream, video);
 
@@ -361,7 +367,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
 
   this.appendStreams = function(streams) {
     if (!streams) {
-      throw "First parameter is required.";
+      throw 'First parameter is required.';
     }
 
     if (!(streams instanceof Array)) {
@@ -373,7 +379,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
     streams.forEach(function(stream) {
       if (
         stream.getTracks().filter(function(t) {
-          return t.kind === "video";
+          return t.kind === 'video';
         }).length
       ) {
         var video = getVideo(stream);
@@ -383,7 +389,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
 
       if (
         stream.getTracks().filter(function(t) {
-          return t.kind === "audio";
+          return t.kind === 'audio';
         }).length &&
         self.audioContext
       ) {
@@ -445,7 +451,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
     streams.forEach(function(stream) {
       if (
         !stream.getTracks().filter(function(t) {
-          return t.kind === "video";
+          return t.kind === 'video';
         }).length
       ) {
         return;
@@ -458,7 +464,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
   }
 
   // for debugging
-  this.name = "MultiStreamsMixer";
+  this.name = 'MultiStreamsMixer';
   this.toString = function() {
     return this.name;
   };

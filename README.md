@@ -40,18 +40,6 @@ No more maintaining this extension; as of 2019. So please use at your own risk.
 
 ----
 
-# Chrome extension for WebRTC Screen Sharing
-
-<a target="_blank" href="https://chrome.google.com/webstore/detail/webrtc-desktop-sharing/nkemblooioekjnpfekmjhpgkackcajhg"><img alt="WebRTC Screen Sharing" src="https://lh3.googleusercontent.com/hoWYXBvzcszyre-LlNVq5i_lEFtqVXYrTJ8gnkVw35vv5xWyUx7sw8VPMrGXjHpxUcV0n3Ie=w640-h400-e365" title="WebRTC Screen Sharing"></img></a>
-
-<a target="_blank" href="https://chrome.google.com/webstore/detail/webrtc-desktop-sharing/nkemblooioekjnpfekmjhpgkackcajhg"><img alt="WebRTC Screen Sharing" src="https://lh3.googleusercontent.com/rUvbMYBGFgwbe_gzIj3qUwtlnemsvbHccSskM__tjFSIILN3D7QRS6P1LielPb90Wt2a4awmNg=w640-h400-e365" title="WebRTC Screen Sharing"></img></a>
-
-## How to install?
-
-<a target="_blank" href="https://chrome.google.com/webstore/detail/webrtc-desktop-sharing/nkemblooioekjnpfekmjhpgkackcajhg"><img alt="Install Dessktop Sharing Extension" src="https://raw.github.com/GoogleChrome/chrome-app-samples/master/tryitnowbutton_small.png" title="Click here to install this sample from the Chrome Web Store"></img></a>
-
-* https://chrome.google.com/webstore/detail/webrtc-desktop-sharing/nkemblooioekjnpfekmjhpgkackcajhg
-
 ## How to view screen?
 
 Try any of the below URL. Replace `your_room_id` with real room-id:
@@ -89,14 +77,6 @@ var resultingURL = 'https://yourWebSite.com/index.html?s=' + connection.sessioni
 You can find `index.html` here:
 
 * [desktopCapture-p2p/index.html](https://github.com/muaz-khan/Chrome-Extensions/blob/master/desktopCapture-p2p/index.html)
-
-## How to publish it for your own business?
-
-Make ZIP of the directory. Then navigate to [Chrome WebStore Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard) and click **Add New Item** blue button.
-
-To learn more about how to publish a chrome extension in Google App Store:
-
-* https://developer.chrome.com/webstore/publish
 
 ## For more information
 
