@@ -95,22 +95,8 @@ export default {
     gotStream(stream) {
       if (!stream) {
         this.setDefaults();
-
-        // chrome.windows.create({
-        //   url:
-        //     "data:text/html,<h1>Internal error occurred while capturing the screen.</h1>",
-        //   type: "popup",
-        //   width: screen.width / 2,
-        //   height: 170,
-        // });
         return;
       }
-
-      // chrome.browserAction.setTitle({
-      //   title: "Connecting to WebSockets server.",
-      // });
-
-      // chrome.browserAction.disable();
 
       stream.addEventListener('inactive', () => {
         this.setDefaults();
@@ -118,14 +104,9 @@ export default {
 
       this.addStreamStopListener(stream, () => {
         this.setDefaults();
-        // chrome.runtime.reload();
       });
 
       this.$emit('gotStream', stream);
-
-      // chrome.browserAction.setIcon({
-      //   path: "images/icon-active_128.png",
-      // });
     },
     addStreamStopListener(stream, callback) {
       var streamEndedEvent = 'ended';

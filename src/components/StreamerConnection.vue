@@ -202,7 +202,6 @@ export default {
         // any key-values set here should be reset in setDefaults.js
         this.$emit('sessionId', this.connection.sessionid);
 
-        // chrome.browserAction.enable();
         this.setViewerCount(0);
 
         // if (this.roomUrlBox === true) {
@@ -243,8 +242,6 @@ export default {
         if (this.connection.getAllParticipants().length > 0) return;
 
         this.setDefaults();
-
-        // chrome.runtime.reload();
       };
 
       this.connection.onSocketError = () => {
@@ -252,7 +249,6 @@ export default {
 
         setTimeout(() => {
           this.setDefaults();
-          // chrome.runtime.reload();
         }, 1000);
       };
 
@@ -322,22 +318,6 @@ export default {
 
         this.connection = null;
       }
-
-      // chrome.browserAction.setIcon({
-      //     path: 'images/icon-inactive_128.png'
-      // });
-
-      // if (popup_id) {
-      //     try {
-      //         chrome.windows.remove(popup_id);
-      //     } catch (e) {}
-
-      //     popup_id = null;
-      // }
-
-      // chrome.browserAction.setTitle({
-      //     title: '2N Streamer'
-      // });
 
       this.setViewerCount(0);
     },
