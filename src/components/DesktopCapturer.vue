@@ -43,13 +43,6 @@ export default {
       // });
     },
     captureDesktop() {
-      /**
-       * TODO: review me
-       * old todo: this may need to change (or be removed) because captureDesktop will be called to
-       * end a stream
-       */
-      // this.isSharing = true;
-
       this.onAccessApproved();
     },
     onAccessApproved() {
