@@ -69,23 +69,6 @@ export default {
         },
       };
 
-      // navigator.webkitGetUserMedia(
-      //   constraints,
-      //   function(screenStream) {
-      //     var win;
-      //     addStreamStopListener(screenStream, function() {
-      //       if (win && !win.closed) {
-      //         win.close();
-      //       } else {
-      //         captureDesktop();
-      //       }
-      //     });
-
-      //     gotStream(screenStream);
-      //   },
-      //   getUserMediaError
-      // );
-
       const startScreenCapture = async () => {
         let captureStream;
         try {
