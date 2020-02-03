@@ -240,7 +240,7 @@ export default {
       isStream: false,
       isPlaying: false,
       statsVisible: false,
-      volume: window.localStorage.getItem('volume_num') || 0.5,
+      volume: window.localStorage.getItem('volume') || 0.5,
       NO_MORE: false,
       stats: {},
       infoBarMessage: '',
@@ -396,7 +396,7 @@ export default {
       this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
       this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
       this.volume = event.srcElement.valueAsNumber / 100;
-      localStorage.setItem('volume_num', event.srcElement.valueAsNumber / 100);
+      localStorage.setItem('volume', event.srcElement.valueAsNumber / 100);
     },
     fullscreenVideo() {
       if (this.$refs.videoPlayer.requestFullscreen)
