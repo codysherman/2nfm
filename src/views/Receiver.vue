@@ -191,7 +191,7 @@ video
           PauseSvg(v-else)
         input#volume-slider(
           type="range" 
-          :value="getVolume"
+          :value="volumeForSlider"
           min="0" 
           max="100" 
           step="1" 
@@ -257,7 +257,7 @@ export default {
         return null;
       }
     },
-    getVolume() {
+    volumeForSlider() {
       return this.volume * 100;
     },
   },
@@ -395,7 +395,6 @@ export default {
       this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
       this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
       localStorage.setItem('volume_num', event.srcElement.valueAsNumber / 100);
-      this.volumeNum = event.srcElement.valueAsNumber / 100;
     },
     fullscreenVideo() {
       if (this.$refs.videoPlayer.requestFullscreen)
