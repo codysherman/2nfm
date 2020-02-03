@@ -170,6 +170,7 @@ video
   .frow.centered-column.nowrap
     LoadingSvg#loading-logo(v-if="!isStream")
     LogoSvg#logo(v-if="isStream")
+    | {{volume}}
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
     video.shadow-light(
       ref='videoPlayer'
@@ -395,6 +396,7 @@ export default {
       this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
       this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
       localStorage.setItem('volume_num', event.srcElement.valueAsNumber / 100);
+      this.volume = event.srcElement.valueAsNumber / 100;
     },
     fullscreenVideo() {
       if (this.$refs.videoPlayer.requestFullscreen)
