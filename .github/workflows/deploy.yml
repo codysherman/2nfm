@@ -28,3 +28,9 @@ jobs:
     - run: git config --global user.email "actions@codysherman.com"
     - run: git config --global user.name "GitHub Actions"
     - run: ./deploy.sh ${{ secrets.GITHUB_TOKEN }} ${{ github.repository }}
+    - run: >-
+           curl -L -X POST -w '%{http_code}\n'
+           -H "Content-Type: application/json"
+           -H "Authorization: token ${{ secrets.DEPLOY_KEY }}"
+           "https://api.github.com/repos/${{ github.repository }}/pages/builds"
+           | tail -1 | grep 201
