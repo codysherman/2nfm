@@ -27,5 +27,4 @@ jobs:
     - run: yarn
     - run: git config --global user.email "actions@codysherman.com"
     - run: git config --global user.name "GitHub Actions"
-    - run: ./deploy.sh
-    - run: git push -f https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git master:gh-pages
+    - run: ./deploy.sh ${{ secrets.GITHUB_TOKEN }} ${{ github.repository }}
