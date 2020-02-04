@@ -22,4 +22,6 @@ git commit -m 'deploy'
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
 # git push -f git@github.com:codysherman/2NFM.git master:gh-pages
 
-# cd -
+git push -f "https://x-access-token:""$1""@github.com/""$2"".git" master:gh-pages
+
+cd -
