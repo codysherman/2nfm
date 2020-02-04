@@ -99,47 +99,6 @@ video
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
-
-// #chat-container
-//   position: fixed
-//   right: 20px
-//   bottom: 20px
-//   height: 370px
-//   width: 300px
-//   background: white
-//   z-index: 9
-//   border-radius: 5px
-//   text-align: left
-//   box-shadow: 0px 0px 1px 7px #b9b9b9
-
-// #chat-container,
-// #chat-container *
-//   padding: 0
-
-// #chat-messages
-//   height: 335px
-//   overflow-x: hidden
-//   overflow-y: auto
-//   width: 300px
-
-// #chat-messages div
-//   border-bottom: 1px solid lightgray
-//   padding: 2px 5px
-//   font-size: 20px
-
-// #chat-messages div span.name
-//   font-weight: bold
-
-// #txt-chat-message
-//   width: 300px
-//   border: 0
-//   border-top: 1px solid lightgray
-//   font-size: 20px
-//   padding: 2px 5px
-
-// .checkmark
-//   width: 18px
-//   vertical-align: middle
 </style>
 
 <template lang="pug">
@@ -189,7 +148,14 @@ video
         )
           PlaySvg(v-if="!isPlaying")
           PauseSvg(v-else)
-        input#volume-slider(type="range" min="0" max="100" value="50" step="1" @change="setVolume")
+        input#volume-slider(
+          type="range"
+          :value="volume"
+          min="0"
+          max="1"
+          step="0.01"
+          @change="setVolume"
+        )
       button#fullscreen-button.button-none(
         type="button"
         v-if="stream.isVideo"
@@ -232,6 +198,7 @@ export default {
       isStream: false,
       isPlaying: false,
       statsVisible: false,
+      volume: window.localStorage.getItem('volume') || 0.5,
       NO_MORE: false,
       stats: {},
       infoBarMessage: '',
@@ -268,6 +235,7 @@ export default {
       false,
     );
   },
+  
   methods: {
     onConnectionStateChanged(state) {
       switch (state.value) {
@@ -345,11 +313,11 @@ export default {
         if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
           this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
         }
-        this.$refs.videoPlayer.volume = 0.5;
+        this.$refs.videoPlayer.volume = this.volume;
       } else {
         this.$refs.audioPlayer.srcObject = this.stream;
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        this.$refs.audioPlayer.volume = 0.5;
+        this.$refs.audioPlayer.volume = this.volume;
       }
       this.playMedia();
     },
@@ -380,8 +348,10 @@ export default {
       }
     },
     setVolume(event) {
-      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
-      this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
+      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber;
+      this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber;
+      this.volume = event.srcElement.valueAsNumber;
+      localStorage.setItem('volume', event.srcElement.valueAsNumber);
     },
     fullscreenVideo() {
       if (this.$refs.videoPlayer.requestFullscreen)
@@ -413,4 +383,5 @@ export default {
     },
   },
 };
+
 </script>
