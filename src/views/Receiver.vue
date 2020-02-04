@@ -191,11 +191,11 @@ video
           PlaySvg(v-if="!isPlaying")
           PauseSvg(v-else)
         input#volume-slider(
-          type="range" 
-          :value="volumeForSlider"
-          min="0" 
-          max="100" 
-          step="1" 
+          type="range"
+          :value="volume"
+          min="0"
+          max="1"
+          step="0.01"
           @change="setVolume"
         )
       button#fullscreen-button.button-none(
@@ -257,9 +257,6 @@ export default {
       } else {
         return null;
       }
-    },
-    volumeForSlider() {
-      return this.volume * 100;
     },
   },
   mounted() {
@@ -393,10 +390,10 @@ export default {
       }
     },
     setVolume(event) {
-      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber / 100;
-      this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber / 100;
-      this.volume = event.srcElement.valueAsNumber / 100;
-      localStorage.setItem('volume', event.srcElement.valueAsNumber / 100);
+      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber;
+      this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber;
+      this.volume = event.srcElement.valueAsNumber;
+      localStorage.setItem('volume', event.srcElement.valueAsNumber);
     },
     fullscreenVideo() {
       if (this.$refs.videoPlayer.requestFullscreen)
