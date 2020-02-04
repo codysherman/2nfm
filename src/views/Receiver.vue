@@ -99,47 +99,6 @@ video
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
-
-// #chat-container
-//   position: fixed
-//   right: 20px
-//   bottom: 20px
-//   height: 370px
-//   width: 300px
-//   background: white
-//   z-index: 9
-//   border-radius: 5px
-//   text-align: left
-//   box-shadow: 0px 0px 1px 7px #b9b9b9
-
-// #chat-container,
-// #chat-container *
-//   padding: 0
-
-// #chat-messages
-//   height: 335px
-//   overflow-x: hidden
-//   overflow-y: auto
-//   width: 300px
-
-// #chat-messages div
-//   border-bottom: 1px solid lightgray
-//   padding: 2px 5px
-//   font-size: 20px
-
-// #chat-messages div span.name
-//   font-weight: bold
-
-// #txt-chat-message
-//   width: 300px
-//   border: 0
-//   border-top: 1px solid lightgray
-//   font-size: 20px
-//   padding: 2px 5px
-
-// .checkmark
-//   width: 18px
-//   vertical-align: middle
 </style>
 
 <template lang="pug">
