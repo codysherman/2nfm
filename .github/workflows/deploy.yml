@@ -28,3 +28,4 @@ jobs:
     - run: git config --global user.email "actions@codysherman.com"
     - run: git config --global user.name "GitHub Actions"
     - run: ./deploy.sh
+    - run: git push -f https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git master:gh-pages
