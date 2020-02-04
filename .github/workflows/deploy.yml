@@ -4,6 +4,9 @@ on:
   push:
     branches:
     - master
+  pull_request:
+    branches:
+    - master
 
 jobs:
   build:
@@ -13,6 +16,9 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
+    
+    env:
+      TEST: ${{ secrets.test }}
 
     steps:
     - uses: actions/checkout@v2
@@ -21,4 +27,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install -g yarn
+    - run: echo $TEST
     - run: ./deploy.sh
