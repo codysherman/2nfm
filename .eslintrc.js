@@ -34,7 +34,10 @@ module.exports = {
     }],
     'import/extensions': ['error', 'ignorePackages'],
     'indent': ['error', 2],
-    'max-len': ['warn', { 'code': 100, 'tabWidth': 2 }],
+    'max-len': ['error', { 'code': 100, 'tabWidth': 2,
+      'ignorePattern': '^\\s*' +
+        '(transition:\\s[A-Za-z-]+\\s[#$)(0-9A-Za-z-]|background-image:\\s|<svg)',
+    }],
     'quotes': ['error', 'single'],
     'no-empty': ['error', { 'allowEmptyCatch': true }],
   },
