@@ -217,6 +217,12 @@ export default {
       }
     },
   },
+  created() {
+    const sanitizedRoomId = this.$route.params.room.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '').toLowerCase();
+    if (this.$route.params.room !== sanitizedRoomId) {
+      this.$router.push(sanitizedRoomId);
+    }
+  },
   mounted() {
     window.addEventListener(
       'offline',
