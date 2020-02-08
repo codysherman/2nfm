@@ -34,7 +34,7 @@ module.exports = {
     }],
     'import/extensions': ['error', 'ignorePackages'],
     'indent': ['error', 2],
-    'max-len': ['error', { 'code': 100, 'tabWidth': 2 }],
+    'max-len': ['warn', { 'code': 100, 'tabWidth': 2 }],
     'quotes': ['error', 'single'],
     'no-empty': ['error', { 'allowEmptyCatch': true }],
   },
