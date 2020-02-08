@@ -3,7 +3,7 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        data: '@import "@/assets/sass/global-setup.sass"',
+        prependData: '@import "@/assets/sass/global-setup.sass"',
       },
     },
   },
