@@ -30,7 +30,7 @@
   fill: $white
 
 .octo-arm
-  transform-origin: 130px 106px;
+  transform-origin: 130px 106px
 </style>
 
 <template lang="pug">
