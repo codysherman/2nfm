@@ -8208,6 +8208,11 @@ sdp@^2.10.0, sdp@^2.6.0:
   resolved "https://registry.yarnpkg.com/sdp/-/sdp-2.11.2.tgz#1851ce7ac2915295fa806abd0d861ca0327e9861"
   integrity sha512-Oly+pE5hwmshcyNCEep4AZ6P7C1UTAzqsXhPRefYVFzxsCcVdHFBqmi/b+KON0uoKXyQvf8avUT4Z2P2kmCfiQ==
 
+sdp@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/sdp/-/sdp-2.12.0.tgz#338a106af7560c86e4523f858349680350d53b22"
+  integrity sha512-jhXqQAQVM+8Xj5EjJGVweuEzgtGWb3tmEEpl3CLP3cStInSbVHSg0QWOGQzNq8pSID4JkpeV2mPqlMDLrm0/Vw==
+
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
@@ -9719,7 +9724,15 @@ webpack@^4.0.0:
     watchpack "^1.6.0"
     webpack-sources "^1.4.1"
 
-webrtc-adapter@^7.3.0, webrtc-adapter@latest:
+webrtc-adapter@^7.5.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-7.5.0.tgz#b870f6ff5e87191276e66f9521ac457c81801954"
+  integrity sha512-cUqlw310uLLSYvO8FTNCVmGWSMlMt6vuSDkcYL1nW+RUvAILJ3jEIvAUgFQU5EFGnU+mf9/No14BFv3U+hoxBQ==
+  dependencies:
+    rtcpeerconnection-shim "^1.2.15"
+    sdp "^2.12.0"
+
+webrtc-adapter@latest:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-7.3.0.tgz#a65e18aad42759bab6ced7f8cfff11b051321e2a"
   integrity sha512-pKcwt6IR6RLCD6jlcdOOi88iVwdzppHlkOhtgTSuZHtYTxdD09t5fA1Di7GJU7je8oHcCBlNfb7zwBsetERnmQ==
