@@ -21,4 +21,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install -g yarn
-    - run: ./deploy.sh
+    - run: yarn
+    - run: git config --global user.email "cody@codysherman.com"
+    - run: git config --global user.name "GitHub Actions"
+    - run: echo "${{ secrets.DEPLOY_KEY }}" > ~/deploy_key
+    - run: chmod 600 ~/deploy_key
+    - run: cat ~/deploy_key
+    - run: GIT_SSH_COMMAND='ssh -i ~/deploy_key' ./deploy.sh
