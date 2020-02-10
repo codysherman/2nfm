@@ -127,7 +127,8 @@ video
       div
         | {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
-    LoadingSvg#loading-logo(v-if="!isStream")
+    router-link#create-message(v-if="!isStream", to="/streamer")
+      LoadingSvg#loading-logo
     LogoSvg#logo(v-if="isStream")
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
     video.shadow-light(
