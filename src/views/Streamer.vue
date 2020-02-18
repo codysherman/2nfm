@@ -294,6 +294,7 @@ export default {
   },
   methods: {
     startStream(isVideo = false) {
+      this.setRoomName();
       this.isVideo = isVideo;
 
       if (
@@ -316,11 +317,11 @@ export default {
       this.$refs.capturer.stopStream();
     },
     setRoomName(event) {
-      this.room_id = event.target.value
+      this.room_id = (event ? event.target.value : this.room_id)
         .replace(/\s+/g, '-')
         .replace(/[^a-zA-Z0-9-_]/g, '')
         .toLowerCase();
-      window.localStorage.setItem('room_id', event.target.value);
+      window.localStorage.setItem('room_id', this.room_id);
     },
     setBandwidth(value) {
       try {
