@@ -162,7 +162,12 @@
     section#setup-section(v-if="!isSharingOn || !sessionId")
       label#room-id-label.row-start
         span.shrink-0 2n.fm/
-        input#room-id(type="text" placeholder="Random" :value="roomName" @change="setRoomName")
+        input#room-id(
+          type="text"
+          placeholder="Random"
+          v-model="room_id"
+          @change="setRoomName"
+          @blur="setRoomName")
       section#options(hidden="")
         .label Options
         .frow.row-start.gutters
@@ -273,11 +278,6 @@ export default {
       viewerCount: 0,
     };
   },
-  computed: {
-    roomName() {
-      return this.room_id || this.sessionId;
-    },
-  },
   mounted() {
     // document.getElementById('enable-chat').onclick = function() {
     //   var popup_width = 312;
@@ -294,7 +294,6 @@ export default {
   },
   methods: {
     startStream(isVideo = false) {
-      this.setRoomName();
       this.isVideo = isVideo;
 
       if (
@@ -316,8 +315,9 @@ export default {
     stopStream() {
       this.$refs.capturer.stopStream();
     },
-    setRoomName(event) {
-      this.room_id = (event ? event.target.value : this.room_id)
+    setRoomName() {
+      console.log(this.room_id)
+      this.room_id = this.room_id
         .replace(/\s+/g, '-')
         .replace(/[^a-zA-Z0-9-_]/g, '')
         .toLowerCase();
