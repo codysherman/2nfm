@@ -59,6 +59,7 @@ video
   object-fit: contain
   margin-bottom: 20px
   background-color: $tertiary-color
+  transition: width $animate-speed
 
   &.theater-mode
     width: 100%
