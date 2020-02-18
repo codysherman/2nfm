@@ -136,7 +136,8 @@ video
   .frow.centered-column.nowrap
     router-link#create-message(v-if="!isStream", to="/")
       LoadingSvg#loading-logo
-    LogoSvg#logo(v-if="isStream")
+    router-link(v-if="isStream", to="/")
+      LogoSvg#logo
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
     video.shadow-light(
       ref='videoPlayer'
