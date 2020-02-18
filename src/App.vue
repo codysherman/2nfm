@@ -3,6 +3,7 @@
 @import @/assets/sass/_colors.sass
 @import @/assets/sass/_variables.sass
 @import ~frow
+@import @/assets/sass/global.sass
 </style>
 
 <template lang="pug">
