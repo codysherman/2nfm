@@ -165,7 +165,7 @@ video
           min="0"
           max="1"
           step="0.01"
-          @change="setVolume"
+          @input="setVolume"
         )
       .frow(v-if="stream.isVideo")
         button#theater-button.button-none.mr-20(
