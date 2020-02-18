@@ -108,6 +108,11 @@ export default {
   },
   methods: {
     goToRoom() {
+      this.roomId = this.roomId
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-zA-Z0-9-_]/g, '')
+        .toLowerCase();
       this.$router.push(this.roomId);
     },
   },
