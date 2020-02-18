@@ -316,8 +316,8 @@ export default {
       this.$refs.capturer.stopStream();
     },
     setRoomName() {
-      console.log(this.room_id)
       this.room_id = this.room_id
+        .trim()
         .replace(/\s+/g, '-')
         .replace(/[^a-zA-Z0-9-_]/g, '')
         .toLowerCase();

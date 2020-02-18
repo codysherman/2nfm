@@ -220,6 +220,7 @@ export default {
   },
   created() {
     const sanitizedRoomId = this.$route.params.room
+      .trim()
       .replace(/\s+/g, '-')
       .replace(/[^a-zA-Z0-9-_]/g, '')
       .toLowerCase();
