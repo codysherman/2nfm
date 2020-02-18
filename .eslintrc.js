@@ -32,7 +32,7 @@ module.exports = {
       'exports': 'always-multiline',
       'functions': 'always-multiline',
     }],
-    'import/extensions': ['error', 'ignorePackages'],
+    'import/extensions': ['error', 'ignorePackages', {'js': 'never'}],
     'indent': ['error', 2],
     'max-len': ['error', { 'code': 100, 'tabWidth': 2,
       'ignorePattern': '^\\s*' +
