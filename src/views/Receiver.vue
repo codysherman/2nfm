@@ -60,6 +60,9 @@ video
   margin-bottom: 20px
   background-color: $tertiary-color
 
+  &.theater-mode
+    width: 100%
+
 #media-controls
   width: 60%
   animation: fade-in 0.4s
@@ -77,7 +80,8 @@ video
 #volume-slider
   max-width: 120px
 
-#fullscreen-button
+#fullscreen-button,
+#theater-button
   svg
     width: 30px
     fill: $primary-color
@@ -87,6 +91,9 @@ video
   &:active,
   &:focus
     transform: scale(1.1)
+
+#theater-button svg
+  width: 18px
 
 #info-bar
   font-size: 24px
@@ -133,6 +140,7 @@ video
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
     video.shadow-light(
       ref='videoPlayer'
+      :class="{ 'theater-mode': theaterMode }"
       @click='togglePlayback'
       playsinline
       :hidden="!stream.isVideo"
@@ -157,12 +165,17 @@ video
           step="0.01"
           @change="setVolume"
         )
-      button#fullscreen-button.button-none(
-        type="button"
-        v-if="stream.isVideo"
-        @click="fullscreenVideo"
-      )
-        FullscreenSvg
+      .frow(v-if="stream.isVideo")
+        button#theater-button.button-none.mr-20(
+          type="button"
+          @click="toggleTheaterMode"
+        )
+          TheaterSvg
+        button#fullscreen-button.button-none(
+          type="button"
+          @click="fullscreenVideo"
+        )
+          FullscreenSvg
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link#create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
@@ -178,6 +191,7 @@ import LogoSvg from '@/assets/svgs/logo.svg';
 import PlaySvg from '@/assets/svgs/play.svg';
 import PauseSvg from '@/assets/svgs/pause.svg';
 import FullscreenSvg from '@/assets/svgs/fullscreen.svg';
+import TheaterSvg from '@/assets/svgs/theater.svg';
 
 import ReceiverConnection from '@/components/ReceiverConnection.vue';
 
@@ -190,6 +204,7 @@ export default {
     PlaySvg,
     PauseSvg,
     FullscreenSvg,
+    TheaterSvg,
     ReceiverConnection,
   },
   data() {
@@ -198,6 +213,7 @@ export default {
       stream: {},
       isStream: false,
       isPlaying: false,
+      theaterMode: false,
       statsVisible: false,
       volume: window.localStorage.getItem('volume') || 0.5,
       NO_MORE: false,
@@ -373,6 +389,9 @@ export default {
         this.$refs.videoPlayer.webkitRequestFullScreen();
       else if (this.$refs.videoPlayer.msRequestFullscreen)
         this.$refs.videoPlayer.msRequestFullscreen();
+    },
+    toggleTheaterMode() {
+      this.theaterMode = !this.theaterMode;
     },
     showStats() {
       this.statsVisible = true;
