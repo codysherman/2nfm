@@ -7,9 +7,9 @@
 import adapter from 'webrtc-adapter';
 
 import RTCMultiConnection from 'rtcmulticonnection';
-import { getStats } from '@/utils/background/helpers/getStats.js';
-import { CodecsHandler } from '@/utils/background/helpers/CodecsHandler.js';
-import { IceServersHandler } from '@/utils/background/helpers/IceServersHandler.js';
+import { getStats } from '@/utils/background/helpers/getStats';
+import { CodecsHandler } from '@/utils/background/helpers/CodecsHandler';
+import { IceServersHandler } from '@/utils/background/helpers/IceServersHandler';
 
 /**
  * @event state { value: Connection.STATE, name?: string, reason?: string }
