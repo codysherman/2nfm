@@ -162,15 +162,16 @@ export default {
       // console.log("connectionHere", externalThis.connection.attachStreams[0].getAudioTracks());
 
       var text = '-';
-      // TODO: convert to setInterval
-      const looper = () => {
+      const looper = setInterval(() => {
         if (!this.connection) {
           this.setViewerCount(0);
+          clearInterval(looper);
           return;
         }
 
         if (this.connection.isInitiator) {
           this.setViewerCount(0);
+          clearInterval(looper)
           return;
         }
 
@@ -180,9 +181,8 @@ export default {
         }
 
         this.setViewerCount(text);
-        setTimeout(looper, 500);
-      };
-      looper();
+      }, 500);
+      
 
       // www.RTCMultiConnection.org/docs/open/
       this.connection.socketCustomEvent = this.connection.sessionid;
@@ -287,6 +287,8 @@ export default {
         try {
           this.connection.closeSocket();
         } catch (e) {}
+
+        clearInterval(this.connection.looper);
 
         this.connection = null;
       }
