@@ -102,7 +102,7 @@ video
   text-align: center
   transition: fade-in 0.4s
 
-#create-message
+.create-message
   font-size: 24px
   margin-top: 20px
   text-decoration: underline
@@ -135,7 +135,7 @@ video
       div
         | {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
-    router-link#create-message(v-if="!isStream", to="/")
+    router-link.create-message(v-if="!isStream", to="/")
       LoadingSvg#loading-logo
     router-link(v-if="isStream", to="/")
       LogoSvg#logo
@@ -179,7 +179,7 @@ video
         )
           FullscreenSvg
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
-    router-link#create-message(v-if="!isStream", to="/streamer") Create your own room
+    router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
     #chat-messages
     input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
@@ -247,24 +247,37 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener(
-      'offline',
-      () => {
-        this.infoBarMessage = 'You seem to be offline.';
-      },
-      false,
-    );
-
-    window.addEventListener(
-      'online',
-      () => {
-        this.infoBarMessage = 'You are back online. Reloading the page...';
-        location.reload();
-      },
-      false,
-    );
+    window.addEventListener('offline', this.setOffline, false);
+    window.addEventListener('online', this.setOnline, false);
   },
-  
+  beforeDestroy() {
+    window.removeEventListener('offline', this.setOffline, false);
+    window.removeEventListener('online', this.setOnline, false);
+
+    this.roomName = null;
+    this.stream = null;
+    this.isStream = null;
+    this.isPlaying = null;
+    this.theaterMode = null;
+    this.statsVisible = null;
+    this.volume = null;
+    this.NO_MORE = null;
+    this.stats = null;
+    this.infoBarMessage = null;
+    this.presenceCheckWait = null;
+
+    delete this.roomName;
+    delete this.stream;
+    delete this.isStream;
+    delete this.isPlaying;
+    delete this.theaterMode;
+    delete this.statsVisible;
+    delete this.volume;
+    delete this.NO_MORE;
+    delete this.stats;
+    delete this.infoBarMessage;
+    delete this.presenceCheckWait;
+  },  
   methods: {
     onConnectionStateChanged(state) {
       switch (state.value) {
@@ -413,6 +426,13 @@ export default {
       var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
       return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
     },
+  },
+  setOffline() {
+    this.infoBarMessage = 'You seem to be offline.';
+  },
+  setOnline() {
+    this.infoBarMessage = 'You are back online. Reloading the page...';
+    location.reload();
   },
 };
 
