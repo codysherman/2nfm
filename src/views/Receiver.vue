@@ -439,11 +439,9 @@ export default {
     },
     showStats() {
       this.statsVisible = true;
-      this.NO_MORE = false;
     },
     hideStats() {
       this.statsVisible = false;
-      this.NO_MORE = true;
     },
     bytesToSize(bytes) {
       let k = 1000;
