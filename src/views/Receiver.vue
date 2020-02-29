@@ -82,7 +82,9 @@ video
       fill: $primary-color
 
   #volume-slider
-    max-width: 120px
+  max-width: 120px
+  @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
+    visibility: hidden
 
   #autoplay
     > *
