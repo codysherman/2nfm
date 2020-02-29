@@ -170,7 +170,7 @@
   .col-md-1-2
     div#id-taken(v-if="useridAlreadyTaken")
       | ⚠️ Whoops,
-      b {{useridAlreadyTaken}}
+      b &nbsp;{{useridAlreadyTaken}}&nbsp;
       | already taken! Please choose another room name.
     section#setup-section(v-if="!isSharingOn || !sessionId")
       label#room-id-label.row-start
@@ -324,7 +324,8 @@ export default {
         this.room_id = window.localStorage.getItem('room_id');
       }
 
-      if (this.room_id === 'streamer') {
+      let protectedRoutes = ['streamer'];
+      if (protectedRoutes.includes(this.room_id)) {
         this.useridAlreadyTaken = 'streamer';
         return;
       }
