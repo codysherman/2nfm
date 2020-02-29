@@ -107,6 +107,12 @@ video
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
+
+.chat-container
+  width: 500px
+  height: 500px
+  background-color: blue
+
 </style>
 
 <template lang="pug">
@@ -180,10 +186,11 @@ video
           FullscreenSvg
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link#create-message(v-if="!isStream", to="/streamer") Create your own room
-  #chat-container(hidden)
-    #chat-messages
-    input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
-
+  //- #chat-container(hidden)
+  //-   #chat-messages
+  //-   input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
+  .chat-container
+    ChatRoom
 </template>
 
 <script>
@@ -196,6 +203,7 @@ import FullscreenSvg from '@/assets/svgs/fullscreen.svg';
 import TheaterSvg from '@/assets/svgs/theater.svg';
 
 import ReceiverConnection from '@/components/ReceiverConnection.vue';
+import ChatRoom from '@/components/ChatRoom.vue';
 
 export default {
   name: 'Receiver',
@@ -208,6 +216,7 @@ export default {
     FullscreenSvg,
     TheaterSvg,
     ReceiverConnection,
+    ChatRoom,
   },
   data() {
     return {
