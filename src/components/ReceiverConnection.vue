@@ -82,6 +82,12 @@ export default {
       OfferToReceiveVideo: true,
     };
 
+    this.connection.candidates = {
+      stun: true,
+      turn: true,
+    };
+    this.connection.iceTransportPolicy = 'relay';
+
     this.connection.getExternalIceServers = false;
     this.connection.iceServers = IceServersHandler.getIceServers();
 
