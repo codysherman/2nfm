@@ -169,8 +169,8 @@
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
     div#id-taken(v-if="useridAlreadyTaken")
-      | ⚠️ Whoops, 
-      b {{useridAlreadyTaken}} 
+      | ⚠️ Whoops,
+      b {{useridAlreadyTaken}}
       | already taken! Please choose another room name.
     section#setup-section(v-if="!isSharingOn || !sessionId")
       label#room-id-label.row-start
@@ -241,7 +241,7 @@
         | {{ `2n.fm/${sessionId}` }}
       .viewer-count
         span#viewer-count-number
-        | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }} 
+        | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
       button#stop-sharing(type="button" @click="stopStream")
         | End Sharing
     .frow.width-100.mt-20
@@ -324,11 +324,12 @@ export default {
         this.room_id = window.localStorage.getItem('room_id');
       }
 
-      if (this.room_id !== 'streamer')
-        this.$refs.capturer.startStream();
-      else {
+      if (this.room_id === 'streamer') {
         this.useridAlreadyTaken = 'streamer';
+        return;
       }
+
+      this.$refs.capturer.startStream();
     },
     stopStream() {
       this.$refs.capturer.stopStream();
