@@ -21,6 +21,8 @@
   background-color: #e3e3e3
   margin:15px
   padding: 10px
+  box-shadow: 1px 5px 4px #a1a1a1
+  border-radius: 3px
   
   .chat-transcript-container
     width: 100%
@@ -35,12 +37,22 @@
     margin-left: 10px
 
   #my
-    background-color: #fff
+    .username
+      font-size:9px
+      padding-left: 15px
+      color: #989898
+    .chat-bubble
+      background-color: #fff
+
   #their
-    background-color: #cacaca
-  
+    .username
+      font-size:9px
+      padding-left: 15px
+      color: #989898
+    .chat-bubble
+      background-color: #cacaca
+
   .chat-bubble
-    background-color: red
     border: 2px solid black
     border-radius: 30px
     padding: 0 18px
@@ -80,11 +92,17 @@
         .chat-transcript-container.grow-1.height-100
           .frow.direction-column-reverse
             .frow.row-end
-              #my.chat-bubble
-                p My sample text
+              #my.chat-bubble-parent
+                .username
+                  | smallthrob
+                .chat-bubble 
+                  p My sample text
             .frow.row-start
-              #their.chat-bubble
-                p Their sample text
+              #their.chat-bubble-parent
+                .username
+                  | dizbar
+                .chat-bubble
+                  p Their sample text
         .chat-message-field-container.shrink-0
           .frow.row-start.nowrap
             textarea#chat-message-field(type="text" placeholder="Enter Chat Message")
@@ -111,7 +129,7 @@ export default {
 
   data() {
     return {
-      chatVisible: false,
+      chatVisible: true,
     };
   },
 };
