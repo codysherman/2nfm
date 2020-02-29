@@ -162,7 +162,6 @@ export default {
       // console.log("connectionHere", externalThis.connection.attachStreams[0].getAudioTracks());
 
       var text = '-';
-      // TODO: clearInterval(looper) on connection drop / unmount.
       const looper = setInterval(() => {
         if (!this.connection) {
           this.setViewerCount(0);
