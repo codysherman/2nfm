@@ -98,18 +98,6 @@ export default {
           bandwidth = null;
         }
 
-        if (
-          bandwidth &&
-          !isNaN(bandwidth) &&
-          bandwidth != 'NaN' &&
-          typeof bandwidth == 'number'
-        ) {
-          sdp = setBandwidth(sdp, bandwidth);
-          sdp = CodecsHandler.setVideoBitrates(sdp, {
-            min: bandwidth,
-            max: bandwidth,
-          });
-        }
       }
 
       if (!!codecs && codecs !== 'default') {
@@ -296,12 +284,6 @@ export default {
     },
   },
 };
-
-function setBandwidth(sdp) {
-  sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
-  sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:10000\r\n');
-  return sdp;
-}
 
 function getParams() {
   let r;
