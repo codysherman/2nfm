@@ -234,15 +234,15 @@ export default {
 
         this.$emit('state', { value: STATE.CONNECTED });
 
-        this.connection.publicRoomIdentifier = 'desktopCapture'
-        this.connection.socket.emit('get-public-rooms',
-          this.connection.publicRoomIdentifier,
-          (listOfRooms) => {
-            console.log(listOfRooms)
-            listOfRooms.forEach((room) => {
-              console.error(room);
-            });
-          });
+        // this.connection.publicRoomIdentifier = 'desktopCapture'
+        // this.connection.socket.emit('get-public-rooms',
+        //   this.connection.publicRoomIdentifier,
+        //   (listOfRooms) => {
+        //     console.log(listOfRooms)
+        //     listOfRooms.forEach((room) => {
+        //       console.error(room);
+        //     });
+        //   });
         getStats(
           this.connection.peers[event.userid].peer,
           (stats) => {

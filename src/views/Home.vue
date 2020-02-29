@@ -89,7 +89,9 @@
                 input#room-input(type="text" v-model="roomId" placeholder="Room Name")
                 button#enter-room(type="submit")
                   | Go
-      PublicRooms
+      PublicRooms(
+        
+      )
 </template>
 
 <script>
