@@ -25,6 +25,14 @@
     border-color: red
     animation: pulse 1.5s ease-in-out infinite alternate
 
+#id-taken
+  color: #721c24
+  background-color: #f8d7da
+  border: 1px solid #f5c6cb
+  padding: 0.5em
+  margin-top: 0.5em
+  border-radius: 10px
+
 /* XS
 @media (max-width: 767px)
   #logo
@@ -160,7 +168,8 @@
     LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
-    div#id-taken(v-if="useridAlreadyTaken") {{useridAlreadyTaken}} already taken! 
+    div#id-taken(v-if="useridAlreadyTaken")
+      |⚠️ Whoops, {{useridAlreadyTaken}} already taken! Please choose another room name.
     section#setup-section(v-if="!isSharingOn || !sessionId")
       label#room-id-label.row-start
         span.shrink-0 2n.fm/
@@ -343,6 +352,7 @@ export default {
       );
     },
     onSessionId(id) {
+      this.useridAlreadyTaken = '';
       this.sessionId = id;
     },
     onSetDefaults() {
