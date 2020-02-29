@@ -255,7 +255,25 @@ export default {
       this.connection.open(this.connection.sessionid, roomOpenCallback);
 
       var oldLength = 0;
-      this.connection.onleave = this.connection.onPeerStateChanged = () => {
+      this.connection.onleave = () => {
+        let participants = this.connection.getAllParticipants();
+        var count = participants.length;
+        if (participants.includes(event.userid)) {
+          count--;
+        }
+        this.setViewerCount(count);
+      };
+
+      this.connection.onleave = (event) =>{
+        let participants = this.connection.getAllParticipants();
+        var count = participants.length;
+        if (participants.includes(event.userid)) {
+          count--;
+        }
+        this.setViewerCount(count);
+      };
+
+      this.connection.onPeerStateChanged = () => {
         var participantsCount = this.connection.getAllParticipants().length;
         if (oldLength != participantsCount) {
           // sendTabTitle();
