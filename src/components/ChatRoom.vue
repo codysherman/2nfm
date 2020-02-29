@@ -36,6 +36,18 @@
   #send-message
     margin-left: 10px
 
+  .set-username
+    margin-bottom: 7px
+    p
+      font-size: 12px
+    input
+      margin: 0 9px
+      height: 31px
+      font-size: 14px
+  
+  #set-username-button
+    font-size: 14px
+
   #my
     .username
       font-size:9px
@@ -81,6 +93,7 @@
     border: 2px solid #4f4f51
     padding: 6px
     border-radius: 26px
+    background-color: #fff
 </style>
 
 <template lang="pug">
@@ -89,6 +102,12 @@
       .x-icon(v-if="chatVisible" @click="chatVisible = false" )
         XSvg
       .frow.column-start.nowrap.height-100
+        .set-username
+          .frow.row-center.nowrap
+            p.shrink-0 Chatting as:
+            input(type="text" placeholder="Set Username")
+            button#set-username-button.button-link(type="submit")
+              | Set
         .chat-transcript-container.grow-1.height-100
           .frow.direction-column-reverse
             .frow.row-end
