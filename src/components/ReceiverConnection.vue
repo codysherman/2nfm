@@ -121,6 +121,7 @@ export default {
       }
       return sdp;
     };
+      
 
     this.connection.optionalArgument = {
       optional: [],
@@ -198,6 +199,7 @@ export default {
     this.connection.onSocketError = () => {
       this.$emit('state', { value: STATE.SOCKET_ERROR });
     };
+    
 
     this.connection.onopen = () => {
       //
@@ -232,6 +234,7 @@ export default {
 
         this.$emit('state', { value: STATE.CONNECTED });
 
+
         getStats(
           this.connection.peers[event.userid].peer,
           (stats) => {
@@ -251,6 +254,15 @@ export default {
         // Keeping these parameters here for documentation
         // eslint-disable-next-line no-unused-vars
         (isRoomExist, roomid, extra) => {
+          this.connection.publicRoomIdentifier = 'desktopCapture'
+          this.connection.socket.emit('get-public-rooms',
+            this.connection.publicRoomIdentifier,
+            (listOfRooms) => {
+              console.log(listOfRooms)
+              listOfRooms.forEach((room) => {
+                console.log(room);
+              });
+            });
           if (isRoomExist === false) {
             if (this.presenceCheckWait < 60000) {
               this.presenceCheckWait = this.presenceCheckWait * 2;
