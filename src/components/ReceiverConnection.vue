@@ -289,6 +289,8 @@ export default {
         },
       );
     },
+
+
     onGettingWebRTCStats(stats, userid) {
       if (!this.connection.peers[userid]) {
         stats.nomore();

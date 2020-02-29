@@ -27,10 +27,25 @@ export default {
       video: true,
       data: true,
       oneway: true,
-    };
+    }
+    this.connection.socketCustomEvent = this.roomName;
+        
     console.log(this.connection)
+    this.connection.publicRoomIdentifier = 'desktopCapture'
+    this.connection.socket.emit('get-public-rooms',
+      this.connection.publicRoomIdentifier,
+      (listOfRooms) => {
+        console.log(listOfRooms)
+        listOfRooms.forEach((room) => {
+          console.error(room);
+        });
+      });
+
   },
-}
+};
+    
+
+
 function getParams() {
   let r;
   let DEFAULTS;

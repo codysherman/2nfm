@@ -304,7 +304,7 @@ export default {
         return;
       }
 
-      this.room_id = '';
+      this.room_id = 'cody';
 
       if (window.localStorage.getItem('room_id')) {
         this.room_id = window.localStorage.getItem('room_id');
