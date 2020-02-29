@@ -154,11 +154,13 @@
     :roomPassword="room_password"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
+    @idTaken="onIdTaken"
   )
   .col-md-1-2
     LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
+    div#id-taken(v-if="useridAlreadyTaken") {{useridAlreadyTaken}} already taken! 
     section#setup-section(v-if="!isSharingOn || !sessionId")
       label#room-id-label.row-start
         span.shrink-0 2n.fm/
@@ -276,6 +278,7 @@ export default {
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
+      useridAlreadyTaken: '',
     };
   },
   mounted() {
@@ -344,6 +347,10 @@ export default {
     },
     onSetDefaults() {
       this.$refs.connection.setDefaults();
+    },
+    onIdTaken(takenID) {
+      this.useridAlreadyTaken = takenID;
+      this.room_id = '';
     },
     onIsSharing(isSharing) {
       this.isSharingOn = isSharing;

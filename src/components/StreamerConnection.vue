@@ -143,6 +143,11 @@ export default {
         } catch (e) {}
       };
 
+      this.connection.onUserIdAlreadyTaken = (useridAlreadyTaken) => {
+        this.$emit('idTaken', useridAlreadyTaken);
+        // alert(useridAlreadyTaken + ' already taken. Please choose another room name.');
+      };
+
       // www.RTCMultiConnection.org/docs/dontCaptureUserMedia/
       this.connection.dontCaptureUserMedia = true;
 
