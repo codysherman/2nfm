@@ -49,21 +49,33 @@
 .room-launcher
   position: fixed
   z-index: 10
-  bottom: 0
+  bottom: 10px
   border: 0
-  left: 0
-
+  left: 10px
   svg
     width: 45px
     height: auto
-
+  
+.x-icon
+  svg
+    position: absolute
+    z-index: 10
+    top: -15px
+    border: 0
+    left: 323px
+    width: 32px
+    height: auto
+    fill: #4f4f51
+    border: 2px solid #4f4f51
+    padding: 6px
+    border-radius: 26px
 </style>
 
 <template lang="pug">
-  .ChatRoom
-    .room-launcher
-      ChatBubble
-    .chat-container.height-100
+  div
+    .chat-container.height-100(v-if="chatVisible")
+      .x-icon(v-if="chatVisible" @click="chatVisible = false" )
+        XSvg
       .frow.column-start.nowrap.height-100
         .chat-transcript-container.grow-1.height-100
           .frow.direction-column-reverse
@@ -78,6 +90,8 @@
             textarea#chat-message-field(type="text" placeholder="Enter Chat Message")
             button#send-message(type="submit")
               | Send
+    .room-launcher(v-if="!chatVisible" @click="chatVisible = true" )
+      ChatBubble
       
 
 
@@ -85,11 +99,21 @@
 
 <script>
 import ChatBubble from '@/assets/svgs/chat-bubble.svg';
+import XSvg from '@/assets/svgs/x.svg';
+
 
 export default {
   name: 'ChatRoom',
   components: {
     ChatBubble,
+    XSvg,
+  },
+
+  data() {
+    return {
+      chatVisible: false,
+    };
   },
 };
+
 </script>
