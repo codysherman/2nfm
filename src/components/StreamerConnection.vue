@@ -144,6 +144,10 @@ export default {
         } catch (e) {}
       };
 
+      this.connection.onUserIdAlreadyTaken = (useridAlreadyTaken) => {
+        this.$emit('idTaken', useridAlreadyTaken);
+      };
+
       // www.RTCMultiConnection.org/docs/dontCaptureUserMedia/
       this.connection.dontCaptureUserMedia = true;
 
