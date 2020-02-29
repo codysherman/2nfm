@@ -86,6 +86,7 @@ export default {
         stun: true,
         turn: true,
       };
+      this.connection.iceTransportPolicy = 'relay';
 
       this.connection.iceProtocols = {
         tcp: true,
