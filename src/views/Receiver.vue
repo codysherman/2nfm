@@ -119,6 +119,7 @@ video
     @stream="onStream"
     @presenceCheckWait="onPresenceCheckWait"
     @stats="onStats"
+    @receiverViewerCount="onReceiverViewerCount"
   )
   .menu-bar
     .frow.row-start
@@ -169,6 +170,8 @@ video
           step="0.01"
           @input="setVolume"
         )
+        span#viewer-count-number
+        | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
       .frow(v-if="stream.isVideo && isPlaying")
         button#theater-button.button-none.mr-20(
           type="button"
@@ -225,6 +228,7 @@ export default {
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
       presenceCheckWait: null,
+      receiverViewerCount: 0,
     };
   },
   computed: {
@@ -354,6 +358,9 @@ export default {
     },
     onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
+    },
+    onReceiverViewerCount(count) {
+      this.receiverViewerCount = count;
     },
     onStats(stats) {
       if (this.NO_MORE) {

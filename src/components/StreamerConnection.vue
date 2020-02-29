@@ -267,6 +267,8 @@ export default {
     },
     setViewerCount(count) {
       this.$emit('viewerCount', count);
+      this.connection.extra.receiverViewerCount = count;
+      this.connection.updateExtraData();
     },
     setDefaults() {
       if (this.connection) {
