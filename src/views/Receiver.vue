@@ -107,6 +107,10 @@ video
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
+
+@supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
+  #volume-slider
+    visibility: hidden
 </style>
 
 <template lang="pug">
