@@ -324,7 +324,11 @@ export default {
         this.room_id = window.localStorage.getItem('room_id');
       }
 
-      this.$refs.capturer.startStream();
+      if (this.room_id !== 'streamer')
+        this.$refs.capturer.startStream();
+      else {
+        this.useridAlreadyTaken = 'streamer';
+      }
     },
     stopStream() {
       this.$refs.capturer.stopStream();
