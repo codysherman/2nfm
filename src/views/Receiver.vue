@@ -108,11 +108,6 @@ video
   text-decoration: underline
   transition: fade-in 0.4s
 
-.chat-container
-  width: 500px
-  height: 500px
-  background-color: blue
-
 </style>
 
 <template lang="pug">
@@ -189,8 +184,7 @@ video
   //- #chat-container(hidden)
   //-   #chat-messages
   //-   input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
-  .chat-container
-    ChatRoom
+  ChatRoom
 </template>
 
 <script>

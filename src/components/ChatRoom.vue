@@ -10,41 +10,86 @@
   80%
     transform: rotate(10deg)
 
-.github-corner
-  fill: $primary-color
-  color: $white
-  position: absolute
-  top: 0
+.chat-container
+  color: #000
+  position: fixed
+  bottom: 0
   border: 0
-  right: 0
+  left: 0
+  max-height: 500px
+  width: 340px
+  background-color: #e3e3e3
+  margin:15px
+  padding: 10px
+  
+  .chat-transcript-container
+    width: 100%
+    overflow-y: scroll
+    margin-bottom: 9px
+    padding: 7px
 
-  &:hover .octo-arm
-    animation: 560ms ease-in-out octocat-wave
+  .chat-message-field-container
+    width: 97%
+  
+  #send-message
+    margin-left: 10px
+
+  #my
+    background-color: #fff
+  #their
+    background-color: #cacaca
+  
+  .chat-bubble
+    background-color: red
+    border: 2px solid black
+    border-radius: 30px
+    padding: 0 18px
+    font-size: 12px
+
+.room-launcher
+  position: fixed
+  z-index: 10
+  bottom: 0
+  border: 0
+  left: 0
 
   svg
-    width: 80px
-    height: 80px
+    width: 45px
+    height: auto
 
-.octo-body,
-.octo-arm
-  fill: $white
-
-.octo-arm
-  transform-origin: 130px 106px
 </style>
 
 <template lang="pug">
-  a.github-corner(href="https://github.com/codysherman/2NFM" target="_blank" rel="noopener")
-    GitHubSvg
+  .ChatRoom
+    .room-launcher
+      ChatBubble
+    .chat-container.height-100
+      .frow.column-start.nowrap.height-100
+        .chat-transcript-container.grow-1.height-100
+          .frow.direction-column-reverse
+            .frow.row-end
+              #my.chat-bubble
+                p My sample text
+            .frow.row-start
+              #their.chat-bubble
+                p Their sample text
+        .chat-message-field-container.shrink-0
+          .frow.row-start.nowrap
+            textarea#chat-message-field(type="text" placeholder="Enter Chat Message")
+            button#send-message(type="submit")
+              | Send
+      
+
+
 </template>
 
 <script>
-import GitHubSvg from '@/assets/svgs/github.svg';
+import ChatBubble from '@/assets/svgs/chat-bubble.svg';
 
 export default {
-  name: 'GitHubCorner',
+  name: 'ChatRoom',
   components: {
-    GitHubSvg,
+    ChatBubble,
   },
 };
 </script>
