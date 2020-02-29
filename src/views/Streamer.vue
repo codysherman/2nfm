@@ -200,7 +200,7 @@
               label
                 | Codec
                 select#codecs(@change="setCodecs")
-                  option(value="default" selected="") Default (VP8)
+                  option(value="default" selected="") Default (VP9)
                   option(value="vp8") VP8
                   option(value="vp9") VP9
                   option(value="h264") H264
@@ -284,7 +284,7 @@ export default {
       constraints: null,
       room_password: '',
       room_id: window.localStorage.getItem('room_id') || '',
-      codecs: 'default',
+      codecs: 'vp9',
       bandwidth: null,
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
