@@ -67,8 +67,7 @@ video
 #media-controls
   width: 60%
   animation: fade-in 0.4s
-  > *
-    > *
+  #volume-slider, #play-button-container, #autoplay
       margin: 14px 10px
 
   #play-button-container
@@ -87,7 +86,7 @@ video
       visibility: hidden
 
   #autoplay
-    > *
+    input, label
       margin: auto 4px
 
 #fullscreen-button,
