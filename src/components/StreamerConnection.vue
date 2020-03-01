@@ -52,9 +52,6 @@ export default {
     this.connection = null;
     delete this.connection;
   },
-  beforeDestroy() {
-    this.connection = null;
-  },
   methods: {
     shareStreamUsingRTCMultiConnection(stream, isVideo = false) {
       // www.RTCMultiConnection.org/docs/
@@ -279,8 +276,8 @@ export default {
     },
     setViewerCount(count) {
       this.$emit('viewerCount', count);
-      this.connection.extra.receiverViewerCount = count;
-      this.connection.updateExtraData();
+      // this.connection.extra.receiverViewerCount = count;
+      // this.connection.updateExtraData();
     },
     setOffline() {
       if (!this.connection || !this.connection.attachStreams.length) return;

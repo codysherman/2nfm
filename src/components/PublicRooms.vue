@@ -1,7 +1,12 @@
 <template lang="pug">
 div
   h1.mb-30 Public Rooms
-    router-link.stream-button(type="button" v-for="room in listOfRooms"  :to='room.owner')
+    router-link.stream-button(
+      type="button"
+      v-for="room in listOfRooms"
+      :key="room.owner"
+      :to="room.owner"
+    )
       | {{room.owner}}
         
 </template>
