@@ -89,7 +89,19 @@ video
     input, label
       margin: auto 4px
 
-#fullscreen-button,
+#fullscreen-button
+  svg
+    width: 30px
+    fill: $primary-color
+    transition: transform 0.4s
+
+  &:hover,
+  &:active,
+  &:focus
+    transform: scale(1.1)
+  @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
+    visibility: hidden
+
 #theater-button
   svg
     width: 30px
@@ -162,7 +174,7 @@ video
       .frow.nowrap
         button#play-button-container.frow.nowrap.button-none(
           type="button"
-          v-if="(stream.isAudio) || (stream.isVideo && !isPlaying)"
+          v-if="stream.isAudio || stream.isVideo"
           @click="togglePlayback"
         )
           PlaySvg(v-if="!isPlaying")
