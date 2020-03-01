@@ -147,9 +147,9 @@ export default {
       this.$emit('stream', e.stream);
     };
 
-    // this.connection.onExtraDataUpdated = (e) => {
-    //   this.$emit('receiverViewerCount', e.extra.receiverViewerCount);
-    // };
+    this.connection.onExtraDataUpdated = (e) => {
+      this.$emit('receiverViewerCount', e.extra.receiverViewerCount);
+    };
 
     // if user left
     this.connection.onleave = (e) => {

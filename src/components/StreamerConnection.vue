@@ -276,8 +276,10 @@ export default {
     },
     setViewerCount(count) {
       this.$emit('viewerCount', count);
-      // this.connection.extra.receiverViewerCount = count;
-      // this.connection.updateExtraData();
+      if (this.connection) {
+        this.connection.extra.receiverViewerCount = count;
+        this.connection.updateExtraData();
+      }
     },
     setOffline() {
       if (!this.connection || !this.connection.attachStreams.length) return;
