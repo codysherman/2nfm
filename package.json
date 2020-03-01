@@ -11,10 +11,8 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "frow": "^3.3.2",
-    "rtcmulticonnection": "^3.6.9",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.5",
-    "webrtc-adapter": "^7.5.0"
+    "vue-router": "^3.1.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.2",

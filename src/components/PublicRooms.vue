@@ -12,11 +12,6 @@ div
 </template>
 
 <script>
-// NOTE: needs to be imported for back-compat, but not referenced
-// eslint-disable-next-line no-unused-vars
-import adapter from 'webrtc-adapter';
-
-import RTCMultiConnection from 'rtcmulticonnection';
 import { IceServersHandler } from '@/utils/background/helpers/IceServersHandler';
 
 /**
