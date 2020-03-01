@@ -83,7 +83,19 @@ video
   @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
     visibility: hidden
 
-#fullscreen-button,
+#fullscreen-button
+  svg
+    width: 30px
+    fill: $primary-color
+    transition: transform 0.4s
+
+  &:hover,
+  &:active,
+  &:focus
+    transform: scale(1.1)
+  @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
+    visibility: hidden
+
 #theater-button
   svg
     width: 30px
