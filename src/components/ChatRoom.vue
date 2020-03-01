@@ -176,7 +176,11 @@
                   p {{ theirSentMessage }}
         .chat-message-field-container.shrink-0
           .frow.row-start.nowrap
-            textarea#chat-message-field(type="text" placeholder="Enter Chat Message" v-model="messageString")
+            textarea#chat-message-field(
+              v-model="messageString"
+              type="text" 
+              placeholder="Enter Chat Message" 
+            )
             button#send-message(@click='greet')
               SendArrow
     .room-launcher(v-if="!chatVisible" @click="chatVisible = true" )
