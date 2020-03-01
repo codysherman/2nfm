@@ -253,30 +253,6 @@ export default {
   beforeDestroy() {
     window.removeEventListener('offline', this.setOffline, false);
     window.removeEventListener('online', this.setOnline, false);
-
-    this.roomName = null;
-    this.stream = null;
-    this.isStream = null;
-    this.isPlaying = null;
-    this.theaterMode = null;
-    this.statsVisible = null;
-    this.volume = null;
-    this.NO_MORE = null;
-    this.stats = null;
-    this.infoBarMessage = null;
-    this.presenceCheckWait = null;
-
-    delete this.roomName;
-    delete this.stream;
-    delete this.isStream;
-    delete this.isPlaying;
-    delete this.theaterMode;
-    delete this.statsVisible;
-    delete this.volume;
-    delete this.NO_MORE;
-    delete this.stats;
-    delete this.infoBarMessage;
-    delete this.presenceCheckWait;
   },  
   methods: {
     onConnectionStateChanged(state) {
