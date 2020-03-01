@@ -25,6 +25,14 @@
     border-color: red
     animation: pulse 1.5s ease-in-out infinite alternate
 
+#id-taken
+  color: #721c24
+  background-color: #f8d7da
+  border: 1px solid #f5c6cb
+  padding: 0.6em
+  margin-top: 0.5em
+  border-radius: $border-radius-small
+
 /* XS
 @media (max-width: 767px)
   #logo
@@ -154,11 +162,16 @@
     :roomPassword="room_password"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
+    @idTaken="onIdTaken"
   )
   .col-md-1-2
     LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
+    div#id-taken(v-if="useridAlreadyTaken")
+      | ⚠️ Whoops,
+      b &nbsp;{{useridAlreadyTaken}}&nbsp;
+      | already taken! Please choose another room name.
     section#setup-section(v-if="!isSharingOn || !sessionId")
       label#room-id-label.row-start
         span.shrink-0 2n.fm/
@@ -187,7 +200,7 @@
               label
                 | Codec
                 select#codecs(@change="setCodecs")
-                  option(value="default" selected="") Default (VP8)
+                  option(value="default" selected="") Default (VP9)
                   option(value="vp8") VP8
                   option(value="vp9") VP9
                   option(value="h264") H264
@@ -228,7 +241,7 @@
         | {{ `2n.fm/${sessionId}` }}
       .viewer-count
         span#viewer-count-number
-        | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }} 
+        | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
       button#stop-sharing(type="button" @click="stopStream")
         | End Sharing
     .frow.width-100.mt-20
@@ -271,11 +284,12 @@ export default {
       constraints: null,
       room_password: '',
       room_id: window.localStorage.getItem('room_id') || '',
-      codecs: 'default',
+      codecs: 'vp9',
       bandwidth: null,
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
+      useridAlreadyTaken: '',
     };
   },
   mounted() {
@@ -310,6 +324,12 @@ export default {
         this.room_id = window.localStorage.getItem('room_id');
       }
 
+      let protectedRoutes = ['streamer'];
+      if (protectedRoutes.includes(this.room_id)) {
+        this.useridAlreadyTaken = 'streamer';
+        return;
+      }
+
       this.$refs.capturer.startStream();
     },
     stopStream() {
@@ -340,10 +360,15 @@ export default {
       );
     },
     onSessionId(id) {
+      this.useridAlreadyTaken = '';
       this.sessionId = id;
     },
     onSetDefaults() {
       this.$refs.connection.setDefaults();
+    },
+    onIdTaken(takenID) {
+      this.useridAlreadyTaken = takenID;
+      this.room_id = '';
     },
     onIsSharing(isSharing) {
       this.isSharingOn = isSharing;

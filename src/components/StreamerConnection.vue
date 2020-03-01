@@ -144,6 +144,10 @@ export default {
         } catch (e) {}
       };
 
+      this.connection.onUserIdAlreadyTaken = (useridAlreadyTaken) => {
+        this.$emit('idTaken', useridAlreadyTaken);
+      };
+
       // www.RTCMultiConnection.org/docs/dontCaptureUserMedia/
       this.connection.dontCaptureUserMedia = true;
 
@@ -255,8 +259,17 @@ export default {
       this.connection.open(this.connection.sessionid, roomOpenCallback);
 
       var oldLength = 0;
-      this.connection.onleave = this.connection.onPeerStateChanged = () => {
-        var participantsCount = this.connection.getAllParticipants().length;
+      this.connection.onleave = (event) =>{
+        const participants = this.connection.getAllParticipants();
+        let count = participants.length;
+        if (participants.includes(event.userid)) {
+          count--;
+        }
+        this.setViewerCount(count);
+      };
+
+      this.connection.onPeerStateChanged = () => {
+        const participantsCount = this.connection.getAllParticipants().length;
         if (oldLength != participantsCount) {
           // sendTabTitle();
         }
