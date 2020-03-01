@@ -89,17 +89,20 @@
                 input#room-input(type="text" v-model="roomId" placeholder="Room Name")
                 button#enter-room(type="submit")
                   | Go
+      PublicRooms
 </template>
 
 <script>
 import LogoSvg from '@/assets/svgs/logo.svg';
 import GitHubCorner from '@/components/GitHubCorner.vue';
+import PublicRooms from '@/components/PublicRooms.vue';
 
 export default {
   name: 'Home',
   components: {
     LogoSvg,
     GitHubCorner,
+    PublicRooms,
   },
   data() {
     return {
