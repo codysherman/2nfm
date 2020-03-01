@@ -66,13 +66,14 @@
       font-size: 14px
   
   #set-username-button
-    font-size: 14px
     border: 1px solid #4f4f51
     padding: 3px 7px
     svg
-      width: 18px
+      width: 13px
       height: auto
       fill: #4f4f51
+    input
+      border-bottom: none
 
   #my
     .username
@@ -91,7 +92,7 @@
       background-color: #cacaca
 
   .chat-bubble
-    border: 2px solid #cacaca
+    border: 1px solid #b8b8b8
     border-radius: 30px
     padding: 0 18px
     margin-bottom: 2px
@@ -111,20 +112,34 @@
   svg
     position: absolute
     z-index: 10
-    top: -15px
+    top: -10px
     border: 0
-    left: 323px
-    width: 32px
+    right: 331px
+    width: 20px
     height: auto
     fill: #4f4f51
     border: 2px solid #4f4f51
-    padding: 6px
+    padding: 3px
     border-radius: 26px
     background-color: #fff
+
+.closed-message-notif
+  position: fixed
+  z-index: 10
+  bottom: 10px
+  border: 0
+  left: 10px
+
 </style>
 
 <template lang="pug">
   div
+    //- .closed-message-notif
+    //-   .chat-bubble-parent
+    //-     .username
+    //-       | smallthrob
+    //-     .chat-bubble 
+    //-       p My sample text
     .chat-container.height-100(v-if="chatVisible")
       .x-icon(v-if="chatVisible" @click="chatVisible = false" )
         XSvg
