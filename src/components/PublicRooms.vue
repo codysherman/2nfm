@@ -1,8 +1,9 @@
 <template lang="pug">
 div
-    p Public Rooms
-    li(v-for="room in listOfRooms") {{room.owner}}
-
+    h1.mb-30 Public Rooms
+    router-link.stream-button(type="button" v-for="room in listOfRooms"  :to='room.owner')
+        | {{room.owner}}
+        
 </template>
 
 <script>
@@ -47,7 +48,7 @@ export default {
       params: {},
       connection: null,
       presenceCheckWait: 3750,
-      roomName: 'find_me',
+      roomName: 'streamer',
       listOfRooms: [],
     };
   },
@@ -62,7 +63,7 @@ export default {
     // http://www.rtcmulticonnection.org/docs/constructor/
     this.connection = new RTCMultiConnection(this.roomName);
     this.connection.socketURL = 'https://api.2n.fm:9001/';
-    this.connection.autoCloseEntireSession = true;
+    this.connection.autoCloseEntireSession = false;
 
     // this must match the extension page
     this.connection.socketMessageEvent = 'desktopCapture';
@@ -98,14 +99,6 @@ export default {
     if (this.roomName) {
       this.checkPresence();
     }
-    
-    this.connection.publicRoomIdentifier = 'desktopCapture'
-    this.connection.socket.emit('get-public-rooms',
-      this.connection.publicRoomIdentifier,
-      (listOfRooms) => {
-        console.log(listOfRooms)
-        this.listOfRooms = listOfRooms
-      });
   },
   methods: {
     checkPresence() {
@@ -115,9 +108,9 @@ export default {
         // eslint-disable-next-line no-unused-vars
         (isRoomExist, roomid, extra) => {
           if (isRoomExist === false) {
-            if (this.presenceCheckWait < 60000) {
-              this.presenceCheckWait = this.presenceCheckWait * 2;
-            }
+            // if (this.presenceCheckWait < 60000) {
+            //   this.presenceCheckWait = this.presenceCheckWait * 2;
+            // }
 
             // FIXME: ensure presenceCheckWait watcher is triggered before sending state update
             // (or, this could be solved by making the infobarMessage a computed in Receiver)
@@ -140,6 +133,13 @@ export default {
           this.connection.join(this.roomName);
         },
       );
+      this.connection.publicRoomIdentifier = 'desktopCapture'
+      this.connection.socket.emit('get-public-rooms',
+        this.connection.publicRoomIdentifier,
+        (listOfRooms) => {
+          console.log(listOfRooms)
+          this.listOfRooms = listOfRooms
+        });
     },
   },
 };
