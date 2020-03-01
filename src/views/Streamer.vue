@@ -117,12 +117,25 @@
   &:hover svg path
     fill: $black
 
-#public-link
-  display: block
-  font-size: 40px
-  color: $primary-color
-  margin: 0 auto
+#stop-section
   text-align: center
+
+  #public-link
+    display: inline-block
+    font-size: 40px
+    color: $primary-color
+    margin: 0 auto
+    
+  #copy-button
+    display: inline-block
+    margin-left: 14px
+    svg
+      width: 30px
+      fill: $primary-color
+
+  #copy-notification
+    font-size: 20px
+    visibility: hidden
 
 /* XS
 @media (max-width: 767px)
@@ -200,7 +213,7 @@
               label
                 | Codec
                 select#codecs(@change="setCodecs")
-                  option(value="default" selected="") Default (VP9)
+                  option(value="default" selected="") Default (VP8)
                   option(value="vp8") VP8
                   option(value="vp9") VP9
                   option(value="h264") H264
@@ -239,6 +252,9 @@
       //- )
       router-link#public-link(:to="sessionId" target="_blank")
         | {{ `2n.fm/${sessionId}` }}
+      #copy-button(@click="copyUrl()")
+          CopySvg
+      div#copy-notification.animate-fade-in Copied!
       .viewer-count
         span#viewer-count-number
         | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
@@ -262,6 +278,7 @@
 import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
+import CopySvg from '@/assets/svgs/copy.svg';
 
 import DesktopCapturer from '@/components/DesktopCapturer.vue';
 import StreamerConnection from '@/components/StreamerConnection.vue';
@@ -272,6 +289,7 @@ export default {
     LogoSvg,
     VideoSvg,
     AudioSvg,
+    CopySvg,
     DesktopCapturer,
     StreamerConnection,
   },
@@ -284,7 +302,7 @@ export default {
       constraints: null,
       room_password: '',
       room_id: window.localStorage.getItem('room_id') || '',
-      codecs: 'vp9',
+      codecs: 'default',
       bandwidth: null,
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
@@ -352,6 +370,25 @@ export default {
     },
     setCodecs(codec) {
       this.codecs = codec;
+    },
+    copyUrl() {
+      let copyText = document.getElementById('public-link');
+      let input = document.createElement('input');
+      input.setAttribute('value', copyText.innerText);
+      document.body.appendChild(input);
+      input.select();
+
+      let result = document.execCommand('copy');
+      const copyNotification = document.getElementById('copy-notification')
+      if (result) {
+        document.body.removeChild(input);
+        copyNotification.style.visibility = 'visible';
+        setTimeout(() => { 
+          copyNotification.style.visibility = 'hidden';
+        }, 5000);
+      } else {
+        copyNotification.innerText = 'Copy failed'
+      }
     },
     onGotStream(stream) {
       this.$refs.connection.shareStreamUsingRTCMultiConnection(
