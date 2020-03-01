@@ -138,7 +138,6 @@ export default {
         'get-public-rooms',
         this.connection.publicRoomIdentifier,
         (listOfRooms) => {
-          console.log(listOfRooms);
           this.listOfRooms = listOfRooms;
         },
       );
