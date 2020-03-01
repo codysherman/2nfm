@@ -135,7 +135,6 @@
 
   #copy-notification
     font-size: 20px
-    visibility: hidden
 
 /* XS
 @media (max-width: 767px)
@@ -254,7 +253,8 @@
         | {{ `2n.fm/${sessionId}` }}
       #copy-button(@click="copyUrl()")
           CopySvg
-      div#copy-notification.animate-fade-in Copied!
+      #copy-notification.animate-fade-in(v-if="copyNotification") 
+        | Copied!
       .viewer-count
         span#viewer-count-number
         | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
@@ -308,6 +308,7 @@ export default {
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
       useridAlreadyTaken: '',
+      copyNotification: false,
     };
   },
   mounted() {
@@ -382,9 +383,9 @@ export default {
       const copyNotification = document.getElementById('copy-notification')
       if (result) {
         document.body.removeChild(input);
-        copyNotification.style.visibility = 'visible';
-        setTimeout(() => { 
-          copyNotification.style.visibility = 'hidden';
+        this.copyNotification = true
+        setTimeout(() => {
+          this.copyNotification = false
         }, 5000);
       } else {
         copyNotification.innerText = 'Copy failed'
