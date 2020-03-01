@@ -156,7 +156,7 @@ video
       .frow.nowrap
         button#play-button-container.frow.nowrap.button-none(
           type="button"
-          v-if="(stream.isAudio) || (stream.isVideo && !isPlaying)"
+          v-if="stream.isAudio || stream.isVideo"
           @click="togglePlayback"
         )
           PlaySvg(v-if="!isPlaying")
