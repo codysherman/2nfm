@@ -7,8 +7,6 @@
 import adapter from 'webrtc-adapter';
 
 import RTCMultiConnection from 'rtcmulticonnection';
-import { getStats } from '@/utils/background/helpers/getStats';
-import { CodecsHandler } from '@/utils/background/helpers/CodecsHandler';
 import { IceServersHandler } from '@/utils/background/helpers/IceServersHandler';
 
 /**
@@ -86,158 +84,22 @@ export default {
 
     this.connection.getExternalIceServers = false;
     this.connection.iceServers = IceServersHandler.getIceServers();
-
-    this.connection.processSdp = (sdp) => {
-      var bandwidth = this.params.bandwidth;
-      var codecs = this.params.codecs;
-
-      if (bandwidth) {
-        try {
-          bandwidth = parseInt(bandwidth);
-        } catch (e) {
-          bandwidth = null;
-        }
-
-      }
-
-      if (!!codecs && codecs !== 'default') {
-        sdp = CodecsHandler.preferCodec(sdp, codecs);
-      }
-      return sdp;
-    };
       
-
-    this.connection.optionalArgument = {
-      optional: [],
-      mandatory: {},
-    };
-
-    this.connection.onstatechange = (state) => {
-      if (state.name == 'request-rejected' && this.params.p) {
-        this.$emit('state', { value: STATE.UNAUTHORIZED });
-      } else if (state.name === 'room-not-available') {
-        this.$emit('state', { value: STATE.UNAVAILABLE });
-      } else {
-        const { name, reason } = state;
-        this.$emit('state', { value: STATE.GENERIC, name, reason });
-      }
-    };
-
-    this.connection.onstreamid = () => {
-      this.$emit('state', { value: STATE.PEER_WILL_SEND });
-    };
 
     this.connection.onstream = (e) => {
       this.$emit('stream', e.stream);
     };
 
-    // if user left
-    this.connection.onleave = (e) => {
-      if (e.userid !== this.roomName) return;
-
-      // TODO: maybe split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing
-      this.connection.close();
-      this.connection.closeSocket();
-      this.connection.userid = this.connection.token();
-
-      this.$emit('state', { value: STATE.SOCKET_CLOSED });
-    };
-
-    // TODO: refactor so synchronous `prompt`'s (or better alternative) is done from the Receiver
-    this.connection.onJoinWithPassword = (remoteUserId) => {
-      if (!this.params.p) {
-        this.params.p = prompt(
-          remoteUserId + ' is password protected. Please enter the pasword:',
-        );
-      }
-
-      this.connection.password = this.params.p;
-      this.connection.join(remoteUserId);
-    };
-    this.connection.onstreamended = this.connection.onSessionClosed = this.connection.onleave;
-
-    this.connection.onInvalidPassword = (remoteUserId, oldPassword) => {
-      var password = prompt(
-        remoteUserId +
-          ' is password protected. Your entered wrong password (' +
-          oldPassword +
-          '). Please enter valid pasword:',
-      );
-      this.connection.password = password;
-      this.connection.join(remoteUserId);
-    };
-
-    this.connection.onPasswordMaxTriesOver = (remoteUserId) => {
-      alert(
-        remoteUserId +
-          ' is password protected. Your max password tries exceeded the limit.',
-      );
-    };
-
-    this.connection.onSocketDisconnect = () => {
-      if (this.connection.getAllParticipants().length > 0) return;
-
-      this.$emit('state', { value: STATE.SOCKET_DISCONNECT });
-    };
-
-    this.connection.onSocketError = () => {
-      this.$emit('state', { value: STATE.SOCKET_ERROR });
-    };
-    
-
-    this.connection.onopen = () => {
-      //
-    };
-
-    this.connection.socketCustomEvent = this.roomName;
-
-    console.log('[Connection mounted]: roomName check:', this.roomName);
     if (this.roomName) {
       this.checkPresence();
     }
-
-    var dontDuplicate = {};
-    this.connection.onPeerStateChanged = (event) => {
-      if (!this.connection.getRemoteStreams(this.roomName).length) {
-        if (event.signalingState === 'have-remote-offer') {
-          this.$emit('state', { value: STATE.HAVE_OFFER });
-        } else if (
-          event.iceGatheringState === 'complete' &&
-          event.iceConnectionState === 'connected'
-        ) {
-          this.$emit('state', { value: STATE.HANDSHAKE_COMPLETE });
-        }
-      }
-
-      if (
-        event.iceConnectionState === 'connected' &&
-        event.signalingState === 'stable'
-      ) {
-        if (dontDuplicate[event.userid]) return;
-        dontDuplicate[event.userid] = true;
-
-        this.$emit('state', { value: STATE.CONNECTED });
-
-        this.connection.publicRoomIdentifier = 'desktopCapture'
-        this.connection.socket.emit('get-public-rooms',
-          this.connection.publicRoomIdentifier,
-          (listOfRooms) => {
-            console.log(listOfRooms)
-            listOfRooms.forEach((room) => {
-              console.error(room);
-            });
-          });
-        getStats(
-          this.connection.peers[event.userid].peer,
-          (stats) => {
-            this.onGettingWebRTCStats(stats, event.userid);
-          },
-          1000,
-        );
-      } else if (event.iceConnectionState === 'disconnected') {
-        this.$emit('state', { value: STATE.DISCONNECTED });
-      }
-    };
+    
+    this.connection.publicRoomIdentifier = 'desktopCapture'
+    this.connection.socket.emit('get-public-rooms',
+      this.connection.publicRoomIdentifier,
+      (listOfRooms) => {
+        console.log(listOfRooms)
+      });
   },
   methods: {
     checkPresence() {
@@ -273,34 +135,14 @@ export default {
         },
       );
     },
-
-
-    onGettingWebRTCStats(stats, userid) {
-      if (!this.connection.peers[userid]) {
-        stats.nomore();
-        return;
-      }
-      this.$emit('stats', stats);
-    },
   },
 };
 
 function getParams() {
-  let r;
   let DEFAULTS;
   let tempParams;
   (tempParams = {}),
-  (r = /([^&=]+)=?([^&]*)/g),
   (DEFAULTS = { bandwidth: 8192 });
-
-  function d(s) {
-    return decodeURIComponent(s.replace(/\+/g, ' '));
-  }
-
-  var match,
-    search = window.location.search;
-  while ((match = r.exec(search.substring(1))))
-    tempParams[d(match[1])] = d(match[2]);
 
   return Object.assign({}, DEFAULTS, tempParams);
 }
