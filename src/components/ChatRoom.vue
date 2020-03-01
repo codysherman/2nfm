@@ -55,7 +55,7 @@
       fill: #fff
 
   .set-username
-    margin-bottom: 7px
+    margin-bottom: 2px
     padding: 14px
     width: 100%
     p
@@ -71,7 +71,7 @@
     background: #ffffff
     border-radius: 5px
     box-shadow: 0 0 0 1px gray
-    padding: 7px 14px
+    padding: 4px 8px
     text-decoration: none
     transition: all 10ms
     svg
@@ -80,22 +80,22 @@
       fill: #4f4f51
 
   #set-username-button:hover
-    box-shadow: 0 0 0 1px #00ab66
-    background: rgba(0, 171, 102, .05)
+    box-shadow: 0 0 0 1px black
+    background: #fefefe
     color: #00ab66
 
   #my
     .username
-      font-size:10px
-      padding-left: 15px
+      font-size:11px
+      padding-left: 12px
       color: #989898
     .chat-bubble
       background-color: #fff
 
   #their
     .username
-      font-size:9px
-      padding-left: 15px
+      font-size:11px
+      padding-left: 12px
       color: #989898
     .chat-bubble
       background-color: #cacaca
@@ -131,6 +131,43 @@
     padding: 6px
     border-radius: 26px
     background-color: #fff
+
+.centerDat
+  text-align: center
+  color: #00ab66
+  animation-fill-mode: forwards
+
+.mySentMsgs
+  text-align: right
+
+.adartest
+  background: #ffffff
+  padding: 10px
+  border-radius: 5px
+
+.changeUserName
+  font-size: 11px
+  color: #aaaaaa
+  display:inline-block
+
+.theme-dark
+  font-size: 11px
+  color: #696969
+  --color-primary: #17ed90
+  --color-secondary: #243133
+  --color-accent: #12cdea
+  --font-color: #ffffff
+
+.theme-light
+  font-size: 11px
+  color: #bababa
+  --color-primary: #0060df
+  --color-secondary: #fbfbfe
+  --color-accent: #fd6f53
+  --font-color: #000000
+
+.adartopmarg
+
 </style>
 
 <template lang="pug">
@@ -139,29 +176,38 @@
       .x-icon(v-if="chatVisible" @click="chatVisible = false" )
         XSvg
       .frow.column-start.nowrap.height-100
-        .set-username
-          .frow.row-center.nowrap
+        .set-username.overflow-hidden
+          .frow.row-center.nowrap(v-if="editingName")
             p.shrink-0 Chatting as:
-            input(type="text" placeholder="Set Username")
-            button#set-username-button.button-link(type="submit")
+            input(type="text" placeholder="Set Username" v-model="setNameString")
+            button#set-username-button.button-link(@click='setMyUsername')
               Checkmark
+          h4.centerDat.animate-slide-down-up(v-if="editingName === false") {{ myUserName }} has entered the room!
+          .frow.row-between.adartopmarg
+            a.changeUserName(v-if="!editingName" @click='changeUserName') Change Username
+            a.theme-dark(@click='setTheme("themeDark")') Dark Theme
+            a.theme-light(@click='setTheme("themeLight")') Light Theme
         .chat-transcript-container.grow-1.height-100
           .frow.direction-column-reverse.height-100.justify-start
             .frow.row-end
+              p.adartest(v-if="mySentMessages.length > 0")
+                template(v-for="msg in mySentMessages")
+                  .mySentMsgs(v-if="msg.length > 0") {{ msg }}
               #my.chat-bubble-parent
-                .username
-                  | smallthrob
-                .chat-bubble 
-                  p {{ mySentMessage }}
-            .frow.row-start
-              #their.chat-bubble-parent
-                .username
-                  | dizbar
-                .chat-bubble
-                  p {{ theirSentMessage }}
+                .username 
+                  | {{ myUserName }} 
+              //-   .chat-bubble 
+              //-     p {{ mySentMessages }}
+            //- .frow.row-start
+            //-   #their.chat-bubble-parent
+            //-     .username
+            //-       | dizbar
+            //-     .chat-bubble
+            //-       p {{ theirSentMessage }}
         .chat-message-field-container.shrink-0
           .frow.row-start.nowrap
-            textarea#chat-message-field(type="text" placeholder="Enter Chat Message" v-model="messageString")
+            textarea#chat-message-field(type="text" placeholder="Enter Chat Message" 
+            v-model="messageString")
             button#send-message(@click='greet')
               SendArrow
     .room-launcher(v-if="!chatVisible" @click="chatVisible = true" )
@@ -178,7 +224,6 @@ import SendArrow from '@/assets/svgs/right-arrow-corner.svg';
 import Checkmark from '@/assets/svgs/checkmark.svg';
 
 
-
 export default {
   name: 'ChatRoom',
   components: {
@@ -192,13 +237,48 @@ export default {
     return {
       chatVisible: true,
       messageString: '',
+      mySentMessages: [],
+
+      editingName: true,
+
+      setNameString: '',
+      myUserName: 'Me',
     };
   },
 
   methods: {
     greet: function () {
-      alert(this.messageString)
+      this.mySentMessages.push(this.messageString)
       this.messageString = ''
+    },
+
+    setMyUsername: function() {
+      if(this.setNameString.length > 0){
+        this.myUserName = this.setNameString
+        this.editingName = false
+        this.setNameString = ''
+      }
+    },
+
+    changeUserName: function() {
+      this.editingName = true
+      this.setNameString = ''
+    },
+
+    setTheme(themeName) {
+      localStorage.setItem('theme', themeName);
+      alert(themeName)
+    },
+
+    toggleTheme() {
+      if(localStorage.getItem('theme') === 'theme-dark') {
+        setTheme('theme-light')
+        console.log('Theme changed to light.')
+      } 
+      else {
+        setTheme('theme-dark')
+        console.log('Theme changed to dark.')
+      }
     },
   },
 };

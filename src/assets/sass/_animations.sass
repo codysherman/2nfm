@@ -37,6 +37,19 @@
 .animate-slide-up
   animation: slide-up $animate-speed
 
+@keyframes slide-down-up
+  0%
+    transform: translateY(-200%)
+  40%
+    transform: translateY(0)
+  60%
+    transform: translateY(0)
+  100%
+    transform: translateY(-200%)
+
+.animate-slide-down-up
+  animation: slide-down-up 5s
+
 @keyframes pulse
   from
     opacity: 1
