@@ -59,6 +59,12 @@ export default {
       false,
     );
   },
+  onDestory() {
+
+    clearInterval(this.connection.looper);
+    this.connection = null;
+
+  },
   methods: {
     shareStreamUsingRTCMultiConnection(stream, isVideo = false) {
       // www.RTCMultiConnection.org/docs/
@@ -301,9 +307,6 @@ export default {
           this.connection.closeSocket();
         } catch (e) {}
 
-        clearInterval(this.connection.looper);
-
-        this.connection = null;
       }
 
       this.setViewerCount(0);
