@@ -67,21 +67,27 @@ video
 #media-controls
   width: 60%
   animation: fade-in 0.4s
+  #volume-slider, #play-button-container, #autoplay
+      margin: 14px 10px
 
-#play-button-container
-  width: 30px
-  height: 30px
-  margin-right: 20px
-
-  svg
+  #play-button-container
     width: 30px
     height: 30px
-    fill: $primary-color
+    margin-right: 20px
 
-#volume-slider
-  max-width: 120px
-  @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
-    visibility: hidden
+    svg
+      width: 30px
+      height: 30px
+      fill: $primary-color
+
+  #volume-slider
+    max-width: 120px
+    @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
+      visibility: hidden
+
+  #autoplay
+    input, label
+      margin: auto 4px
 
 #fullscreen-button,
 #theater-button
@@ -161,7 +167,7 @@ video
         )
           PlaySvg(v-if="!isPlaying")
           PauseSvg(v-else)
-        input#volume-slider(
+        input#volume-slider.frow.nowrap(
           type="range"
           :value="volume"
           min="0"
@@ -169,6 +175,14 @@ video
           step="0.01"
           @input="setVolume"
         )
+        div#autoplay.frow.nowrap
+          input(
+            type="checkbox"
+            :checked = "autoplay"
+            @change="toggleAutoPlay"
+          )
+          label AutoPlay
+        
       .frow(v-if="stream.isVideo && isPlaying")
         button#theater-button.button-none.mr-20(
           type="button"
@@ -225,6 +239,7 @@ export default {
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
       presenceCheckWait: null,
+      autoplay: true,
     };
   },
   computed: {
@@ -246,6 +261,10 @@ export default {
       .toLowerCase();
     if (this.$route.params.room !== sanitizedRoomId) {
       this.$router.push(sanitizedRoomId);
+    }
+    const localstorageAutoplay = JSON.parse(localStorage.getItem('autoplay'))
+    if (localstorageAutoplay !== null) {
+      this.autoplay = localstorageAutoplay
     }
   },
   mounted() {
@@ -350,7 +369,9 @@ export default {
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
         this.$refs.audioPlayer.volume = this.volume;
       }
-      this.playMedia();
+      if (this.autoplay) {
+        this.playMedia();
+      }
     },
     onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
@@ -369,6 +390,10 @@ export default {
       } catch (err) {
         // Playback Failed
       }
+    },
+    toggleAutoPlay() {
+      this.autoplay = !this.autoplay
+      localStorage.setItem('autoplay', JSON.stringify(this.autoplay))
     },
     togglePlayback() {
       if (this.player.paused) {
