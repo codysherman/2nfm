@@ -60,7 +60,10 @@ export default {
     );
   },
   beforeDestroy() {
+
+    clearInterval(this.connection.looper);
     this.connection = null;
+
   },
   methods: {
     shareStreamUsingRTCMultiConnection(stream, isVideo = false) {

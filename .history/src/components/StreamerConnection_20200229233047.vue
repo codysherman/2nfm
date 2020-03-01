@@ -59,8 +59,11 @@ export default {
       false,
     );
   },
-  beforeDestroy() {
+  onDestory() {
+
+    clearInterval(this.connection.looper);
     this.connection = null;
+
   },
   methods: {
     shareStreamUsingRTCMultiConnection(stream, isVideo = false) {

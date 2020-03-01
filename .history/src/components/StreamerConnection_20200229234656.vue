@@ -60,6 +60,7 @@ export default {
     );
   },
   beforeDestroy() {
+    console.log(t)
     this.connection = null;
   },
   methods: {
