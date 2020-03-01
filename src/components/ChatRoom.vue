@@ -68,11 +68,21 @@
   #set-username-button
     font-size: 14px
     border: 1px solid #4f4f51
-    padding: 3px 7px
+    background: #ffffff
+    border-radius: 5px
+    box-shadow: 0 0 0 1px gray
+    padding: 7px 14px
+    text-decoration: none
+    transition: all 10ms
     svg
       width: 18px
       height: auto
       fill: #4f4f51
+
+  #set-username-button:hover
+    box-shadow: 0 0 0 1px #00ab66
+    background: rgba(0, 171, 102, .05)
+    color: #00ab66
 
   #my
     .username
@@ -142,21 +152,17 @@
                 .username
                   | smallthrob
                 .chat-bubble 
-                  p My sample text
-                .chat-bubble 
-                  p And then there's even more text here.
+                  p {{ mySentMessage }}
             .frow.row-start
               #their.chat-bubble-parent
                 .username
                   | dizbar
                 .chat-bubble
-                  p Their sample text
+                  p {{ theirSentMessage }}
         .chat-message-field-container.shrink-0
           .frow.row-start.nowrap
-            textarea#chat-message-field(type="text" placeholder="Enter Chat Message")
-            //- button#send-message(type="submit")
-            //-   | Send
-            button#send-message(type="submit")
+            textarea#chat-message-field(type="text" placeholder="Enter Chat Message" v-model="messageString")
+            button#send-message(@click='greet')
               SendArrow
     .room-launcher(v-if="!chatVisible" @click="chatVisible = true" )
       ChatBubble
@@ -185,7 +191,15 @@ export default {
   data() {
     return {
       chatVisible: true,
+      messageString: '',
     };
+  },
+
+  methods: {
+    greet: function () {
+      alert(this.messageString)
+      this.messageString = ''
+    },
   },
 };
 
