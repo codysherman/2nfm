@@ -154,6 +154,7 @@
     :roomPassword="room_password"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
+    :privacy="privacy"
   )
   .col-md-1-2
     LogoSvg#logo
