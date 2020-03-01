@@ -38,17 +38,29 @@ export default {
     };
   },
   mounted() {
-    window.addEventListener('offline', this.setOffline, false);
-    window.addEventListener('online', this.setOnline, false);
-  },
-  beforeDestroy() {
-    window.removeEventListener('offline', this.setOffline, false);
-    window.removeEventListener('online', this.setOnline, false);
+    // TODO: should probably deregister the event listener on e.g. `unmounted`
+    window.addEventListener(
+      'offline',
+      () => {
+        if (!this.connection || !this.connection.attachStreams.length) return;
 
-    this.connection = null;
-    delete this.connection;
+        this.setDefaults();
+      },
+      false,
+    );
+
+    window.addEventListener(
+      'online',
+      () => {
+        if (!this.connection) return;
+
+        this.setDefaults();
+      },
+      false,
+    );
   },
   beforeDestroy() {
+
     this.connection = null;
   },
   methods: {
@@ -272,18 +284,8 @@ export default {
     },
     setViewerCount(count) {
       this.$emit('viewerCount', count);
-      this.connection.extra.receiverViewerCount = count;
-      this.connection.updateExtraData();
     },
-    setOffline() {
-      if (!this.connection || !this.connection.attachStreams.length) return;
-      this.setDefaults();
-    },
-    setOnline() {
-      if (!this.connection) return;
-      this.setDefaults();
-    },
-    setDefaults() {     
+    setDefaults() {
       if (this.connection) {
         this.connection.attachStreams.forEach((stream) => {
           try {
