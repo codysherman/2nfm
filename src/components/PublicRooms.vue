@@ -1,4 +1,8 @@
 <template lang="pug">
+div
+    p Public Rooms
+    li(v-for="room in listOfRooms") {{room.owner}}
+
 </template>
 
 <script>
@@ -44,6 +48,7 @@ export default {
       connection: null,
       presenceCheckWait: 3750,
       roomName: 'find_me',
+      listOfRooms: [],
     };
   },
   watch: {
@@ -99,6 +104,7 @@ export default {
       this.connection.publicRoomIdentifier,
       (listOfRooms) => {
         console.log(listOfRooms)
+        this.listOfRooms = listOfRooms
       });
   },
   methods: {
