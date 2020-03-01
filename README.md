@@ -55,7 +55,7 @@ https://www.webrtc-experiment.com/screen/?s=your_room_id
 3. [RTCMultiConnection](https://github.com/muaz-khan/RTCMultiConnection) is a WebRTC library that is used for peer-to-peer WebRTC streaming.
 4. PubNub is used as a signaling method for handshake. However you can use [any WebRTC signaing option](https://github.com/muaz-khan/WebRTC-Experiment/blob/master/Signaling.md).
 5. You can replace or include your own STUN+TURN servers in the [IceServersHandler.js](https://github.com/muaz-khan/Chrome-Extensions/blob/master/desktopCapture-p2p/IceServersHandler.js) file.
-6. VP8 is currently default video codecs. However VP9 is recommended. You can always change codecs using options page.
+6. VP9 is currently default video codecs. You can always change codecs using options page.
 7. [getStats](https://github.com/muaz-khan/getStats) is a WebRTC library that is used for bandwidth & codecs detection. This library is optional. You can always remove it.
 
 ## Before publishing it for your own business

@@ -25,6 +25,14 @@
     border-color: red
     animation: pulse 1.5s ease-in-out infinite alternate
 
+#id-taken
+  color: #721c24
+  background-color: #f8d7da
+  border: 1px solid #f5c6cb
+  padding: 0.6em
+  margin-top: 0.5em
+  border-radius: $border-radius-small
+
 /* XS
 @media (max-width: 767px)
   #logo
@@ -109,12 +117,24 @@
   &:hover svg path
     fill: $black
 
-#public-link
-  display: block
-  font-size: 40px
-  color: $primary-color
-  margin: 0 auto
+#stop-section
   text-align: center
+
+  #public-link
+    display: inline-block
+    font-size: 40px
+    color: $primary-color
+    margin: 0 auto
+    
+  #copy-button
+    display: inline-block
+    margin-left: 14px
+    svg
+      width: 30px
+      fill: $primary-color
+
+  #copy-notification
+    font-size: 20px
 
 /* XS
 @media (max-width: 767px)
@@ -152,14 +172,19 @@
     :codecs="codecs"
     :roomId="room_id"
     :roomPassword="room_password"
+    :privacy="privacy"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
-    :privacy="privacy"
+    @idTaken="onIdTaken"
   )
   .col-md-1-2
     LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
+    div#id-taken(v-if="useridAlreadyTaken")
+      | ⚠️ Whoops,
+      b &nbsp;{{useridAlreadyTaken}}&nbsp;
+      | already taken! Please choose another room name.
     section#setup-section(v-if="!isSharingOn || !sessionId")
       label#room-id-label.row-start
         span.shrink-0 2n.fm/
@@ -188,7 +213,7 @@
               label
                 | Codec
                 select#codecs(@change="setCodecs")
-                  option(value="default" selected="") Default (VP8)
+                  option(value="default" selected="") Default (VP9)
                   option(value="vp8") VP8
                   option(value="vp9") VP9
                   option(value="h264") H264
@@ -236,9 +261,13 @@
       //- )
       router-link#public-link(:to="sessionId" target="_blank")
         | {{ `2n.fm/${sessionId}` }}
+      #copy-button(@click="copyUrl()")
+          CopySvg
+      #copy-notification.animate-fade-in(v-if="copyNotification") 
+        | Copied!
       .viewer-count
         span#viewer-count-number
-        | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }} 
+        | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
       button#stop-sharing(type="button" @click="stopStream")
         | End Sharing
     .frow.width-100.mt-20
@@ -259,6 +288,7 @@
 import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
+import CopySvg from '@/assets/svgs/copy.svg';
 
 import DesktopCapturer from '@/components/DesktopCapturer.vue';
 import StreamerConnection from '@/components/StreamerConnection.vue';
@@ -269,6 +299,7 @@ export default {
     LogoSvg,
     VideoSvg,
     AudioSvg,
+    CopySvg,
     DesktopCapturer,
     StreamerConnection,
   },
@@ -281,12 +312,14 @@ export default {
       constraints: null,
       room_password: '',
       room_id: window.localStorage.getItem('room_id') || '',
-      codecs: 'default',
+      codecs: 'vp9',
       bandwidth: null,
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
       privacy: 'private',
+      useridAlreadyTaken: '',
+      copyNotification: false,
     };
   },
   mounted() {
@@ -321,6 +354,12 @@ export default {
         this.room_id = window.localStorage.getItem('room_id');
       }
 
+      let protectedRoutes = ['streamer'];
+      if (protectedRoutes.includes(this.room_id)) {
+        this.useridAlreadyTaken = 'streamer';
+        return;
+      }
+
       this.$refs.capturer.startStream();
     },
     stopStream() {
@@ -344,6 +383,25 @@ export default {
     setCodecs(codec) {
       this.codecs = codec;
     },
+    copyUrl() {
+      let copyText = document.getElementById('public-link');
+      let input = document.createElement('input');
+      input.setAttribute('value', copyText.innerText);
+      document.body.appendChild(input);
+      input.select();
+
+      let result = document.execCommand('copy');
+      const copyNotification = document.getElementById('copy-notification')
+      if (result) {
+        document.body.removeChild(input);
+        this.copyNotification = true
+        setTimeout(() => {
+          this.copyNotification = false
+        }, 5000);
+      } else {
+        copyNotification.innerText = 'Copy failed'
+      }
+    },
     onGotStream(stream) {
       this.$refs.connection.shareStreamUsingRTCMultiConnection(
         stream,
@@ -351,10 +409,15 @@ export default {
       );
     },
     onSessionId(id) {
+      this.useridAlreadyTaken = '';
       this.sessionId = id;
     },
     onSetDefaults() {
       this.$refs.connection.setDefaults();
+    },
+    onIdTaken(takenID) {
+      this.useridAlreadyTaken = takenID;
+      this.room_id = '';
     },
     onIsSharing(isSharing) {
       this.isSharingOn = isSharing;

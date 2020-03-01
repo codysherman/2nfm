@@ -42,26 +42,18 @@ export default {
     };
   },
   mounted() {
-    // TODO: should probably deregister the event listener on e.g. `unmounted`
-    window.addEventListener(
-      'offline',
-      () => {
-        if (!this.connection || !this.connection.attachStreams.length) return;
+    window.addEventListener('offline', this.setOffline, false);
+    window.addEventListener('online', this.setOnline, false);
+  },
+  beforeDestroy() {
+    window.removeEventListener('offline', this.setOffline, false);
+    window.removeEventListener('online', this.setOnline, false);
 
-        this.setDefaults();
-      },
-      false,
-    );
-
-    window.addEventListener(
-      'online',
-      () => {
-        if (!this.connection) return;
-
-        this.setDefaults();
-      },
-      false,
-    );
+    this.connection = null;
+    delete this.connection;
+  },
+  beforeDestroy() {
+    this.connection = null;
   },
   methods: {
     shareStreamUsingRTCMultiConnection(stream, isVideo = false) {
@@ -150,7 +142,11 @@ export default {
           delete event.mediaElement;
         } catch (e) {}
       };
-      
+
+      this.connection.onUserIdAlreadyTaken = (useridAlreadyTaken) => {
+        this.$emit('idTaken', useridAlreadyTaken);
+      };
+
       // www.RTCMultiConnection.org/docs/dontCaptureUserMedia/
       this.connection.dontCaptureUserMedia = true;
 
@@ -262,8 +258,17 @@ export default {
       this.connection.open(this.connection.sessionid, roomOpenCallback);
 
       var oldLength = 0;
-      this.connection.onleave = this.connection.onPeerStateChanged = () => {
-        var participantsCount = this.connection.getAllParticipants().length;
+      this.connection.onleave = (event) =>{
+        const participants = this.connection.getAllParticipants();
+        let count = participants.length;
+        if (participants.includes(event.userid)) {
+          count--;
+        }
+        this.setViewerCount(count);
+      };
+
+      this.connection.onPeerStateChanged = () => {
+        const participantsCount = this.connection.getAllParticipants().length;
         if (oldLength != participantsCount) {
           // sendTabTitle();
         }
@@ -274,8 +279,18 @@ export default {
     },
     setViewerCount(count) {
       this.$emit('viewerCount', count);
+      this.connection.extra.receiverViewerCount = count;
+      this.connection.updateExtraData();
     },
-    setDefaults() {
+    setOffline() {
+      if (!this.connection || !this.connection.attachStreams.length) return;
+      this.setDefaults();
+    },
+    setOnline() {
+      if (!this.connection) return;
+      this.setDefaults();
+    },
+    setDefaults() {     
       if (this.connection) {
         this.connection.attachStreams.forEach((stream) => {
           try {
@@ -295,9 +310,6 @@ export default {
           this.connection.closeSocket();
         } catch (e) {}
 
-        clearInterval(this.connection.looper);
-
-        this.connection = null;
       }
 
       this.setViewerCount(0);

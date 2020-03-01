@@ -67,21 +67,41 @@ video
 #media-controls
   width: 60%
   animation: fade-in 0.4s
+  #volume-slider, #play-button-container, #autoplay
+      margin: 14px 10px
 
-#play-button-container
-  width: 30px
-  height: 30px
-  margin-right: 20px
-
-  svg
+  #play-button-container
     width: 30px
     height: 30px
+    margin-right: 20px
+
+    svg
+      width: 30px
+      height: 30px
+      fill: $primary-color
+
+  #volume-slider
+    max-width: 120px
+    @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
+      visibility: hidden
+
+  #autoplay
+    input, label
+      margin: auto 4px 47px
+
+#fullscreen-button
+  svg
+    width: 30px
     fill: $primary-color
+    transition: transform 0.4s
 
-#volume-slider
-  max-width: 120px
+  &:hover,
+  &:active,
+  &:focus
+    transform: scale(1.1)
+  @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
+    visibility: hidden
 
-#fullscreen-button,
 #theater-button
   svg
     width: 30px
@@ -102,11 +122,17 @@ video
   text-align: center
   transition: fade-in 0.4s
 
-#create-message
+.create-message
   font-size: 24px
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
+
+.viewer-count
+  margin: 5px 20px 5px
+  text-align: center
+  font-size: 20px
+  font-weight: bold
 </style>
 
 <template lang="pug">
@@ -117,6 +143,7 @@ video
     @stream="onStream"
     @presenceCheckWait="onPresenceCheckWait"
     @stats="onStats"
+    @receiverViewerCount="onReceiverViewerCount"
   )
   .menu-bar
     .frow.row-start
@@ -135,7 +162,7 @@ video
       div
         | {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
-    router-link#create-message(v-if="!isStream", to="/")
+    router-link.create-message(v-if="!isStream", to="/")
       LoadingSvg#loading-logo
     router-link(v-if="isStream", to="/")
       LogoSvg#logo
@@ -154,12 +181,12 @@ video
       .frow.nowrap
         button#play-button-container.frow.nowrap.button-none(
           type="button"
-          v-if="(stream.isAudio) || (stream.isVideo && !isPlaying)"
+          v-if="stream.isAudio || stream.isVideo"
           @click="togglePlayback"
         )
           PlaySvg(v-if="!isPlaying")
           PauseSvg(v-else)
-        input#volume-slider(
+        input#volume-slider.frow.nowrap(
           type="range"
           :value="volume"
           min="0"
@@ -167,6 +194,17 @@ video
           step="0.01"
           @input="setVolume"
         )
+        .viewer-count
+          span#viewer-count-number
+          | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
+        div#autoplay.frow.nowrap
+          input(
+            type="checkbox"
+            :checked = "autoplay"
+            @change="toggleAutoPlay"
+          )
+          label AutoPlay
+
       .frow(v-if="stream.isVideo && isPlaying")
         button#theater-button.button-none.mr-20(
           type="button"
@@ -179,7 +217,7 @@ video
         )
           FullscreenSvg
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
-    router-link#create-message(v-if="!isStream", to="/streamer") Create your own room
+    router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
     #chat-messages
     input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
@@ -223,6 +261,8 @@ export default {
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
       presenceCheckWait: null,
+      receiverViewerCount: 0,
+      autoplay: true,
     };
   },
   computed: {
@@ -245,26 +285,19 @@ export default {
     if (this.$route.params.room !== sanitizedRoomId) {
       this.$router.push(sanitizedRoomId);
     }
+    const localstorageAutoplay = JSON.parse(localStorage.getItem('autoplay'))
+    if (localstorageAutoplay !== null) {
+      this.autoplay = localstorageAutoplay
+    }
   },
   mounted() {
-    window.addEventListener(
-      'offline',
-      () => {
-        this.infoBarMessage = 'You seem to be offline.';
-      },
-      false,
-    );
-
-    window.addEventListener(
-      'online',
-      () => {
-        this.infoBarMessage = 'You are back online. Reloading the page...';
-        location.reload();
-      },
-      false,
-    );
+    window.addEventListener('offline', this.setOffline, false);
+    window.addEventListener('online', this.setOnline, false);
   },
-  
+  beforeDestroy() {
+    window.removeEventListener('offline', this.setOffline, false);
+    window.removeEventListener('online', this.setOnline, false);
+  },  
   methods: {
     onConnectionStateChanged(state) {
       switch (state.value) {
@@ -348,10 +381,15 @@ export default {
         this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
         this.$refs.audioPlayer.volume = this.volume;
       }
-      this.playMedia();
+      if (this.autoplay) {
+        this.playMedia();
+      }
     },
     onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
+    },
+    onReceiverViewerCount(count) {
+      this.receiverViewerCount = count;
     },
     onStats(stats) {
       if (this.NO_MORE) {
@@ -367,6 +405,10 @@ export default {
       } catch (err) {
         // Playback Failed
       }
+    },
+    toggleAutoPlay() {
+      this.autoplay = !this.autoplay
+      localStorage.setItem('autoplay', JSON.stringify(this.autoplay))
     },
     togglePlayback() {
       if (this.player.paused) {
@@ -412,6 +454,13 @@ export default {
       let i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
       return `${(bytes / Math.pow(k, i)).toPrecision(3)} ${sizes[i]}`;
     },
+  },
+  setOffline() {
+    this.infoBarMessage = 'You seem to be offline.';
+  },
+  setOnline() {
+    this.infoBarMessage = 'You are back online. Reloading the page...';
+    location.reload();
   },
 };
 
