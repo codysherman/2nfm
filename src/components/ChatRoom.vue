@@ -1,20 +1,17 @@
 <style scoped lang="sass">
-@keyframes open-chat
-  0%
-    height: 0px
-    width: 0px
-  100%
-    width: 340px
-    height: 100%
-
-// @keyframes close-chat
+// @keyframes open-chat
 //   0%
-//     height: 100%
-//     width: 340px
-//   100%
-//     width: 0px
 //     height: 0px
+//     width: 0px
+//   100%
+//     width: 340px
+//     height: 100%
 
+// @keyframes hover-size-control
+//   0%
+//     max-height: 500px
+//   100%
+//     max-height: 250px
 
 .chat-container
   color: #000
@@ -22,14 +19,17 @@
   bottom: 0
   border: 0
   left: 0
+  // max-height: 250px
   max-height: 500px
   width: 340px
   background-color: #e8e8e8
   margin:15px
   box-shadow: 1px 5px 4px #a1a1a1
   border-radius: 3px
-  animation: 300ms open-chat
-  // animation: 300ms ease-out close-chat
+  // animation: 300ms open-chat
+  // &:hover, &:active, &:focus
+  //   animation: 300ms ease-out shrink-50-hover forwards
+  //   // animation-delay: 2s
   
   .chat-transcript-container
     width: 100%
