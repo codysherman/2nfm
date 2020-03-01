@@ -256,7 +256,6 @@ export default {
       theaterMode: false,
       statsVisible: false,
       volume: window.localStorage.getItem('volume') || 0.5,
-      NO_MORE: false,
       stats: {},
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
@@ -356,6 +355,7 @@ export default {
         break;
       case ReceiverConnection.STATE.DISCONNECTED:
         this.isStream = false;
+
         this.infoBarMessage = 'You\'ve been disconnected. Please try again.';
         break;
       case ReceiverConnection.STATE.GENERIC:
@@ -392,10 +392,6 @@ export default {
       this.receiverViewerCount = count;
     },
     onStats(stats) {
-      if (this.NO_MORE) {
-        stats.nomore();
-        return;
-      }
       this.stats = stats;
     },
     async playMedia() {
