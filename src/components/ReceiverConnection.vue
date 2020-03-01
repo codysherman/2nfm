@@ -229,7 +229,6 @@ export default {
         event.iceConnectionState === 'connected' &&
         event.signalingState === 'stable'
       ) {
-        console.log(event.iceConnectionState);
         if (dontDuplicate[event.userid]) return;
         dontDuplicate[event.userid] = true;
 
