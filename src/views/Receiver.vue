@@ -109,6 +109,12 @@ video
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
+
+.viewer-count
+  margin: 5px 20px 5px
+  text-align: center
+  font-size: 20px
+  font-weight: bold
 </style>
 
 <template lang="pug">
@@ -170,8 +176,9 @@ video
           step="0.01"
           @input="setVolume"
         )
-        span#viewer-count-number
-        | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
+        .viewer-count
+          span#viewer-count-number
+          | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
       .frow(v-if="stream.isVideo && isPlaying")
         button#theater-button.button-none.mr-20(
           type="button"
