@@ -3,18 +3,17 @@
 export const IceServersHandler = (function() {
   function getIceServers() {
     var iceServers = [{
-      urls: [ 'stun:u3.xirsys.com' ],
+      urls: [ 'stun:ws-turn1.xirsys.com' ],
     }, {
-      username: 'nCvfkcJAvprAwLpirxzuRpaS2HjkOQ0wGHKJP0M'
-        + 'jjyVdA3OI1XdHjcICAykCM6eHAAAAAF5Z2k5wYXJhZGlnbXBvc3Q=',
-      credential: '850b28c6-5aa3-11ea-98ab-f67d6f96bf8e',
+      username: 'paB_VapMS4rh7KG1WxSX5sAoEAzPCBei0AwjO-PLRjIGrYBCsFZ_9WF-XlAvTnIBAAAAAF2FRx5jb2R5c2hlcm1hbg==',
+      credential: '282dd8fc-dbef-11e9-87d1-12339b8f6738',
       urls: [
-        'turn:u3.xirsys.com:80?transport=udp',
-        'turn:u3.xirsys.com:3478?transport=udp',
-        'turn:u3.xirsys.com:80?transport=tcp',
-        'turn:u3.xirsys.com:3478?transport=tcp',
-        'turns:u3.xirsys.com:443?transport=tcp',
-        'turns:u3.xirsys.com:5349?transport=tcp',
+        'turn:ws-turn1.xirsys.com:80?transport=udp',
+        'turn:ws-turn1.xirsys.com:3478?transport=udp',
+        'turn:ws-turn1.xirsys.com:80?transport=tcp',
+        'turn:ws-turn1.xirsys.com:3478?transport=tcp',
+        'turns:ws-turn1.xirsys.com:443?transport=tcp',
+        'turns:ws-turn1.xirsys.com:5349?transport=tcp',
       ],
     }];
 
