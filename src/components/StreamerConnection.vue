@@ -38,26 +38,15 @@ export default {
     };
   },
   mounted() {
-    // TODO: should probably deregister the event listener on e.g. `unmounted`
-    window.addEventListener(
-      'offline',
-      () => {
-        if (!this.connection || !this.connection.attachStreams.length) return;
+    window.addEventListener('offline', this.setOffline, false);
+    window.addEventListener('online', this.setOnline, false);
+  },
+  beforeDestroy() {
+    window.removeEventListener('offline', this.setOffline, false);
+    window.removeEventListener('online', this.setOnline, false);
 
-        this.setDefaults();
-      },
-      false,
-    );
-
-    window.addEventListener(
-      'online',
-      () => {
-        if (!this.connection) return;
-
-        this.setDefaults();
-      },
-      false,
-    );
+    this.connection = null;
+    delete this.connection;
   },
   methods: {
     shareStreamUsingRTCMultiConnection(stream, isVideo = false) {
@@ -283,7 +272,15 @@ export default {
       this.connection.extra.receiverViewerCount = count;
       this.connection.updateExtraData();
     },
-    setDefaults() {
+    setOffline() {
+      if (!this.connection || !this.connection.attachStreams.length) return;
+      this.setDefaults();
+    },
+    setOnline() {
+      if (!this.connection) return;
+      this.setDefaults();
+    },
+    setDefaults() {     
       if (this.connection) {
         this.connection.attachStreams.forEach((stream) => {
           try {
