@@ -87,7 +87,7 @@ video
 
   #autoplay
     input, label
-      margin: auto 4px
+      margin: auto 4px 47px
 
 #fullscreen-button
   svg
@@ -127,6 +127,12 @@ video
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
+
+.viewer-count
+  margin: 5px 20px 5px
+  text-align: center
+  font-size: 20px
+  font-weight: bold
 </style>
 
 <template lang="pug">
@@ -137,6 +143,7 @@ video
     @stream="onStream"
     @presenceCheckWait="onPresenceCheckWait"
     @stats="onStats"
+    @receiverViewerCount="onReceiverViewerCount"
   )
   .menu-bar
     .frow.row-start
@@ -187,6 +194,9 @@ video
           step="0.01"
           @input="setVolume"
         )
+        .viewer-count
+          span#viewer-count-number
+          | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
         div#autoplay.frow.nowrap
           input(
             type="checkbox"
@@ -194,7 +204,7 @@ video
             @change="toggleAutoPlay"
           )
           label AutoPlay
-        
+
       .frow(v-if="stream.isVideo && isPlaying")
         button#theater-button.button-none.mr-20(
           type="button"
@@ -251,6 +261,7 @@ export default {
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
       presenceCheckWait: null,
+      receiverViewerCount: 0,
       autoplay: true,
     };
   },
@@ -387,6 +398,9 @@ export default {
     },
     onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
+    },
+    onReceiverViewerCount(count) {
+      this.receiverViewerCount = count;
     },
     onStats(stats) {
       if (this.NO_MORE) {
