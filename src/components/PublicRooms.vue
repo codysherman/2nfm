@@ -1,8 +1,8 @@
 <template lang="pug">
 div
-    h1.mb-30 Public Rooms
+  h1.mb-30 Public Rooms
     router-link.stream-button(type="button" v-for="room in listOfRooms"  :to='room.owner')
-        | {{room.owner}}
+      | {{room.owner}}
         
 </template>
 
@@ -47,7 +47,7 @@ export default {
     return {
       params: {},
       connection: null,
-      presenceCheckWait: 3750,
+      presenceCheckWait: 15000,
       roomName: 'streamer',
       listOfRooms: [],
     };

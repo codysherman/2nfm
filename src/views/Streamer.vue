@@ -315,7 +315,7 @@ export default {
         return;
       }
 
-      this.room_id = 'cody';
+      this.room_id = '';
 
       if (window.localStorage.getItem('room_id')) {
         this.room_id = window.localStorage.getItem('room_id');
