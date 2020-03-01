@@ -1,14 +1,20 @@
 <style scoped lang="sass">
-@keyframes octocat-wave
-  0%,
+@keyframes open-chat
+  0%
+    height: 0px
+    width: 0px
   100%
-    transform: rotate(0)
-  20%,
-  60%
-    transform: rotate(-25deg)
-  40%,
-  80%
-    transform: rotate(10deg)
+    width: 340px
+    height: 100%
+
+// @keyframes close-chat
+//   0%
+//     height: 100%
+//     width: 340px
+//   100%
+//     width: 0px
+//     height: 0px
+
 
 .chat-container
   color: #000
@@ -18,11 +24,12 @@
   left: 0
   max-height: 500px
   width: 340px
-  background-color: #e3e3e3
+  background-color: #e8e8e8
   margin:15px
-  padding: 10px
   box-shadow: 1px 5px 4px #a1a1a1
   border-radius: 3px
+  animation: 300ms open-chat
+  // animation: 300ms ease-out close-chat
   
   .chat-transcript-container
     width: 100%
@@ -31,13 +38,26 @@
     padding: 7px
 
   .chat-message-field-container
-    width: 97%
-  
+    width: 100%
+    padding: 10px
+    background-color: #cacaca
+    border-radius: 0px 0px 3px 3px
+    
+    textarea
+      &::placeholder
+        color: #4F4F51
+
   #send-message
     margin-left: 10px
+    svg
+      width: 18px
+      height: auto
+      fill: #fff
 
   .set-username
     margin-bottom: 7px
+    padding: 14px
+    width: 100%
     p
       font-size: 12px
     input
@@ -47,10 +67,16 @@
   
   #set-username-button
     font-size: 14px
+    border: 1px solid #4f4f51
+    padding: 3px 7px
+    svg
+      width: 18px
+      height: auto
+      fill: #4f4f51
 
   #my
     .username
-      font-size:9px
+      font-size:10px
       padding-left: 15px
       color: #989898
     .chat-bubble
@@ -65,9 +91,10 @@
       background-color: #cacaca
 
   .chat-bubble
-    border: 2px solid black
+    border: 2px solid #cacaca
     border-radius: 30px
     padding: 0 18px
+    margin-bottom: 2px
     font-size: 12px
 
 .room-launcher
@@ -107,15 +134,17 @@
             p.shrink-0 Chatting as:
             input(type="text" placeholder="Set Username")
             button#set-username-button.button-link(type="submit")
-              | Set
+              Checkmark
         .chat-transcript-container.grow-1.height-100
-          .frow.direction-column-reverse
+          .frow.direction-column-reverse.height-100.justify-start
             .frow.row-end
               #my.chat-bubble-parent
                 .username
                   | smallthrob
                 .chat-bubble 
                   p My sample text
+                .chat-bubble 
+                  p And then there's even more text here.
             .frow.row-start
               #their.chat-bubble-parent
                 .username
@@ -125,8 +154,10 @@
         .chat-message-field-container.shrink-0
           .frow.row-start.nowrap
             textarea#chat-message-field(type="text" placeholder="Enter Chat Message")
+            //- button#send-message(type="submit")
+            //-   | Send
             button#send-message(type="submit")
-              | Send
+              SendArrow
     .room-launcher(v-if="!chatVisible" @click="chatVisible = true" )
       ChatBubble
       
@@ -137,6 +168,9 @@
 <script>
 import ChatBubble from '@/assets/svgs/chat-bubble.svg';
 import XSvg from '@/assets/svgs/x.svg';
+import SendArrow from '@/assets/svgs/right-arrow-corner.svg';
+import Checkmark from '@/assets/svgs/checkmark.svg';
+
 
 
 export default {
@@ -144,6 +178,8 @@ export default {
   components: {
     ChatBubble,
     XSvg,
+    SendArrow,
+    Checkmark,
   },
 
   data() {
