@@ -249,6 +249,10 @@ export default {
       }
     };
   },
+  beforeDestroy() {
+    this.connection = null;
+    delete this.connection;
+  },
   methods: {
     checkPresence() {
       this.connection.checkPresence(
