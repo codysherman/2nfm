@@ -80,6 +80,8 @@ video
 
 #volume-slider
   max-width: 120px
+  @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
+    visibility: hidden
 
 #fullscreen-button,
 #theater-button
@@ -217,8 +219,6 @@ export default {
       isPlaying: false,
       theaterMode: false,
       statsVisible: false,
-      volume: window.localStorage.getItem('volume') || 0.5,
-      NO_MORE: false,
       stats: {},
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
@@ -323,6 +323,7 @@ export default {
         break;
       case ReceiverConnection.STATE.DISCONNECTED:
         this.isStream = false;
+
         this.infoBarMessage = 'You\'ve been disconnected. Please try again.';
         break;
       case ReceiverConnection.STATE.GENERIC:
@@ -354,10 +355,6 @@ export default {
       this.presenceCheckWait = newValue;
     },
     onStats(stats) {
-      if (this.NO_MORE) {
-        stats.nomore();
-        return;
-      }
       this.stats = stats;
     },
     async playMedia() {
@@ -402,14 +399,13 @@ export default {
       this.statsVisible = false;
     },
     bytesToSize(bytes) {
-      // TODO: Should this be 1024?
-      var k = 1000;
-      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+      let k = 1000;
+      let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
       if (bytes === 0) {
         return '0 Bytes';
       }
-      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
-      return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+      let i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
+      return `${(bytes / Math.pow(k, i)).toPrecision(3)} ${sizes[i]}`;
     },
   },
 };
