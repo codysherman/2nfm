@@ -172,6 +172,7 @@
     :codecs="codecs"
     :roomId="room_id"
     :roomPassword="room_password"
+    :privacy="privacy"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
     @idTaken="onIdTaken"
@@ -231,6 +232,15 @@
               label
                 | Room Password
                 input#room_password(type="password" value="" placeholder="Optional")
+      section#privacy
+        #start
+          .frow
+            .label Privacy
+          .frow.nowrap
+            label.row-center.direction-reverse Private
+              input#private(type="radio" value="private" v-model="privacy")
+            label.row-center.direction-reverse Public
+              input#public(type="radio" value="public" v-model="privacy")
       section#stream-section
         #start
           .label Start
@@ -307,6 +317,7 @@ export default {
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
+      privacy: 'private',
       useridAlreadyTaken: '',
       copyNotification: false,
     };

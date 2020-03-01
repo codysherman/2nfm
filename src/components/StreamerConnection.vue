@@ -3,12 +3,6 @@
 </template>
 
 <script>
-// NOTE: needs to be imported for back-compat, but not referenced
-// eslint-disable-next-line no-unused-vars
-import adapter from 'webrtc-adapter';
-
-import RTCMultiConnection from 'rtcmulticonnection';
-
 import { CodecsHandler } from '../utils/background/helpers/CodecsHandler';
 import { IceServersHandler } from '../utils/background/helpers/IceServersHandler';
 
@@ -31,7 +25,11 @@ export default {
       type: String,
       default: '',
     },
-  },
+    privacy: {
+      type: String,
+      default: 'private',
+    },
+  },  
   data() {
     return {
       connection: null,
@@ -54,8 +52,11 @@ export default {
       this.connection = new RTCMultiConnection();
       this.connection.socketURL = 'https://api.2n.fm:9001/';
       this.connection.autoCloseEntireSession = true;
-
       // this must match the viewer page
+      if (this.privacy === 'public') {
+        this.connection.publicRoomIdentifier = 'desktopCapture';
+      }
+      
       this.connection.socketMessageEvent = 'desktopCapture';
 
       this.connection.password = null;
@@ -269,8 +270,10 @@ export default {
     },
     setViewerCount(count) {
       this.$emit('viewerCount', count);
-      this.connection.extra.receiverViewerCount = count;
-      this.connection.updateExtraData();
+      if (this.connection) {
+        this.connection.extra.receiverViewerCount = count;
+        this.connection.updateExtraData();
+      }
     },
     setOffline() {
       if (!this.connection || !this.connection.attachStreams.length) return;
@@ -300,9 +303,6 @@ export default {
           this.connection.closeSocket();
         } catch (e) {}
 
-        clearInterval(this.connection.looper);
-
-        this.connection = null;
       }
 
       this.setViewerCount(0);

@@ -6,6 +6,9 @@ module.exports = {
     node: true,
     browser: true,
   },
+  globals: {
+    RTCMultiConnection: true,
+  },
   parserOptions: {
     parser: 'babel-eslint',
     // specifying a module sourcetype prevent eslint from marking import statements as errors

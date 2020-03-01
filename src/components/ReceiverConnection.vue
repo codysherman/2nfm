@@ -2,11 +2,6 @@
 </template>
 
 <script>
-// NOTE: needs to be imported for back-compat, but not referenced
-// eslint-disable-next-line no-unused-vars
-import adapter from 'webrtc-adapter';
-
-import RTCMultiConnection from 'rtcmulticonnection';
 import { getStats } from '@/utils/background/helpers/getStats';
 import { CodecsHandler } from '@/utils/background/helpers/CodecsHandler';
 import { IceServersHandler } from '@/utils/background/helpers/IceServersHandler';
@@ -121,6 +116,7 @@ export default {
       }
       return sdp;
     };
+      
 
     this.connection.optionalArgument = {
       optional: [],
@@ -202,6 +198,7 @@ export default {
     this.connection.onSocketError = () => {
       this.$emit('state', { value: STATE.SOCKET_ERROR });
     };
+    
 
     this.connection.onopen = () => {
       //
@@ -235,7 +232,6 @@ export default {
         dontDuplicate[event.userid] = true;
 
         this.$emit('state', { value: STATE.CONNECTED });
-
         getStats(
           this.connection.peers[event.userid].peer,
           (stats) => {
@@ -282,6 +278,8 @@ export default {
         },
       );
     },
+
+
     onGettingWebRTCStats(stats, userid) {
       if (!this.connection.peers[userid]) {
         stats.nomore();
