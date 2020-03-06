@@ -129,6 +129,7 @@
   #copy-button
     display: inline-block
     margin-left: 14px
+    cursor: pointer
     svg
       width: 30px
       fill: $primary-color
