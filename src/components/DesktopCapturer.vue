@@ -7,6 +7,7 @@ export default {
   name: 'DesktopCapturer',
   props: {
     enableVideo: Boolean,
+    enableMic: Boolean,
   },
   data() {
     return {
@@ -62,6 +63,22 @@ export default {
         },
       };
 
+      const startMicCapture = async () => {
+        let captureMicStream;
+        try {
+          captureMicStream = await navigator.mediaDevices.getUserMedia(
+            {
+              audio: true,
+              video: false,
+            },
+          );
+        } catch (err) {
+          console.log('errored', err);
+          this.setDefaults();
+        }
+        return captureMicStream;
+      };
+
       const startScreenCapture = async () => {
         let captureStream;
         try {
@@ -75,11 +92,25 @@ export default {
       };
 
       const startCapturing = async () => {
+        let micStream = null;
+        if (this.enableMic === true) {
+          micStream = await startMicCapture();
+        }
         let stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
         if (!this.enableVideo && stream.getAudioTracks().length === 0) {
           alert('Make sure to check the "Share audio" box in Google Chrome');
+        }
+        if (micStream) {
+          // let outputTracks = [];
+          // outputTracks = outputTracks.concat(stream.getTracks());
+          // outputTracks = outputTracks.concat(micStream.getTracks());
+          // stream = new MediaStream(outputTracks);
+          console.log('mic track', micStream.getAudioTracks());
+          console.log('System Audio', stream.getAudioTracks());
+          stream.addTrack(micStream.getAudioTracks()[0]);
+          console.log('stream before send', stream.getAudioTracks());
         }
         this.gotStream(stream);
       };

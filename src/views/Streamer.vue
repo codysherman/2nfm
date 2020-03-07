@@ -163,6 +163,7 @@
   DesktopCapturer(
     ref="capturer"
     :enableVideo="isVideo"
+    :enableMic="enableMic"
     @isSharing="onIsSharing"
     @gotStream="onGotStream"
     @setDefaults="onSetDefaults"
@@ -246,16 +247,21 @@
         #start
           .label Start
           .frow.gutters
-            .col-xs-1-2
+            .col-xs-1-3
               #video-button.stream-button(@click="startStream(true)")
                 .frow.column-center
                   VideoSvg
                   | Video
-            .col-xs-1-2
+            .col-xs-1-3
               #audio-button.stream-button(@click="startStream()")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
+            .col-xs-1-3
+              #audio-button.stream-button(@click="enableMic = !enableMic")
+                .frow.column-center
+                  AudioSvg
+                  | Microphone {{enableMic}}
     section#stop-section(v-if="isSharingOn && sessionId")
       //- router-link#public-link(
       //-   to="{query: { s: sessionId, p: room_password }}`}" target="_blank"
@@ -321,6 +327,7 @@ export default {
       privacy: 'private',
       useridAlreadyTaken: '',
       copyNotification: false,
+      enableMic: true,
     };
   },
   mounted() {
