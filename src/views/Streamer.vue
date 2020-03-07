@@ -195,53 +195,55 @@
           v-model="room_id"
           @change="setRoomName"
           @blur="setRoomName")
-      section#options(hidden="")
+      section#options
         .label Options
         .frow.row-start.gutters
+          //- .col-xs-1-2
+          //-   .settings-item
+          //-     label
+          //-       | Resolution
+          //-       select#resolutions
+          //-         option(value="fit-screen" selected="") Fit Screen
+          //-         option(value="4K") 4K (2160p)
+          //-         option(value="1080p") Full-HD (1080p)
+          //-         option(value="720p") HD (720p)
+          //-         option(value="480p") SD (480p)
+          //-         option(value="360p") SD (360p)
           .col-xs-1-2
-            .settings-item
-              label
-                | Resolution
-                select#resolutions
-                  option(value="fit-screen" selected="") Fit Screen
-                  option(value="4K") 4K (2160p)
-                  option(value="1080p") Full-HD (1080p)
-                  option(value="720p") HD (720p)
-                  option(value="480p") SD (480p)
-                  option(value="360p") SD (360p)
+            label.row-start
+              input(type="radio" value="private" v-model="privacy")
+              | Private Room
+            label.row-start.mb-0
+              input(type="radio" value="public" v-model="privacy")
+              | Public Room
           .col-xs-1-2
-            .settings-item
-              label
-                | Codec
-                select#codecs(@change="setCodecs")
-                  option(value="default" selected="") Default (VP9)
-                  option(value="vp8") VP8
-                  option(value="vp9") VP9
-                  option(value="h264") H264
-          .col-xs-1-2
-            .settings-item.mb-0
-              label
-                | Bandwidth
-                input#bandwidth(
-                  type="text"
-                  value=""
-                  placeholder="Optional: 8192, 1048, 512, etc."
-                  @change="setBandwidth"
-                )
-          .col-xs-1-2
-            .settings-item.mb-0
-              label
-                | Room Password
-                input#room_password(type="password" value="" placeholder="Optional")
-      section#privacy
-        #start
-          .frow
-            .label Privacy
-          .frow.nowrap
-            label.row-center.direction-reverse Private
-              input#private(type="radio" value="private" v-model="privacy")
-            label.row-center.direction-reverse Public
-              input#public(type="radio" value="public" v-model="privacy")
+            label.row-center
+              | Codec
+              select.ml-5(v-model="codecs")
+                //- option(value="default" selected="") Default (VP9)
+                option(value="vp9") VP9 (Default)
+                option(value="vp8") VP8
+                //- option(value="h264") H264
+            .setting-description.text-center
+              span(v-if="codecs === 'vp9'")
+                | Better quality, less data
+              span(v-if="codecs === 'vp8'")
+                | Less strain on older devices
+          //- .col-xs-1-2
+          //-   .settings-item.mb-0
+          //-     label
+          //-       | Bandwidth
+          //-       input#bandwidth(
+          //-         type="text"
+          //-         value=""
+          //-         placeholder="Optional: 8192, 1048, 512, etc."
+          //-         @change="setBandwidth"
+          //-       )
+          //- .col-xs-1-2
+          //-   .settings-item.mb-0
+          //-     label
+          //-       | Room Password
+          //-       input#room_password(type="password" value="" placeholder="Optional")
       section#stream-section
         #start
           .label Start
@@ -380,9 +382,6 @@ export default {
       } catch (e) {
         this.bandwidth = null;
       }
-    },
-    setCodecs(codec) {
-      this.codecs = codec;
     },
     copyUrl() {
       let copyText = document.getElementById('public-link');
