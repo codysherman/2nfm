@@ -306,7 +306,7 @@ export default {
         } catch (e) {
           console.error(e);
         }
-
+        this.connection = null;
       }
 
       this.setViewerCount(0);

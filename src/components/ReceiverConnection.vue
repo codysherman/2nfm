@@ -207,7 +207,7 @@ export default {
 
     this.connection.socketCustomEvent = this.roomName;
 
-    console.log('[Connection mounted]: roomName check:', this.roomName);
+    // console.log('[Connection mounted]: roomName check:', this.roomName);
     if (this.roomName) {
       this.checkPresence();
     }
