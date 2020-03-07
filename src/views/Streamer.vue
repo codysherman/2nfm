@@ -228,7 +228,7 @@
               span(v-if="codecs === 'vp9'")
                 | Better quality, less data
               span(v-if="codecs === 'vp8'")
-                | Less strain on old devices
+                | Less strain on older devices
               span(v-if="codecs === 'h264'")
                 | Less strain on older devices
           //- .col-xs-1-2
