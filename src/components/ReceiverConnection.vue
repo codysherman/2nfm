@@ -151,7 +151,6 @@ export default {
       if (e.userid !== this.roomName) return;
 
       // TODO: maybe split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing
-      this.stats.nomore();
       this.connection.close();
       this.connection.closeSocket();
       this.connection.userid = this.connection.token();
@@ -282,6 +281,7 @@ export default {
 
 
     onGettingWebRTCStats(stats, userid) {
+      console.log('run')
       if (!this.connection.peers[userid]) {
         stats.nomore();
         return;
