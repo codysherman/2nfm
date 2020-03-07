@@ -125,7 +125,7 @@
     font-size: 40px
     color: $primary-color
     margin: 0 auto
-    
+
   #copy-button
     display: inline-block
     margin-left: 14px
@@ -147,10 +147,10 @@
   font-size: 20px
   font-weight: bold
 
-#stop-sharing
+.streamer-control-buttons
   margin: 0 auto
-  font-size: 40px
-  padding: 20px
+  font-size: 30px
+  padding: 15px
   background: none
   border: 3px solid $primary-color
   color: $primary-color
@@ -253,13 +253,16 @@
         | {{ `2n.fm/${sessionId}` }}
       #copy-button(@click="copyUrl()")
           CopySvg
-      #copy-notification.animate-fade-in(v-if="copyNotification") 
+      #copy-notification.animate-fade-in(v-if="copyNotification")
         | Copied!
       .viewer-count
         span#viewer-count-number
         | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
-      button#stop-sharing(type="button" @click="stopStream")
-        | End Sharing
+      .frow.row-between
+        button.streamer-control-buttons(type="button" @click="stopStream")
+          | End Sharing
+        button.streamer-control-buttons(type="button" @click="showPreview = !showPreview")
+          | {{ showPreview ? 'Hide Preview' : 'Show Preview' }}
     .frow.width-100.mt-20
       a.text-underline(
         href="https://caniuse.com/#search=getDisplayMedia"
@@ -272,6 +275,8 @@
         <img src="../images/chat.png">
         Open Chat Box
         </div>
+    .frow.width-100.mt-20
+
 </template>
 
 <script>
@@ -309,6 +314,7 @@ export default {
       viewerCount: 0,
       useridAlreadyTaken: '',
       copyNotification: false,
+      showPreview: false,
     };
   },
   mounted() {
@@ -380,15 +386,15 @@ export default {
       input.select();
 
       let result = document.execCommand('copy');
-      const copyNotification = document.getElementById('copy-notification')
+      const copyNotification = document.getElementById('copy-notification');
       if (result) {
         document.body.removeChild(input);
-        this.copyNotification = true
+        this.copyNotification = true;
         setTimeout(() => {
-          this.copyNotification = false
+          this.copyNotification = false;
         }, 5000);
       } else {
-        copyNotification.innerText = 'Copy failed'
+        copyNotification.innerText = 'Copy failed';
       }
     },
     onGotStream(stream) {

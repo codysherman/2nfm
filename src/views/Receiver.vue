@@ -167,55 +167,56 @@ video
     router-link(v-if="isStream", to="/")
       LogoSvg#logo
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
-    video.shadow-light(
-      ref='videoPlayer'
-      :class="{ 'theater-mode': theaterMode }"
-      @click='togglePlayback'
-      playsinline
-      :hidden="!stream.isVideo"
-    )
-      | Your browser does not support the video element.
-    audio(ref='audioPlayer' :hidden="!stream.isAudio")
-      | Your browser does not support the audio element.
-    #media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
-      .frow.nowrap
-        button#play-button-container.frow.nowrap.button-none(
-          type="button"
-          v-if="stream.isAudio || stream.isVideo"
-          @click="togglePlayback"
-        )
-          PlaySvg(v-if="!isPlaying")
-          PauseSvg(v-else)
-        input#volume-slider.frow.nowrap(
-          type="range"
-          :value="volume"
-          min="0"
-          max="1"
-          step="0.01"
-          @input="setVolume"
-        )
-        .viewer-count
-          span#viewer-count-number
-          | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
-        div#autoplay.frow.nowrap
-          input(
-            type="checkbox"
-            :checked = "autoplay"
-            @change="toggleAutoPlay"
-          )
-          label AutoPlay
-
-      .frow(v-if="stream.isVideo && isPlaying")
-        button#theater-button.button-none.mr-20(
-          type="button"
-          @click="toggleTheaterMode"
-        )
-          TheaterSvg
-        button#fullscreen-button.button-none(
-          type="button"
-          @click="fullscreenVideo"
-        )
-          FullscreenSvg
+    Player(:stream.sync="stream")
+    //- video.shadow-light(
+    //-   ref='videoPlayer'
+    //-   :class="{ 'theater-mode': theaterMode }"
+    //-   @click='togglePlayback'
+    //-   playsinline
+    //-   :hidden="!stream.isVideo"
+    //- )
+    //-   | Your browser does not support the video element.
+    //- audio(ref='audioPlayer' :hidden="!stream.isAudio")
+    //-   | Your browser does not support the audio element.
+    //- #media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
+    //-   .frow.nowrap
+    //-     button#play-button-container.frow.nowrap.button-none(
+    //-       type="button"
+    //-       v-if="stream.isAudio || stream.isVideo"
+    //-       @click="togglePlayback"
+    //-     )
+    //-       PlaySvg(v-if="!isPlaying")
+    //-       PauseSvg(v-else)
+    //-     input#volume-slider.frow.nowrap(
+    //-       type="range"
+    //-       :value="volume"
+    //-       min="0"
+    //-       max="1"
+    //-       step="0.01"
+    //-       @input="setVolume"
+    //-     )
+    //-     .viewer-count
+    //-       span#viewer-count-number
+    //-       | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
+    //-     div#autoplay.frow.nowrap
+    //-       input(
+    //-         type="checkbox"
+    //-         :checked = "autoplay"
+    //-         @change="toggleAutoPlay"
+    //-       )
+    //-       label AutoPlay
+    //-
+    //-   .frow(v-if="stream.isVideo && isPlaying")
+    //-     button#theater-button.button-none.mr-20(
+    //-       type="button"
+    //-       @click="toggleTheaterMode"
+    //-     )
+    //-       TheaterSvg
+    //-     button#fullscreen-button.button-none(
+    //-       type="button"
+    //-       @click="fullscreenVideo"
+    //-     )
+    //-       FullscreenSvg
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
@@ -235,6 +236,8 @@ import TheaterSvg from '@/assets/svgs/theater.svg';
 
 import ReceiverConnection from '@/components/ReceiverConnection.vue';
 
+import Player from '@/components/Player/Player.vue';
+
 export default {
   name: 'Receiver',
   components: {
@@ -246,6 +249,7 @@ export default {
     FullscreenSvg,
     TheaterSvg,
     ReceiverConnection,
+    Player,
   },
   data() {
     return {
@@ -262,19 +266,7 @@ export default {
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
       presenceCheckWait: null,
       receiverViewerCount: 0,
-      autoplay: true,
     };
-  },
-  computed: {
-    player() {
-      if (this.stream.isVideo) {
-        return this.$refs.videoPlayer;
-      } else if (this.stream.isAudio) {
-        return this.$refs.audioPlayer;
-      } else {
-        return null;
-      }
-    },
   },
   created() {
     const sanitizedRoomId = this.$route.params.room
@@ -285,9 +277,9 @@ export default {
     if (this.$route.params.room !== sanitizedRoomId) {
       this.$router.push(sanitizedRoomId);
     }
-    const localstorageAutoplay = JSON.parse(localStorage.getItem('autoplay'))
+    const localstorageAutoplay = JSON.parse(localStorage.getItem('autoplay'));
     if (localstorageAutoplay !== null) {
-      this.autoplay = localstorageAutoplay
+      this.autoplay = localstorageAutoplay;
     }
   },
   mounted() {
@@ -297,7 +289,7 @@ export default {
   beforeDestroy() {
     window.removeEventListener('offline', this.setOffline, false);
     window.removeEventListener('online', this.setOnline, false);
-  },  
+  },
   methods: {
     onConnectionStateChanged(state) {
       switch (state.value) {
@@ -322,7 +314,7 @@ export default {
         this.infoBarMessage = 'Remote peer is about to send his screen.';
         break;
       case ReceiverConnection.STATE.SOCKET_CLOSED:
-        this.$refs.videoPlayer.srcObject = null;
+        this.stream = null;
 
         this.infoBarMessage = 'Screen sharing has been closed.';
         this.hideStats();
@@ -364,26 +356,8 @@ export default {
       }
     },
     onStream(stream) {
-      this.$refs.videoPlayer.srcObject = null;
-      this.$refs.audioPlayer.srcObject = null;
+      console.log('====Received Stream====');
       this.stream = stream;
-      this.stream.mute();
-
-      if (this.stream.isVideo) {
-        this.$refs.videoPlayer.srcObject = this.stream;
-        this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
-        if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
-          this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        }
-        this.$refs.videoPlayer.volume = this.volume;
-      } else {
-        this.$refs.audioPlayer.srcObject = this.stream;
-        this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        this.$refs.audioPlayer.volume = this.volume;
-      }
-      if (this.autoplay) {
-        this.playMedia();
-      }
     },
     onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
@@ -397,45 +371,6 @@ export default {
         return;
       }
       this.stats = stats;
-    },
-    async playMedia() {
-      try {
-        await this.player.play();
-        this.isPlaying = true;
-      } catch (err) {
-        // Playback Failed
-      }
-    },
-    toggleAutoPlay() {
-      this.autoplay = !this.autoplay
-      localStorage.setItem('autoplay', JSON.stringify(this.autoplay))
-    },
-    togglePlayback() {
-      if (this.player.paused) {
-        this.playMedia();
-      } else {
-        this.player.pause();
-        this.isPlaying = false;
-      }
-    },
-    setVolume(event) {
-      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber;
-      this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber;
-      this.volume = event.srcElement.valueAsNumber;
-      localStorage.setItem('volume', event.srcElement.valueAsNumber);
-    },
-    fullscreenVideo() {
-      if (this.$refs.videoPlayer.requestFullscreen)
-        this.$refs.videoPlayer.requestFullscreen();
-      else if (this.$refs.videoPlayer.mozRequestFullScreen)
-        this.$refs.videoPlayer.mozRequestFullScreen();
-      else if (this.$refs.videoPlayer.webkitRequestFullScreen)
-        this.$refs.videoPlayer.webkitRequestFullScreen();
-      else if (this.$refs.videoPlayer.msRequestFullscreen)
-        this.$refs.videoPlayer.msRequestFullscreen();
-    },
-    toggleTheaterMode() {
-      this.theaterMode = !this.theaterMode;
     },
     showStats() {
       this.statsVisible = true;
@@ -463,5 +398,4 @@ export default {
     location.reload();
   },
 };
-
 </script>
