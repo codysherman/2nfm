@@ -131,7 +131,9 @@ export default {
         try {
           event.mediaElement.pause();
           delete event.mediaElement;
-        } catch (e) {}
+        } catch (e) {
+          console.error(e);
+        }
       };
 
       this.connection.onUserIdAlreadyTaken = (useridAlreadyTaken) => {
@@ -290,18 +292,20 @@ export default {
             stream.getTracks().forEach((track) => {
               try {
                 track.stop();
-              } catch (e) {}
+              } catch (e) {
+                console.error(e);
+              }
             });
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         });
 
         try {
-          this.connection.close();
-        } catch (e) {}
-
-        try {
           this.connection.closeSocket();
-        } catch (e) {}
+        } catch (e) {
+          console.error(e);
+        }
 
       }
 

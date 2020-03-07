@@ -364,7 +364,7 @@ export default {
         this.useridAlreadyTaken = 'streamer';
         return;
       }
-
+      console.log('bang')
       this.$refs.capturer.startStream();
     },
     stopStream() {
