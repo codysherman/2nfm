@@ -223,11 +223,13 @@
                 //- option(value="default" selected="") Default (VP9)
                 option(value="vp9") VP9 (Default)
                 option(value="vp8") VP8
-                //- option(value="h264") H264
+                //- option(value="h264") H.264
             .setting-description.text-center
               span(v-if="codecs === 'vp9'")
                 | Better quality, less data
               span(v-if="codecs === 'vp8'")
+                | Less strain on old devices
+              span(v-if="codecs === 'h264'")
                 | Less strain on older devices
           //- .col-xs-1-2
           //-   .settings-item.mb-0
