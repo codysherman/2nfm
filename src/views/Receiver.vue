@@ -64,16 +64,16 @@ video
   &.theater-mode
     width: 100%
 
-#media-controls
+#media-controls, #media-settings
   width: 60%
   animation: fade-in 0.4s
   #volume-slider, #play-button-container, #autoplay
-      margin: 14px 10px
+      margin: 6px 6px
 
   #play-button-container
     width: 30px
     height: 30px
-    margin-right: 20px
+    margin-right: 5px
 
     svg
       width: 30px
@@ -82,6 +82,8 @@ video
 
   #volume-slider
     max-width: 120px
+    @media only screen and (max-device-width: 768px)
+      max-width: 80px
     @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
       visibility: hidden
 
@@ -129,10 +131,12 @@ video
   transition: fade-in 0.4s
 
 .viewer-count
-  margin: 5px 20px 5px
+  margin: 5px 5px 5px
   text-align: center
   font-size: 20px
   font-weight: bold
+  @media only screen and (max-device-width: 768px)
+    font-size: 18px
 </style>
 
 <template lang="pug">
@@ -195,17 +199,7 @@ video
     //-       step="0.01"
     //-       @input="setVolume"
     //-     )
-    //-     .viewer-count
-    //-       span#viewer-count-number
-    //-       | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
-    //-     div#autoplay.frow.nowrap
-    //-       input(
-    //-         type="checkbox"
-    //-         :checked = "autoplay"
-    //-         @change="toggleAutoPlay"
-    //-       )
-    //-       label AutoPlay
-    //-
+
     //-   .frow(v-if="stream.isVideo && isPlaying")
     //-     button#theater-button.button-none.mr-20(
     //-       type="button"
@@ -217,6 +211,17 @@ video
     //-       @click="fullscreenVideo"
     //-     )
     //-       FullscreenSvg
+    #media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
+      div#autoplay.frow.nowrap
+        input(
+          type="checkbox"
+          :checked = "autoplay"
+          @change="toggleAutoPlay"
+        )
+        label AutoPlay
+      .viewer-count
+        span#viewer-count-number
+        | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
@@ -260,7 +265,6 @@ export default {
       theaterMode: false,
       statsVisible: false,
       volume: window.localStorage.getItem('volume') || 0.5,
-      NO_MORE: false,
       stats: {},
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
@@ -348,6 +352,7 @@ export default {
         break;
       case ReceiverConnection.STATE.DISCONNECTED:
         this.isStream = false;
+
         this.infoBarMessage = 'You\'ve been disconnected. Please try again.';
         break;
       case ReceiverConnection.STATE.GENERIC:
@@ -366,19 +371,13 @@ export default {
       this.receiverViewerCount = count;
     },
     onStats(stats) {
-      if (this.NO_MORE) {
-        stats.nomore();
-        return;
-      }
       this.stats = stats;
     },
     showStats() {
       this.statsVisible = true;
-      this.NO_MORE = false;
     },
     hideStats() {
       this.statsVisible = false;
-      this.NO_MORE = true;
     },
     bytesToSize(bytes) {
       let k = 1000;

@@ -2,33 +2,21 @@
 
 export const IceServersHandler = (function() {
   function getIceServers() {
-    let iceServers = [
-      {
-        url: 'stun:global.stun.twilio.com:3478?transport=udp',
-        urls: 'stun:global.stun.twilio.com:3478?transport=udp',
-      },
-      {
-        url: 'turn:global.turn.twilio.com:3478?transport=udp',
-        username:
-          '635df392f184a3c38b1e1f275ec5c1004d9b8fa5aa32f81a45c904e830535070',
-        urls: 'turn:global.turn.twilio.com:3478?transport=udp',
-        credential: 'M4Ax2yC8TNlrKTmWrm2pFO08WGmDCKGy5HkAyv22seQ=',
-      },
-      {
-        url: 'turn:global.turn.twilio.com:3478?transport=tcp',
-        username:
-          '635df392f184a3c38b1e1f275ec5c1004d9b8fa5aa32f81a45c904e830535070',
-        urls: 'turn:global.turn.twilio.com:3478?transport=tcp',
-        credential: 'M4Ax2yC8TNlrKTmWrm2pFO08WGmDCKGy5HkAyv22seQ=',
-      },
-      {
-        url: 'turn:global.turn.twilio.com:443?transport=tcp',
-        username:
-          '635df392f184a3c38b1e1f275ec5c1004d9b8fa5aa32f81a45c904e830535070',
-        urls: 'turn:global.turn.twilio.com:443?transport=tcp',
-        credential: 'M4Ax2yC8TNlrKTmWrm2pFO08WGmDCKGy5HkAyv22seQ=',
-      },
-    ];
+    var iceServers = [{
+      urls: [ 'stun:ws-turn1.xirsys.com' ],
+    }, {
+      username: 'paB_VapMS4rh7KG1WxSX5sAoEAzPCBei0AwjO-PLRjIGrYBCsFZ_9WF-XlAvTnIBAAAAAF2FRx5jb2R5c2hlcm1hbg==',
+      credential: '282dd8fc-dbef-11e9-87d1-12339b8f6738',
+      urls: [
+        'turn:ws-turn1.xirsys.com:80?transport=udp',
+        'turn:ws-turn1.xirsys.com:3478?transport=udp',
+        'turn:ws-turn1.xirsys.com:80?transport=tcp',
+        'turn:ws-turn1.xirsys.com:3478?transport=tcp',
+        'turns:ws-turn1.xirsys.com:443?transport=tcp',
+        'turns:ws-turn1.xirsys.com:5349?transport=tcp',
+      ],
+    }];
+
     return iceServers;
   }
 

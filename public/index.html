@@ -29,8 +29,14 @@
 
       gtag("config", "UA-150821892-1");
     </script>
-    <!-- specifically so we are not setting variables on `window`; expected to be global by RTCMultiConnection-->
+    <!-- expected by RTCMultiConnection-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <!-- needs to be imported for back-compat, but not referenced -->
+    <script src="https://unpkg.com/webrtc-adapter@7.5.0/out/adapter.js"></script>
+    <!-- NOTE: needs to be loaded via CDN due to cached module exports not working
+         solves issue where you cannot construct a connection from multiple files without refresh
+    -->
+    <script src="https://unpkg.com/rtcmulticonnection@3.6.9/dist/RTCMultiConnection.min.js"></script>
   </head>
   <body>
     <noscript>

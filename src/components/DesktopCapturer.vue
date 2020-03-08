@@ -36,11 +36,6 @@ export default {
       // SM: post Vue migration, what previously ran in captureDesktop is instead in setDefaults
       // this.captureDesktop();
       this.setDefaults();
-
-      // runtimePort.postMessage({
-      //   messageFromContentScript1234: true,
-      //   stopSharing: true,
-      // });
     },
     captureDesktop() {
       this.onAccessApproved();
