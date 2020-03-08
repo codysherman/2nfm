@@ -82,7 +82,9 @@ export default {
         this.player.srcObject.getAudioTracks()[0].enabled = true;
       }
       this.player.volume = this.volume;
-      this.playMedia();
+      if (this.autoplay) {
+        this.playMedia();
+      }
     },
     onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
