@@ -157,10 +157,6 @@ export default {
     if (this.$route.params.room !== sanitizedRoomId) {
       this.$router.push(sanitizedRoomId);
     }
-    const localstorageAutoplay = JSON.parse(localStorage.getItem('autoplay'));
-    if (localstorageAutoplay !== null) {
-      this.autoplay = localstorageAutoplay;
-    }
   },
   mounted() {
     window.addEventListener('offline', this.setOffline, false);

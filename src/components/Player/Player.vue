@@ -10,7 +10,12 @@
       v-show="stream.isAudio"
       ref="audioPlayer"
     )
-    MediaControls(:isVideo="true" :player="player")
+    MediaControls(
+      :isVideo="stream.isVideo"
+      :isAudio="stream.isAudio"
+      :player="player"
+      :autoplay.sync="autoplay"
+    )
 </template>
 
 <script>
@@ -45,6 +50,7 @@ export default {
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
       presenceCheckWait: null,
+      autoplay: JSON.parse(window.localStorage.getItem('autoplay')) === false ? false : true,
     };
   },
   computed: {

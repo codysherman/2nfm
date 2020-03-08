@@ -22,10 +22,6 @@
     @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
       visibility: hidden
 
-  .autoplay
-    input, label
-      margin: auto 4px 47px
-
 .fullscreen-button
   svg
     width: 30px
@@ -92,15 +88,16 @@ div
         @click="fullscreenVideo"
       )
         FullscreenSvg
-  //- .media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
+  .media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
     div.autoplay.frow.nowrap
-      input(
-        type="checkbox"
-        :checked = "autoplay"
-        @change="toggleAutoPlay"
-      )
-      label AutoPlay
-    .viewer-count
+      
+      label.row-start.direction-reverse AutoPlay
+        input(
+          type="checkbox"
+          :checked="autoplay"
+          @change="toggleAutoPlay"
+        )
+    //- .viewer-count
       span.viewer-count-number
       | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
 </template>
@@ -131,13 +128,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    player: {
+      type: [HTMLVideoElement, HTMLAudioElement],
+      default: null,
+    },
     recieverViewerCount: {
       type: Number,
       default: 0,
     },
-    player: {
-      type: [HTMLVideoElement, HTMLAudioElement],
-      default: null,
+    autoplay: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -147,8 +148,6 @@ export default {
       isPlaying: false,
       theaterMode: false,
       volume: window.localStorage.getItem('volume') || 0.5,
-      // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
-      presenceCheckWait: null,
     };
   },
   methods: {
@@ -185,6 +184,12 @@ export default {
     },
     toggleTheaterMode() {
       this.theaterMode = !this.theaterMode;
+    },
+    toggleAutoPlay() {
+      this.$emit('update:autoplay', !this.autoplay)
+      this.$nextTick(() => {
+        window.localStorage.setItem('autoplay', this.autoplay);
+      });
     },
   },
 };

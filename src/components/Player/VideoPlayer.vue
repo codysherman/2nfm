@@ -69,10 +69,6 @@ export default {
     toggleTheaterMode() {
       this.theaterMode = !this.theaterMode;
     },
-    toggleAutoPlay() {
-      this.autoplay = !this.autoplay;
-      localStorage.setItem('autoplay', JSON.stringify(this.autoplay));
-    },
   },
 };
 </script>
