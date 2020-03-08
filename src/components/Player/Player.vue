@@ -10,7 +10,7 @@
       v-show="stream.isAudio"
       ref="audioPlayer"
     )
-    p(@click="togglePlayback") play
+    p(@click="togglePlayback") play {{ stream }}
 </template>
 
 <script>

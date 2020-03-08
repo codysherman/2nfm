@@ -20,7 +20,7 @@ video
       playsinline
     )
       | Your browser does not support the video element.
-    MediaControls(:isVideo="true")
+    MediaControls(:isVideo="true" :parentRefs="$refs")
 </template>
 
 <script>
@@ -30,6 +30,12 @@ export default {
   name: 'VideoPlayer',
   components: {
     MediaControls,
+  },
+  props: {
+    recieverViewerCount: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {

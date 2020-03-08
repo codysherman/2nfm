@@ -56,13 +56,13 @@
     )
     .viewer-count
       span#viewer-count-number
-      | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
+      //- | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
     div#autoplay.frow.nowrap
-      input(
-        type="checkbox"
-        :checked = "autoplay"
-        @change="toggleAutoPlay"
-      )
+      //- input(
+      //-   type="checkbox"
+      //-   :checked = "autoplay"
+      //-   @change="toggleAutoPlay"
+      //- )
       label AutoPlay
   .frow(v-if="isVideo && isPlaying")
     button.theater-button.button-none.mr-20(
@@ -95,6 +95,10 @@ export default {
     ReceiverConnection,
   },
   props: {
+    parentRefs: {
+      type: Object,
+      default: null,
+    },
     isVideo: {
       type: Boolean,
       default: false,
@@ -102,6 +106,10 @@ export default {
     isAudio: {
       type: Boolean,
       default: false,
+    },
+    recieverViewerCount: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
@@ -118,38 +126,15 @@ export default {
   computed: {
     player() {
       if (this.isVideo) {
-        return this.$refs.videoPlayer;
+        return this.parentRefs.videoPlayer;
       } else if (this.isAudio) {
-        return this.$refs.audioPlayer;
+        return this.parentRefs.audioPlayer;
       } else {
         return null;
       }
     },
   },
   methods: {
-    onStream(stream) {
-      this.$refs.videoPlayer.srcObject = null;
-      this.$refs.audioPlayer.srcObject = null;
-      this.stream = stream;
-      this.stream.mute();
-
-      if (this.isVideo) {
-        this.$refs.videoPlayer.srcObject = this.stream;
-        this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
-        if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
-          this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        }
-        this.$refs.videoPlayer.volume = this.volume;
-      } else {
-        this.$refs.audioPlayer.srcObject = this.stream;
-        this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        this.$refs.audioPlayer.volume = this.volume;
-      }
-      this.playMedia();
-    },
-    onPresenceCheckWait(newValue) {
-      this.presenceCheckWait = newValue;
-    },
     async playMedia() {
       try {
         await this.player.play();
@@ -167,20 +152,19 @@ export default {
       }
     },
     setVolume(event) {
-      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber;
-      this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber;
+      this.player.volume = event.srcElement.valueAsNumber;
       this.volume = event.srcElement.valueAsNumber;
       localStorage.setItem('volume', event.srcElement.valueAsNumber);
     },
     fullscreenVideo() {
-      if (this.$refs.videoPlayer.requestFullscreen)
-        this.$refs.videoPlayer.requestFullscreen();
-      else if (this.$refs.videoPlayer.mozRequestFullScreen)
-        this.$refs.videoPlayer.mozRequestFullScreen();
-      else if (this.$refs.videoPlayer.webkitRequestFullScreen)
-        this.$refs.videoPlayer.webkitRequestFullScreen();
-      else if (this.$refs.videoPlayer.msRequestFullscreen)
-        this.$refs.videoPlayer.msRequestFullscreen();
+      if (this.player.requestFullscreen)
+        this.player.requestFullscreen();
+      else if (this.player.mozRequestFullScreen)
+        this.player.mozRequestFullScreen();
+      else if (this.player.webkitRequestFullScreen)
+        this.player.webkitRequestFullScreen();
+      else if (this.player.msRequestFullscreen)
+        this.player.msRequestFullscreen();
     },
     toggleTheaterMode() {
       this.theaterMode = !this.theaterMode;

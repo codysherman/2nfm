@@ -171,7 +171,7 @@ video
     router-link(v-if="isStream", to="/")
       LogoSvg#logo
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
-    Player(:stream.sync="stream")
+    Player(:stream.sync="stream" :receiverViewerCount="receiverViewerCount")
     //- video.shadow-light(
     //-   ref='videoPlayer'
     //-   :class="{ 'theater-mode': theaterMode }"
@@ -211,17 +211,17 @@ video
     //-       @click="fullscreenVideo"
     //-     )
     //-       FullscreenSvg
-    #media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
-      div#autoplay.frow.nowrap
-        input(
-          type="checkbox"
-          :checked = "autoplay"
-          @change="toggleAutoPlay"
-        )
-        label AutoPlay
-      .viewer-count
-        span#viewer-count-number
-        | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
+    //- #media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
+    //-   div#autoplay.frow.nowrap
+    //-     input(
+    //-       type="checkbox"
+    //-       :checked = "autoplay"
+    //-       @change="toggleAutoPlay"
+    //-     )
+    //-     label AutoPlay
+    //-   .viewer-count
+    //-     span#viewer-count-number
+    //-     | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
@@ -259,7 +259,7 @@ export default {
   data() {
     return {
       roomName: this.$route.params.room,
-      stream: {},
+      stream: new MediaStream,
       isStream: false,
       isPlaying: false,
       theaterMode: false,
