@@ -91,11 +91,11 @@ div
   .media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
     div.autoplay.frow.nowrap
       
-      label.row-start.direction-reverse AutoPlay
+      label.row-start.direction-reverse Autoplay
         input(
           type="checkbox"
           :checked="autoplay"
-          @change="toggleAutoPlay"
+          @change="toggleAutoplay"
         )
     //- .viewer-count
       span.viewer-count-number
@@ -185,7 +185,7 @@ export default {
     toggleTheaterMode() {
       this.theaterMode = !this.theaterMode;
     },
-    toggleAutoPlay() {
+    toggleAutoplay() {
       this.$emit('update:autoplay', !this.autoplay)
       this.$nextTick(() => {
         window.localStorage.setItem('autoplay', this.autoplay);
