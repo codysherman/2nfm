@@ -11,7 +11,6 @@
       ref="audioPlayer"
     )
     MediaControls(:isVideo="true" :player="player")
-    p(@click="togglePlayback") play {{ stream }}
 </template>
 
 <script>
@@ -68,7 +67,6 @@ export default {
       console.log('=====ON STREAM=====', this.$refs);
       this.player.srcObject = null;
       this.stream.mute();
-
       
       this.player.srcObject = this.stream;
       if (this.stream.isVideo) {

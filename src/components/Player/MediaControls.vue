@@ -1,26 +1,44 @@
 <style scoped lang="sass">
-.media-controls
+.media-controls, .media-settings
   width: 60%
   animation: fade-in 0.4s
+  .volume-slider, .play-button-container, .autoplay
+      margin: 6px 6px
 
-.play-button-container
-  width: 30px
-  height: 30px
-  margin-right: 20px
-
-  svg
+  .play-button-container
     width: 30px
     height: 30px
-    fill: $primary-color
+    margin-right: 5px
 
-.volume-slider
-  max-width: 120px
-  @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
+    svg
+      width: 30px
+      height: 30px
+      fill: $primary-color
+
+  .volume-slider
+    max-width: 120px
+    @media only screen and (max-device-width: 768px)
+      max-width: 80px
+    @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
+      visibility: hidden
+
+  .autoplay
+    input, label
+      margin: auto 4px 47px
+
+.fullscreen-button
+  svg
+    width: 30px
+    fill: $primary-color
+    transition: transform 0.4s
+
+  &:hover,
+  &:active,
+  &:focus
+    transform: scale(1.1)
+  @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
     visibility: hidden
-.autoplay
-  input, label
-    margin: auto 4px 47px
-.fullscreen-button,
+
 .theater-button
   svg
     width: 30px
@@ -34,47 +52,58 @@
 
 .theater-button svg
   width: 18px
+
+.viewer-count
+  margin: 5px 5px 5px
+  text-align: center
+  font-size: 20px
+  font-weight: bold
+  @media only screen and (max-device-width: 768px)
+    font-size: 18px
 </style>
 
 <template lang="pug">
-.media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
-  .frow.nowrap
-    button.play-button-container.frow.nowrap.button-none(
-      type="button"
-      v-if="(isAudio) || (isVideo && !isPlaying)"
-      @click="togglePlayback"
-    )
-      PlaySvg(v-if="!isPlaying")
-      PauseSvg(v-else)
-    input.volume-slider(
-      type="range"
-      :value="volume"
-      min="0"
-      max="1"
-      step="0.01"
-      @input="setVolume"
-    )
-    .viewer-count
-      span#viewer-count-number
-      //- | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
-    div#autoplay.frow.nowrap
-      //- input(
-      //-   type="checkbox"
-      //-   :checked = "autoplay"
-      //-   @change="toggleAutoPlay"
-      //- )
+div
+  .media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
+    .frow.nowrap
+      button.play-button-container.frow.nowrap.button-none(
+        type="button"
+        v-if="isAudio || isVideo"
+        @click="togglePlayback"
+      )
+        PlaySvg(v-if="!isPlaying")
+        PauseSvg(v-else)
+      input.volume-slider.frow.nowrap(
+        type="range"
+        :value="volume"
+        min="0"
+        max="1"
+        step="0.01"
+        @input="setVolume"
+      )
+
+    .frow(v-if="isVideo && isPlaying")
+      button.theater-button.button-none.mr-20(
+        type="button"
+        @click="toggleTheaterMode"
+      )
+        TheaterSvg
+      button.fullscreen-button.button-none(
+        type="button"
+        @click="fullscreenVideo"
+      )
+        FullscreenSvg
+  //- .media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
+    div.autoplay.frow.nowrap
+      input(
+        type="checkbox"
+        :checked = "autoplay"
+        @change="toggleAutoPlay"
+      )
       label AutoPlay
-  .frow(v-if="isVideo && isPlaying")
-    button.theater-button.button-none.mr-20(
-      type="button"
-      @click="toggleTheaterMode"
-    )
-      TheaterSvg
-    button.fullscreen-button.button-none(
-      type="button"
-      @click="fullscreenVideo"
-    )
-      FullscreenSvg
+    .viewer-count
+      span.viewer-count-number
+      | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
 </template>
 
 <script>

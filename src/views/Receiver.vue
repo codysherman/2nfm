@@ -64,60 +64,6 @@ video
   &.theater-mode
     width: 100%
 
-#media-controls, #media-settings
-  width: 60%
-  animation: fade-in 0.4s
-  #volume-slider, #play-button-container, #autoplay
-      margin: 6px 6px
-
-  #play-button-container
-    width: 30px
-    height: 30px
-    margin-right: 5px
-
-    svg
-      width: 30px
-      height: 30px
-      fill: $primary-color
-
-  #volume-slider
-    max-width: 120px
-    @media only screen and (max-device-width: 768px)
-      max-width: 80px
-    @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
-      visibility: hidden
-
-  #autoplay
-    input, label
-      margin: auto 4px 47px
-
-#fullscreen-button
-  svg
-    width: 30px
-    fill: $primary-color
-    transition: transform 0.4s
-
-  &:hover,
-  &:active,
-  &:focus
-    transform: scale(1.1)
-  @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
-    visibility: hidden
-
-#theater-button
-  svg
-    width: 30px
-    fill: $primary-color
-    transition: transform 0.4s
-
-  &:hover,
-  &:active,
-  &:focus
-    transform: scale(1.1)
-
-#theater-button svg
-  width: 18px
-
 #info-bar
   font-size: 24px
   margin-top: 20px
@@ -129,14 +75,6 @@ video
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
-
-.viewer-count
-  margin: 5px 5px 5px
-  text-align: center
-  font-size: 20px
-  font-weight: bold
-  @media only screen and (max-device-width: 768px)
-    font-size: 18px
 </style>
 
 <template lang="pug">
@@ -172,56 +110,6 @@ video
       LogoSvg#logo
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
     Player(:stream.sync="stream" :receiverViewerCount="receiverViewerCount")
-    //- video.shadow-light(
-    //-   ref='videoPlayer'
-    //-   :class="{ 'theater-mode': theaterMode }"
-    //-   @click='togglePlayback'
-    //-   playsinline
-    //-   :hidden="!stream.isVideo"
-    //- )
-    //-   | Your browser does not support the video element.
-    //- audio(ref='audioPlayer' :hidden="!stream.isAudio")
-    //-   | Your browser does not support the audio element.
-    //- #media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
-    //-   .frow.nowrap
-    //-     button#play-button-container.frow.nowrap.button-none(
-    //-       type="button"
-    //-       v-if="stream.isAudio || stream.isVideo"
-    //-       @click="togglePlayback"
-    //-     )
-    //-       PlaySvg(v-if="!isPlaying")
-    //-       PauseSvg(v-else)
-    //-     input#volume-slider.frow.nowrap(
-    //-       type="range"
-    //-       :value="volume"
-    //-       min="0"
-    //-       max="1"
-    //-       step="0.01"
-    //-       @input="setVolume"
-    //-     )
-
-    //-   .frow(v-if="stream.isVideo && isPlaying")
-    //-     button#theater-button.button-none.mr-20(
-    //-       type="button"
-    //-       @click="toggleTheaterMode"
-    //-     )
-    //-       TheaterSvg
-    //-     button#fullscreen-button.button-none(
-    //-       type="button"
-    //-       @click="fullscreenVideo"
-    //-     )
-    //-       FullscreenSvg
-    //- #media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
-    //-   div#autoplay.frow.nowrap
-    //-     input(
-    //-       type="checkbox"
-    //-       :checked = "autoplay"
-    //-       @change="toggleAutoPlay"
-    //-     )
-    //-     label AutoPlay
-    //-   .viewer-count
-    //-     span#viewer-count-number
-    //-     | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
@@ -261,7 +149,6 @@ export default {
       roomName: this.$route.params.room,
       stream: new MediaStream,
       isStream: false,
-      isPlaying: false,
       theaterMode: false,
       statsVisible: false,
       volume: window.localStorage.getItem('volume') || 0.5,
