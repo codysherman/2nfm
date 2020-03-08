@@ -1,7 +1,7 @@
 <style scoped lang="sass"></style>
 
 <template lang="pug">
-  .player
+  .player(ref="test")
     VideoPlayer(
       v-show="stream.isVideo"
       ref="videoPlayer"
@@ -10,6 +10,7 @@
       v-show="stream.isAudio"
       ref="audioPlayer"
     )
+    MediaControls(:isVideo="true" :player="player")
     p(@click="togglePlayback") play {{ stream }}
 </template>
 
@@ -17,6 +18,8 @@
 import ReceiverConnection from '@/components/ReceiverConnection.vue';
 import VideoPlayer from '@/components/Player/VideoPlayer.vue';
 import AudioPlayer from '@/components/Player/AudioPlayer.vue';
+import MediaControls from '@/components/Player/MediaControls.vue';
+
 
 export default {
   name: 'Player',
@@ -24,6 +27,7 @@ export default {
     ReceiverConnection,
     VideoPlayer,
     AudioPlayer,
+    MediaControls,
   },
   props: {
     stream: {
@@ -47,12 +51,11 @@ export default {
   computed: {
     player() {
       if (this.stream.isVideo) {
-        return this.$refs.videoPlayer.$refs.videoPlayer;
+        return this.$refs.videoPlayer.$refs.player;
       } else if (this.stream.isAudio) {
-        return this.$refs.audioPlayer.$refs.audioPlayer;
-      } else {
-        return null;
+        return this.$refs.audioPlayer.$refs.player;
       }
+      return null;
     },
   },
   watch: {
@@ -62,23 +65,19 @@ export default {
   },
   methods: {
     onStream() {
-      console.log('=====ON STREAM=====');
+      console.log('=====ON STREAM=====', this.$refs);
       this.player.srcObject = null;
-      this.$refs.audioPlayer.srcObject = null;
       this.stream.mute();
 
+      
+      this.player.srcObject = this.stream;
       if (this.stream.isVideo) {
-        this.player.srcObject = this.stream;
         this.player.srcObject.getVideoTracks()[0].enabled = true;
-        if (this.player.srcObject.getAudioTracks().length) {
-          this.player.srcObject.getAudioTracks()[0].enabled = true;
-        }
-        this.player.volume = this.volume;
-      } else {
-        this.$refs.audioPlayer.srcObject = this.stream;
-        this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        this.$refs.audioPlayer.volume = this.volume;
       }
+      if (this.player.srcObject.getAudioTracks().length) {
+        this.player.srcObject.getAudioTracks()[0].enabled = true;
+      }
+      this.player.volume = this.volume;
       this.playMedia();
     },
     onPresenceCheckWait(newValue) {

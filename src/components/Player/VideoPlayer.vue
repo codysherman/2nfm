@@ -14,23 +14,17 @@ video
 <template lang="pug">
   .video-player
     video.shadow-light(
-      ref='videoPlayer'
+      ref='player'
       :class="{ 'theater-mode': theaterMode }"
       @click='togglePlayback'
       playsinline
     )
       | Your browser does not support the video element.
-    MediaControls(:isVideo="true" :parentRefs="$refs")
 </template>
 
 <script>
-import MediaControls from '@/components/Player/MediaControls.vue';
-
 export default {
   name: 'VideoPlayer',
-  components: {
-    MediaControls,
-  },
   props: {
     recieverViewerCount: {
       type: Number,

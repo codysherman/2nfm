@@ -95,10 +95,6 @@ export default {
     ReceiverConnection,
   },
   props: {
-    parentRefs: {
-      type: Object,
-      default: null,
-    },
     isVideo: {
       type: Boolean,
       default: false,
@@ -111,6 +107,10 @@ export default {
       type: Number,
       default: 0,
     },
+    player: {
+      type: [HTMLVideoElement, HTMLAudioElement],
+      default: null,
+    },
   },
   data() {
     return {
@@ -122,17 +122,6 @@ export default {
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
       presenceCheckWait: null,
     };
-  },
-  computed: {
-    player() {
-      if (this.isVideo) {
-        return this.parentRefs.videoPlayer;
-      } else if (this.isAudio) {
-        return this.parentRefs.audioPlayer;
-      } else {
-        return null;
-      }
-    },
   },
   methods: {
     async playMedia() {

@@ -2,21 +2,13 @@
 
 <template lang="pug">
   .audio-player
-    audio(ref='audioPlayer')
+    audio(ref='player')
       | Your browser does not support the audio element.
-    MediaControls
 </template>
 
 <script>
-import ReceiverConnection from '@/components/ReceiverConnection.vue';
-import MediaControls from '@/components/Player/MediaControls.vue';
-
 export default {
   name: 'Receiver',
-  components: {
-    ReceiverConnection,
-    MediaControls,
-  },
   data() {
     return {
       stream: {},
