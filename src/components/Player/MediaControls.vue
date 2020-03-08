@@ -68,7 +68,7 @@ div
     .frow.nowrap
       button.play-button-container.frow.nowrap.button-none(
         type="button"
-        v-if="isAudio || isVideo"
+        v-if="isAudio || (isVideo && !isPlaying)"
         @click="togglePlayback"
       )
         PlaySvg(v-if="!isPlaying")
@@ -81,7 +81,6 @@ div
         step="0.01"
         @input="setVolume"
       )
-
     .frow(v-if="isVideo && isPlaying")
       button.theater-button.button-none.mr-20(
         type="button"

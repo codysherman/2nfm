@@ -53,17 +53,6 @@
   fill: $primary-color
   animation: fade-in 2s ease-out
 
-video
-  width: 60%
-  height: auto
-  object-fit: contain
-  margin-bottom: 20px
-  background-color: $tertiary-color
-  transition: width $animate-speed
-
-  &.theater-mode
-    width: 100%
-
 #info-bar
   font-size: 24px
   margin-top: 20px
