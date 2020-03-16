@@ -99,6 +99,7 @@
       LogoSvg#logo
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
     Player(
+      v-show="isStream"
       :stream="stream"
       :receiverViewerCount="receiverViewerCount"
     )

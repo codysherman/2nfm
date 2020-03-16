@@ -8,7 +8,7 @@
 </style>
 
 <template lang="pug">
-  .frow.centered-column
+  .frow.column-center
     VideoPlayer(
       :class="{ 'theater-mode': theaterMode }"
       v-show="stream.isVideo"
@@ -19,7 +19,6 @@
       ref="audioPlayer"
     )
     MediaControls(
-      v-if="stream"
       :isVideo="stream.isVideo"
       :isAudio="stream.isAudio"
       :player="player"
