@@ -276,8 +276,8 @@
       .frow.row-between
         button.streamer-control-buttons(type="button" @click="stopStream")
           | End Sharing
-        button.streamer-control-buttons(type="button" @click="showPreview = !showPreview")
-          | {{ showPreview ? 'Hide Preview' : 'Show Preview' }}
+        //- button.streamer-control-buttons(type="button" @click="showPreview = !showPreview")
+        //-   | {{ showPreview ? 'Hide Preview' : 'Show Preview' }}
     .frow.width-100.mt-20
       a.text-underline(
         href="https://caniuse.com/#search=getDisplayMedia"
