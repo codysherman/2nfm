@@ -133,7 +133,7 @@ export default {
       default: null,
     },
     receiverViewerCount: {
-      type: [String, Number],
+      type: Number,
       default: 0,
     },
     autoplay: {
