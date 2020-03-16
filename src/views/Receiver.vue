@@ -236,7 +236,6 @@ export default {
       }
     },
     onStream(stream) {
-      console.log('====Received Stream====');
       this.stream = stream;
     },
     onPresenceCheckWait(newValue) {

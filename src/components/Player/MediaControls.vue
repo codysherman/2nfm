@@ -97,7 +97,7 @@
           :checked="autoplay"
           @change="toggleAutoplay"
         )
-    //- .viewer-count
+    .viewer-count
       span.viewer-count-number
       | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
 </template>
@@ -132,8 +132,8 @@ export default {
       type: [HTMLVideoElement, HTMLAudioElement],
       default: null,
     },
-    recieverViewerCount: {
-      type: Number,
+    receiverViewerCount: {
+      type: [String, Number],
       default: 0,
     },
     autoplay: {

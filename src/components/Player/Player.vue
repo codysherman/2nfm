@@ -24,7 +24,7 @@
       :player="player"
       :autoplay.sync="autoplay"
       :theaterMode.sync="theaterMode"
-      :receiverViewerCount="0"
+      :receiverViewerCount="receiverViewerCount"
     )
 </template>
 
@@ -47,6 +47,10 @@ export default {
     stream: {
       type: MediaStream,
       default: null,
+    },
+    receiverViewerCount: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
@@ -80,7 +84,6 @@ export default {
   },
   methods: {
     onStream() {
-      console.log('=====ON STREAM=====', this.$refs);
       this.player.srcObject = null;
       this.stream.mute();
       
