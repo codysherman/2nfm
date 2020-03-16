@@ -98,7 +98,10 @@
     router-link(v-if="isStream", to="/")
       LogoSvg#logo
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
-    Player(:stream.sync="stream" :receiverViewerCount="receiverViewerCount")
+    Player(
+      :stream="stream"
+      :receiverViewerCount="receiverViewerCount"
+    )
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)

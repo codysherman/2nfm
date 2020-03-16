@@ -1,5 +1,5 @@
 <style scoped lang="sass">
-.media-controls, .media-settings
+.media-controls
   width: 60%
   animation: fade-in 0.4s
   .volume-slider, .play-button-container, .autoplay
@@ -59,8 +59,8 @@
 </style>
 
 <template lang="pug">
-div
-  .media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
+.media-controls
+  .frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
     .frow.nowrap
       button.play-button-container.frow.nowrap.button-none(
         type="button"
@@ -88,7 +88,7 @@ div
         @click="fullscreenVideo"
       )
         FullscreenSvg
-  .media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
+  .frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
     div.autoplay.frow.nowrap
       
       label.row-start.direction-reverse Autoplay
@@ -140,13 +140,16 @@ export default {
       type: Boolean,
       default: true,
     },
+    theaterMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       stream: {},
       isStream: true,
       isPlaying: false,
-      theaterMode: false,
       volume: window.localStorage.getItem('volume') || 0.5,
     };
   },
@@ -183,10 +186,10 @@ export default {
         this.player.msRequestFullscreen();
     },
     toggleTheaterMode() {
-      this.theaterMode = !this.theaterMode;
+      this.$emit('update:theaterMode', !this.theaterMode);
     },
     toggleAutoplay() {
-      this.$emit('update:autoplay', !this.autoplay)
+      this.$emit('update:autoplay', !this.autoplay);
       this.$nextTick(() => {
         window.localStorage.setItem('autoplay', this.autoplay);
       });

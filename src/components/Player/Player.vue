@@ -1,8 +1,16 @@
-<style scoped lang="sass"></style>
+<style scoped lang="sass">
+::v-deep
+  video
+    width: 60%
+
+    &.theater-mode
+      width: 100%
+</style>
 
 <template lang="pug">
-  .player(ref="test")
+  .frow.centered-column
     VideoPlayer(
+      :class="{ 'theater-mode': theaterMode }"
       v-show="stream.isVideo"
       ref="videoPlayer"
     )
@@ -15,6 +23,8 @@
       :isAudio="stream.isAudio"
       :player="player"
       :autoplay.sync="autoplay"
+      :theaterMode.sync="theaterMode"
+      :receiverViewerCount="0"
     )
 </template>
 
