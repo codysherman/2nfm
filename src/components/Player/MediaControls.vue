@@ -205,7 +205,6 @@ export default {
       });
     },
     playbackToggled() {
-      console.log('YABBBA DABBBA DOOO');
       if (this.player.paused) {
         this.isPlaying = false;
       } else {
