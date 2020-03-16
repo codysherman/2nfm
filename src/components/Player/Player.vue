@@ -8,7 +8,7 @@
 </style>
 
 <template lang="pug">
-  .frow.column-center
+  .frow.column-center.width-100
     VideoPlayer(
       :class="{ 'theater-mode': theaterMode }"
       v-show="stream.isVideo"

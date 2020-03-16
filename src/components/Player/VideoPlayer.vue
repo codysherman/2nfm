@@ -16,13 +16,5 @@ video
 <script>
 export default {
   name: 'VideoPlayer',
-  data() {
-    return {
-      stream: {},
-      isStream: false,
-      isPlaying: false,
-      volume: window.localStorage.getItem('volume') || 0.5,
-    };
-  },
 };
 </script>
