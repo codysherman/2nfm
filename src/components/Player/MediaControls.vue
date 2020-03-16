@@ -153,6 +153,16 @@ export default {
       volume: window.localStorage.getItem('volume') || 0.5,
     };
   },
+  watch: {
+    player() {
+      this.player.addEventListener('pause', this.playbackToggled);
+      this.player.addEventListener('playing', this.playbackToggled);
+    },
+  },
+  beforeDestroy() {
+    this.player.removeEventListener('pause', this.playbackToggled, true);
+    this.player.removeEventListener('playing', this.playbackToggled, true);
+  },
   methods: {
     async playMedia() {
       try {
@@ -193,6 +203,14 @@ export default {
       this.$nextTick(() => {
         window.localStorage.setItem('autoplay', this.autoplay);
       });
+    },
+    playbackToggled() {
+      console.log('YABBBA DABBBA DOOO');
+      if (this.player.paused) {
+        this.isPlaying = false;
+      } else {
+        this.isPlaying = true;
+      }
     },
   },
 };

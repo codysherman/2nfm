@@ -19,6 +19,7 @@
       ref="audioPlayer"
     )
     MediaControls(
+      v-if="stream"
       :isVideo="stream.isVideo"
       :isAudio="stream.isAudio"
       :player="player"
@@ -78,7 +79,7 @@ export default {
     },
   },
   watch: {
-    stream: function() {
+    stream() {
       this.onStream();
     },
   },
