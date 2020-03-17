@@ -44,6 +44,13 @@
   @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
     visibility: hidden
 
+.autoplay
+  label
+    font-weight: $bold
+    color: $primary-color
+    font-size: 16px
+    margin-bottom: 0
+
 .viewer-count
   text-align: center
   font-weight: $bold
@@ -79,8 +86,8 @@
         @click="fullscreenVideo"
       )
         FullscreenSvg
-  .frow.nowrap.mt-10(:class="{ 'justify-between': isVideo }")
-    .autoplay
+  .frow.centered.nowrap.mt-20(:class="{ 'justify-between': isVideo }")
+    .autoplay.mr-20
       label.row-start.direction-reverse Autoplay
         input(
           type="checkbox"
@@ -88,7 +95,6 @@
           @change="toggleAutoplay"
         )
     .viewer-count
-      span.viewer-count-number
       | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
 </template>
 
