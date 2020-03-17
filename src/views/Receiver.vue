@@ -142,9 +142,7 @@ export default {
       roomName: this.$route.params.room,
       stream: new MediaStream,
       isStream: false,
-      theaterMode: false,
       statsVisible: false,
-      volume: window.localStorage.getItem('volume') || 0.5,
       stats: {},
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)

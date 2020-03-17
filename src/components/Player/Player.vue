@@ -55,15 +55,8 @@ export default {
   },
   data() {
     return {
-      isStream: false,
-      isPlaying: false,
       theaterMode: false,
-      statsVisible: false,
       volume: window.localStorage.getItem('volume') || 0.5,
-      stats: {},
-      infoBarMessage: '',
-      // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
-      presenceCheckWait: null,
       autoplay: JSON.parse(window.localStorage.getItem('autoplay')) === false ? false : true,
     };
   },
@@ -99,40 +92,13 @@ export default {
         this.playMedia();
       }
     },
-    onPresenceCheckWait(newValue) {
-      this.presenceCheckWait = newValue;
-    },
     async playMedia() {
       try {
         await this.player.play();
-        this.isPlaying = true;
       } catch (err) {
         console.error(err);
         // Playback Failed
       }
-    },
-    togglePlayback() {
-      if (this.player.paused) {
-        this.playMedia();
-      } else {
-        this.player.pause();
-        this.isPlaying = false;
-      }
-    },
-    setVolume(event) {
-      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber;
-      this.player.volume = event.srcElement.valueAsNumber;
-      this.volume = event.srcElement.valueAsNumber;
-      localStorage.setItem('volume', event.srcElement.valueAsNumber);
-    },
-    fullscreenVideo() {
-      if (this.player.requestFullscreen) this.player.requestFullscreen();
-      else if (this.player.mozRequestFullScreen)
-        this.player.mozRequestFullScreen();
-      else if (this.player.webkitRequestFullScreen)
-        this.player.webkitRequestFullScreen();
-      else if (this.player.msRequestFullscreen)
-        this.player.msRequestFullscreen();
     },
   },
 };

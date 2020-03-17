@@ -2,8 +2,6 @@
 .media-controls
   width: 60%
   animation: fade-in 0.4s
-  .volume-slider, .play-button-container, .autoplay
-      margin: 6px 6px
 
   .play-button-container
     width: 30px
@@ -22,6 +20,17 @@
     @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
       visibility: hidden
 
+.theater-button
+  svg
+    width: 18px
+    fill: $primary-color
+    transition: transform 0.4s
+
+  &:hover,
+  &:active,
+  &:focus
+    transform: scale(1.1)
+
 .fullscreen-button
   svg
     width: 30px
@@ -35,32 +44,14 @@
   @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
     visibility: hidden
 
-.theater-button
-  svg
-    width: 30px
-    fill: $primary-color
-    transition: transform 0.4s
-
-  &:hover,
-  &:active,
-  &:focus
-    transform: scale(1.1)
-
-.theater-button svg
-  width: 18px
-
 .viewer-count
-  margin: 5px 5px 5px
   text-align: center
-  font-size: 20px
-  font-weight: bold
-  @media only screen and (max-device-width: 768px)
-    font-size: 18px
+  font-weight: $bold
 </style>
 
 <template lang="pug">
-.media-controls
-  .frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
+.media-controls(:class="{ 'mt-20': isVideo }")
+  .frow.nowrap(:class="{ 'justify-between': isVideo }")
     .frow.nowrap
       button.play-button-container.frow.nowrap.button-none(
         type="button"
@@ -88,9 +79,8 @@
         @click="fullscreenVideo"
       )
         FullscreenSvg
-  .frow.nowrap(v-if="isStream" :class="{ 'justify-between': isVideo }")
-    div.autoplay.frow.nowrap
-      
+  .frow.nowrap.mt-10(:class="{ 'justify-between': isVideo }")
+    .autoplay
       label.row-start.direction-reverse Autoplay
         input(
           type="checkbox"
@@ -148,7 +138,6 @@ export default {
   data() {
     return {
       stream: {},
-      isStream: true,
       isPlaying: false,
       volume: window.localStorage.getItem('volume') || 0.5,
     };
@@ -158,10 +147,6 @@ export default {
       this.player.addEventListener('pause', this.playbackToggled);
       this.player.addEventListener('playing', this.playbackToggled);
     },
-  },
-  beforeDestroy() {
-    this.player.removeEventListener('pause', this.playbackToggled, true);
-    this.player.removeEventListener('playing', this.playbackToggled, true);
   },
   methods: {
     async playMedia() {
