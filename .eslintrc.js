@@ -35,6 +35,7 @@ module.exports = {
       'exports': 'always-multiline',
       'functions': 'always-multiline',
     }],
+    'semi':[2, 'always'],
     'import/extensions': ['error', 'ignorePackages', {'js': 'never'}],
     'indent': ['error', 2],
     'max-len': ['error', { 'code': 100, 'tabWidth': 2,
