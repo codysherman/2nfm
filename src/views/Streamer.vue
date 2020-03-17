@@ -393,7 +393,7 @@ export default {
     copyUrl() {
       let copyText = document.getElementById('public-link');
       let input = document.createElement('input');
-      input.setAttribute('value', copyText.innerText);
+      input.setAttribute('value', `https://${copyText.innerText}`);
       document.body.appendChild(input);
       input.select();
 
