@@ -116,46 +116,6 @@
 
   &:hover svg path
     fill: $black
-
-#stop-section
-  text-align: center
-
-  #public-link
-    display: inline-block
-    font-size: 40px
-    color: $primary-color
-    margin: 0 auto
-
-  #copy-button
-    display: inline-block
-    margin-left: 14px
-    cursor: pointer
-    svg
-      width: 30px
-      fill: $primary-color
-
-  #copy-notification
-    font-size: 20px
-
-/* XS
-@media (max-width: 767px)
-  #public-link
-    font-size: 30px
-
-.viewer-count
-  margin: 5px auto 60px
-  text-align: center
-  font-size: 20px
-  font-weight: bold
-
-.streamer-control-buttons
-  margin: 0 auto
-  font-size: 30px
-  padding: 15px
-  background: none
-  border: 3px solid $primary-color
-  color: $primary-color
-  border-radius: 10px
 </style>
 
 <template lang="pug">
@@ -230,7 +190,7 @@
               span(v-if="codecs === 'vp8'")
                 | Less strain on older devices
               span(v-if="codecs === 'h264'")
-                | Less strain on older devices
+                | Less strain on oldest devices
           //- .col-xs-1-2
           //-   .settings-item.mb-0
           //-     label
@@ -260,46 +220,20 @@
                 .frow.column-center
                   AudioSvg
                   | Audio Only
-    section#stop-section(v-if="isSharingOn && sessionId")
-      //- router-link#public-link(
-      //-   to="{query: { s: sessionId, p: room_password }}`}" target="_blank"
-      //- )
-      router-link#public-link(:to="sessionId" target="_blank")
-        | {{ `2n.fm/${sessionId}` }}
-      #copy-button(@click="copyUrl()")
-          CopySvg
-      #copy-notification.animate-fade-in(v-if="copyNotification")
-        | Copied!
-      .viewer-count
-        span#viewer-count-number
-        | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
-      .frow.row-between
-        button.streamer-control-buttons(type="button" @click="stopStream")
-          | End Sharing
-        //- button.streamer-control-buttons(type="button" @click="showPreview = !showPreview")
-        //-   | {{ showPreview ? 'Hide Preview' : 'Show Preview' }}
-    .frow.width-100.mt-20
-      a.text-underline(
-        href="https://caniuse.com/#search=getDisplayMedia"
-        rel="noreferrer"
-        target="_blank"
-      )
-        | OS and Browser Limitations
-      //
-        <div id="enable-chat">
-        <img src="../images/chat.png">
-        Open Chat Box
-        </div>
-    .frow.width-100.mt-20
-
+    StopSection(
+      v-if="isSharingOn && sessionId"
+      :sessionId="sessionId"
+      :viewerCount="viewerCount"
+      @stopStream="stopStream"
+    )
 </template>
 
 <script>
 import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
-import CopySvg from '@/assets/svgs/copy.svg';
 
+import StopSection from '@/components/Streamer/StopSection.vue';
 import DesktopCapturer from '@/components/DesktopCapturer.vue';
 import StreamerConnection from '@/components/StreamerConnection.vue';
 
@@ -309,7 +243,7 @@ export default {
     LogoSvg,
     VideoSvg,
     AudioSvg,
-    CopySvg,
+    StopSection,
     DesktopCapturer,
     StreamerConnection,
   },
@@ -329,8 +263,6 @@ export default {
       viewerCount: 0,
       privacy: 'private',
       useridAlreadyTaken: '',
-      copyNotification: false,
-      showPreview: false,
     };
   },
   mounted() {
@@ -388,25 +320,6 @@ export default {
         this.bandwidth = parseInt(value);
       } catch (e) {
         this.bandwidth = null;
-      }
-    },
-    copyUrl() {
-      let copyText = document.getElementById('public-link');
-      let input = document.createElement('input');
-      input.setAttribute('value', `https://${copyText.innerText}`);
-      document.body.appendChild(input);
-      input.select();
-
-      let result = document.execCommand('copy');
-      const copyNotification = document.getElementById('copy-notification');
-      if (result) {
-        document.body.removeChild(input);
-        this.copyNotification = true;
-        setTimeout(() => {
-          this.copyNotification = false;
-        }, 5000);
-      } else {
-        copyNotification.innerText = 'Copy failed';
       }
     },
     onGotStream(stream) {
