@@ -143,7 +143,6 @@ export default {
   },
   data() {
     return {
-      stream: {},
       isPlaying: false,
       volume: window.localStorage.getItem('volume') || 0.5,
     };
