@@ -221,6 +221,11 @@
                 .frow.column-center
                   AudioSvg
                   | Audio Only
+            .col-xs-1-3
+              #audio-button.stream-button(@click="enableMic = !enableMic")
+                .frow.column-center
+                  AudioSvg
+                  | Microphone {{enableMic}}
     StopSection(
       v-if="isSharingOn && sessionId"
       :sessionId="sessionId"
