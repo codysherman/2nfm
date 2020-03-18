@@ -281,7 +281,6 @@ export default {
 
 
     onGettingWebRTCStats(stats, userid) {
-      console.log('run')
       if (!this.connection.peers[userid]) {
         stats.nomore();
         return;

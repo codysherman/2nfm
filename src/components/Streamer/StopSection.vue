@@ -25,7 +25,7 @@
     font-size: 30px
 
 .viewer-count
-  margin: 5px auto 60px
+  margin: 5px auto 20px
   text-align: center
   font-size: 20px
   font-weight: bold
@@ -50,15 +50,21 @@ section#stop-section
   #copy-button(@click="copyUrl()")
       CopySvg
   #copy-notification.animate-fade-in(v-if="copyNotification")
-    | Copied!
+    | Copied
   .viewer-count
     span#viewer-count-number
     | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
+  Player.mb-20(
+    v-if="showPreview"
+    :stream="stream"
+    :receiverViewerCount="viewerCount"
+    :disableAutoplay="true"
+  )
   .frow.row-between
     button.streamer-control-buttons(type="button" @click="stopStream")
       | End Sharing
-    //- button.streamer-control-buttons(type="button" @click="showPreview = !showPreview")
-    //-   | {{ showPreview ? 'Hide Preview' : 'Show Preview' }}
+    button.streamer-control-buttons(type="button" @click="showPreview = !showPreview")
+      | {{ showPreview ? 'Hide Preview' : 'Show Preview' }}
   .frow.width-100.mt-20
     a.text-underline(
       href="https://caniuse.com/#search=getDisplayMedia"
@@ -71,12 +77,19 @@ section#stop-section
 <script>
 import CopySvg from '@/assets/svgs/copy.svg';
 
+import Player from '@/components/Player/Player.vue';
+
 export default {
   name: 'StopSection',
   components: {
     CopySvg,
+    Player,
   },
   props: {
+    stream: {
+      type: MediaStream,
+      default: null,
+    },
     sessionId: {
       type: String,
       default: null,

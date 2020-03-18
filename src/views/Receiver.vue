@@ -102,6 +102,7 @@
       v-show="isStream"
       :stream="stream"
       :receiverViewerCount="receiverViewerCount"
+      :showExtraControls="true"
     )
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room

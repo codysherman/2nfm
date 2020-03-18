@@ -62,7 +62,6 @@
     .frow.nowrap
       button.play-button-container.frow.nowrap.button-none(
         type="button"
-        v-if="isAudio || (isVideo && !isPlaying)"
         @click="togglePlayback"
       )
         PlaySvg(v-if="!isPlaying")
@@ -75,7 +74,7 @@
         step="0.01"
         @input="setVolume"
       )
-    .frow(v-if="isVideo && isPlaying")
+    .frow(v-if="isVideo && isPlaying && showExtraControls")
       button.theater-button.button-none.mr-20(
         type="button"
         @click="toggleTheaterMode"
@@ -86,7 +85,10 @@
         @click="fullscreenVideo"
       )
         FullscreenSvg
-  .frow.centered.nowrap.mt-20(:class="{ 'justify-between': isVideo }")
+  .frow.centered.nowrap.mt-20(
+    v-if="showExtraControls"
+    :class="{ 'justify-between': isVideo }"
+  )
     .autoplay.mr-20
       label.row-start.direction-reverse Autoplay
         input(
@@ -137,6 +139,10 @@ export default {
       default: true,
     },
     theaterMode: {
+      type: Boolean,
+      default: false,
+    },
+    showExtraControls: {
       type: Boolean,
       default: false,
     },

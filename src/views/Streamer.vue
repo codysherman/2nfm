@@ -224,6 +224,7 @@
       v-if="isSharingOn && sessionId"
       :sessionId="sessionId"
       :viewerCount="viewerCount"
+      :stream="stream"
       @stopStream="stopStream"
     )
 </template>
@@ -252,6 +253,7 @@ export default {
       isSharingOn: false,
       // sessionId aka room name
       sessionId: null,
+      stream: null,
       desktop_id: null,
       constraints: null,
       room_password: '',
@@ -306,6 +308,7 @@ export default {
     },
     stopStream() {
       this.$refs.capturer.stopStream();
+      this.stream = null;
     },
     setRoomName() {
       this.room_id = this.room_id
@@ -323,6 +326,9 @@ export default {
       }
     },
     onGotStream(stream) {
+      this.stream = stream;
+      this.stream.isVideo = this.isVideo;
+      this.stream.isAudio = !this.isVideo;
       this.$refs.connection.shareStreamUsingRTCMultiConnection(
         stream,
         this.isVideo,
