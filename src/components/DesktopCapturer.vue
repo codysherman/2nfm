@@ -97,15 +97,12 @@ export default {
         if (!this.enableVideo && stream.getAudioTracks().length === 0) {
           alert('Make sure to check the "Share audio" box in Google Chrome');
         }
+        if (stream.getAudioTracks().length > 0) {
+          stream.systemAudioId = stream.getAudioTracks()[0].id;
+        }
         if (micStream) {
-          // let outputTracks = [];
-          // outputTracks = outputTracks.concat(stream.getTracks());
-          // outputTracks = outputTracks.concat(micStream.getTracks());
-          // stream = new MediaStream(outputTracks);
-          console.log('mic track', micStream.getAudioTracks());
-          console.log('System Audio', stream.getAudioTracks());
           stream.addTrack(micStream.getAudioTracks()[0]);
-          console.log('stream before send', stream.getAudioTracks());
+          stream.micId = micStream.getAudioTracks()[0].id;
         }
         this.gotStream(stream);
       };

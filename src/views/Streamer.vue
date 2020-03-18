@@ -338,7 +338,7 @@ export default {
       this.stream.isAudio = !this.isVideo;
       this.$refs.connection.shareStreamUsingRTCMultiConnection(
         stream,
-        this.isVideo,
+        this.isVideo, // TODO: This is redundant if it's also in stream
       );
     },
     onSessionId(id) {

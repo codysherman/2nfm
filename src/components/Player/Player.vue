@@ -78,6 +78,7 @@ export default {
     },
   },
   mounted() {
+    console.log('bang');
     if (this.stream && this.stream.active) {
       this.onStream();
     }
@@ -96,6 +97,8 @@ export default {
       }
       this.determinePlayer();
       this.player.srcObject = null;
+
+      console.log('ALMOST there', this.stream);
       
       this.player.srcObject = this.stream;
       if (this.stream.isVideo) {
