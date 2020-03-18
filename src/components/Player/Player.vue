@@ -72,11 +72,13 @@ export default {
   },
   watch: {
     stream() {
-      this.onStream();
+      if (this.stream.active) {
+        this.onStream();
+      }
     },
   },
   mounted() {
-    if (this.stream) {
+    if (this.stream && this.stream.active) {
       this.onStream();
     }
   },
