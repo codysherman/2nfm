@@ -220,6 +220,7 @@
                 .frow.column-center
                   AudioSvg
                   | Audio Only
+    | {{isSharingOn}} {{sessionId}}
     StopSection(
       v-if="isSharingOn && sessionId"
       :sessionId="sessionId"
@@ -347,6 +348,9 @@ export default {
     },
     onIsSharing(isSharing) {
       this.isSharingOn = isSharing;
+      if (!this.isSharingOn) {
+        this.sessionId = null;
+      }
     },
     onViewerCount(count) {
       this.viewerCount = count;
