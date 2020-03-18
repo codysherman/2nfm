@@ -151,7 +151,6 @@ export default {
       if (e.userid !== this.roomName) return;
 
       // TODO: maybe split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing
-      this.stats.nomore();
       this.connection.close();
       this.connection.closeSocket();
       this.connection.userid = this.connection.token();
@@ -207,7 +206,7 @@ export default {
 
     this.connection.socketCustomEvent = this.roomName;
 
-    console.log('[Connection mounted]: roomName check:', this.roomName);
+    // console.log('[Connection mounted]: roomName check:', this.roomName);
     if (this.roomName) {
       this.checkPresence();
     }
