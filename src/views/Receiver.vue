@@ -53,71 +53,6 @@
   fill: $primary-color
   animation: fade-in 2s ease-out
 
-video
-  width: 60%
-  height: auto
-  object-fit: contain
-  margin-bottom: 20px
-  background-color: $tertiary-color
-  transition: width $animate-speed
-
-  &.theater-mode
-    width: 100%
-
-#media-controls, #media-settings
-  width: 60%
-  animation: fade-in 0.4s
-  #volume-slider, #play-button-container, #autoplay
-      margin: 6px 6px
-
-  #play-button-container
-    width: 30px
-    height: 30px
-    margin-right: 5px
-
-    svg
-      width: 30px
-      height: 30px
-      fill: $primary-color
-
-  #volume-slider
-    max-width: 120px
-    @media only screen and (max-device-width: 768px)
-      max-width: 80px
-    @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
-      visibility: hidden
-
-  #autoplay
-    input, label
-      margin: auto 4px 47px
-
-#fullscreen-button
-  svg
-    width: 30px
-    fill: $primary-color
-    transition: transform 0.4s
-
-  &:hover,
-  &:active,
-  &:focus
-    transform: scale(1.1)
-  @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
-    visibility: hidden
-
-#theater-button
-  svg
-    width: 30px
-    fill: $primary-color
-    transition: transform 0.4s
-
-  &:hover,
-  &:active,
-  &:focus
-    transform: scale(1.1)
-
-#theater-button svg
-  width: 18px
-
 #info-bar
   font-size: 24px
   margin-top: 20px
@@ -129,14 +64,6 @@ video
   margin-top: 20px
   text-decoration: underline
   transition: fade-in 0.4s
-
-.viewer-count
-  margin: 5px 5px 5px
-  text-align: center
-  font-size: 20px
-  font-weight: bold
-  @media only screen and (max-device-width: 768px)
-    font-size: 18px
 </style>
 
 <template lang="pug">
@@ -171,56 +98,11 @@ video
     router-link(v-if="isStream", to="/")
       LogoSvg#logo
     #tab-title.mt-30.mb-20(onclick="document.execCommand('copy')")
-    video.shadow-light(
-      ref='videoPlayer'
-      :class="{ 'theater-mode': theaterMode }"
-      @click='togglePlayback'
-      playsinline
-      :hidden="!stream.isVideo"
+    Player(
+      v-show="isStream"
+      :stream="stream"
+      :receiverViewerCount="receiverViewerCount"
     )
-      | Your browser does not support the video element.
-    audio(ref='audioPlayer' :hidden="!stream.isAudio")
-      | Your browser does not support the audio element.
-    #media-controls.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
-      .frow.nowrap
-        button#play-button-container.frow.nowrap.button-none(
-          type="button"
-          v-if="stream.isAudio || stream.isVideo"
-          @click="togglePlayback"
-        )
-          PlaySvg(v-if="!isPlaying")
-          PauseSvg(v-else)
-        input#volume-slider.frow.nowrap(
-          type="range"
-          :value="volume"
-          min="0"
-          max="1"
-          step="0.01"
-          @input="setVolume"
-        )
-
-      .frow(v-if="stream.isVideo && isPlaying")
-        button#theater-button.button-none.mr-20(
-          type="button"
-          @click="toggleTheaterMode"
-        )
-          TheaterSvg
-        button#fullscreen-button.button-none(
-          type="button"
-          @click="fullscreenVideo"
-        )
-          FullscreenSvg
-    #media-settings.frow.nowrap(v-if="isStream" :class="{ 'justify-between': stream.isVideo }")
-      div#autoplay.frow.nowrap
-        input(
-          type="checkbox"
-          :checked = "autoplay"
-          @change="toggleAutoPlay"
-        )
-        label AutoPlay
-      .viewer-count
-        span#viewer-count-number
-        | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
   #chat-container(hidden)
@@ -240,6 +122,8 @@ import TheaterSvg from '@/assets/svgs/theater.svg';
 
 import ReceiverConnection from '@/components/ReceiverConnection.vue';
 
+import Player from '@/components/Player/Player.vue';
+
 export default {
   name: 'Receiver',
   components: {
@@ -251,34 +135,20 @@ export default {
     FullscreenSvg,
     TheaterSvg,
     ReceiverConnection,
+    Player,
   },
   data() {
     return {
       roomName: this.$route.params.room,
-      stream: {},
+      stream: new MediaStream,
       isStream: false,
-      isPlaying: false,
-      theaterMode: false,
       statsVisible: false,
-      volume: window.localStorage.getItem('volume') || 0.5,
       stats: {},
       infoBarMessage: '',
       // set by Receiver.onPresenceCheckWait / Connection(@presenceCheckWait)
       presenceCheckWait: null,
       receiverViewerCount: 0,
-      autoplay: true,
     };
-  },
-  computed: {
-    player() {
-      if (this.stream.isVideo) {
-        return this.$refs.videoPlayer;
-      } else if (this.stream.isAudio) {
-        return this.$refs.audioPlayer;
-      } else {
-        return null;
-      }
-    },
   },
   created() {
     const sanitizedRoomId = this.$route.params.room
@@ -289,10 +159,6 @@ export default {
     if (this.$route.params.room !== sanitizedRoomId) {
       this.$router.push(sanitizedRoomId);
     }
-    const localstorageAutoplay = JSON.parse(localStorage.getItem('autoplay'))
-    if (localstorageAutoplay !== null) {
-      this.autoplay = localstorageAutoplay
-    }
   },
   mounted() {
     window.addEventListener('offline', this.setOffline, false);
@@ -301,7 +167,7 @@ export default {
   beforeDestroy() {
     window.removeEventListener('offline', this.setOffline, false);
     window.removeEventListener('online', this.setOnline, false);
-  },  
+  },
   methods: {
     onConnectionStateChanged(state) {
       switch (state.value) {
@@ -326,7 +192,7 @@ export default {
         this.infoBarMessage = 'Remote peer is about to send his screen.';
         break;
       case ReceiverConnection.STATE.SOCKET_CLOSED:
-        this.$refs.videoPlayer.srcObject = null;
+        this.stream = null;
 
         this.infoBarMessage = 'Screen sharing has been closed.';
         this.hideStats();
@@ -369,26 +235,7 @@ export default {
       }
     },
     onStream(stream) {
-      this.$refs.videoPlayer.srcObject = null;
-      this.$refs.audioPlayer.srcObject = null;
       this.stream = stream;
-      this.stream.mute();
-
-      if (this.stream.isVideo) {
-        this.$refs.videoPlayer.srcObject = this.stream;
-        this.$refs.videoPlayer.srcObject.getVideoTracks()[0].enabled = true;
-        if (this.$refs.videoPlayer.srcObject.getAudioTracks().length) {
-          this.$refs.videoPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        }
-        this.$refs.videoPlayer.volume = this.volume;
-      } else {
-        this.$refs.audioPlayer.srcObject = this.stream;
-        this.$refs.audioPlayer.srcObject.getAudioTracks()[0].enabled = true;
-        this.$refs.audioPlayer.volume = this.volume;
-      }
-      if (this.autoplay) {
-        this.playMedia();
-      }
     },
     onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
@@ -398,45 +245,6 @@ export default {
     },
     onStats(stats) {
       this.stats = stats;
-    },
-    async playMedia() {
-      try {
-        await this.player.play();
-        this.isPlaying = true;
-      } catch (err) {
-        // Playback Failed
-      }
-    },
-    toggleAutoPlay() {
-      this.autoplay = !this.autoplay
-      localStorage.setItem('autoplay', JSON.stringify(this.autoplay))
-    },
-    togglePlayback() {
-      if (this.player.paused) {
-        this.playMedia();
-      } else {
-        this.player.pause();
-        this.isPlaying = false;
-      }
-    },
-    setVolume(event) {
-      this.$refs.audioPlayer.volume = event.srcElement.valueAsNumber;
-      this.$refs.videoPlayer.volume = event.srcElement.valueAsNumber;
-      this.volume = event.srcElement.valueAsNumber;
-      localStorage.setItem('volume', event.srcElement.valueAsNumber);
-    },
-    fullscreenVideo() {
-      if (this.$refs.videoPlayer.requestFullscreen)
-        this.$refs.videoPlayer.requestFullscreen();
-      else if (this.$refs.videoPlayer.mozRequestFullScreen)
-        this.$refs.videoPlayer.mozRequestFullScreen();
-      else if (this.$refs.videoPlayer.webkitRequestFullScreen)
-        this.$refs.videoPlayer.webkitRequestFullScreen();
-      else if (this.$refs.videoPlayer.msRequestFullscreen)
-        this.$refs.videoPlayer.msRequestFullscreen();
-    },
-    toggleTheaterMode() {
-      this.theaterMode = !this.theaterMode;
     },
     showStats() {
       this.statsVisible = true;
@@ -462,5 +270,4 @@ export default {
     location.reload();
   },
 };
-
 </script>
