@@ -146,6 +146,7 @@ export default {
       // www.RTCMultiConnection.org/docs/attachStreams/
       this.connection.attachStreams.push(stream);
 
+      // TODO: Remove the video track from the source stream
       if (
         !isVideo &&
         this.connection.attachStreams[0].getVideoTracks().length > 0
