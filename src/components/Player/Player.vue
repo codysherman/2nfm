@@ -18,6 +18,10 @@
       v-show="stream.isAudio"
       ref="audioPlayer"
     )
+    AudioPlayer(
+      v-show="stream.micId"
+      ref="micPlayer"
+    )
     MediaControls(
       :isVideo="stream.isVideo"
       :isAudio="stream.isAudio"
@@ -26,6 +30,10 @@
       :theaterMode.sync="theaterMode"
       :receiverViewerCount="receiverViewerCount"
       :showExtraControls="showExtraControls"
+    )
+    MediaControls(
+      :isAudio="true"
+      :player="this.micPlayer"
     )
 </template>
 
@@ -66,6 +74,7 @@ export default {
     return {
       theaterMode: false,
       player: null,
+      micPlayer: null,
       volume: window.localStorage.getItem('volume') || 0.5,
       autoplay: JSON.parse(window.localStorage.getItem('autoplay')) === false ? false : true,
     };
@@ -83,18 +92,21 @@ export default {
     }
   },
   methods: {
-    determinePlayer() {
+    determinePlayers() {
       if (this.stream.isVideo) {
         this.player = this.$refs.videoPlayer.$refs.player;
       } else {
         this.player = this.$refs.audioPlayer.$refs.player;
+      }
+      if (this.stream.micId) {
+        this.micPlayer = this.$refs.micPlayer.$refs.player;
       }
     },
     onStream() {
       if (typeof this.stream.mute === 'function') { 
         this.stream.mute();  // HACK: Avoids double audio
       }
-      this.determinePlayer();
+      this.determinePlayers();
       this.player.srcObject = null;
 
       this.player.srcObject = this.stream;
@@ -106,6 +118,15 @@ export default {
           (stream) => stream.id === this.stream.systemAudioId,
         ).enabled = true;
       }
+      // if (this.stream.micId) {
+      //   this.micPlayer.srcObject = this.stream;
+      //   // this.micPlayer.srcObject.getAudioTracks().find(
+      //   //   (stream) => stream.id === this.stream.systemAudioId,
+      //   // ).enabled = false;
+      //   this.micPlayer.srcObject.getAudioTracks().find(
+      //     (stream) => stream.id === this.stream.micId,
+      //   ).enabled = true;
+      // }
       this.player.volume = this.volume;
       if (this.autoplay && !this.disableAutoplay) {
         this.playMedia();
@@ -114,6 +135,7 @@ export default {
     async playMedia() {
       try {
         await this.player.play();
+        // await this.micPlayer.play();
       } catch (err) {
         console.error(err);
         // Playback Failed
