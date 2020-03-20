@@ -78,7 +78,6 @@ export default {
     },
   },
   mounted() {
-    console.log('bang');
     if (this.stream && this.stream.active) {
       this.onStream();
     }
@@ -98,14 +97,14 @@ export default {
       this.determinePlayer();
       this.player.srcObject = null;
 
-      console.log('ALMOST there', this.stream);
-      
       this.player.srcObject = this.stream;
       if (this.stream.isVideo) {
         this.player.srcObject.getVideoTracks()[0].enabled = true;
       }
       if (this.player.srcObject.getAudioTracks().length) {
-        this.player.srcObject.getAudioTracks()[0].enabled = true;
+        this.player.srcObject.getAudioTracks().find(
+          (stream) => stream.id === this.stream.systemAudioId,
+        ).enabled = true;
       }
       this.player.volume = this.volume;
       if (this.autoplay && !this.disableAutoplay) {

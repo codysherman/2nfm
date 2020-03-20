@@ -162,16 +162,9 @@ export default {
       }
 
       if (stream.micId) {
-        console.log('attaching mIC');
         this.connection.extra.micId = stream.micId;
-        this.connection.attachStreams[0].micId = 'testttttttttt';
-        console.log('CONNNETCTION', this.connection);
         // this.connection.updateExtraData();
       }
-
-      console.log(this.connection.extra);
-
-      // console.log("connectionHere", externalThis.connection.attachStreams[0].getAudioTracks());
 
       var text = '-';
       const looper = setInterval(() => {
