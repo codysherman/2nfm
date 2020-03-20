@@ -118,15 +118,15 @@ export default {
           (stream) => stream.id === this.stream.systemAudioId,
         ).enabled = true;
       }
-      // if (this.stream.micId) {
-      //   this.micPlayer.srcObject = this.stream;
-      //   // this.micPlayer.srcObject.getAudioTracks().find(
-      //   //   (stream) => stream.id === this.stream.systemAudioId,
-      //   // ).enabled = false;
-      //   this.micPlayer.srcObject.getAudioTracks().find(
-      //     (stream) => stream.id === this.stream.micId,
-      //   ).enabled = true;
-      // }
+      if (this.stream.micId) {
+        this.micPlayer.srcObject = this.stream;
+        // this.micPlayer.srcObject.getAudioTracks().find(
+        //   (stream) => stream.id === this.stream.systemAudioId,
+        // ).enabled = false;
+        this.micPlayer.srcObject.getAudioTracks().find(
+          (stream) => stream.id === this.stream.micId,
+        ).enabled = true;
+      }
       this.player.volume = this.volume;
       if (this.autoplay && !this.disableAutoplay) {
         this.playMedia();
