@@ -47,7 +47,7 @@
   stroke-dashoffset: 990
   animation: dash 15s ease-in-out 1.5s infinite
 
-#logo
+.mb-50
   height: 50px
   width: auto
   fill: $primary-color
@@ -96,7 +96,7 @@
     router-link.create-message(v-if="!isStream", to="/")
       LoadingSvg#loading-logo
     router-link(v-if="isStream", to="/")
-      LogoSvg#logo
+      LogoSvg.mb-50
     Player(
       v-show="isStream"
       :stream="stream"

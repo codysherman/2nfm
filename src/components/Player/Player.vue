@@ -23,17 +23,24 @@
       ref="micPlayer"
     )
     MediaControls(
+      :class="{ 'mt-20': stream.isVideo }"
       :isVideo="stream.isVideo"
       :isAudio="stream.isAudio"
       :player="player"
       :autoplay.sync="autoplay"
       :theaterMode.sync="theaterMode"
-      :receiverViewerCount="receiverViewerCount"
-      :showExtraControls="showExtraControls"
     )
-    MediaControls(
+    MediaControls.mt-10(
+      v-if="stream.micId"
+      :isVideo="stream.isVideo"
       :isAudio="true"
+      :isMic="true"
       :player="this.micPlayer"
+    )
+    ExtraControls.mt-30(
+      v-if="showExtraControls"
+      :autoplay.sync="autoplay"
+      :receiverViewerCount="receiverViewerCount"
     )
 </template>
 
@@ -42,6 +49,7 @@ import ReceiverConnection from '@/components/ReceiverConnection.vue';
 import VideoPlayer from '@/components/Player/VideoPlayer.vue';
 import AudioPlayer from '@/components/Player/AudioPlayer.vue';
 import MediaControls from '@/components/Player/MediaControls.vue';
+import ExtraControls from '@/components/Player/ExtraControls.vue';
 
 
 export default {
@@ -51,6 +59,7 @@ export default {
     VideoPlayer,
     AudioPlayer,
     MediaControls,
+    ExtraControls,
   },
   props: {
     stream: {
