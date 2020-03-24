@@ -25,6 +25,7 @@
       :autoplay.sync="autoplay"
       :theaterMode.sync="theaterMode"
       :receiverViewerCount="receiverViewerCount"
+      :showExtraControls="showExtraControls"
     )
 </template>
 
@@ -52,33 +53,49 @@ export default {
       type: Number,
       default: 0,
     },
+    disableAutoplay: {
+      type: Boolean,
+      default: false,
+    },
+    showExtraControls: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       theaterMode: false,
+      player: null,
       volume: window.localStorage.getItem('volume') || 0.5,
       autoplay: JSON.parse(window.localStorage.getItem('autoplay')) === false ? false : true,
     };
   },
-  computed: {
-    player() {
-      if (this.stream.isVideo) {
-        return this.$refs.videoPlayer.$refs.player;
-      } else if (this.stream.isAudio) {
-        return this.$refs.audioPlayer.$refs.player;
-      }
-      return null;
-    },
-  },
   watch: {
     stream() {
-      this.onStream();
+      if (this.stream.active) {
+        this.onStream();
+      }
     },
   },
+  mounted() {
+    if (this.stream && this.stream.active) {
+      this.onStream();
+    }
+  },
   methods: {
+    determinePlayer() {
+      if (this.stream.isVideo) {
+        this.player = this.$refs.videoPlayer.$refs.player;
+      } else {
+        this.player = this.$refs.audioPlayer.$refs.player;
+      }
+    },
     onStream() {
+      if (typeof this.stream.mute === 'function') { 
+        this.stream.mute();  // HACK: Avoids double audio
+      }
+      this.determinePlayer();
       this.player.srcObject = null;
-      this.stream.mute();
       
       this.player.srcObject = this.stream;
       if (this.stream.isVideo) {
@@ -88,7 +105,7 @@ export default {
         this.player.srcObject.getAudioTracks()[0].enabled = true;
       }
       this.player.volume = this.volume;
-      if (this.autoplay) {
+      if (this.autoplay && !this.disableAutoplay) {
         this.playMedia();
       }
     },
