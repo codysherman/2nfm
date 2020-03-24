@@ -68,7 +68,7 @@ export default {
             },
           );
         } catch (err) {
-          console.log('Error getting microphone', err);
+          console.error('Error getting microphone', err);
           alert('Your browser denied microphone access');
           // this.setDefaults();
         }
