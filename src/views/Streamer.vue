@@ -135,6 +135,7 @@
     :roomId="room_id"
     :roomPassword="room_password"
     :privacy="privacy"
+    :isVideo="isVideo"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
     @idTaken="onIdTaken"
@@ -182,14 +183,14 @@
               | Codec
               select.ml-5(v-model="codecs")
                 //- option(value="default" selected="") Default (VP9)
-                option(value="vp9") VP9 (Default)
-                option(value="vp8") VP8
+                option(value="vp9") VP9 (Screensharing)
+                option(value="vp8") VP8 (Gaming)
                 //- option(value="h264") H.264
             .setting-description.text-center
               span(v-if="codecs === 'vp9'")
                 | Better quality, less data
               span(v-if="codecs === 'vp8'")
-                | Less strain on older devices
+                | Lower quality, more FPS
               span(v-if="codecs === 'h264'")
                 | Less strain on oldest devices
           //- .col-xs-1-2
