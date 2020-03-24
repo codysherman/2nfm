@@ -107,25 +107,27 @@ export default {
         this.stream.mute();  // HACK: Avoids double audio
       }
       this.determinePlayers();
-      this.player.srcObject = null;
-
-      this.player.srcObject = this.stream;
+      const tempPlayerStream = new MediaStream();
       if (this.stream.isVideo) {
-        this.player.srcObject.getVideoTracks()[0].enabled = true;
+        tempPlayerStream.addTrack(
+          this.stream.getVideoTracks()[0],
+        );
+        tempPlayerStream.getVideoTracks()[0].enabled = true;
       }
-      if (this.player.srcObject.getAudioTracks().length) {
-        this.player.srcObject.getAudioTracks().find(
+      if (this.stream.getAudioTracks().length) {
+        tempPlayerStream.addTrack(this.stream.getAudioTracks().find(
           (stream) => stream.id === this.stream.systemAudioId,
-        ).enabled = true;
+        ));
+        tempPlayerStream.getAudioTracks()[0].enabled = true;
       }
+      this.player.srcObject = tempPlayerStream;
       if (this.stream.micId) {
-        this.micPlayer.srcObject = this.stream;
-        // this.micPlayer.srcObject.getAudioTracks().find(
-        //   (stream) => stream.id === this.stream.systemAudioId,
-        // ).enabled = false;
-        this.micPlayer.srcObject.getAudioTracks().find(
+        const tempMicStream = new MediaStream();
+        tempMicStream.addTrack(this.stream.getAudioTracks().find(
           (stream) => stream.id === this.stream.micId,
-        ).enabled = true;
+        ));
+        tempMicStream.getAudioTracks()[0].enabled = true;
+        this.micPlayer.srcObject = tempMicStream;
       }
       this.player.volume = this.volume;
       if (this.autoplay && !this.disableAutoplay) {
@@ -135,7 +137,7 @@ export default {
     async playMedia() {
       try {
         await this.player.play();
-        // await this.micPlayer.play();
+        await this.micPlayer.play();
       } catch (err) {
         console.error(err);
         // Playback Failed
