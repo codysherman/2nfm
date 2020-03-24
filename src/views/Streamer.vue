@@ -159,7 +159,7 @@
           @blur="setRoomName")
       section#options
         .label Options
-        .frow.row-start.gutters
+        .frow.gutters
           //- .col-xs-1-2
           //-   .settings-item
           //-     label
@@ -179,14 +179,17 @@
               input(type="radio" value="public" v-model="privacy")
               | Public Room
           .col-xs-1-2
-            label.row-center
+            label.row-start
+              input(type="checkbox" v-model="enableMic")
+              | Enable Microphone (Beta)
+            label.row-start
               | Codec
               select.ml-5(v-model="codecs")
                 //- option(value="default" selected="") Default (VP9)
                 option(value="vp9") VP9 (Screensharing)
                 option(value="vp8") VP8 (Gaming)
                 //- option(value="h264") H.264
-            .setting-description.text-center
+            //- .text-center
               span(v-if="codecs === 'vp9'")
                 | Better quality, less data
               span(v-if="codecs === 'vp8'")
@@ -212,21 +215,16 @@
         #start
           .label Start
           .frow.gutters
-            .col-xs-1-3
+            .col-xs-1-2
               #video-button.stream-button(@click="startStream(true)")
                 .frow.column-center
                   VideoSvg
                   | Video
-            .col-xs-1-3
+            .col-xs-1-2
               #audio-button.stream-button(@click="startStream()")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
-            .col-xs-1-3
-              #audio-button.stream-button(@click="enableMic = !enableMic")
-                .frow.column-center
-                  AudioSvg
-                  | Microphone {{enableMic}}
     StopSection(
       v-if="isSharingOn && sessionId"
       :sessionId="sessionId"
@@ -265,14 +263,14 @@ export default {
       constraints: null,
       room_password: '',
       room_id: window.localStorage.getItem('room_id') || '',
-      codecs: 'vp9',
+      codecs: 'vp8',
       bandwidth: null,
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
       privacy: 'private',
       useridAlreadyTaken: '',
-      enableMic: true,
+      enableMic: false,
     };
   },
   mounted() {
