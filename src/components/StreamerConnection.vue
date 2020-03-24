@@ -154,14 +154,14 @@ export default {
       // www.RTCMultiConnection.org/docs/attachStreams/
       this.connection.attachStreams.push(stream);
 
-      // if (
-      //   !this.isVideo &&
-      //   this.connection.attachStreams[0].getVideoTracks().length > 0
-      // ) {
-      //   this.connection.attachStreams[0].removeTrack(
-      //     this.connection.attachStreams[0].getVideoTracks()[0],
-      //   );
-      // }
+      if (
+        !this.isVideo &&
+        this.connection.attachStreams[0].getVideoTracks().length > 0
+      ) {
+        this.connection.attachStreams[0].removeTrack(
+          this.connection.attachStreams[0].getVideoTracks()[0],
+        );
+      }
 
       // console.log("connectionHere", externalThis.connection.attachStreams[0].getAudioTracks());
 
