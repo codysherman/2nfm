@@ -25,15 +25,14 @@
     MediaControls(
       :class="{ 'mt-20': stream.isVideo }"
       :isVideo="stream.isVideo"
-      :isAudio="stream.isAudio"
       :player="player"
       :autoplay.sync="autoplay"
       :theaterMode.sync="theaterMode"
+      @togglePlayback="togglePlayback"
     )
     MediaControls.mt-10(
       v-if="stream.micId"
       :isVideo="stream.isVideo"
-      :isAudio="true"
       :isMic="true"
       :player="this.micPlayer"
     )
@@ -123,10 +122,11 @@ export default {
         );
         tempPlayerStream.getVideoTracks()[0].enabled = true;
       }
-      if (this.stream.getAudioTracks().length) {
-        tempPlayerStream.addTrack(this.stream.getAudioTracks().find(
-          (stream) => stream.id === this.stream.systemAudioId,
-        ));
+      const systemAudioIndex = this.stream.getAudioTracks().findIndex(
+        (stream) => stream.id === this.stream.systemAudioId,
+      );
+      if (systemAudioIndex >= 0) {
+        tempPlayerStream.addTrack(this.stream.getAudioTracks()[systemAudioIndex]);
         tempPlayerStream.getAudioTracks()[0].enabled = true;
       }
       this.player.srcObject = tempPlayerStream;
@@ -146,10 +146,22 @@ export default {
     async playMedia() {
       try {
         await this.player.play();
-        await this.micPlayer.play();
+        if (this.stream.micId) {
+          await this.micPlayer.play();
+        }
       } catch (err) {
         console.error(err);
         // Playback Failed
+      }
+    },
+    togglePlayback() {
+      if (this.player.paused) {
+        this.playMedia();
+      } else {
+        this.player.pause();
+        if (this.stream.micId) {
+          this.micPlayer.pause();
+        }
       }
     },
   },

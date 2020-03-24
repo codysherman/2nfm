@@ -105,10 +105,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    isAudio: {
-      type: Boolean,
-      default: false,
-    },
     isMic: {
       type: Boolean,
       default: false,
@@ -135,21 +131,8 @@ export default {
     },
   },
   methods: {
-    async playMedia() {
-      try {
-        await this.player.play();
-        this.isPlaying = true;
-      } catch (err) {
-        // Playback Failed
-      }
-    },
     togglePlayback() {
-      if (this.player.paused) {
-        this.playMedia();
-      } else {
-        this.player.pause();
-        this.isPlaying = false;
-      }
+      this.$emit('togglePlayback');
     },
     setVolume(event) {
       this.player.volume = event.srcElement.valueAsNumber;
