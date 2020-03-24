@@ -29,6 +29,10 @@ export default {
       type: String,
       default: 'private',
     },
+    isVideo: {
+      type: Boolean,
+      default: false,
+    },
   },  
   data() {
     return {
@@ -47,7 +51,7 @@ export default {
     delete this.connection;
   },
   methods: {
-    shareStreamUsingRTCMultiConnection(stream, isVideo = false) {
+    shareStreamUsingRTCMultiConnection(stream) {
       // www.RTCMultiConnection.org/docs/
       this.connection = new RTCMultiConnection();
       this.connection.socketURL = 'https://api.2n.fm:9001/';
@@ -116,7 +120,11 @@ export default {
         }
 
         if (!!this.codecs && this.codecs !== 'default') {
-          sdp = CodecsHandler.preferCodec(sdp, this.codecs);
+          if (this.isVideo) {
+            sdp = CodecsHandler.preferCodec(sdp, this.codecs);
+          } else {
+            sdp = CodecsHandler.preferCodec(sdp, 'vp8');
+          }
         }
         return sdp;
       };
@@ -146,14 +154,14 @@ export default {
       // www.RTCMultiConnection.org/docs/attachStreams/
       this.connection.attachStreams.push(stream);
 
-      if (
-        !isVideo &&
-        this.connection.attachStreams[0].getVideoTracks().length > 0
-      ) {
-        this.connection.attachStreams[0].removeTrack(
-          this.connection.attachStreams[0].getVideoTracks()[0],
-        );
-      }
+      // if (
+      //   !this.isVideo &&
+      //   this.connection.attachStreams[0].getVideoTracks().length > 0
+      // ) {
+      //   this.connection.attachStreams[0].removeTrack(
+      //     this.connection.attachStreams[0].getVideoTracks()[0],
+      //   );
+      // }
 
       // console.log("connectionHere", externalThis.connection.attachStreams[0].getAudioTracks());
 
@@ -167,7 +175,7 @@ export default {
 
         if (this.connection.isInitiator) {
           this.setViewerCount(0);
-          clearInterval(looper)
+          clearInterval(looper);
           return;
         }
 

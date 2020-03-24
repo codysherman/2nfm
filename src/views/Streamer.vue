@@ -134,6 +134,7 @@
     :roomId="room_id"
     :roomPassword="room_password"
     :privacy="privacy"
+    :isVideo="isVideo"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
     @idTaken="onIdTaken"
