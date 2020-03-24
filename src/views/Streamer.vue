@@ -141,7 +141,8 @@
     @idTaken="onIdTaken"
   )
   .col-md-1-2
-    LogoSvg#logo
+    router-link(to="/")
+      LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
     div#id-taken(v-if="useridAlreadyTaken")
