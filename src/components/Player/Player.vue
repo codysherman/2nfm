@@ -18,14 +18,28 @@
       v-show="stream.isAudio"
       ref="audioPlayer"
     )
+    AudioPlayer(
+      v-show="stream.micId"
+      ref="micPlayer"
+    )
     MediaControls(
+      :class="{ 'mt-20': stream.isVideo }"
       :isVideo="stream.isVideo"
-      :isAudio="stream.isAudio"
       :player="player"
       :autoplay.sync="autoplay"
       :theaterMode.sync="theaterMode"
+      @togglePlayback="togglePlayback"
+    )
+    MediaControls.mt-10(
+      v-if="stream.micId"
+      :isVideo="stream.isVideo"
+      :isMic="true"
+      :player="this.micPlayer"
+    )
+    ExtraControls.mt-30(
+      v-if="showExtraControls"
+      :autoplay.sync="autoplay"
       :receiverViewerCount="receiverViewerCount"
-      :showExtraControls="showExtraControls"
     )
 </template>
 
@@ -34,6 +48,7 @@ import ReceiverConnection from '@/components/ReceiverConnection.vue';
 import VideoPlayer from '@/components/Player/VideoPlayer.vue';
 import AudioPlayer from '@/components/Player/AudioPlayer.vue';
 import MediaControls from '@/components/Player/MediaControls.vue';
+import ExtraControls from '@/components/Player/ExtraControls.vue';
 
 
 export default {
@@ -43,6 +58,7 @@ export default {
     VideoPlayer,
     AudioPlayer,
     MediaControls,
+    ExtraControls,
   },
   props: {
     stream: {
@@ -66,6 +82,7 @@ export default {
     return {
       theaterMode: false,
       player: null,
+      micPlayer: null,
       volume: window.localStorage.getItem('volume') || 0.5,
       autoplay: JSON.parse(window.localStorage.getItem('autoplay')) === false ? false : true,
     };
@@ -83,26 +100,43 @@ export default {
     }
   },
   methods: {
-    determinePlayer() {
+    determinePlayers() {
       if (this.stream.isVideo) {
         this.player = this.$refs.videoPlayer.$refs.player;
       } else {
         this.player = this.$refs.audioPlayer.$refs.player;
+      }
+      if (this.stream.micId) {
+        this.micPlayer = this.$refs.micPlayer.$refs.player;
       }
     },
     onStream() {
       if (typeof this.stream.mute === 'function') { 
         this.stream.mute();  // HACK: Avoids double audio
       }
-      this.determinePlayer();
-      this.player.srcObject = null;
-      
-      this.player.srcObject = this.stream;
+      this.determinePlayers();
+      const tempPlayerStream = new MediaStream();
       if (this.stream.isVideo) {
-        this.player.srcObject.getVideoTracks()[0].enabled = true;
+        tempPlayerStream.addTrack(
+          this.stream.getVideoTracks()[0],
+        );
+        tempPlayerStream.getVideoTracks()[0].enabled = true;
       }
-      if (this.player.srcObject.getAudioTracks().length) {
-        this.player.srcObject.getAudioTracks()[0].enabled = true;
+      const systemAudioIndex = this.stream.getAudioTracks().findIndex(
+        (stream) => stream.id === this.stream.systemAudioId,
+      );
+      if (systemAudioIndex >= 0) {
+        tempPlayerStream.addTrack(this.stream.getAudioTracks()[systemAudioIndex]);
+        tempPlayerStream.getAudioTracks()[0].enabled = true;
+      }
+      this.player.srcObject = tempPlayerStream;
+      if (this.stream.micId) {
+        const tempMicStream = new MediaStream();
+        tempMicStream.addTrack(this.stream.getAudioTracks().find(
+          (stream) => stream.id === this.stream.micId,
+        ));
+        tempMicStream.getAudioTracks()[0].enabled = true;
+        this.micPlayer.srcObject = tempMicStream;
       }
       this.player.volume = this.volume;
       if (this.autoplay && !this.disableAutoplay) {
@@ -112,9 +146,22 @@ export default {
     async playMedia() {
       try {
         await this.player.play();
+        if (this.stream.micId) {
+          await this.micPlayer.play();
+        }
       } catch (err) {
         console.error(err);
         // Playback Failed
+      }
+    },
+    togglePlayback() {
+      if (this.player.paused) {
+        this.playMedia();
+      } else {
+        this.player.pause();
+        if (this.stream.micId) {
+          this.micPlayer.pause();
+        }
       }
     },
   },

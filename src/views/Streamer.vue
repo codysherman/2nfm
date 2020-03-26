@@ -123,6 +123,7 @@
   DesktopCapturer(
     ref="capturer"
     :enableVideo="isVideo"
+    :enableMic="enableMic"
     @isSharing="onIsSharing"
     @gotStream="onGotStream"
     @setDefaults="onSetDefaults"
@@ -140,7 +141,8 @@
     @idTaken="onIdTaken"
   )
   .col-md-1-2
-    LogoSvg#logo
+    router-link(to="/")
+      LogoSvg#logo
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
     div#id-taken(v-if="useridAlreadyTaken")
@@ -158,7 +160,7 @@
           @blur="setRoomName")
       section#options
         .label Options
-        .frow.row-start.gutters
+        .frow.gutters
           //- .col-xs-1-2
           //-   .settings-item
           //-     label
@@ -178,14 +180,17 @@
               input(type="radio" value="public" v-model="privacy")
               | Public Room
           .col-xs-1-2
-            label.row-center
+            label.row-start
+              input(type="checkbox" v-model="enableMic")
+              | Enable Microphone (Beta)
+            label.row-start
               | Codec
               select.ml-5(v-model="codecs")
                 //- option(value="default" selected="") Default (VP9)
                 option(value="vp9") VP9 (Screensharing)
                 option(value="vp8") VP8 (Gaming)
                 //- option(value="h264") H.264
-            .setting-description.text-center
+            //- .text-center
               span(v-if="codecs === 'vp9'")
                 | Better quality, less data
               span(v-if="codecs === 'vp8'")
@@ -259,13 +264,14 @@ export default {
       constraints: null,
       room_password: '',
       room_id: window.localStorage.getItem('room_id') || '',
-      codecs: 'vp9',
+      codecs: 'vp8',
       bandwidth: null,
       isVideo: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
       privacy: 'private',
       useridAlreadyTaken: '',
+      enableMic: false,
     };
   },
   mounted() {
@@ -332,7 +338,7 @@ export default {
       this.stream.isAudio = !this.isVideo;
       this.$refs.connection.shareStreamUsingRTCMultiConnection(
         stream,
-        this.isVideo,
+        this.isVideo, // TODO: This is redundant if it's also in stream
       );
     },
     onSessionId(id) {

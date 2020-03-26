@@ -7,6 +7,7 @@ export default {
   name: 'DesktopCapturer',
   props: {
     enableVideo: Boolean,
+    enableMic: Boolean,
   },
   data() {
     return {
@@ -57,6 +58,23 @@ export default {
         },
       };
 
+      const startMicCapture = async () => {
+        let captureMicStream;
+        try {
+          captureMicStream = await navigator.mediaDevices.getUserMedia(
+            {
+              audio: true,
+              video: false,
+            },
+          );
+        } catch (err) {
+          console.error('Error getting microphone', err);
+          alert('Your browser denied microphone access');
+          // this.setDefaults();
+        }
+        return captureMicStream;
+      };
+
       const startScreenCapture = async () => {
         let captureStream;
         try {
@@ -70,11 +88,22 @@ export default {
       };
 
       const startCapturing = async () => {
+        let micStream = null;
+        if (this.enableMic === true) {
+          micStream = await startMicCapture();
+        }
         let stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
         if (!this.enableVideo && stream.getAudioTracks().length === 0) {
           alert('Make sure to check the "Share audio" box in Google Chrome');
+        }
+        if (stream.getAudioTracks().length > 0) {
+          stream.systemAudioId = stream.getAudioTracks()[0].id;
+        }
+        if (micStream) {
+          stream.addTrack(micStream.getAudioTracks()[0]);
+          stream.micId = micStream.getAudioTracks()[0].id;
         }
         this.gotStream(stream);
       };

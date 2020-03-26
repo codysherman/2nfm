@@ -154,6 +154,7 @@ export default {
       // www.RTCMultiConnection.org/docs/attachStreams/
       this.connection.attachStreams.push(stream);
 
+      // TODO: Remove the video track from the source stream
       if (
         !this.isVideo &&
         this.connection.attachStreams[0].getVideoTracks().length > 0
@@ -163,7 +164,15 @@ export default {
         );
       }
 
-      // console.log("connectionHere", externalThis.connection.attachStreams[0].getAudioTracks());
+      if(stream.systemAudioId) {
+        this.connection.extra.systemAudioId = stream.systemAudioId;
+        // this.connection.updateExtraData();
+      }
+
+      if (stream.micId) {
+        this.connection.extra.micId = stream.micId;
+        // this.connection.updateExtraData();
+      }
 
       var text = '-';
       const looper = setInterval(() => {

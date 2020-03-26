@@ -139,6 +139,12 @@ export default {
     };
 
     this.connection.onstream = (e) => {
+      if (e.extra.micId) {
+        e.stream.micId = e.extra.micId;
+      }
+      if (e.extra.systemAudioId) {
+        e.stream.systemAudioId = e.extra.systemAudioId;
+      }
       this.$emit('stream', e.stream);
     };
 

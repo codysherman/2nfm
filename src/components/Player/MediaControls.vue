@@ -5,13 +5,16 @@
 
   .play-button-container
     width: 30px
-    height: 30px
     margin-right: 5px
 
     svg
       width: 30px
-      height: 30px
       fill: $primary-color
+
+  .microphone
+    width: 30px
+    margin-right: 5px
+    fill: $primary-color
 
   .volume-slider
     max-width: 120px
@@ -43,29 +46,20 @@
     transform: scale(1.1)
   @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
     visibility: hidden
-
-.autoplay
-  label
-    font-weight: $bold
-    color: $primary-color
-    font-size: 16px
-    margin-bottom: 0
-
-.viewer-count
-  text-align: center
-  font-weight: $bold
 </style>
 
 <template lang="pug">
-.media-controls(:class="{ 'mt-20': isVideo }")
+.media-controls
   .frow.nowrap(:class="{ 'justify-between': isVideo }")
     .frow.nowrap
       button.play-button-container.frow.nowrap.button-none(
         type="button"
+        v-if="!isMic"
         @click="togglePlayback"
       )
         PlaySvg(v-if="!isPlaying")
         PauseSvg(v-else)
+      MicrophoneSvg.microphone(v-if="isMic")
       input.volume-slider.frow.nowrap(
         type="range"
         :value="volume"
@@ -74,7 +68,7 @@
         step="0.01"
         @input="setVolume"
       )
-    .frow(v-if="isVideo && isPlaying && showExtraControls")
+    .frow(v-if="isVideo && isPlaying && !isMic")
       button.theater-button.button-none.mr-20(
         type="button"
         @click="toggleTheaterMode"
@@ -85,19 +79,6 @@
         @click="fullscreenVideo"
       )
         FullscreenSvg
-  .frow.centered.nowrap.mt-20(
-    v-if="showExtraControls"
-    :class="{ 'justify-between': isVideo }"
-  )
-    .autoplay.mr-20
-      label.row-start.direction-reverse Autoplay
-        input(
-          type="checkbox"
-          :checked="autoplay"
-          @change="toggleAutoplay"
-        )
-    .viewer-count
-      | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
 </template>
 
 <script>
@@ -105,6 +86,7 @@ import PlaySvg from '@/assets/svgs/play.svg';
 import PauseSvg from '@/assets/svgs/pause.svg';
 import FullscreenSvg from '@/assets/svgs/fullscreen.svg';
 import TheaterSvg from '@/assets/svgs/theater.svg';
+import MicrophoneSvg from '@/assets/svgs/microphone.svg';
 
 import ReceiverConnection from '@/components/ReceiverConnection.vue';
 
@@ -115,6 +97,7 @@ export default {
     PauseSvg,
     FullscreenSvg,
     TheaterSvg,
+    MicrophoneSvg,
     ReceiverConnection,
   },
   props: {
@@ -122,7 +105,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isAudio: {
+    isMic: {
       type: Boolean,
       default: false,
     },
@@ -130,19 +113,7 @@ export default {
       type: [HTMLVideoElement, HTMLAudioElement],
       default: null,
     },
-    receiverViewerCount: {
-      type: Number,
-      default: 0,
-    },
-    autoplay: {
-      type: Boolean,
-      default: true,
-    },
     theaterMode: {
-      type: Boolean,
-      default: false,
-    },
-    showExtraControls: {
       type: Boolean,
       default: false,
     },
@@ -160,26 +131,15 @@ export default {
     },
   },
   methods: {
-    async playMedia() {
-      try {
-        await this.player.play();
-        this.isPlaying = true;
-      } catch (err) {
-        // Playback Failed
-      }
-    },
     togglePlayback() {
-      if (this.player.paused) {
-        this.playMedia();
-      } else {
-        this.player.pause();
-        this.isPlaying = false;
-      }
+      this.$emit('togglePlayback');
     },
     setVolume(event) {
       this.player.volume = event.srcElement.valueAsNumber;
       this.volume = event.srcElement.valueAsNumber;
-      localStorage.setItem('volume', event.srcElement.valueAsNumber);
+      if (!this.isMic) {
+        localStorage.setItem('volume', event.srcElement.valueAsNumber);
+      }
     },
     fullscreenVideo() {
       if (this.player.requestFullscreen)
@@ -193,12 +153,6 @@ export default {
     },
     toggleTheaterMode() {
       this.$emit('update:theaterMode', !this.theaterMode);
-    },
-    toggleAutoplay() {
-      this.$emit('update:autoplay', !this.autoplay);
-      this.$nextTick(() => {
-        window.localStorage.setItem('autoplay', this.autoplay);
-      });
     },
     playbackToggled() {
       if (this.player.paused) {
