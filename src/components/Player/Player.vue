@@ -122,19 +122,20 @@ export default {
         );
         tempPlayerStream.getVideoTracks()[0].enabled = true;
       }
-      const systemAudioIndex = this.stream.getAudioTracks().findIndex(
-        (stream) => stream.id === this.stream.systemAudioId,
-      );
-      if (systemAudioIndex >= 0) {
-        tempPlayerStream.addTrack(this.stream.getAudioTracks()[systemAudioIndex]);
+      // console.log('BANGGG', this.stream.systemAudioId, this.stream.getAudioTracks());
+      if (!(this.stream.getAudioTracks().length === 1 && this.stream.micId)
+        && this.stream.getAudioTracks().length) {
+        tempPlayerStream.addTrack(this.stream.getAudioTracks()[0]);
         tempPlayerStream.getAudioTracks()[0].enabled = true;
       }
       this.player.srcObject = tempPlayerStream;
       if (this.stream.micId) {
         const tempMicStream = new MediaStream();
-        tempMicStream.addTrack(this.stream.getAudioTracks().find(
-          (stream) => stream.id === this.stream.micId,
-        ));
+        tempMicStream.addTrack(
+          this.stream.getAudioTracks()[1]
+            ? this.stream.getAudioTracks()[1]
+            : this.stream.getAudioTracks()[0],
+        );
         tempMicStream.getAudioTracks()[0].enabled = true;
         this.micPlayer.srcObject = tempMicStream;
       }
