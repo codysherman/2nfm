@@ -122,7 +122,6 @@ export default {
         );
         tempPlayerStream.getVideoTracks()[0].enabled = true;
       }
-      // console.log('BANGGG', this.stream.systemAudioId, this.stream.getAudioTracks());
       if (!(this.stream.getAudioTracks().length === 1 && this.stream.micId)
         && this.stream.getAudioTracks().length) {
         tempPlayerStream.addTrack(this.stream.getAudioTracks()[0]);
