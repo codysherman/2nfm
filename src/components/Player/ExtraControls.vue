@@ -1,14 +1,14 @@
 <style scoped lang="sass">
 .autoplay
   label
-    font-weight: $bold
+    font-weight: $weight-bold
     color: $primary-color
     font-size: 16px
     margin-bottom: 0
 
 .viewer-count
   text-align: center
-  font-weight: $bold
+  font-weight: $weight-bold
 </style>
 
 <template lang="pug">
