@@ -1,19 +1,48 @@
+<style scoped lang="sass">
+.public-room
+  display: block
+  width: 100%
+  margin: 0 auto 10px
+  padding: 5px 7px
+  border-radius: 5px
+  
+  &:hover
+    text-decoration: none
+    color: $black
+    background-color: $gray-lighter
+
+  .viewers
+    margin-left: 10px
+    border: 1px solid $primary-color
+    padding: 2px 5px
+    border-radius: 100px
+    min-width: 40px
+    
+    svg
+      width: auto
+      height: 13px
+      margin-right: 2px
+      fill: $primary-color
+</style>
+
 <template lang="pug">
   div
-    .frow
-      h1.my-30 Public Rooms
-    .frow.content-evenly.width-100 
-      router-link.stream-button.mx-10(
-        type="button"
-        v-for="room in listOfRooms"
-        :key="room.owner"
-        :to="room.owner"
-      )
-        | {{room.owner}}  
+    h1.text-center.my-30 Public Rooms
+    router-link.public-room(
+      v-for="room in listOfRooms"
+      :key="room.owner"
+      :to="room.owner"
+    )
+      .frow.row-between.nowrap
+        .owner.text-ellipsis {{room.owner}}
+        .viewers.frow.row-center.nowrap.shrink-0
+          PersonSvg.shrink-0
+          .viewer-count {{room.extra.receiverViewerCount}}
 </template>
 
 <script>
 import { IceServersHandler } from '@/utils/background/helpers/IceServersHandler';
+import PersonSvg from '@/assets/svgs/person.svg';
 
 /**
  * @event state { value: Connection.STATE, name?: string, reason?: string }
@@ -43,7 +72,9 @@ const STATE = {
 export default {
   name: 'PublicRooms',
   STATE, // export so Receiver.vue can compare values for `state` event/emitter
-
+  components: {
+    PersonSvg,
+  },
   data() {
     return {
       params: {},
