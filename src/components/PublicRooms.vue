@@ -11,6 +11,9 @@
     color: $black
     background-color: $gray-lighter
 
+  .owner
+    font-size: 18px
+
   .viewers
     margin-left: 10px
     border: 1px solid $gray-dark

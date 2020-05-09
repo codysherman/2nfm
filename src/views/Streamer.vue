@@ -19,8 +19,6 @@
   font-weight: $weight-bold
   font-size: 91px
   text-align: center
-  line-height: 0.9
-  padding-top: 16px
 
   &.live
     color: red
@@ -184,7 +182,7 @@
           .col-xs-1-2
             label.row-start
               input(type="checkbox" v-model="enableMic")
-              | Enable Microphone (Beta)
+              | Enable Microphone
             label.row-start
               | Codec
               select.ml-5(v-model="codecs")
