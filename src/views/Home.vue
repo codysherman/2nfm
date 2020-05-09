@@ -87,7 +87,7 @@
               h1.mb-30 Join a Room
               form#join-form.frow.nowrap(@submit.prevent="goToRoom")
                 input#room-input(type="text" v-model="roomId" placeholder="Room Name")
-                button#enter-room(type="submit")
+                button#enter-room(type="submit" :disabled="!roomId")
                   | Go
       PublicRooms
 </template>
@@ -111,6 +111,7 @@ export default {
   },
   methods: {
     goToRoom() {
+      
       this.roomId = this.roomId
         .trim()
         .replace(/\s+/g, '-')
