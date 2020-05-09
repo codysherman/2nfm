@@ -28,7 +28,7 @@
   margin: 5px auto 20px
   text-align: center
   font-size: 20px
-  font-weight: bold
+  font-weight: $weight-bold
 
 .streamer-control-buttons
   margin: 0 auto

@@ -16,7 +16,7 @@
   color: $tertiary-color
   border-radius: 20px
   border: 6px solid $tertiary-color
-  font-weight: bold
+  font-weight: $weight-bold
   font-size: 91px
   text-align: center
 
