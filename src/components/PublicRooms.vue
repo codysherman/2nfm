@@ -13,16 +13,17 @@
 
   .viewers
     margin-left: 10px
-    border: 1px solid $primary-color
+    border: 1px solid $gray-dark
     padding: 2px 5px
     border-radius: 100px
     min-width: 40px
+    color: $gray-dark
     
     svg
       width: auto
       height: 13px
       margin-right: 2px
-      fill: $primary-color
+      fill: $gray-dark
 </style>
 
 <template lang="pug">

@@ -19,6 +19,8 @@
   font-weight: $weight-bold
   font-size: 91px
   text-align: center
+  line-height: 0.9
+  padding-top: 16px
 
   &.live
     color: red
