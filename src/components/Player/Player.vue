@@ -26,7 +26,6 @@
       :class="{ 'mt-20': stream.isVideo }"
       :isVideo="stream.isVideo"
       :player="player"
-      :autoplay.sync="autoplay"
       :theaterMode.sync="theaterMode"
       @togglePlayback="togglePlayback"
     )
@@ -106,38 +105,49 @@ export default {
       } else {
         this.player = this.$refs.audioPlayer.$refs.player;
       }
+
       if (this.stream.micId) {
         this.micPlayer = this.$refs.micPlayer.$refs.player;
       }
     },
     onStream() {
-      if (typeof this.stream.mute === 'function') { 
-        this.stream.mute();  // HACK: Avoids double audio
+      if (typeof this.stream.mute === 'function' && !navigator.mozGetUserMedia) {
+        // HACK: Avoids double audio in Chrome-based browsers
+        console.warn('Avoiding double audio in Chrome via RTCMultiConnection#mute');
+        this.stream.mute();
       }
+
       this.determinePlayers();
+
+      // NOTE: we clone all individual tracks so we can stop the old ones later.
       const tempPlayerStream = new MediaStream();
       if (this.stream.isVideo) {
-        tempPlayerStream.addTrack(
-          this.stream.getVideoTracks()[0],
-        );
-        tempPlayerStream.getVideoTracks()[0].enabled = true;
+        const track = this.stream.getVideoTracks()[0].clone();
+        tempPlayerStream.addTrack(track);
       }
       if (!(this.stream.getAudioTracks().length === 1 && this.stream.micId)
         && this.stream.getAudioTracks().length) {
-        tempPlayerStream.addTrack(this.stream.getAudioTracks()[0]);
-        tempPlayerStream.getAudioTracks()[0].enabled = true;
+        const track = this.stream.getAudioTracks()[0].clone();
+        tempPlayerStream.addTrack(track);
       }
+
+      tempPlayerStream.getTracks().forEach((track) => { track.enabled = true; });
       this.player.srcObject = tempPlayerStream;
+
       if (this.stream.micId) {
         const tempMicStream = new MediaStream();
-        tempMicStream.addTrack(
-          this.stream.getAudioTracks()[1]
-            ? this.stream.getAudioTracks()[1]
-            : this.stream.getAudioTracks()[0],
-        );
-        tempMicStream.getAudioTracks()[0].enabled = true;
+        const track = this.stream.getAudioTracks().slice(-1)[0].clone(); // get last track
+        tempMicStream.addTrack(track);
+        tempMicStream.getTracks()[0].enabled = true;
         this.micPlayer.srcObject = tempMicStream;
       }
+
+      if (navigator.mozGetUserMedia) {
+        // HACK: Avoids double audio in Firefox
+        console.warn('Avoiding double audio in Firefox via MediaStreamTrack#stop');
+        this.stream.getAudioTracks().forEach((track) => track.stop());
+      }
+
       this.player.volume = this.volume;
       if (this.autoplay && !this.disableAutoplay) {
         this.playMedia();
@@ -150,8 +160,15 @@ export default {
           await this.micPlayer.play();
         }
       } catch (err) {
-        console.error(err);
-        // Playback Failed
+        if (err.name == 'NotAllowedError') {
+          console.warn(
+            'Unable to playMedia due to browser permissions;',
+            'this is probably autoplay, so failing silently',
+          );
+        } else {
+          // Playback Failed
+          console.error(err);
+        }
       }
     },
     togglePlayback() {
