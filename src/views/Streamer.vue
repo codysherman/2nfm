@@ -122,8 +122,9 @@
 .frow.centered
   DesktopCapturer(
     ref="capturer"
-    :enableVideo="isVideo"
-    :enableMic="enableMic"
+    :isVideo="isVideo"
+    :isAudio="isAudio"
+    :isMic="isMic"
     @isSharing="onIsSharing"
     @gotStream="onGotStream"
     @setDefaults="onSetDefaults"
@@ -181,7 +182,7 @@
               | Public Room
           .col-xs-1-2
             label.row-start
-              input(type="checkbox" v-model="enableMic")
+              input(type="checkbox" v-model="isMic")
               | Enable Microphone
             label.row-start
               | Codec
@@ -216,13 +217,19 @@
         #start
           .label Start
           .frow.gutters
-            .col-xs-1-2
-              #video-button.stream-button(@click="startStream(true)")
+            .col-xs-1-3
+              #video-button.stream-button(@click="startStream(true, false)")
                 .frow.column-center
                   VideoSvg
-                  | Video
-            .col-xs-1-2
-              #audio-button.stream-button(@click="startStream()")
+                  | Video Only
+            .col-xs-1-3
+              #audio-button.stream-button(@click="startStream(true, true)")
+                .frow.column-center
+                  VideoSvg
+                  AudioSvg
+                  | Video + Audio
+            .col-xs-1-3
+              #audio-button.stream-button(@click="startStream(false, true)")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
@@ -267,11 +274,12 @@ export default {
       codecs: 'vp8',
       bandwidth: null,
       isVideo: false,
+      isAudio: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
       privacy: 'private',
       useridAlreadyTaken: '',
-      enableMic: false,
+      isMic: false,
     };
   },
   mounted() {
@@ -289,13 +297,12 @@ export default {
     // };
   },
   methods: {
-    startStream(isVideo = false) {
+    startStream(isVideo, isAudio) {
       this.isVideo = isVideo;
+      this.isAudio = isAudio;
+    
 
-      if (
-        this.$refs.connection.connection &&
-        this.$refs.connection.connection.attachStreams[0]
-      ) {
+      if (this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0]) {
         this.onSetDefaults();
         return;
       }
@@ -335,11 +342,8 @@ export default {
     onGotStream(stream) {
       this.stream = stream;
       this.stream.isVideo = this.isVideo;
-      this.stream.isAudio = !this.isVideo;
-      this.$refs.connection.shareStreamUsingRTCMultiConnection(
-        stream,
-        this.isVideo, // TODO: This is redundant if it's also in stream
-      );
+      this.stream.isAudio = this.isAudio;
+      this.$refs.connection.shareStreamUsingRTCMultiConnection(this.stream);
     },
     onSessionId(id) {
       this.useridAlreadyTaken = '';
