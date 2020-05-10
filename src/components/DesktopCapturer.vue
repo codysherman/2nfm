@@ -92,7 +92,6 @@ export default {
           micStream = await startMicCapture();
         }
         let stream = await startScreenCapture();
-        console.log(stream);
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
         if (this.isAudio && stream.getAudioTracks().length === 0) {
