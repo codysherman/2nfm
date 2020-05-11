@@ -15,7 +15,7 @@ export default {
     },
     codecs: {
       type: String,
-      default: 'default',
+      default: 'vp8',
     },
     roomPassword: {
       type: String,
@@ -119,13 +119,12 @@ export default {
           }
         }
 
-        if (!!this.codecs && this.codecs !== 'default') {
-          if (this.enableVideo) {
-            sdp = CodecsHandler.preferCodec(sdp, this.codecs);
-          } else {
-            sdp = CodecsHandler.preferCodec(sdp, 'vp8');
-          }
+        if (this.enableAudio && !this.enableVideo) {
+          sdp = CodecsHandler.preferCodec(sdp, this.codecs);
+        } else {
+          sdp = CodecsHandler.preferCodec(sdp, 'h264');
         }
+          
         return sdp;
       };
 
