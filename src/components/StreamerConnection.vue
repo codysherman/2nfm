@@ -29,7 +29,7 @@ export default {
       type: String,
       default: 'private',
     },
-    isVideo: {
+    enableVideo: {
       type: Boolean,
       default: false,
     },
@@ -120,7 +120,7 @@ export default {
         }
 
         if (!!this.codecs && this.codecs !== 'default') {
-          if (this.isVideo) {
+          if (this.enableVideo) {
             sdp = CodecsHandler.preferCodec(sdp, this.codecs);
           } else {
             sdp = CodecsHandler.preferCodec(sdp, 'vp8');
@@ -156,7 +156,7 @@ export default {
 
       // TODO: Remove the video track from the source stream
       if (
-        !this.isVideo &&
+        !this.enableVideo &&
         this.connection.attachStreams[0].getVideoTracks().length > 0
       ) {
         this.connection.attachStreams[0].removeTrack(

@@ -122,8 +122,8 @@
 .frow.centered
   DesktopCapturer(
     ref="capturer"
-    :isVideo="isVideo"
-    :isAudio="isAudio"
+    :enableVideo="enableVideo"
+    :enableAudio="enableAudio"
     :isMic="isMic"
     @isSharing="onIsSharing"
     @gotStream="onGotStream"
@@ -136,7 +136,7 @@
     :roomId="room_id"
     :roomPassword="room_password"
     :privacy="privacy"
-    :isVideo="isVideo"
+    :enableVideo="enableVideo"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
     @idTaken="onIdTaken"
@@ -273,8 +273,8 @@ export default {
       room_id: window.localStorage.getItem('room_id') || '',
       codecs: 'vp8',
       bandwidth: null,
-      isVideo: false,
-      isAudio: false,
+      enableVideo: false,
+      enableAudio: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
       privacy: 'private',
@@ -297,9 +297,9 @@ export default {
     // };
   },
   methods: {
-    startStream(isVideo, isAudio) {
-      this.isVideo = isVideo;
-      this.isAudio = isAudio;
+    startStream(enableVideo, enableAudio) {
+      this.enableVideo = enableVideo;
+      this.enableAudio = enableAudio;
     
 
       if (this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0]) {
@@ -341,8 +341,8 @@ export default {
     },
     onGotStream(stream) {
       this.stream = stream;
-      this.stream.isVideo = this.isVideo;
-      this.stream.isAudio = this.isAudio;
+      this.stream.enableVideo = this.enableVideo;
+      this.stream.enableAudio = this.enableAudio;
       this.$refs.connection.shareStreamUsingRTCMultiConnection(this.stream);
     },
     onSessionId(id) {

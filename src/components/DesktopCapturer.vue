@@ -6,8 +6,8 @@
 export default {
   name: 'DesktopCapturer',
   props: {
-    isVideo: Boolean,
-    isAudio: Boolean,
+    enableVideo: Boolean,
+    enableAudio: Boolean,
     isMic: Boolean,
   },
   data() {
@@ -94,7 +94,7 @@ export default {
         let stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
-        if (this.isAudio && stream.getAudioTracks().length === 0) {
+        if (this.enableAudio && stream.getAudioTracks().length === 0) {
           alert('Make sure to check the "Share audio" box in Google Chrome');
         }
         if (stream.getAudioTracks().length > 0) {
