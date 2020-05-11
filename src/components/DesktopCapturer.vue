@@ -7,12 +7,12 @@ export default {
   name: 'DesktopCapturer',
   props: {
     enableVideo: Boolean,
-    enableMic: Boolean,
+    enableAudio: Boolean,
+    isMic: Boolean,
   },
   data() {
     return {
       isSharing: false,
-      enableAudio: false,
     };
   },
   watch: {
@@ -28,7 +28,6 @@ export default {
     startStream() {
       this.setDefaults();
       this.isSharing = true;
-      this.enableAudio = true;
       this.captureDesktop();
     },
     stopStream() {
@@ -89,13 +88,13 @@ export default {
 
       const startCapturing = async () => {
         let micStream = null;
-        if (this.enableMic === true) {
+        if (this.isMic === true) {
           micStream = await startMicCapture();
         }
         let stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
-        if (!this.enableVideo && stream.getAudioTracks().length === 0) {
+        if (this.enableAudio && stream.getAudioTracks().length === 0) {
           alert('Make sure to check the "Share audio" box in Google Chrome');
         }
         if (stream.getAudioTracks().length > 0) {
