@@ -5,6 +5,7 @@
   text-align: center
 
 #logo
+  display: block
   margin: 0 auto
   width: 228px
   height: auto
@@ -36,7 +37,6 @@
 /* XS
 @media (max-width: 767px)
   #logo
-    margin: 0 auto
     width: 114px
   #live-indicator
     width: 114px
@@ -86,7 +86,7 @@
 #start
   border: 2px solid $tertiary-color
   border-radius: 10px
-  padding: 40px
+  padding: 40px 40px 35px
   margin-top: 40px
   position: relative
 
@@ -106,8 +106,8 @@
     color: $black
 
   svg
-    width: auto
-    height: 40px
+    width: 40px
+    height: auto
     margin-bottom: 10px
 
   path
@@ -116,14 +116,19 @@
 
   &:hover svg path
     fill: $black
+
+.and-mic
+  opacity: 0
+  transition: opacity $animate-speed
 </style>
 
 <template lang="pug">
 .frow.centered
   DesktopCapturer(
     ref="capturer"
-    :enableVideo="isVideo"
-    :enableMic="enableMic"
+    :enableVideo="enableVideo"
+    :enableAudio="enableAudio"
+    :isMic="isMic"
     @isSharing="onIsSharing"
     @gotStream="onGotStream"
     @setDefaults="onSetDefaults"
@@ -135,14 +140,14 @@
     :roomId="room_id"
     :roomPassword="room_password"
     :privacy="privacy"
-    :isVideo="isVideo"
+    :enableVideo="enableVideo"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
     @idTaken="onIdTaken"
   )
   .col-md-1-2
-    router-link(to="/")
-      LogoSvg#logo
+    router-link#logo(to="/")
+      LogoSvg
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
     div#id-taken(v-if="useridAlreadyTaken")
@@ -181,7 +186,7 @@
               | Public Room
           .col-xs-1-2
             label.row-start
-              input(type="checkbox" v-model="enableMic")
+              input(type="checkbox" v-model="isMic")
               | Enable Microphone
             label.row-start
               | Codec
@@ -216,16 +221,27 @@
         #start
           .label Start
           .frow.gutters
-            .col-xs-1-2
-              #video-button.stream-button(@click="startStream(true)")
+            .col-xs-1-3
+              .stream-button(@click="startStream(true, false)")
                 .frow.column-center
                   VideoSvg
-                  | Video
-            .col-xs-1-2
-              #audio-button.stream-button(@click="startStream()")
+                  | Video Only
+                  .and-mic(:class="{'opacity-100': isMic }")
+                    | & Mic
+            .col-xs-1-3
+              .stream-button(@click="startStream(true, true)")
+                .frow.column-center
+                  VideoAndAudioSvg
+                  | Video + Audio
+                  .and-mic(:class="{'opacity-100': isMic }")
+                    | & Mic
+            .col-xs-1-3
+              .stream-button(@click="startStream(false, true)")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
+                  .and-mic(:class="{'opacity-100': isMic }")
+                    | & Mic
     StopSection(
       v-if="isSharingOn && sessionId"
       :sessionId="sessionId"
@@ -239,6 +255,7 @@
 import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
+import VideoAndAudioSvg from '@/assets/svgs/video-and-audio.svg';
 
 import StopSection from '@/components/Streamer/StopSection.vue';
 import DesktopCapturer from '@/components/DesktopCapturer.vue';
@@ -250,6 +267,7 @@ export default {
     LogoSvg,
     VideoSvg,
     AudioSvg,
+    VideoAndAudioSvg,
     StopSection,
     DesktopCapturer,
     StreamerConnection,
@@ -266,12 +284,13 @@ export default {
       room_id: window.localStorage.getItem('room_id') || '',
       codecs: 'vp8',
       bandwidth: null,
-      isVideo: false,
+      enableVideo: false,
+      enableAudio: false,
       streaming_method: 'RTCMultiConnection',
       viewerCount: 0,
       privacy: 'private',
       useridAlreadyTaken: '',
-      enableMic: false,
+      isMic: false,
     };
   },
   mounted() {
@@ -289,13 +308,12 @@ export default {
     // };
   },
   methods: {
-    startStream(isVideo = false) {
-      this.isVideo = isVideo;
+    startStream(enableVideo, enableAudio) {
+      this.enableVideo = enableVideo;
+      this.enableAudio = enableAudio;
+    
 
-      if (
-        this.$refs.connection.connection &&
-        this.$refs.connection.connection.attachStreams[0]
-      ) {
+      if (this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0]) {
         this.onSetDefaults();
         return;
       }
@@ -334,12 +352,9 @@ export default {
     },
     onGotStream(stream) {
       this.stream = stream;
-      this.stream.isVideo = this.isVideo;
-      this.stream.isAudio = !this.isVideo;
-      this.$refs.connection.shareStreamUsingRTCMultiConnection(
-        stream,
-        this.isVideo, // TODO: This is redundant if it's also in stream
-      );
+      this.stream.enableVideo = this.enableVideo;
+      this.stream.enableAudio = this.enableAudio;
+      this.$refs.connection.shareStreamUsingRTCMultiConnection(this.stream);
     },
     onSessionId(id) {
       this.useridAlreadyTaken = '';
