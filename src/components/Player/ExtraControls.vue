@@ -22,7 +22,7 @@ div
           @change="toggleAutoplay"
         )
     .viewer-count
-      | {{ receiverViewerCount }} {{ receiverViewerCount === 1 ? 'Viewer' : 'Viewers' }}
+      | {{ receiverViewerCount + 1 }} {{ receiverViewerCount + 1 === 1 ? 'Viewer' : 'Viewers' }}
 </template>
 
 <script>

@@ -41,7 +41,7 @@
         .owner.text-ellipsis {{room.owner}}
         .viewers.frow.row-center.nowrap.shrink-0
           PersonSvg.shrink-0
-          .viewer-count {{room.extra.receiverViewerCount}}
+          .viewer-count {{room.extra.receiverViewerCount + 1}}
 </template>
 
 <script>
