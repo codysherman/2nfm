@@ -5,6 +5,7 @@
   text-align: center
 
 #logo
+  display: block
   margin: 0 auto
   width: 228px
   height: auto
@@ -36,7 +37,6 @@
 /* XS
 @media (max-width: 767px)
   #logo
-    margin: 0 auto
     width: 114px
   #live-indicator
     width: 114px
@@ -86,7 +86,7 @@
 #start
   border: 2px solid $tertiary-color
   border-radius: 10px
-  padding: 40px
+  padding: 40px 40px 35px
   margin-top: 40px
   position: relative
 
@@ -116,6 +116,10 @@
 
   &:hover svg path
     fill: $black
+
+.and-mic
+  opacity: 0
+  transition: opacity $animate-speed
 </style>
 
 <template lang="pug">
@@ -142,8 +146,8 @@
     @idTaken="onIdTaken"
   )
   .col-md-1-2
-    router-link(to="/")
-      LogoSvg#logo
+    router-link#logo(to="/")
+      LogoSvg
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
     div#id-taken(v-if="useridAlreadyTaken")
@@ -222,16 +226,22 @@
                 .frow.column-center
                   VideoSvg
                   | Video Only
+                  .and-mic(:class="{'opacity-100': isMic }")
+                    | & Mic
             .col-xs-1-3
               .stream-button(@click="startStream(true, true)")
                 .frow.column-center
                   VideoAndAudioSvg
                   | Video + Audio
+                  .and-mic(:class="{'opacity-100': isMic }")
+                    | & Mic
             .col-xs-1-3
               .stream-button(@click="startStream(false, true)")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
+                  .and-mic(:class="{'opacity-100': isMic }")
+                    | & Mic
     StopSection(
       v-if="isSharingOn && sessionId"
       :sessionId="sessionId"
