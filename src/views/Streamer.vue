@@ -106,8 +106,8 @@
     color: $black
 
   svg
-    width: auto
-    height: 40px
+    width: 40px
+    height: auto
     margin-bottom: 10px
 
   path
@@ -218,18 +218,17 @@
           .label Start
           .frow.gutters
             .col-xs-1-3
-              #video-button.stream-button(@click="startStream(true, false)")
+              .stream-button(@click="startStream(true, false)")
                 .frow.column-center
                   VideoSvg
                   | Video Only
             .col-xs-1-3
-              #audio-button.stream-button(@click="startStream(true, true)")
+              .stream-button(@click="startStream(true, true)")
                 .frow.column-center
-                  VideoSvg
-                  AudioSvg
+                  VideoAndAudioSvg
                   | Video + Audio
             .col-xs-1-3
-              #audio-button.stream-button(@click="startStream(false, true)")
+              .stream-button(@click="startStream(false, true)")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
@@ -246,6 +245,7 @@
 import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
+import VideoAndAudioSvg from '@/assets/svgs/video-and-audio.svg';
 
 import StopSection from '@/components/Streamer/StopSection.vue';
 import DesktopCapturer from '@/components/DesktopCapturer.vue';
@@ -257,6 +257,7 @@ export default {
     LogoSvg,
     VideoSvg,
     AudioSvg,
+    VideoAndAudioSvg,
     StopSection,
     DesktopCapturer,
     StreamerConnection,
