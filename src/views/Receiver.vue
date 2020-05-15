@@ -105,7 +105,7 @@
     )
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
-    PublicRooms
+    PublicRooms(v-if="!isStream")
   #chat-container(hidden)
     #chat-messages
     input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
