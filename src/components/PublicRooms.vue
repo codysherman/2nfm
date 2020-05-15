@@ -33,7 +33,7 @@
   div
     h1.text-center.my-30 Public Rooms
     router-link.public-room(
-      v-for="room in listOfRooms"
+      v-for="room in sortListOfRooms"
       :key="room.owner"
       :to="room.owner"
     )
@@ -87,6 +87,14 @@ export default {
       roomName: 'streamer',
       listOfRooms: [],
     };
+  },
+  computed: {
+    sortListOfRooms: function () {
+      let newList = this.listOfRooms;
+      return newList.sort((a, b) => {
+        return b.extra.receiverViewerCount - a.extra.receiverViewerCount;
+      });
+    },
   },
   watch: {
     presenceCheckWait(newValue) {
