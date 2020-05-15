@@ -91,7 +91,7 @@ export default {
   computed: {
     sortListOfRooms: function () {
       let newList = this.listOfRooms;
-      return newList.sort(function(a, b) {
+      return newList.sort((a, b) => {
         return b.extra.receiverViewerCount - a.extra.receiverViewerCount;
       });
     },
