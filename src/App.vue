@@ -8,5 +8,5 @@
 
 <template lang="pug">
   #app.frow-container.height-100
-    router-view
+    router-view(:key="$route.fullPath")
 </template>
