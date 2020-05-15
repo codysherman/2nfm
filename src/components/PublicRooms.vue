@@ -90,7 +90,10 @@ export default {
   },
   computed: {
     sortListOfRooms: function () {
-      return this.listOfRooms;
+      let newList = this.listOfRooms;
+      return newList.sort(function(a, b) {
+        return b.extra.receiverViewerCount - a.extra.receiverViewerCount;
+      });
     },
   },
   watch: {
