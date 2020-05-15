@@ -105,6 +105,7 @@
     )
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
+    PublicRooms
   #chat-container(hidden)
     #chat-messages
     input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
@@ -121,6 +122,8 @@ import FullscreenSvg from '@/assets/svgs/fullscreen.svg';
 import TheaterSvg from '@/assets/svgs/theater.svg';
 
 import ReceiverConnection from '@/components/ReceiverConnection.vue';
+import PublicRooms from '@/components/PublicRooms.vue';
+
 
 import Player from '@/components/Player/Player.vue';
 
@@ -135,6 +138,7 @@ export default {
     FullscreenSvg,
     TheaterSvg,
     ReceiverConnection,
+    PublicRooms,
     Player,
   },
   data() {
