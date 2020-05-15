@@ -33,7 +33,7 @@
   div
     h1.text-center.my-30 Public Rooms
     router-link.public-room(
-      v-for="room in listOfRooms"
+      v-for="room in sortListOfRooms"
       :key="room.owner"
       :to="room.owner"
     )
@@ -87,6 +87,11 @@ export default {
       roomName: 'streamer',
       listOfRooms: [],
     };
+  },
+  computed: {
+    sortListOfRooms: function () {
+      return this.listOfRooms;
+    },
   },
   watch: {
     presenceCheckWait(newValue) {
@@ -174,10 +179,6 @@ export default {
         this.connection.publicRoomIdentifier,
         (listOfRooms) => {
           this.listOfRooms = listOfRooms;
-          // const test = listOfRooms.map(x.participants => x + 't');
-          
-          
-          console.log('111111', listOfRooms.participants);
         },
       );
     },
