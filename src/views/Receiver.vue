@@ -32,6 +32,7 @@
 #loading-logo
   height: 53px
   width: auto
+  margin-bottom: 20px
 
 @keyframes dash
   90%
@@ -105,7 +106,7 @@
     )
     #info-bar(v-if="!isStream") {{ infoBarMessage }}
     router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
-    PublicRooms(v-if="!isStream")
+    PublicRooms.mt-40(v-if="!isStream")
   #chat-container(hidden)
     #chat-messages
     input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
