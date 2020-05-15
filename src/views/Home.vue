@@ -65,6 +65,10 @@
 #enter-room
   width: 70px
   margin-left: 10px
+
+  &:disabled,
+  &:hover:disabled
+    background: #ddd
 </style>
 
 <template lang="pug">
@@ -87,7 +91,7 @@
               h1.mb-30 Join a Room
               form#join-form.frow.nowrap(@submit.prevent="goToRoom")
                 input#room-input(type="text" v-model="roomId" placeholder="Room Name")
-                button#enter-room(type="submit")
+                button#enter-room(type="submit" :disabled="!roomId")
                   | Go
       PublicRooms
 </template>
