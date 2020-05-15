@@ -65,6 +65,10 @@
 #enter-room
   width: 70px
   margin-left: 10px
+
+  &:disabled,
+  &:hover:disabled
+    background: #ddd
 </style>
 
 <template lang="pug">
@@ -111,7 +115,6 @@ export default {
   },
   methods: {
     goToRoom() {
-      
       this.roomId = this.roomId
         .trim()
         .replace(/\s+/g, '-')
