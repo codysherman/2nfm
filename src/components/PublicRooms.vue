@@ -174,6 +174,10 @@ export default {
         this.connection.publicRoomIdentifier,
         (listOfRooms) => {
           this.listOfRooms = listOfRooms;
+          // const test = listOfRooms.map(x.participants => x + 't');
+          
+          
+          console.log('111111', listOfRooms.participants);
         },
       );
     },
