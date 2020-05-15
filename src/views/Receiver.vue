@@ -48,7 +48,7 @@
   stroke-dashoffset: 990
   animation: dash 15s ease-in-out 1.5s infinite
 
-.mb-50
+.reciever-logo
   height: 50px
   width: auto
   fill: $primary-color
@@ -96,8 +96,8 @@
   .frow.centered-column.nowrap
     router-link.create-message(v-if="!isStream", to="/")
       LoadingSvg#loading-logo
-    router-link(v-if="isStream", to="/")
-      LogoSvg.mb-50
+    router-link.mb-50(v-if="isStream", to="/")
+      LogoSvg.reciever-logo
     Player(
       v-show="isStream"
       :stream="stream"
