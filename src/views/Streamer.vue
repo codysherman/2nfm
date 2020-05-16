@@ -310,8 +310,6 @@ export default {
   },
   methods: {
     startStream(enableVideo, enableAudio) {
-      console.log('55555', this.privacy);
-
       this.enableVideo = enableVideo;
       this.enableAudio = enableAudio;
     
