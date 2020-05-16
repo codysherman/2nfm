@@ -45,7 +45,7 @@ section#stop-section
   //- router-link#public-link(
   //-   to="{query: { s: sessionId, p: room_password }}`}" target="_blank"
   //- )
-  | {{privacy}}
+  div.viewer-count| Your stream is: {{privacy}}
   router-link#public-link(:to="sessionId" target="_blank")
     | {{ `2n.fm/${sessionId}` }}
   #copy-button(@click="copyUrl()")
