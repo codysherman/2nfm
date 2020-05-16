@@ -42,6 +42,9 @@
         .viewers.frow.row-center.nowrap.shrink-0
           PersonSvg.shrink-0
           .viewer-count {{room.extra.receiverViewerCount + 1}}
+
+    .frow
+      .owner.text-ellipsis(v-if="!listOfRooms.length") No public rooms open
 </template>
 
 <script>
@@ -90,6 +93,9 @@ export default {
   },
   computed: {
     sortListOfRooms: function () {
+      console.log('11111', typeof this.listOfRooms.length);
+      console.log('22222', this.listOfRooms);
+
       let newList = this.listOfRooms;
       return newList.sort((a, b) => {
         return b.extra.receiverViewerCount - a.extra.receiverViewerCount;
