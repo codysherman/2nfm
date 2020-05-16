@@ -192,15 +192,15 @@
               | Codec
               select.ml-5(v-model="codecs")
                 //- option(value="default" selected="") Default (VP9)
-                option(value="vp9") VP9 (Screensharing)
-                option(value="vp8") VP8 (Gaming)
-                //- option(value="h264") H.264
+                option(:value="Codecs.vp9") VP9 (Screensharing)
+                option(:value="Codecs.vp8") VP8 (Gaming)
+                //- option(:value="Codecs.h264") H.264
             //- .text-center
-              span(v-if="codecs === 'vp9'")
+              span(v-if="codecs === Codecs.vp9")
                 | Better quality, less data
-              span(v-if="codecs === 'vp8'")
+              span(v-if="codecs === Codecs.vp8")
                 | Lower quality, more FPS
-              span(v-if="codecs === 'h264'")
+              span(v-if="codecs === Codecs.h264")
                 | Less strain on oldest devices
           //- .col-xs-1-2
           //-   .settings-item.mb-0
@@ -253,6 +253,8 @@
 </template>
 
 <script>
+import { Codecs } from '@/utils/enums/Codecs';
+
 import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
@@ -283,7 +285,7 @@ export default {
       constraints: null,
       room_password: '',
       room_id: window.localStorage.getItem('room_id') || '',
-      codecs: 'vp8',
+      codecs: Codecs.vp8,
       bandwidth: null,
       enableVideo: false,
       enableAudio: false,
@@ -293,6 +295,9 @@ export default {
       useridAlreadyTaken: '',
       isMic: false,
     };
+  },
+  computed: {
+    Codecs() { return Codecs; },
   },
   mounted() {
     // document.getElementById('enable-chat').onclick = function() {
