@@ -8,10 +8,15 @@
     color: $primary-color
     margin: 0 auto
 
+    // XS
+    @media (max-width: 767px)
+      font-size: 30px
+
   #copy-button
     display: inline-block
     margin-left: 14px
     cursor: pointer
+
     svg
       width: 30px
       fill: $primary-color
@@ -19,13 +24,17 @@
   #copy-notification
     font-size: 20px
 
-/* XS
-@media (max-width: 767px)
-  #public-link
-    font-size: 30px
+.public-indicator
+  border-radius: $border-radius-small
+  padding: 3px 5px
+  background-color: $gray-light
+  text-transform: capitalize
+  color: $white
+
+  &.public
+    background-color: $blue
 
 .viewer-count
-  margin: 5px auto 20px
   text-align: center
   font-size: 20px
   font-weight: $weight-bold
@@ -45,16 +54,17 @@ section#stop-section
   //- router-link#public-link(
   //-   to="{query: { s: sessionId, p: room_password }}`}" target="_blank"
   //- )
-  div.viewer-count| Your stream is: {{privacy}}
   router-link#public-link(:to="sessionId" target="_blank")
     | {{ `2n.fm/${sessionId}` }}
   #copy-button(@click="copyUrl()")
       CopySvg
   #copy-notification.animate-fade-in(v-if="copyNotification")
     | Copied
-  .viewer-count
+  .viewer-count.mt-20
     span#viewer-count-number
     | {{ viewerCount }} {{ viewerCount === 1 ? 'Viewer' : 'Viewers' }}
+  .frow.mt-5.mb-30
+    .public-indicator(:class="{'public': privacy === 'public'}") {{privacy}}
   Player.mb-20(
     v-if="showPreview"
     :stream="stream"
@@ -62,9 +72,9 @@ section#stop-section
     :disableAutoplay="true"
   )
   .frow.row-between
-    button.streamer-control-buttons(type="button" @click="stopStream")
+    button.col-xs-2-5.streamer-control-buttons(type="button" @click="stopStream")
       | End Sharing
-    button.streamer-control-buttons(type="button" @click="showPreview = !showPreview")
+    button.col-xs-2-5.streamer-control-buttons(type="button" @click="showPreview = !showPreview")
       | {{ showPreview ? 'Hide Preview' : 'Show Preview' }}
   .frow.width-100.mt-20
     a.text-underline(
