@@ -45,6 +45,7 @@ section#stop-section
   //- router-link#public-link(
   //-   to="{query: { s: sessionId, p: room_password }}`}" target="_blank"
   //- )
+  | {{privacy}}
   router-link#public-link(:to="sessionId" target="_blank")
     | {{ `2n.fm/${sessionId}` }}
   #copy-button(@click="copyUrl()")
@@ -79,11 +80,14 @@ import CopySvg from '@/assets/svgs/copy.svg';
 
 import Player from '@/components/Player/Player.vue';
 
+import Streamer from '@/views/Streamer';
+
 export default {
   name: 'StopSection',
   components: {
     CopySvg,
     Player,
+    Streamer,
   },
   props: {
     stream: {
@@ -97,6 +101,10 @@ export default {
     viewerCount: {
       type: Number,
       default: 0,
+    },
+    privacy: {
+      type: String,
+      default: 'private',
     },
   },
   data() {

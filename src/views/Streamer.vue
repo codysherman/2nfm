@@ -247,6 +247,7 @@
       :sessionId="sessionId"
       :viewerCount="viewerCount"
       :stream="stream"
+      :privacy="privacy"
       @stopStream="stopStream"
     )
 </template>
@@ -309,6 +310,8 @@ export default {
   },
   methods: {
     startStream(enableVideo, enableAudio) {
+      console.log('55555', this.privacy);
+
       this.enableVideo = enableVideo;
       this.enableAudio = enableAudio;
     
