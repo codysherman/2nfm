@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { Codecs } from '@/utils/enums/Codecs';
 import { CodecsHandler } from '../utils/background/helpers/CodecsHandler';
 import { IceServersHandler } from '../utils/background/helpers/IceServersHandler';
 
@@ -122,7 +123,7 @@ export default {
         if (this.enableAudio && !this.enableVideo) {
           sdp = CodecsHandler.preferCodec(sdp, this.codecs);
         } else {
-          sdp = CodecsHandler.preferCodec(sdp, 'h264');
+          sdp = CodecsHandler.preferCodec(sdp, Codecs.h264);
         }
           
         return sdp;
