@@ -80,14 +80,11 @@ import CopySvg from '@/assets/svgs/copy.svg';
 
 import Player from '@/components/Player/Player.vue';
 
-import Streamer from '@/views/Streamer';
-
 export default {
   name: 'StopSection',
   components: {
     CopySvg,
     Player,
-    Streamer,
   },
   props: {
     stream: {
