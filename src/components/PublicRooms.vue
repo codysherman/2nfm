@@ -43,7 +43,7 @@
           PersonSvg.shrink-0
           .viewer-count {{room.extra.receiverViewerCount + 1}}
     .frow
-      .owner.text-ellipsis(v-if="!listOfRooms.length") No public rooms open
+      .owner(v-if="!listOfRooms.length") No public rooms open
 </template>
 
 <script>
