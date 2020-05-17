@@ -270,6 +270,11 @@ import StreamerConnection from '@/components/StreamerConnection.vue';
 
 export default {
   name: 'Streamer',
+  metaInfo() {
+    return {
+      title: `2N.fm - ${this.room_id}`,
+    };
+  },
   components: {
     LogoSvg,
     VideoSvg,
