@@ -130,6 +130,11 @@ import Player from '@/components/Player/Player.vue';
 
 export default {
   name: 'Receiver',
+  metaInfo() {
+    return {
+      title: `2N.fm - ${this.roomName}`,
+    };
+  },
   components: {
     XSvg,
     LoadingSvg,
