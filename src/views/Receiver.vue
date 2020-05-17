@@ -132,7 +132,7 @@ export default {
   name: 'Receiver',
   metaInfo() {
     return {
-      title: `2N.fm - ${this.roomName}`,
+      title: `2N.fm - ${this.roomName}(${this.receiverViewerCount + 1})`,
     };
   },
   components: {
