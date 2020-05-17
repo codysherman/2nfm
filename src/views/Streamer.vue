@@ -129,6 +129,7 @@
     :enableVideo="enableVideo"
     :enableAudio="enableAudio"
     :isMic="isMic"
+    :resolution="resolution"
     @isSharing="onIsSharing"
     @gotStream="onGotStream"
     @setDefaults="onSetDefaults"
@@ -166,17 +167,18 @@
       section#options
         .label Options
         .frow.gutters
-          //- .col-xs-1-2
-          //-   .settings-item
-          //-     label
-          //-       | Resolution
-          //-       select#resolutions
-          //-         option(value="fit-screen" selected="") Fit Screen
-          //-         option(value="4K") 4K (2160p)
-          //-         option(value="1080p") Full-HD (1080p)
-          //-         option(value="720p") HD (720p)
-          //-         option(value="480p") SD (480p)
-          //-         option(value="360p") SD (360p)
+          .col-xs-1-2
+            .settings-item
+              label
+                | Resolution
+                select#resolutions(v-model="resolution")
+                  option(:value="Resolutions.FitScreen" selected="") Fit Screen
+                  option(:value="Resolutions.Fit4K") 4K (2160p)
+                  option(:value="Resolutions.Fit2K") 2K (1440p)
+                  option(:value="Resolutions.Fit1080p") Full-HD (1080p)
+                  option(:value="Resolutions.Fit720p") HD (720p)
+                  option(:value="Resolutions.Fit480p") SD (480p)
+                  option(:value="Resolutions.Fit360p") SD (360p)
           .col-xs-1-2
             label.row-start
               input(type="radio" value="private" v-model="privacy")
@@ -253,6 +255,7 @@
 </template>
 
 <script>
+import { Resolutions } from '@/utils/enums/Resolutions';
 import { Codecs } from '@/utils/enums/Codecs';
 
 import LogoSvg from '@/assets/svgs/logo.svg';
@@ -285,6 +288,7 @@ export default {
       constraints: null,
       room_password: '',
       room_id: window.localStorage.getItem('room_id') || '',
+      resolution: Resolutions.FitScreen,
       codecs: Codecs.vp8,
       bandwidth: null,
       enableVideo: false,
@@ -297,6 +301,7 @@ export default {
     };
   },
   computed: {
+    Resolutions() { return Resolutions; },
     Codecs() { return Codecs; },
   },
   mounted() {

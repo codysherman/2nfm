@@ -3,12 +3,18 @@
 </template>
 
 <script>
+import { Resolutions, getDimensionsForResolution } from '@/utils/enums/Resolutions';
+
 export default {
   name: 'DesktopCapturer',
   props: {
     enableVideo: Boolean,
     enableAudio: Boolean,
     isMic: Boolean,
+    resolution: {
+      type: String,
+      default: Resolutions.FitScreen,
+    },
   },
   data() {
     return {
@@ -42,12 +48,15 @@ export default {
     },
     onAccessApproved() {
       // console.log(navigator.mediaDevices.getSupportedConstraints());
+      const dimensions = getDimensionsForResolution(this.resolution);
 
       let constraints = {
         video: {
           // TODO: displaySurface support is waiting on browser support
           // https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
-          // displaySurface: ["application", "browser", "monitor", "window"]
+          // displaySurface: ["application", "browser", "monitor", "window"],
+          width: { ideal: dimensions.width },
+          height: { ideal: dimensions.height },
         },
         audio: {
           autoGainControl: false,
@@ -94,6 +103,7 @@ export default {
         let stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
+
         if (this.enableAudio && stream.getAudioTracks().length === 0) {
           alert('Make sure to check the "Share audio" box in Google Chrome');
         }
