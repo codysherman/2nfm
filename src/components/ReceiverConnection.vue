@@ -150,7 +150,6 @@ export default {
 
     this.connection.onExtraDataUpdated = (e) => {
       this.$emit('receiverViewerCount', e.extra.receiverViewerCount);
-      this.$emit('systemAudioId', e.extra.systemAudioId);
     };
 
     // if user left

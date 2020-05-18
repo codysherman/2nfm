@@ -1,7 +1,7 @@
 <style scoped lang="sass">
 .owner-svg
     svg
-      width: 30px
+      width: 25px
       height: auto
       margin: 10px
       fill: #4F4F51
@@ -48,7 +48,7 @@
           VideoSvg(v-if="room.session.video && !room.session.audio")
           AudioSvg(v-if="room.session.audio && !room.session.video")
           VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
-        .owner.text-ellipsis {{room.owner}} {{room.session.audio}}
+        .owner.text-ellipsis {{room.owner}}
         .viewers.frow.row-center.nowrap.shrink-0
           PersonSvg.shrink-0
           .viewer-count {{room.extra.receiverViewerCount + 1}}
