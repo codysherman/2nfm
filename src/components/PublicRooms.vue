@@ -38,7 +38,7 @@
       :to="room.owner"
     )
       .frow.row-between.nowrap
-        .owner.text-ellipsis {{room.owner}}
+        .owner.text-ellipsis {{room.owner}} {{room.session.audio}}
         .viewers.frow.row-center.nowrap.shrink-0
           PersonSvg.shrink-0
           .viewer-count {{room.extra.receiverViewerCount + 1}}
@@ -49,6 +49,9 @@
 <script>
 import { IceServersHandler } from '@/utils/background/helpers/IceServersHandler';
 import PersonSvg from '@/assets/svgs/person.svg';
+import VideoSvg from '@/assets/svgs/video.svg';
+import AudioSvg from '@/assets/svgs/audio.svg';
+import VideoAndAudioSvg from '@/assets/svgs/video-and-audio.svg';
 
 /**
  * @event state { value: Connection.STATE, name?: string, reason?: string }
@@ -80,6 +83,9 @@ export default {
   STATE, // export so Receiver.vue can compare values for `state` event/emitter
   components: {
     PersonSvg,
+    VideoSvg,
+    AudioSvg,
+    VideoAndAudioSvg,
   },
   data() {
     return {
@@ -92,7 +98,6 @@ export default {
   },
   computed: {
     sortListOfRooms: function () {
-      console.log('9999', this.listOfRooms);
       let newList = this.listOfRooms;
       return newList.sort((a, b) => {
         return b.extra.receiverViewerCount - a.extra.receiverViewerCount;
