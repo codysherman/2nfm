@@ -34,6 +34,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    enableAudio: {
+      type: Boolean,
+      default: false, 
+    },
   },  
   data() {
     return {
@@ -71,8 +75,8 @@ export default {
 
       this.connection.enableLogs = false;
       this.connection.session = {
-        audio: true,
-        video: true,
+        audio: this.enableAudio,
+        video: this.enableVideo,
         data: true,
         oneway: true,
       };
