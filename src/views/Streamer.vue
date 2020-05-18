@@ -142,6 +142,7 @@
     :roomPassword="room_password"
     :privacy="privacy"
     :enableVideo="enableVideo"
+    :enableAudio="enableAudio"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
     @idTaken="onIdTaken"
