@@ -1,4 +1,10 @@
 <style scoped lang="sass">
+.owner-svg
+    svg
+      width: 30px
+      height: auto
+      margin: 10px
+      fill: #4F4F51
 .public-room
   display: block
   width: 100%
@@ -27,12 +33,6 @@
       height: 13px
       margin-right: 2px
       fill: $gray-dark
-
-  .owner-svg
-    svg
-      width: 30px
-      height: auto
-      margin: 10px
 </style>
 
 <template lang="pug">
@@ -44,7 +44,7 @@
       :to="room.owner"
     )
       .frow.row-between.nowrap
-        .owner-svg
+        .owner-svg.shrink-0
           VideoSvg(v-if="room.session.video && !room.session.audio")
           AudioSvg(v-if="room.session.audio && !room.session.video")
           VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
