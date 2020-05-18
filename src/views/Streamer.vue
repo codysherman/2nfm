@@ -265,7 +265,7 @@ export default {
   name: 'Streamer',
   metaInfo() {
     return {
-      title: `2N.fm - ${this.room_id}(${this.viewerCount + 1})`,
+      title: `2N.fm - ${this.room_id} (${this.viewerCount})`,
     };
   },
   components: {
