@@ -92,6 +92,7 @@ export default {
   },
   computed: {
     sortListOfRooms: function () {
+      console.log('9999', this.listOfRooms);
       let newList = this.listOfRooms;
       return newList.sort((a, b) => {
         return b.extra.receiverViewerCount - a.extra.receiverViewerCount;
