@@ -27,6 +27,13 @@
       height: 13px
       margin-right: 2px
       fill: $gray-dark
+
+.tomSvg
+  svg
+    width: 40px
+    height: auto
+    margin-bottom: 10px
+
 </style>
 
 <template lang="pug">
@@ -38,6 +45,10 @@
       :to="room.owner"
     )
       .frow.row-between.nowrap
+        .tomSvg
+          VideoSvg(v-if="room.session.video && !room.session.audio")
+          AudioSvg(v-if="room.session.audio && !room.session.video")
+          VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
         .owner.text-ellipsis {{room.owner}} {{room.session.audio}}
         .viewers.frow.row-center.nowrap.shrink-0
           PersonSvg.shrink-0
