@@ -28,12 +28,11 @@
       margin-right: 2px
       fill: $gray-dark
 
-.tomSvg
-  svg
-    width: 40px
-    height: auto
-    margin-bottom: 10px
-
+  .owner-svg
+    svg
+      width: 30px
+      height: auto
+      margin: 10px
 </style>
 
 <template lang="pug">
@@ -45,7 +44,7 @@
       :to="room.owner"
     )
       .frow.row-between.nowrap
-        .tomSvg
+        .owner-svg
           VideoSvg(v-if="room.session.video && !room.session.audio")
           AudioSvg(v-if="room.session.audio && !room.session.video")
           VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
