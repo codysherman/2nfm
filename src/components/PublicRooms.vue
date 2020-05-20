@@ -5,7 +5,9 @@
       height: auto
       margin: 10px
       fill: #4F4F51
-
+    div
+      margin-bottom: 2px
+      
 .public-room
   display: block
   width: 100%
@@ -50,7 +52,7 @@
             VideoSvg(v-if="room.session.video && !room.session.audio")
             AudioSvg(v-if="room.session.audio && !room.session.video")
             VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
-          .owner.text-ellipsis {{room.owner}}
+          .owner {{room.owner}}
         .viewers.frow.row-center.nowrap.shrink-0
           PersonSvg.shrink-0
           .viewer-count {{room.extra.receiverViewerCount + 1}}
