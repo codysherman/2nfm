@@ -5,6 +5,7 @@
       height: auto
       margin: 10px
       fill: #4F4F51
+      
 .public-room
   display: block
   width: 100%
