@@ -96,14 +96,20 @@ const STATE = {
 };
 
 export default {
-  name: 'PublicRooms',
-  STATE, // export so Receiver.vue can compare values for `state` event/emitter
+  name: 'PublicRooms', // export so Receiver.vue can compare values for `state` event/emitter
   components: {
     PersonSvg,
     VideoSvg,
     AudioSvg,
     VideoAndAudioSvg,
   },
+  props: {
+    publicRoomCount: {
+      type: Number,
+      default: 0,
+    },
+  },
+  STATE,
   data() {
     return {
       params: {},
@@ -124,6 +130,9 @@ export default {
   watch: {
     presenceCheckWait(newValue) {
       this.$emit('presenceCheckWait', newValue);
+    },
+    listOfRooms(numOfRooms) {
+      this.$emit('update:publicRoomCount', numOfRooms.length);
     },
   },
   mounted() {
@@ -209,6 +218,10 @@ export default {
           this.listOfRooms = listOfRooms;
         },
       );
+    },
+    tomTest(value) {
+      console.log('sucess', value);
+      // this.$emit('numberOfPublicROoms', this.listOfRooms.length);
     },
   },
 };
