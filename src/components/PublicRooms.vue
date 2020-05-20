@@ -109,7 +109,7 @@ export default {
       default: 0,
     },
   },
-  STATE,
+  STATE, // export so Receiver.vue can compare values for `state` event/emitter
   data() {
     return {
       params: {},
@@ -218,10 +218,6 @@ export default {
           this.listOfRooms = listOfRooms;
         },
       );
-    },
-    tomTest(value) {
-      console.log('sucess', value);
-      // this.$emit('numberOfPublicROoms', this.listOfRooms.length);
     },
   },
 };
