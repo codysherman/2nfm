@@ -96,7 +96,7 @@ const STATE = {
 };
 
 export default {
-  name: 'PublicRooms', // export so Receiver.vue can compare values for `state` event/emitter
+  name: 'PublicRooms',
   components: {
     PersonSvg,
     VideoSvg,
