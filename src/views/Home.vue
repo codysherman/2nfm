@@ -105,7 +105,7 @@ export default {
   name: 'Home',
   metaInfo() {
     return {
-      title: `2N.fm - ${this.publicRoomCount}`,
+      title: `2N.fm - ${this.publicRoomCount} rooms`,
     };
   },
   components: {
