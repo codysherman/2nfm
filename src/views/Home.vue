@@ -88,7 +88,7 @@
         .home-half
           .frow.column-start
             div
-              h1.mb-30 Join a Room {{publicRoomCount}}
+              h1.mb-30 Join a Room
               form#join-form.frow.nowrap(@submit.prevent="goToRoom")
                 input#room-input(type="text" v-model="roomId" placeholder="Room Name")
                 button#enter-room(type="submit" :disabled="!roomId")
@@ -103,6 +103,11 @@ import PublicRooms from '@/components/PublicRooms.vue';
 
 export default {
   name: 'Home',
+  metaInfo() {
+    return {
+      title: `2N.fm - ${this.publicRoomCount}`,
+    };
+  },
   components: {
     LogoSvg,
     GitHubCorner,
