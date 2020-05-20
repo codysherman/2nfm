@@ -1,11 +1,11 @@
 <style scoped lang="sass">
 .owner-svg
     svg
-      width: 25px
+      width: 20px
       height: auto
       margin: 10px
       fill: #4F4F51
-      
+
 .public-room
   display: block
   width: 100%
