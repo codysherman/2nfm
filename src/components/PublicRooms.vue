@@ -1,41 +1,43 @@
 <style scoped lang="sass">
-.owner-svg
-    svg
-      width: 20px
-      height: auto
-      margin: 10px
-      fill: #4F4F51
-    div
-      margin-bottom: 2px
-      
 .public-room
   display: block
   width: 100%
   margin: 0 auto 10px
   padding: 5px 7px
   border-radius: 5px
+  font-size: 18px
+  color: $text-color
   
-  &:hover
+  &:hover,
+  &:active,
+  &:focus
     text-decoration: none
     color: $black
     background-color: $gray-lighter
 
-  .owner
-    font-size: 18px
+.owner-svg
+  svg
+    width: 20px
+    height: auto
+    margin: 10px
+    fill: $primary-color
 
-  .viewers
-    margin-left: 10px
-    border: 1px solid $gray-dark
-    padding: 2px 5px
-    border-radius: 100px
-    min-width: 40px
-    color: $gray-dark
-    
-    svg
-      width: auto
-      height: 13px
-      margin-right: 2px
-      fill: $gray-dark
+.owner
+  margin-bottom: 2px
+
+.viewers
+  margin-left: 10px
+  border: 1px solid $gray-dark
+  padding: 2px 5px
+  border-radius: 100px
+  min-width: 40px
+  color: $gray-dark
+  
+  svg
+    width: auto
+    height: 13px
+    margin-right: 2px
+    fill: $gray-dark
 </style>
 
 <template lang="pug">
@@ -47,17 +49,18 @@
       :to="room.owner"
     )
       .frow.row-between.nowrap
-        div.frow.row-start
+        .frow.row-start
           .owner-svg.shrink-0
             VideoSvg(v-if="room.session.video && !room.session.audio")
             AudioSvg(v-if="room.session.audio && !room.session.video")
             VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
           .owner {{room.owner}}
-        .viewers.frow.row-center.nowrap.shrink-0
-          PersonSvg.shrink-0
-          .viewer-count {{room.extra.receiverViewerCount + 1}}
+        .viewers.shrink-0
+          .frow.row-center.nowrap
+            PersonSvg.shrink-0
+            .viewer-count {{room.extra.receiverViewerCount + 1}}
     .frow
-      .owner(v-if="!listOfRooms.length") No public rooms open
+      div(v-if="!listOfRooms.length") No public rooms open
 </template>
 
 <script>
