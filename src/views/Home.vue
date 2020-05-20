@@ -88,12 +88,12 @@
         .home-half
           .frow.column-start
             div
-              h1.mb-30 Join a Room
+              h1.mb-30 Join a Room {{publicRoomCount}}
               form#join-form.frow.nowrap(@submit.prevent="goToRoom")
                 input#room-input(type="text" v-model="roomId" placeholder="Room Name")
                 button#enter-room(type="submit" :disabled="!roomId")
                   | Go
-      PublicRooms
+      PublicRooms(:publicRoomCount.sync="publicRoomCount")
 </template>
 
 <script>
@@ -111,6 +111,7 @@ export default {
   data() {
     return {
       roomId: '',
+      publicRoomCount: 0,
     };
   },
   methods: {
