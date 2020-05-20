@@ -45,11 +45,12 @@
       :to="room.owner"
     )
       .frow.row-between.nowrap
-        .owner-svg.shrink-0
-          VideoSvg(v-if="room.session.video && !room.session.audio")
-          AudioSvg(v-if="room.session.audio && !room.session.video")
-          VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
-        .owner.text-ellipsis {{room.owner}}
+        div.frow.row-start
+          .owner-svg.shrink-0
+            VideoSvg(v-if="room.session.video && !room.session.audio")
+            AudioSvg(v-if="room.session.audio && !room.session.video")
+            VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
+          .owner.text-ellipsis {{room.owner}}
         .viewers.frow.row-center.nowrap.shrink-0
           PersonSvg.shrink-0
           .viewer-count {{room.extra.receiverViewerCount + 1}}
