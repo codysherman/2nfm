@@ -275,7 +275,7 @@ export default {
     return {
       title: (
         `2N.fm ${this.isSharingOn && this.sessionId ?
-          ` - ${this.room_id} (${this.viewerCount})` : ''}`
+          `· ${this.room_id} (${this.viewerCount})` : ''}`
       ),
     };
   },
