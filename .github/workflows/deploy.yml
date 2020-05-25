@@ -23,9 +23,9 @@ jobs:
     - run: npm install -g yarn
     - run: yarn
     - name: Add TURN server username
-      run: echo "VUE_APP_TURN_USERNAME = ${{ secrets.TURN_USERNAME }}" >> .env
+      run: echo "VUE_APP_TURN_USERNAME = ${{ secrets.TURN_USERNAME }}" >> .env.production.local
     - name: Add TURN server credential
-      run: echo "VUE_APP_TURN_CREDENTIAL = ${{ secrets.TURN_CREDENTIAL }}" >> .env
+      run: echo "VUE_APP_TURN_CREDENTIAL = ${{ secrets.TURN_CREDENTIAL }}" >> .env.production.local
     - name: Configuring git
       run: git config --global user.email "cody@codysherman.com" && git config --global user.name "GitHub Actions"
     - name: Configuring ssh
