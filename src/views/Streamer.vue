@@ -34,7 +34,7 @@
   margin-top: 0.5em
   border-radius: $border-radius-small
 
-/* XS */
+// XS
 @media (max-width: 767px)
   #logo
     width: 114px
@@ -53,7 +53,7 @@
     font-size: 40px
     border-width: 4px
 
-/* XS */
+// XS
 @media (max-width: 767px)
   #room-id-label
     font-size: 30px
