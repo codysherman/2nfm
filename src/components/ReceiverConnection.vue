@@ -77,15 +77,6 @@ export default {
       OfferToReceiveVideo: true,
     };
 
-    this.connection.candidates = {
-      stun: true,
-      turn: true,
-    };
-    this.connection.iceTransportPolicy = 'relay';
-
-    this.connection.getExternalIceServers = false;
-    this.connection.iceServers = IceServersHandler.getIceServers();
-
     this.connection.processSdp = (sdp) => {
       var bandwidth = this.params.bandwidth;
       var codecs = this.params.codecs;
@@ -145,6 +136,16 @@ export default {
       if (e.extra.systemAudioId) {
         e.stream.systemAudioId = e.extra.systemAudioId;
       }
+
+      this.connection.candidates = {
+        stun: true,
+        turn: !e.extra.isP2POnly,
+      };
+      this.connection.iceTransportPolicy = 'all';
+
+      this.connection.getExternalIceServers = false;
+      this.connection.iceServers = IceServersHandler.getIceServers(!e.extra.isP2POnly);
+
       this.$emit('stream', e.stream);
     };
 
