@@ -145,6 +145,7 @@ export default {
 
       this.connection.getExternalIceServers = false;
       this.connection.iceServers = IceServersHandler.getIceServers(!e.extra.isP2POnly);
+      console.log('iceServers', this.connection.iceServers);
 
       this.$emit('stream', e.stream);
     };
