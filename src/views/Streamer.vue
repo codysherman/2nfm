@@ -80,7 +80,7 @@
     width: auto
     z-index: 2
 
-    &.rightItem
+    &.right-item
       left: auto
       right: 30px
 
@@ -197,7 +197,7 @@
           @blur="setRoomName")
       section#options
         .label Options
-        .label.rightItem(@click="showAdvancedOptions = !showAdvancedOptions")
+        .label.right-item(@click="showAdvancedOptions = !showAdvancedOptions")
           span(v-if="!showAdvancedOptions")
             | ⚙
             sup !
