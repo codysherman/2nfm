@@ -83,6 +83,7 @@
       left: auto
       right: 30px
       cursor: pointer
+      user-select: none
 
       svg
         height: 8px
