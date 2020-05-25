@@ -40,7 +40,6 @@
   100%
     stroke-dashoffset: 0
 
-
 #loading-logo path
   stroke: $secondary-color
   stroke-width: 1.5
