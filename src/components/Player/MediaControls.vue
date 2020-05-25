@@ -1,7 +1,7 @@
 <style scoped lang="sass">
 .media-controls
   width: 60%
-  animation: fade-in 0.4s
+  animation: fade-in $animate-speed
 
   .play-button-container
     width: 30px
@@ -27,7 +27,7 @@
   svg
     width: 18px
     fill: $primary-color
-    transition: transform 0.4s
+    transition: transform $animate-speed
 
   &:hover,
   &:active,
@@ -38,7 +38,7 @@
   svg
     width: 30px
     fill: $primary-color
-    transition: transform 0.4s
+    transition: transform $animate-speed
 
   &:hover,
   &:active,
