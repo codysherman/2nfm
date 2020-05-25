@@ -74,11 +74,10 @@
     top: -9px
     left: 30px
     background-color: $white
-    border: 2px solid $white
     border-radius: $border-radius-small
-    padding: 0 8px
+    padding: 2px 10px
     width: auto
-    z-index: 2
+    z-index: $z-page
 
     &.right-item
       left: auto
@@ -86,22 +85,20 @@
       cursor: pointer
 
       svg
-        width: 8px
-        height: auto
-        display: inline
-        margin: 0 4px
-        margin-bottom: 2px
+        height: 8px
+        width: auto
+        margin: 0 4px 2px
 
   .advanced
+    overflow: hidden
+
     &,
     & > .frow
-      overflow: hidden
       position: absolute
       top: 0
       right: 0
       bottom: 0
       left: 0
-      z-index: 1
 
     > .frow
       animation: slide-down $animate-speed ease
@@ -201,17 +198,16 @@
       section#options
         .label Options
         .label.right-item(@click="showAdvancedOptions = !showAdvancedOptions")
-          span(v-if="!showAdvancedOptions")
+          div(v-if="!showAdvancedOptions")
             | ⚙
             sup !
-          span(v-if="showAdvancedOptions")
+          div(v-if="showAdvancedOptions")
             XSvg
         .advanced(v-show="showAdvancedOptions")
           .frow.centered
-            .col-xs-1-1
-              label.row-center
-                input(type="checkbox" v-model="isP2POnly")
-                | Only send audio and video via peer-to-peer connections
+            label.row-center.mb-0
+              input(type="checkbox" v-model="isP2POnly")
+              | Only send audio and video via peer-to-peer connections
         .frow.gutters
           .col-xs-1-2
             .settings-item
