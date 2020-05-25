@@ -34,7 +34,7 @@
   margin-top: 0.5em
   border-radius: $border-radius-small
 
-/* XS
+/* XS */
 @media (max-width: 767px)
   #logo
     width: 114px
@@ -53,7 +53,7 @@
     font-size: 40px
     border-width: 4px
 
-/* XS
+/* XS */
 @media (max-width: 767px)
   #room-id-label
     font-size: 30px
@@ -74,8 +74,37 @@
     top: -9px
     left: 30px
     background-color: $white
+    border: 2px solid $white
+    border-radius: 10px
     padding: 0 8px
     width: auto
+    z-index: 2
+
+    &.rightItem
+      left: auto
+      right: 30px
+
+      svg
+        width: 8px
+        height: auto
+        display: inline
+        margin: 0 4px
+        margin-bottom: 2px
+
+  .advanced, .advanced .frow
+    overflow: hidden
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    z-index: 1
+
+  .advanced .frow
+    animation: slide-down 0.4s ease
+    background-color: $tertiary-color
+    border: 2px solid $tertiary-color
+    height: 100%
 
 .settings-item
   margin-bottom: 40px
@@ -143,6 +172,7 @@
     :privacy="privacy"
     :enableVideo="enableVideo"
     :enableAudio="enableAudio"
+    :isP2POnly="isP2POnly"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
     @idTaken="onIdTaken"
@@ -167,6 +197,18 @@
           @blur="setRoomName")
       section#options
         .label Options
+        .label.rightItem(@click="showAdvancedOptions = !showAdvancedOptions")
+          span(v-if="!showAdvancedOptions")
+            | ⚙
+            sup !
+          span(v-if="showAdvancedOptions")
+            XSvg
+        .advanced(v-show="showAdvancedOptions")
+          .frow.centered
+            .col-xs-1-1
+              label.row-center
+                input(type="checkbox" v-model="isP2POnly")
+                | Only send audio and video via peer-to-peer connections
         .frow.gutters
           .col-xs-1-2
             .settings-item
@@ -198,7 +240,7 @@
                 //- option(value="default" selected="") Default (VP9)
                 option(:value="Codecs.vp9") VP9 (Screensharing)
                 option(:value="Codecs.vp8") VP8 (Gaming)
-                //- option(:value="Codecs.h264") H.264
+                option(:value="Codecs.h264" :disabled="!isP2POnly") H.264
             //- .text-center
               span(v-if="codecs === Codecs.vp9")
                 | Better quality, less data
@@ -221,6 +263,7 @@
           //-     label
           //-       | Room Password
           //-       input#room_password(type="password" value="" placeholder="Optional")
+      
       section#stream-section
         #start
           .label Start
@@ -264,6 +307,7 @@ import LogoSvg from '@/assets/svgs/logo.svg';
 import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
 import VideoAndAudioSvg from '@/assets/svgs/video-and-audio.svg';
+import XSvg from '@/assets/svgs/x.svg';
 
 import StopSection from '@/components/Streamer/StopSection.vue';
 import DesktopCapturer from '@/components/DesktopCapturer.vue';
@@ -284,6 +328,7 @@ export default {
     VideoSvg,
     AudioSvg,
     VideoAndAudioSvg,
+    XSvg,
     StopSection,
     DesktopCapturer,
     StreamerConnection,
@@ -308,11 +353,21 @@ export default {
       privacy: 'private',
       useridAlreadyTaken: '',
       isMic: false,
+      showAdvancedOptions: false,
+      isP2POnly: false,
     };
   },
   computed: {
     Resolutions() { return Resolutions; },
     Codecs() { return Codecs; },
+  },
+  watch: {
+    isP2POnly(isP2POnly) {
+      if (!isP2POnly && this.codecs == Codecs.h264) {
+        // TODO: we may want to alert the user of this change somehow
+        this.codecs = Codecs.vp8;
+      }
+    },
   },
   mounted() {
     // document.getElementById('enable-chat').onclick = function() {

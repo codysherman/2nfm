@@ -38,6 +38,10 @@ export default {
       type: Boolean,
       default: false, 
     },
+    isP2POnly: {
+      type: Boolean,
+      default: false,
+    },
   },  
   data() {
     return {
@@ -83,9 +87,9 @@ export default {
 
       this.connection.candidates = {
         stun: true,
-        turn: true,
+        turn: !this.isP2POnly,
       };
-      this.connection.iceTransportPolicy = 'relay';
+      this.connection.iceTransportPolicy = 'all';
 
       this.connection.iceProtocols = {
         tcp: true,
@@ -106,7 +110,8 @@ export default {
       this.connection.autoReDialOnFailure = true;
       this.connection.getExternalIceServers = false;
 
-      this.connection.iceServers = IceServersHandler.getIceServers();
+      this.connection.extra.isP2POnly = this.isP2POnly;
+      this.connection.iceServers = IceServersHandler.getIceServers(!this.isP2POnly);
 
       this.connection.processSdp = (sdp) => {
         if (this.bandwidth) {
