@@ -103,8 +103,6 @@
     > .frow
       animation: slide-down $animate-speed ease
       background-color: $tertiary-color
-      border: 2px solid $tertiary-color
-      height: 100%
 
 .settings-item
   margin-bottom: 40px
