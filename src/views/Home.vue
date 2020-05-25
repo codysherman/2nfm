@@ -6,7 +6,7 @@
   fill: $primary-color
   animation: fade-in 2s ease-out
 
-/* XS
+// XS
 @media (max-width: 767px)
   #home-logo
     height: 50px
@@ -16,7 +16,7 @@
   padding: 20px 0
   text-align: center
 
-/* XS
+// XS
 @media (max-width: 767px)
   .home-half
     width: 100%
@@ -28,7 +28,7 @@
 #enter-room
   font-size: 40px
 
-/* XS
+// XS
 @media (max-width: 767px)
   .stream-button,
   #enter-room
@@ -51,7 +51,7 @@
   background-color: #eaeaea
   width: 2px
 
-/* XS
+// XS
 @media (max-width: 767px)
   .line-divider
     margin: 30px 30px
@@ -75,7 +75,7 @@
 .height-100
   GitHubCorner
   #home.frow-container.height-100
-    .frow.centered-column.align-between.width-100
+    .frow.centered-column.align-between.nowrap.width-100
       LogoSvg#home-logo
       .frow.items-stretch.width-100.mt-50
         .home-half
