@@ -75,7 +75,7 @@
     left: 30px
     background-color: $white
     border: 2px solid $white
-    border-radius: 10px
+    border-radius: $border-radius-small
     padding: 0 8px
     width: auto
     z-index: 2
@@ -83,6 +83,7 @@
     &.right-item
       left: auto
       right: 30px
+      cursor: pointer
 
       svg
         width: 8px
@@ -91,20 +92,22 @@
         margin: 0 4px
         margin-bottom: 2px
 
-  .advanced, .advanced .frow
-    overflow: hidden
-    position: absolute
-    top: 0
-    right: 0
-    bottom: 0
-    left: 0
-    z-index: 1
+  .advanced
+    &,
+    & > .frow
+      overflow: hidden
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+      z-index: 1
 
-  .advanced .frow
-    animation: slide-down 0.4s ease
-    background-color: $tertiary-color
-    border: 2px solid $tertiary-color
-    height: 100%
+    > .frow
+      animation: slide-down $animate-speed ease
+      background-color: $tertiary-color
+      border: 2px solid $tertiary-color
+      height: 100%
 
 .settings-item
   margin-bottom: 40px
