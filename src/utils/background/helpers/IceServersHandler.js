@@ -1,9 +1,5 @@
 // IceServersHandler.js
 
-const TURN_USERNAME =
-  'paB_VapMS4rh7KG1WxSX5sAoEAzPCBei0AwjO-PLRjIGrYBCsFZ_9WF-XlAvTnIBAAAAAF2FRx5jb2R5c2hlcm1hbg==';
-const TURN_CREDENTIAL = '282dd8fc-dbef-11e9-87d1-12339b8f6738';
-
 export const IceServersHandler = (function() {
   function getIceServers(withTurn = true) {
     var iceServers = [{
@@ -11,8 +7,8 @@ export const IceServersHandler = (function() {
     }];
 
     if (withTurn) iceServers.push({
-      username: TURN_USERNAME,
-      credential: TURN_CREDENTIAL,
+      username: process.env.VUE_APP_TURN_USERNAME,
+      credential: process.env.VUE_APP_TURN_CREDENTIAL,
       urls: [
         'turn:ws-turn1.xirsys.com:80?transport=udp',
         'turn:ws-turn1.xirsys.com:3478?transport=udp',
