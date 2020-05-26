@@ -10,12 +10,12 @@ export const IceServersHandler = (function() {
       username: process.env.VUE_APP_TURN_USERNAME,
       credential: process.env.VUE_APP_TURN_CREDENTIAL,
       urls: [
-        'turn:ws-turn1.xirsys.com:80?transport=udp',
-        'turn:ws-turn1.xirsys.com:3478?transport=udp',
-        'turn:ws-turn1.xirsys.com:80?transport=tcp',
-        'turn:ws-turn1.xirsys.com:3478?transport=tcp',
-        'turns:ws-turn1.xirsys.com:443?transport=tcp',
-        'turns:ws-turn1.xirsys.com:5349?transport=tcp',
+        'turn:us-turn1.xirsys.com:80?transport=udp',
+        'turn:us-turn1.xirsys.com:3478?transport=udp',
+        'turn:us-turn1.xirsys.com:80?transport=tcp',
+        'turn:us-turn1.xirsys.com:3478?transport=tcp',
+        'turns:us-turn1.xirsys.com:443?transport=tcp',
+        'turns:us-turn1.xirsys.com:5349?transport=tcp',
       ],
     });
 
