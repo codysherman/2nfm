@@ -52,208 +52,257 @@ export default {
       this.$emit('presenceCheckWait', newValue);
     },
   },
-  mounted() {
-    this.params = getParams();
+  async mounted() {
+    const { isP2POnly } = await this.fetchConnectionInfo();
+    this.connect(isP2POnly);
+  },
+  methods: {
+    createConnection() {
+      // http://www.rtcmulticonnection.org/docs/constructor/
+      const connection = new RTCMultiConnection(this.roomName);
+      connection.socketURL = 'https://api.2n.fm:9001/';
+      connection.autoCloseEntireSession = true;
 
-    // http://www.rtcmulticonnection.org/docs/constructor/
-    this.connection = new RTCMultiConnection(this.roomName);
-    this.connection.socketURL = 'https://api.2n.fm:9001/';
-    this.connection.autoCloseEntireSession = true;
+      // this must match the extension page
+      connection.socketMessageEvent = 'desktopCapture';
 
-    // this must match the extension page
-    this.connection.socketMessageEvent = 'desktopCapture';
+      connection.enableLogs = true;
+      connection.optionalArgument = {
+        optional: [],
+        mandatory: {},
+      };
 
-    this.connection.enableLogs = true;
-    this.connection.session = {
-      audio: true,
-      video: true,
-      data: true,
-      oneway: true,
-    };
+      return connection;
+    },
+    async fetchConnectionInfo() {
+      return new Promise((resolve, reject) => {
+        console.log('[ReceiverConnection fetchConnectionInfo]', 'starting / promise called');
+        const connection = this.createConnection();
+        this.params = getParams();
 
-    // www.rtcmulticonnection.org/docs/sdpConstraints/
-    this.connection.sdpConstraints.mandatory = {
-      OfferToReceiveAudio: true,
-      OfferToReceiveVideo: true,
-    };
+        connection.session = {
+          audio: false,
+          video: false,
+          data: true,
+          oneway: true,
+        };
 
-    this.connection.processSdp = (sdp) => {
-      var bandwidth = this.params.bandwidth;
-      var codecs = this.params.codecs;
+        connection.sdpConstraints.mandatory = {
+          OfferToReceiveAudio: false,
+          OfferToReceiveVideo: false,
+        };
 
-      if (bandwidth) {
-        try {
-          bandwidth = parseInt(bandwidth);
-        } catch (e) {
-          bandwidth = null;
+        connection.onstream = (e) => {
+          console.log('hello world');
+          const connectionInfo = e.extra;
+          connection.close();
+          resolve(connectionInfo);
+        };
+
+        // TODO: this should be a more extensive check
+        connection.onSocketError = reject;
+
+        connection.onleave = (e) => {
+          if (e.userid !== this.roomName) return;
+
+          connection.close();
+          connection.closeSocket();
+          connection.userid = connection.token();
+        };
+
+        connection.onstreamended = connection.onSessionClosed = connection.onleave;
+
+        this.checkPresence(connection);
+      });
+    },
+    connect(isP2POnly) {
+      console.log('[ReceiverConnection connect]', 'starting');
+      this.connection = this.createConnection();
+      this.params = getParams();
+
+      this.connection.session = {
+        audio: true,
+        video: true,
+        data: true,
+        oneway: true,
+      };
+
+      // www.rtcmulticonnection.org/docs/sdpConstraints/
+      this.connection.sdpConstraints.mandatory = {
+        OfferToReceiveAudio: true,
+        OfferToReceiveVideo: true,
+      };
+
+      this.connection.processSdp = (sdp) => {
+        var bandwidth = this.params.bandwidth;
+        var codecs = this.params.codecs;
+
+        if (bandwidth) {
+          try {
+            bandwidth = parseInt(bandwidth);
+          } catch (e) {
+            bandwidth = null;
+          }
+
+          if (
+            bandwidth &&
+            !isNaN(bandwidth) &&
+            bandwidth != 'NaN' &&
+            typeof bandwidth == 'number'
+          ) {
+            sdp = setBandwidth(sdp, bandwidth);
+            sdp = CodecsHandler.setVideoBitrates(sdp, {
+              min: bandwidth,
+              max: bandwidth,
+            });
+          }
         }
 
-        if (
-          bandwidth &&
-          !isNaN(bandwidth) &&
-          bandwidth != 'NaN' &&
-          typeof bandwidth == 'number'
-        ) {
-          sdp = setBandwidth(sdp, bandwidth);
-          sdp = CodecsHandler.setVideoBitrates(sdp, {
-            min: bandwidth,
-            max: bandwidth,
-          });
+        if (!!codecs && codecs !== 'default') {
+          sdp = CodecsHandler.preferCodec(sdp, codecs);
         }
-      }
-
-      if (!!codecs && codecs !== 'default') {
-        sdp = CodecsHandler.preferCodec(sdp, codecs);
-      }
-      return sdp;
-    };
-      
-
-    this.connection.optionalArgument = {
-      optional: [],
-      mandatory: {},
-    };
-
-    this.connection.onstatechange = (state) => {
-      if (state.name == 'request-rejected' && this.params.p) {
-        this.$emit('state', { value: STATE.UNAUTHORIZED });
-      } else if (state.name === 'room-not-available') {
-        this.$emit('state', { value: STATE.UNAVAILABLE });
-      } else {
-        const { name, reason } = state;
-        this.$emit('state', { value: STATE.GENERIC, name, reason });
-      }
-    };
-
-    this.connection.onstreamid = () => {
-      this.$emit('state', { value: STATE.PEER_WILL_SEND });
-    };
-
-    this.connection.onstream = (e) => {
-      if (e.extra.micId) {
-        e.stream.micId = e.extra.micId;
-      }
-      if (e.extra.systemAudioId) {
-        e.stream.systemAudioId = e.extra.systemAudioId;
-      }
-
+        return sdp;
+      };
+        
       this.connection.candidates = {
         stun: true,
-        turn: !e.extra.isP2POnly,
+        turn: !isP2POnly,
       };
       this.connection.iceTransportPolicy = 'all';
 
       this.connection.getExternalIceServers = false;
-      this.connection.iceServers = IceServersHandler.getIceServers(!e.extra.isP2POnly);
+      this.connection.iceServers = IceServersHandler.getIceServers(!isP2POnly);
 
-      this.$emit('stream', e.stream);
-    };
-
-    this.connection.onExtraDataUpdated = (e) => {
-      this.$emit('receiverViewerCount', e.extra.receiverViewerCount);
-    };
-
-    // if user left
-    this.connection.onleave = (e) => {
-      if (e.userid !== this.roomName) return;
-
-      // TODO: maybe split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing
-      this.connection.close();
-      this.connection.closeSocket();
-      this.connection.userid = this.connection.token();
-
-      this.$emit('state', { value: STATE.SOCKET_CLOSED });
-    };
-
-    // TODO: refactor so synchronous `prompt`'s (or better alternative) is done from the Receiver
-    this.connection.onJoinWithPassword = (remoteUserId) => {
-      if (!this.params.p) {
-        this.params.p = prompt(
-          remoteUserId + ' is password protected. Please enter the pasword:',
-        );
-      }
-
-      this.connection.password = this.params.p;
-      this.connection.join(remoteUserId);
-    };
-    this.connection.onstreamended = this.connection.onSessionClosed = this.connection.onleave;
-
-    this.connection.onInvalidPassword = (remoteUserId, oldPassword) => {
-      var password = prompt(
-        remoteUserId +
-          ' is password protected. Your entered wrong password (' +
-          oldPassword +
-          '). Please enter valid pasword:',
-      );
-      this.connection.password = password;
-      this.connection.join(remoteUserId);
-    };
-
-    this.connection.onPasswordMaxTriesOver = (remoteUserId) => {
-      alert(
-        remoteUserId +
-          ' is password protected. Your max password tries exceeded the limit.',
-      );
-    };
-
-    this.connection.onSocketDisconnect = () => {
-      if (this.connection.getAllParticipants().length > 0) return;
-
-      this.$emit('state', { value: STATE.SOCKET_DISCONNECT });
-    };
-
-    this.connection.onSocketError = () => {
-      this.$emit('state', { value: STATE.SOCKET_ERROR });
-    };
-    
-
-    this.connection.onopen = () => {
-      //
-    };
-
-    this.connection.socketCustomEvent = this.roomName;
-
-    // console.log('[Connection mounted]: roomName check:', this.roomName);
-    if (this.roomName) {
-      this.checkPresence();
-    }
-
-    var dontDuplicate = {};
-    this.connection.onPeerStateChanged = (event) => {
-      if (!this.connection.getRemoteStreams(this.roomName).length) {
-        if (event.signalingState === 'have-remote-offer') {
-          this.$emit('state', { value: STATE.HAVE_OFFER });
-        } else if (
-          event.iceGatheringState === 'complete' &&
-          event.iceConnectionState === 'connected'
-        ) {
-          this.$emit('state', { value: STATE.HANDSHAKE_COMPLETE });
+      this.connection.onstatechange = (state) => {
+        if (state.name == 'request-rejected' && this.params.p) {
+          this.$emit('state', { value: STATE.UNAUTHORIZED });
+        } else if (state.name === 'room-not-available') {
+          this.$emit('state', { value: STATE.UNAVAILABLE });
+        } else {
+          const { name, reason } = state;
+          this.$emit('state', { value: STATE.GENERIC, name, reason });
         }
-      }
+      };
 
-      if (
-        event.iceConnectionState === 'connected' &&
-        event.signalingState === 'stable'
-      ) {
-        if (dontDuplicate[event.userid]) return;
-        dontDuplicate[event.userid] = true;
+      this.connection.onstreamid = () => {
+        this.$emit('state', { value: STATE.PEER_WILL_SEND });
+      };
 
-        this.$emit('state', { value: STATE.CONNECTED });
-        getStats(
-          this.connection.peers[event.userid].peer,
-          (stats) => {
-            this.onGettingWebRTCStats(stats, event.userid);
-          },
-          1000,
+      this.connection.onstream = (e) => {
+        if (e.extra.micId) {
+          e.stream.micId = e.extra.micId;
+        }
+        if (e.extra.systemAudioId) {
+          e.stream.systemAudioId = e.extra.systemAudioId;
+        }
+
+        this.$emit('stream', e.stream);
+      };
+
+      this.connection.onExtraDataUpdated = (e) => {
+        this.$emit('receiverViewerCount', e.extra.receiverViewerCount);
+      };
+
+      // if user left
+      this.connection.onleave = (e) => {
+        if (e.userid !== this.roomName) return;
+
+        // TODO: maybe split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing
+        this.connection.close();
+        this.connection.closeSocket();
+        this.connection.userid = this.connection.token();
+
+        this.$emit('state', { value: STATE.SOCKET_CLOSED });
+      };
+
+      // TODO: refactor so synchronous `prompt`'s (or better alternative) is done from the Receiver
+      this.connection.onJoinWithPassword = (remoteUserId) => {
+        if (!this.params.p) {
+          this.params.p = prompt(
+            remoteUserId + ' is password protected. Please enter the pasword:',
+          );
+        }
+
+        this.connection.password = this.params.p;
+        this.connection.join(remoteUserId);
+      };
+      this.connection.onstreamended = this.connection.onSessionClosed = this.connection.onleave;
+
+      this.connection.onInvalidPassword = (remoteUserId, oldPassword) => {
+        var password = prompt(
+          remoteUserId +
+            ' is password protected. Your entered wrong password (' +
+            oldPassword +
+            '). Please enter valid pasword:',
         );
-      } else if (event.iceConnectionState === 'disconnected') {
-        this.$emit('state', { value: STATE.DISCONNECTED });
+        this.connection.password = password;
+        this.connection.join(remoteUserId);
+      };
+
+      this.connection.onPasswordMaxTriesOver = (remoteUserId) => {
+        alert(
+          remoteUserId +
+            ' is password protected. Your max password tries exceeded the limit.',
+        );
+      };
+
+      this.connection.onSocketDisconnect = () => {
+        if (this.connection.getAllParticipants().length > 0) return;
+
+        this.$emit('state', { value: STATE.SOCKET_DISCONNECT });
+      };
+
+      this.connection.onSocketError = () => {
+        this.$emit('state', { value: STATE.SOCKET_ERROR });
+      };
+      
+
+      this.connection.onopen = () => {
+        //
+      };
+
+      this.connection.socketCustomEvent = this.roomName;
+
+      // console.log('[Connection mounted]: roomName check:', this.roomName);
+      if (this.roomName) {
+        this.checkPresence();
       }
-    };
-  },
-  methods: {
-    checkPresence() {
-      this.connection.checkPresence(
+
+      var dontDuplicate = {};
+      this.connection.onPeerStateChanged = (event) => {
+        if (!this.connection.getRemoteStreams(this.roomName).length) {
+          if (event.signalingState === 'have-remote-offer') {
+            this.$emit('state', { value: STATE.HAVE_OFFER });
+          } else if (
+            event.iceGatheringState === 'complete' &&
+            event.iceConnectionState === 'connected'
+          ) {
+            this.$emit('state', { value: STATE.HANDSHAKE_COMPLETE });
+          }
+        }
+
+        if (
+          event.iceConnectionState === 'connected' &&
+          event.signalingState === 'stable'
+        ) {
+          if (dontDuplicate[event.userid]) return;
+          dontDuplicate[event.userid] = true;
+
+          this.$emit('state', { value: STATE.CONNECTED });
+          getStats(
+            this.connection.peers[event.userid].peer,
+            (stats) => {
+              this.onGettingWebRTCStats(stats, event.userid);
+            },
+            1000,
+          );
+        } else if (event.iceConnectionState === 'disconnected') {
+          this.$emit('state', { value: STATE.DISCONNECTED });
+        }
+      };
+    },
+    checkPresence(connection = null) {
+      (connection || this.connection).checkPresence(
         this.roomName,
         // Keeping these parameters here for documentation
         // eslint-disable-next-line no-unused-vars
@@ -276,12 +325,12 @@ export default {
 
           this.$emit('state', { value: STATE.JOINING });
 
-          this.connection.password = null;
+          (connection || this.connection).password = null;
           if (this.params.p) {
-            this.connection.password = this.params.p;
+            (connection || this.connection).password = this.params.p;
           }
 
-          this.connection.join(this.roomName);
+          (connection || this.connection).join(this.roomName);
         },
       );
     },
