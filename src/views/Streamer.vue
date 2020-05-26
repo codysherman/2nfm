@@ -84,11 +84,26 @@
       right: 30px
       cursor: pointer
       user-select: none
+      fill: $primary-color
+      padding: 0 10px
 
-      svg
-        height: 8px
-        width: auto
-        margin: 0 4px 2px
+      .gear
+        svg
+          height: 16px
+          width: auto
+          margin-right: 2px
+
+        sup
+          display: block
+          margin-top: 8px
+
+      .x-icon
+        height: 15px
+        padding: 0 4px
+
+        svg
+          height: 8px
+          width: auto
 
   .advanced
     overflow: hidden
@@ -182,7 +197,7 @@
     #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
     div#id-taken(v-if="useridAlreadyTaken")
-      | ⚠️ Whoops,
+      | Whoops,
       b &nbsp;{{useridAlreadyTaken}}&nbsp;
       | already taken! Please choose another room name.
     section#setup-section(v-if="!isSharingOn || !sessionId")
@@ -197,10 +212,10 @@
       section#options
         .label Options
         .label.right-item(@click="showAdvancedOptions = !showAdvancedOptions")
-          div(v-if="!showAdvancedOptions")
-            | ⚙
+          .gear.frow.nowrap(v-if="!showAdvancedOptions")
+            GearSvg
             sup !
-          div(v-if="showAdvancedOptions")
+          .x-icon.frow.centered(v-if="showAdvancedOptions")
             XSvg
         .advanced(v-show="showAdvancedOptions")
           .frow.centered
@@ -306,6 +321,7 @@ import VideoSvg from '@/assets/svgs/video.svg';
 import AudioSvg from '@/assets/svgs/audio.svg';
 import VideoAndAudioSvg from '@/assets/svgs/video-and-audio.svg';
 import XSvg from '@/assets/svgs/x.svg';
+import GearSvg from '@/assets/svgs/gear.svg';
 
 import StopSection from '@/components/Streamer/StopSection.vue';
 import DesktopCapturer from '@/components/DesktopCapturer.vue';
@@ -327,6 +343,7 @@ export default {
     AudioSvg,
     VideoAndAudioSvg,
     XSvg,
+    GearSvg,
     StopSection,
     DesktopCapturer,
     StreamerConnection,
