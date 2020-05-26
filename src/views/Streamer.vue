@@ -91,7 +91,7 @@
         svg
           height: 16px
           width: auto
-          margin-right: 2px
+          margin-right: 1px
 
         sup
           display: block
