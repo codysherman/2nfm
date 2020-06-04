@@ -120,6 +120,25 @@ section
   label
     margin-bottom: 0
 
+.bandwidth-number
+  width: 32px
+  margin-left: 10px
+
+#start
+  border: 2px solid $tertiary-color
+  border-radius: 10px
+  padding: 40px 40px 35px
+  margin-top: 40px
+  position: relative
+
+  .label
+    position: absolute
+    top: -9px
+    left: 30px
+    background-color: $white
+    padding: 0 8px
+    width: auto
+
 .stream-button
   cursor: pointer
   transition: color $animate-speed
@@ -203,6 +222,18 @@ div
               label.row-center.mb-0
                 input(type="checkbox" v-model="isP2POnly")
                 | Force peer-to-peer (P2P) connections
+              label.mt-20.width-auto
+                | Bandwidth
+                .frow.row-center.nowrap
+                  input(
+                    type="range"
+                    v-model="bandwidthTick"
+                    min="1"
+                    max="7"
+                    @change="setBandwidth"
+                  )
+                  .bandwidth-number.shrink-0
+                    | {{bandwidthNumber}}
           .frow.gutters
             .col-xs-1-2
               .settings-item
@@ -350,11 +381,32 @@ export default {
       enableMic: false,
       showAdvancedOptions: false,
       isP2POnly: false,
+      bandwidthTick: 7,
     };
   },
   computed: {
     Resolutions() { return Resolutions; },
     Codecs() { return Codecs; },
+    bandwidthNumber() {
+      switch(this.bandwidthTick) {
+      case '1':
+        return '128';
+      case '2':
+        return '256';
+      case '3':
+        return '512';
+      case '4':
+        return '1024';
+      case '5':
+        return '2048';
+      case '6':
+        return '4096';
+      case '7':
+        return '8192';
+      default:
+        return '8192';
+      }
+    },
   },
   watch: {
     isP2POnly(isP2POnly) {
