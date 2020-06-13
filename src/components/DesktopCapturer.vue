@@ -47,8 +47,14 @@ export default {
     },
     onAccessApproved() {
       // console.log(navigator.mediaDevices.getSupportedConstraints());
-      const dimensions = getDimensionsForResolution(this.resolution);
-
+      let dimensions = '';
+      
+      if(!this.enableVideo) {
+        dimensions = getDimensionsForResolution('Fit144p');
+      } else {
+        dimensions = getDimensionsForResolution(this.resolution);
+      }
+      
       let constraints = {
         video: {
           // TODO: displaySurface support is waiting on browser support

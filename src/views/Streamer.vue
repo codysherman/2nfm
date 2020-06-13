@@ -400,7 +400,9 @@ export default {
         this.useridAlreadyTaken = 'streamer';
         return;
       }
-      this.$refs.capturer.startStream();
+      this.$nextTick(() => {
+        this.$refs.capturer.startStream();
+      });
     },
     stopStream() {
       this.$refs.capturer.stopStream();
