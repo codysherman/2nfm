@@ -34,7 +34,7 @@
 </style>
 
 <template lang="pug">
-  a.github-corner(href="https://github.com/codysherman/2NFM" target="_blank" rel="noopener")
+  a.github-corner(href="https://github.com/codysherman/2nfm" target="_blank" rel="noopener")
     GitHubSvg
 </template>
 
