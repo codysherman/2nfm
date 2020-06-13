@@ -105,6 +105,9 @@ export default {
         if (this.enableMic === true) {
           micStream = await startMicCapture();
         }
+        if (this.enableMic === true && !micStream) {
+          return;
+        }
         let stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
@@ -122,7 +125,11 @@ export default {
           stream.containsVideo = true;
         }
         if (this.enableAudio && stream.getAudioTracks().length === 0) {
-          alert('Make sure to check the "Share audio" box in Google Chrome');
+          alert('Make sure to check the "Share audio" box in Google Chrome or Microsoft Edge');
+          this.$nextTick(() => {
+            this.stopStream();
+          });
+          return;
         }
         if (stream.getAudioTracks().length > 0) {
           stream.containsAudio = true;
