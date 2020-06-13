@@ -53,16 +53,16 @@
 
 <template lang="pug">
 .media-controls
-  .frow.nowrap(:class="{ 'justify-between': isVideo }")
+  .frow.nowrap(:class="{ 'justify-between': containsVideo }")
     .frow.nowrap
       button.play-button-container.frow.nowrap.button-none(
         type="button"
-        v-if="!isMic"
+        v-if="!containsMic"
         @click="togglePlayback"
       )
         PlaySvg(v-if="!isPlaying")
         PauseSvg(v-else)
-      MicrophoneSvg.microphone(v-if="isMic")
+      MicrophoneSvg.microphone(v-if="containsMic")
       input.volume-slider.frow.nowrap(
         type="range"
         :value="volume"
@@ -71,7 +71,7 @@
         step="0.01"
         @input="setVolume"
       )
-    .frow(v-if="isVideo && isPlaying && !isMic")
+    .frow(v-if="containsVideo && isPlaying && !containsMic")
       button.theater-button.button-none.mr-20(
         type="button"
         @click="toggleTheaterMode"
@@ -104,11 +104,11 @@ export default {
     ReceiverConnection,
   },
   props: {
-    isVideo: {
+    containsVideo: {
       type: Boolean,
       default: false,
     },
-    isMic: {
+    containsMic: {
       type: Boolean,
       default: false,
     },
@@ -140,7 +140,7 @@ export default {
     setVolume(event) {
       this.player.volume = event.srcElement.valueAsNumber;
       this.volume = event.srcElement.valueAsNumber;
-      if (!this.isMic) {
+      if (!this.containsMic) {
         localStorage.setItem('volume', event.srcElement.valueAsNumber);
       }
     },

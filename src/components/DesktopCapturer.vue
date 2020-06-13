@@ -9,7 +9,7 @@ export default {
   props: {
     enableVideo: Boolean,
     enableAudio: Boolean,
-    isMic: Boolean,
+    enableMic: Boolean,
     resolution: {
       type: String,
       default: Resolutions.FitScreen,
@@ -96,22 +96,24 @@ export default {
 
       const startCapturing = async () => {
         let micStream = null;
-        if (this.isMic === true) {
+        if (this.enableMic === true) {
           micStream = await startMicCapture();
         }
         let stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
-
+        if (stream.getVideoTracks().length > 0) {
+          stream.containsVideo = true;
+        }
         if (this.enableAudio && stream.getAudioTracks().length === 0) {
           alert('Make sure to check the "Share audio" box in Google Chrome');
         }
         if (stream.getAudioTracks().length > 0) {
-          stream.systemAudioId = stream.getAudioTracks()[0].id;
+          stream.containsAudio = true;
         }
         if (micStream) {
           stream.addTrack(micStream.getAudioTracks()[0]);
-          stream.micId = micStream.getAudioTracks()[0].id;
+          stream.containsMic = true;
         }
         this.gotStream(stream);
       };

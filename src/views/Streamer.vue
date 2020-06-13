@@ -149,7 +149,7 @@ section
     ref="capturer"
     :enableVideo="enableVideo"
     :enableAudio="enableAudio"
-    :isMic="isMic"
+    :enableMic="enableMic"
     :resolution="resolution"
     @isSharing="onIsSharing"
     @gotStream="onGotStream"
@@ -227,7 +227,7 @@ section
               | Public Room
           .col-xs-1-2
             label.row-start
-              input(type="checkbox" v-model="isMic")
+              input(type="checkbox" v-model="enableMic")
               | Enable Microphone
           .col-xs-1-2
             label.row-start.mb-10
@@ -266,21 +266,21 @@ section
               .frow.column-center
                 VideoSvg
                 | Video Only
-                .and-mic(:class="{'opacity-100': isMic }")
+                .and-mic(:class="{'opacity-100': enableMic }")
                   | & Mic
           .col-xs-1-3
             .stream-button(@click="startStream(true, true)")
               .frow.column-center
                 VideoAndAudioSvg
                 | Video + Audio
-                .and-mic(:class="{'opacity-100': isMic }")
+                .and-mic(:class="{'opacity-100': enableMic }")
                   | & Mic
           .col-xs-1-3
             .stream-button(@click="startStream(false, true)")
               .frow.column-center
                 AudioSvg
                 | Audio Only
-                .and-mic(:class="{'opacity-100': isMic }")
+                .and-mic(:class="{'opacity-100': enableMic }")
                   | & Mic
     StopSection(
       v-if="isSharingOn && sessionId"
@@ -347,7 +347,7 @@ export default {
       viewerCount: 0,
       privacy: 'private',
       useridAlreadyTaken: '',
-      isMic: false,
+      enableMic: false,
       showAdvancedOptions: false,
       isP2POnly: false,
     };

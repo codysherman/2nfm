@@ -172,13 +172,18 @@ export default {
         );
       }
 
-      if(stream.systemAudioId) {
-        this.connection.extra.systemAudioId = stream.systemAudioId;
+      if(stream.containsVideo) {
+        this.connection.extra.containsVideo = stream.containsVideo;
         // this.connection.updateExtraData();
       }
 
-      if (stream.micId) {
-        this.connection.extra.micId = stream.micId;
+      if(stream.containsAudio) {
+        this.connection.extra.containsAudio = stream.containsAudio;
+        // this.connection.updateExtraData();
+      }
+
+      if (stream.containsMic) {
+        this.connection.extra.containsMic = stream.containsMic;
         // this.connection.updateExtraData();
       }
 

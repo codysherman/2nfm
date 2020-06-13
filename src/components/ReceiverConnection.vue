@@ -189,13 +189,15 @@ export default {
       };
 
       this.connection.onstream = (e) => {
-        if (e.extra.micId) {
-          e.stream.micId = e.extra.micId;
+        if (e.extra.containsVideo) {
+          e.stream.containsVideo = e.extra.containsVideo;
         }
-        if (e.extra.systemAudioId) {
-          e.stream.systemAudioId = e.extra.systemAudioId;
+        if (e.extra.containsAudio) {
+          e.stream.containsAudio = e.extra.containsAudio;
         }
-
+        if (e.extra.containsMic) {
+          e.stream.containsMic = e.extra.containsMic;
+        }
         this.$emit('stream', e.stream);
       };
 

@@ -8,31 +8,31 @@
 </style>
 
 <template lang="pug">
-.frow.column-center.width-100
+.frow.column-center.width-100.nowrap
   VideoPlayer(
     :class="{ 'theater-mode': theaterMode }"
-    v-show="stream.isVideo"
+    v-show="stream.containsVideo"
     ref="videoPlayer"
   )
   AudioPlayer(
-    v-show="stream.isAudio"
+    v-show="!stream.containsVideo && stream.containsAudio"
     ref="audioPlayer"
   )
   AudioPlayer(
-    v-show="stream.micId"
+    v-show="stream.containsMic"
     ref="micPlayer"
   )
   MediaControls(
-    :class="{ 'mt-20': stream.isVideo }"
-    :isVideo="stream.isVideo"
+    :class="{ 'mt-20': stream.containsVideo }"
+    :containsVideo="stream.containsVideo"
     :player="player"
     :theaterMode.sync="theaterMode"
     @togglePlayback="togglePlayback"
   )
   MediaControls.mt-10(
-    v-if="stream.micId"
-    :isVideo="stream.isVideo"
-    :isMic="true"
+    v-if="stream.containsMic"
+    :containsVideo="stream.containsVideo"
+    :containsMic="true"
     :player="this.micPlayer"
   )
   ExtraControls.mt-30(
@@ -100,13 +100,13 @@ export default {
   },
   methods: {
     determinePlayers() {
-      if (this.stream.isVideo) {
+      if (this.stream.containsVideo) {
         this.player = this.$refs.videoPlayer.$refs.player;
       } else {
         this.player = this.$refs.audioPlayer.$refs.player;
       }
 
-      if (this.stream.micId) {
+      if (this.stream.containsMic) {
         this.micPlayer = this.$refs.micPlayer.$refs.player;
       }
     },
@@ -121,11 +121,11 @@ export default {
 
       // NOTE: we clone all individual tracks so we can stop the old ones later.
       const tempPlayerStream = new MediaStream();
-      if (this.stream.isVideo) {
+      if (this.stream.containsVideo) {
         const track = this.stream.getVideoTracks()[0].clone();
         tempPlayerStream.addTrack(track);
       }
-      if (!(this.stream.getAudioTracks().length === 1 && this.stream.micId)
+      if (!(this.stream.getAudioTracks().length === 1 && this.stream.containsMic)
         && this.stream.getAudioTracks().length) {
         const track = this.stream.getAudioTracks()[0].clone();
         tempPlayerStream.addTrack(track);
@@ -134,7 +134,7 @@ export default {
       tempPlayerStream.getTracks().forEach((track) => { track.enabled = true; });
       this.player.srcObject = tempPlayerStream;
 
-      if (this.stream.micId) {
+      if (this.stream.containsMic) {
         const tempMicStream = new MediaStream();
         const track = this.stream.getAudioTracks().slice(-1)[0].clone(); // get last track
         tempMicStream.addTrack(track);
@@ -156,7 +156,7 @@ export default {
     async playMedia() {
       try {
         await this.player.play();
-        if (this.stream.micId) {
+        if (this.stream.containsMic) {
           await this.micPlayer.play();
         }
       } catch (err) {
@@ -176,7 +176,7 @@ export default {
         this.playMedia();
       } else {
         this.player.pause();
-        if (this.stream.micId) {
+        if (this.stream.containsMic) {
           this.micPlayer.pause();
         }
       }
