@@ -104,8 +104,7 @@ export default {
     return {
       title: 
       `2N.fm ${!this.publicRoomCount ? ''
-        : `· ${this.publicRoomCount}
-        ${this.publicRoomCount === 1 ? 'room' : 'rooms'}`}`,
+        : `· ${this.publicRoomCount} ${this.publicRoomCount === 1 ? 'room' : 'rooms'}`}`,
     };
   },
   components: {
