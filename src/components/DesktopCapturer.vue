@@ -102,6 +102,16 @@ export default {
         let stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
+
+        // Remove the video track from the source stream if audio only
+        if (
+          !this.enableVideo &&
+          stream.getVideoTracks().length > 0
+        ) {
+          stream.removeTrack(
+            stream.getVideoTracks()[0],
+          );
+        }
         if (stream.getVideoTracks().length > 0) {
           stream.containsVideo = true;
         }
