@@ -130,9 +130,9 @@ export default {
         }
 
         if (this.enableAudio && !this.enableVideo) {
-          sdp = CodecsHandler.preferCodec(sdp, this.codecs);
-        } else {
           sdp = CodecsHandler.preferCodec(sdp, Codecs.h264);
+        } else {
+          sdp = CodecsHandler.preferCodec(sdp, this.codecs);
         }
           
         return sdp;
