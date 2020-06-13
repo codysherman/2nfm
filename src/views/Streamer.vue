@@ -131,9 +131,9 @@ section
     height: auto
     margin-bottom: 10px
 
-  path
-    fill: $primary-color
-    transition: fill $animate-speed
+    path
+      fill: $primary-color
+      transition: fill $animate-speed
 
   &:hover svg path
     fill: $black
