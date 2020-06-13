@@ -5,10 +5,10 @@
   top: 5px
 
   button
-    color: gray
+    color: $gray-dark
     margin-right: 10px
 
-#stats-bar
+.stats-box
   background-color: rgba(255, 255, 255, 0.92)
   top: 35px
   left: 20px
@@ -16,20 +16,15 @@
   text-align: left
   padding: 10px
 
-#stats-bar-html
-  padding: 5px 10px
-
-#hide-stats-bar
-  position: absolute
-  top: 5px
-  right: 5px
-  cursor: pointer
-
   svg
+    position: absolute
+    top: 5px
+    right: 5px
+    cursor: pointer
     width: 10px
     height: 10px
 
-#loading-logo
+.loading-logo
   height: 53px
   width: auto
   margin-bottom: 20px
@@ -40,7 +35,7 @@
   100%
     stroke-dashoffset: 0
 
-#loading-logo path
+.loading-logo path
   stroke: $secondary-color
   stroke-width: 1.5
   stroke-dasharray: 495
@@ -53,7 +48,7 @@
   fill: $primary-color
   animation: fade-in 2s ease-out
 
-#info-bar
+.info-bar
   font-size: 24px
   margin-top: 20px
   text-align: center
@@ -67,7 +62,7 @@
 </style>
 
 <template lang="pug">
-#receiver.height-100
+.height-100
   ReceiverConnection(
     :roomName="roomName"
     @state="onConnectionStateChanged"
@@ -78,12 +73,11 @@
   )
   .menu-bar
     .frow.row-start
-      button#show-stats-bar.button-link(v-if="isStream" @click="showStats") Stats
-      // <button id="show-chats" class="button-link">Past Tabs</button>
-  #stats-bar.shadow-light(v-if="statsVisible")
-    #hide-stats-bar(@click="hideStats")
-      XSvg
-    #stats-bar-html
+      button.button-link(v-if="isStream" @click="showStats")
+        | Stats
+  .stats-box.shadow-light(v-if="statsVisible")
+    XSvg(@click="hideStats")
+    .m-10
       div(v-if="stats.video.recv.codecs.length > 0")
         | {{ `Video: ${stats.video.recv.codecs}` }}
       div(v-if="stats.video.recv.codecs.length > 0")
@@ -94,7 +88,7 @@
         | {{ `Data: ${this.bytesToSize(stats.audio.bytesReceived + stats.video.bytesReceived)}` }}
   .frow.centered-column.nowrap
     router-link.create-message(v-if="!isStream", to="/")
-      LoadingSvg#loading-logo
+      LoadingSvg.loading-logo
     router-link.mb-50(v-if="isStream", to="/")
       LogoSvg.reciever-logo
     Player(
@@ -103,13 +97,11 @@
       :receiverViewerCount="receiverViewerCount"
       :showExtraControls="true"
     )
-    #info-bar(v-if="!isStream") {{ infoBarMessage }}
-    router-link.create-message(v-if="!isStream", to="/streamer") Create your own room
+    .info-bar(v-if="!isStream")
+      | {{ infoBarMessage }}
+    router-link.create-message(v-if="!isStream", to="/streamer")
+      | Create your own room
     PublicRooms.mt-40(v-if="!isStream")
-  #chat-container(hidden)
-    #chat-messages
-    input#txt-chat-message(type="text" placeholder="Enter Chat Message" hidden)
-
 </template>
 
 <script>

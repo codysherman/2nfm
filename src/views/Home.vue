@@ -38,7 +38,9 @@
   border-color: red
   animation: pulse 1.5s ease-in-out infinite alternate
 
-  &:hover
+  &:hover,
+  &:focus,
+  &:active
     animation: none
     background-color: red
     border-color: red
