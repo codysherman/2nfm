@@ -6,6 +6,8 @@ export const Resolutions = {
   Fit720p: 'Fit720p',
   Fit480p: 'Fit480p',
   Fit360p: 'Fit360p',
+  Fit240p: 'Fit240p',
+  Fit144p: 'Fit144p',
 };
 
 /**
@@ -26,8 +28,12 @@ export const getDimensionsForResolution = (resolution) => {
     return { width: 720, height: 480 };
   case Resolutions.Fit360p:
     return { width: 640, height: 360 };
+  case Resolutions.Fit240p:
+    return { width: 426, height: 240 };
+  case Resolutions.Fit144p:
+    return { width: 256, height: 144 };
   case Resolutions.FitScreen:
   default:
-    return (window || {}).screen || getDimensionsForResolution(Resolutions.Fit480p);
+    return (window || {}).screen || getDimensionsForResolution(Resolutions.Fit720p);
   }
 };

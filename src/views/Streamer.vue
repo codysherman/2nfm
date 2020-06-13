@@ -215,7 +215,9 @@ section
                   option(:value="Resolutions.Fit1080p") Full-HD (1080p)
                   option(:value="Resolutions.Fit720p") HD (720p)
                   option(:value="Resolutions.Fit480p") SD (480p)
-                  option(:value="Resolutions.Fit360p") SD (360p)
+                  option(:value="Resolutions.Fit360p") LD (360p)
+                  option(:value="Resolutions.Fit240p") N64 (240p)
+                  option(:value="Resolutions.Fit144p") 2LO (144p)
           .col-xs-1-2
             label.row-start
               input(type="radio" value="private" v-model="privacy")
