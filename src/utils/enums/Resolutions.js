@@ -14,7 +14,6 @@ export const Resolutions = {
  * @return dimensions { width: number, height: number }
  */
 export const getDimensionsForResolution = (resolution) => {
-  console.log('resolution:', resolution);
   switch (resolution) {
   case Resolutions.Fit4K:
     return { width: 3840, height: 2160 };
