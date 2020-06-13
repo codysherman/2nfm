@@ -68,7 +68,7 @@
 
   &:disabled,
   &:hover:disabled
-    background: #ddd
+    background: $gray-lighter
 </style>
 
 <template lang="pug">
