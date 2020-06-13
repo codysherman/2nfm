@@ -1,14 +1,13 @@
 <style scoped lang="sass">
-#home-logo
+.home-logo
   height: 70px
   width: auto
   margin: 0 auto
   fill: $primary-color
   animation: fade-in 2s ease-out
 
-// XS
-@media (max-width: 767px)
-  #home-logo
+  // XS
+  @media (max-width: 767px)
     height: 50px
 
 .home-half
@@ -16,22 +15,20 @@
   padding: 20px 0
   text-align: center
 
-// XS
-@media (max-width: 767px)
-  .home-half
+  // XS
+  @media (max-width: 767px)
     width: 100%
-  .home-half > .frow
-    flex-direction: row
-    justify-content: center
+
+    & > .frow
+      flex-direction: row
+      justify-content: center
 
 .stream-button,
-#enter-room
+.enter-room
   font-size: 40px
 
-// XS
-@media (max-width: 767px)
-  .stream-button,
-  #enter-room
+  // XS
+  @media (max-width: 767px)
     font-size: 30px
 
 .stream-button
@@ -48,35 +45,33 @@
 
 .line-divider
   margin: 0 30px
-  background-color: #eaeaea
+  background-color: $gray-lighter
   width: 2px
 
-// XS
-@media (max-width: 767px)
-  .line-divider
+  // XS
+  @media (max-width: 767px)
     margin: 30px 30px
     width: 100%
     height: 2px
 
-#room-input
+.room-input
   font-size: 30px
   width: 205px
 
-#enter-room
+.enter-room
   width: 70px
   margin-left: 10px
 
-  &:disabled,
-  &:hover:disabled
+  &:disabled
     background: $gray-lighter
 </style>
 
 <template lang="pug">
 .height-100
   GitHubCorner
-  #home.frow-container.height-100
+  .frow-container.height-100
     .frow.centered-column.align-between.nowrap.width-100
-      LogoSvg#home-logo
+      LogoSvg.home-logo
       .frow.items-stretch.width-100.mt-50
         .home-half
           .frow.column-end
@@ -89,9 +84,9 @@
           .frow.column-start
             div
               h1.mb-30 Join a Room
-              form#join-form.frow.nowrap(@submit.prevent="goToRoom")
-                input#room-input(type="text" v-model="roomId" placeholder="Room Name")
-                button#enter-room(type="submit" :disabled="!roomId")
+              form.frow.nowrap(@submit.prevent="goToRoom")
+                input.room-input(type="text" v-model="roomId" placeholder="Room Name")
+                button.enter-room(type="submit" :disabled="!roomId")
                   | Go
       PublicRooms(:publicRoomCount.sync="publicRoomCount")
 </template>
