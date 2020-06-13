@@ -102,7 +102,10 @@ export default {
   name: 'Home',
   metaInfo() {
     return {
-      title: `2N.fm ${!this.publicRoomCount ? '' : `· ${this.publicRoomCount} rooms`}`,
+      title: 
+      `2N.fm ${!this.publicRoomCount ? ''
+        : `· ${this.publicRoomCount}
+        ${this.publicRoomCount <= 1 ? 'room' : 'rooms'}`}`,
     };
   },
   components: {
