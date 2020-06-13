@@ -25,6 +25,9 @@ export default {
       this.$emit('isSharing', newValue);
     },
   },
+  beforeDestroy() {
+    this.stopStream();
+  },
   methods: {
     setDefaults() {
       this.$emit('setDefaults');
