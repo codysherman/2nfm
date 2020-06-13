@@ -1,17 +1,16 @@
 <style scoped lang="sass">
-.card
-  background-color: $white
-  padding: 15px
-  text-align: center
-
-#logo
+.logo
   display: block
   margin: 0 auto
   width: 228px
   height: auto
   fill: $primary-color
 
-#live-indicator
+  // XS
+  @media (max-width: 767px)
+    width: 114px
+
+.live-indicator
   margin: 15px auto 0
   width: 228px
   color: $tertiary-color
@@ -21,12 +20,20 @@
   font-size: 91px
   text-align: center
 
+  // XS
+  @media (max-width: 767px)
+    width: 114px
+    border-radius: 10px
+    border: 3px solid $tertiary-color
+    font-size: 45px
+    margin-bottom: 30px
+
   &.live
     color: red
     border-color: red
     animation: pulse 1.5s ease-in-out infinite alternate
 
-#id-taken
+.id-taken
   color: #721c24
   background-color: #f8d7da
   border: 1px solid #f5c6cb
@@ -34,44 +41,33 @@
   margin-top: 0.5em
   border-radius: $border-radius-small
 
-// XS
-@media (max-width: 767px)
-  #logo
-    width: 114px
-  #live-indicator
-    width: 114px
-    border-radius: 10px
-    border: 3px solid $tertiary-color
-    font-size: 45px
-    margin-bottom: 30px
-
-#room-id-label
+.room-id-label
   font-size: 40px
   color: $primary-color
+
+  // XS
+  @media (max-width: 767px)
+    font-size: 30px
 
   input
     font-size: 40px
     border-width: 4px
 
-// XS
-@media (max-width: 767px)
-  #room-id-label
-    font-size: 30px
-
-    input
+    // XS
+    @media (max-width: 767px)
       font-size: 30px
       border-width: 2px
 
-#options
+section
   border: 2px solid $tertiary-color
   border-radius: 10px
   padding: 40px
   margin: 40px 0
   position: relative
 
-  .label
+  .section-label
     position: absolute
-    top: -9px
+    top: -12px
     left: 30px
     background-color: $white
     border-radius: $border-radius-small
@@ -85,7 +81,7 @@
       cursor: pointer
       user-select: none
       fill: $primary-color
-      padding: 0 10px
+      padding: 3px 10px 0
 
       .gear
         svg
@@ -107,16 +103,13 @@
 
   .advanced
     overflow: hidden
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
 
-    &,
     & > .frow
-      position: absolute
-      top: 0
-      right: 0
-      bottom: 0
-      left: 0
-
-    > .frow
       animation: slide-down $animate-speed ease
       background-color: $tertiary-color
 
@@ -126,24 +119,9 @@
   label
     margin-bottom: 0
 
-#start
-  border: 2px solid $tertiary-color
-  border-radius: 10px
-  padding: 40px 40px 35px
-  margin-top: 40px
-  position: relative
-
-  .label
-    position: absolute
-    top: -9px
-    left: 30px
-    background-color: $white
-    padding: 0 8px
-    width: auto
-
 .stream-button
   cursor: pointer
-  transition: color 0.3s
+  transition: color $animate-speed
 
   &:hover
     color: $black
@@ -155,7 +133,7 @@
 
   path
     fill: $primary-color
-    transition: fill 0.3s
+    transition: fill $animate-speed
 
   &:hover svg path
     fill: $black
@@ -192,43 +170,46 @@
     @idTaken="onIdTaken"
   )
   .col-md-1-2
-    router-link#logo(to="/")
+    router-link.logo(to="/")
       LogoSvg
-    #live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
+    .live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
   .col-md-1-2
-    div#id-taken(v-if="useridAlreadyTaken")
-      | Whoops,
-      b &nbsp;{{useridAlreadyTaken}}&nbsp;
-      | already taken! Please choose another room name.
-    section#setup-section(v-if="!isSharingOn || !sessionId")
-      label#room-id-label.row-start
-        span.shrink-0 2n.fm/
-        input#room-id(
+    div(v-if="!isSharingOn || !sessionId")
+      .id-taken(v-if="useridAlreadyTaken")
+        | Whoops,
+        b &nbsp;{{useridAlreadyTaken}}&nbsp;
+        | already taken! Please choose another room name.
+      label.room-id-label.row-start
+        span.shrink-0
+          | 2n.fm/
+        input(
           type="text"
           placeholder="Random"
           v-model="room_id"
           @change="setRoomName"
           @blur="setRoomName")
-      section#options
-        .label Options
-        .label.right-item(@click="showAdvancedOptions = !showAdvancedOptions")
-          .gear.frow.nowrap(v-if="!showAdvancedOptions")
-            GearSvg
-            sup !
-          .x-icon.frow.centered(v-if="showAdvancedOptions")
-            XSvg
+      section.options
+        .section-label Options
+        .section-label.right-item(@click="showAdvancedOptions = !showAdvancedOptions")
+          .gear(v-if="!showAdvancedOptions")
+            .frow.nowrap
+              GearSvg
+              sup !
+          .x-icon(v-if="showAdvancedOptions")
+            .frow.centered
+              XSvg
         .advanced(v-show="showAdvancedOptions")
           .frow.centered
             label.row-center.mb-0
               input(type="checkbox" v-model="isP2POnly")
-              | Only send audio and video via peer-to-peer connections
+              | Force peer-to-peer (P2P) connections
         .frow.gutters
           .col-xs-1-2
             .settings-item
               label
                 | Resolution
                 select#resolutions(v-model="resolution")
-                  option(:value="Resolutions.FitScreen" selected="") Fit Screen
+                  option(:value="Resolutions.FitScreen") Fit Screen
                   option(:value="Resolutions.Fit4K") 4K (2160p)
                   option(:value="Resolutions.Fit2K") 2K (1440p)
                   option(:value="Resolutions.Fit1080p") Full-HD (1080p)
@@ -247,20 +228,19 @@
               input(type="checkbox" v-model="isMic")
               | Enable Microphone
           .col-xs-1-2
-            label.row-start
+            label.row-start.mb-10
               | Codec
               select.ml-5(v-model="codecs")
-                //- option(value="default" selected="") Default (VP9)
-                option(:value="Codecs.vp9") VP9 (Screensharing)
-                option(:value="Codecs.vp8") VP8 (Gaming)
-                option(:value="Codecs.h264" :disabled="!isP2POnly") H.264
-            //- .text-center
+                option(:value="Codecs.vp9") VP9 (Quality)
+                option(:value="Codecs.vp8") VP8 (Performance)
+                option(:value="Codecs.h264" :disabled="!isP2POnly") H.264 (P2P Only)
+            .label.text-center.m-0
               span(v-if="codecs === Codecs.vp9")
-                | Better quality, less data
+                | Best quality, least data
               span(v-if="codecs === Codecs.vp8")
-                | Lower quality, more FPS
+                | Good quality, more FPS
               span(v-if="codecs === Codecs.h264")
-                | Less strain on oldest devices
+                | Easy on old devices, bandwidth heavy
           //- .col-xs-1-2
           //-   .settings-item.mb-0
           //-     label
@@ -276,32 +256,30 @@
           //-     label
           //-       | Room Password
           //-       input#room_password(type="password" value="" placeholder="Optional")
-      
-      section#stream-section
-        #start
-          .label Start
-          .frow.gutters
-            .col-xs-1-3
-              .stream-button(@click="startStream(true, false)")
-                .frow.column-center
-                  VideoSvg
-                  | Video Only
-                  .and-mic(:class="{'opacity-100': isMic }")
-                    | & Mic
-            .col-xs-1-3
-              .stream-button(@click="startStream(true, true)")
-                .frow.column-center
-                  VideoAndAudioSvg
-                  | Video + Audio
-                  .and-mic(:class="{'opacity-100': isMic }")
-                    | & Mic
-            .col-xs-1-3
-              .stream-button(@click="startStream(false, true)")
-                .frow.column-center
-                  AudioSvg
-                  | Audio Only
-                  .and-mic(:class="{'opacity-100': isMic }")
-                    | & Mic
+      section
+        .section-label Start
+        .frow.gutters
+          .col-xs-1-3
+            .stream-button(@click="startStream(true, false)")
+              .frow.column-center
+                VideoSvg
+                | Video Only
+                .and-mic(:class="{'opacity-100': isMic }")
+                  | & Mic
+          .col-xs-1-3
+            .stream-button(@click="startStream(true, true)")
+              .frow.column-center
+                VideoAndAudioSvg
+                | Video + Audio
+                .and-mic(:class="{'opacity-100': isMic }")
+                  | & Mic
+          .col-xs-1-3
+            .stream-button(@click="startStream(false, true)")
+              .frow.column-center
+                AudioSvg
+                | Audio Only
+                .and-mic(:class="{'opacity-100': isMic }")
+                  | & Mic
     StopSection(
       v-if="isSharingOn && sessionId"
       :sessionId="sessionId"
