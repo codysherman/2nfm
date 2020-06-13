@@ -262,6 +262,7 @@ export function MultiStreamsMixer(arrayOfMediaStreams) {
     var fullcanvas;
     arrayOfMediaStreams.forEach(function(stream) {
       if (stream.fullcanvas) {
+        // eslint-disable-next-line no-unused-vars
         fullcanvas = true;
       }
     });
