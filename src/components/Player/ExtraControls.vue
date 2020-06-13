@@ -12,17 +12,16 @@
 </style>
 
 <template lang="pug">
-div
-  .frow.centered.nowrap
-    .autoplay.mr-20
-      label.row-start.direction-reverse Autoplay
-        input(
-          type="checkbox"
-          :checked="autoplay"
-          @change="toggleAutoplay"
-        )
-    .viewer-count
-      | {{ receiverViewerCount + 1 }} {{ receiverViewerCount + 1 === 1 ? 'Viewer' : 'Viewers' }}
+.frow.centered.nowrap
+  .autoplay.mr-20
+    label.row-start.direction-reverse Autoplay
+      input(
+        type="checkbox"
+        :checked="autoplay"
+        @change="toggleAutoplay"
+      )
+  .viewer-count
+    | {{ receiverViewerCount + 1 }} {{ receiverViewerCount + 1 === 1 ? 'Viewer' : 'Viewers' }}
 </template>
 
 <script>

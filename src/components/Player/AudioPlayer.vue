@@ -1,4 +1,5 @@
-<style scoped lang="sass"></style>
+<style scoped lang="sass">
+</style>
 
 <template lang="pug">
 audio(ref='player')

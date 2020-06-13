@@ -18,8 +18,10 @@
 
   .volume-slider
     max-width: 120px
+
     @media only screen and (max-device-width: 768px)
       max-width: 80px
+
     @supports (-webkit-touch-callout: none) // iOS volume slider doesn't work, so hide it
       visibility: hidden
 
@@ -44,6 +46,7 @@
   &:active,
   &:focus
     transform: scale(1.1)
+
   @supports (-webkit-touch-callout: none) // fullscreen API doesn't work on iOS, so hide it
     visibility: hidden
 </style>

@@ -8,38 +8,38 @@
 </style>
 
 <template lang="pug">
-  .frow.column-center.width-100
-    VideoPlayer(
-      :class="{ 'theater-mode': theaterMode }"
-      v-show="stream.isVideo"
-      ref="videoPlayer"
-    )
-    AudioPlayer(
-      v-show="stream.isAudio"
-      ref="audioPlayer"
-    )
-    AudioPlayer(
-      v-show="stream.micId"
-      ref="micPlayer"
-    )
-    MediaControls(
-      :class="{ 'mt-20': stream.isVideo }"
-      :isVideo="stream.isVideo"
-      :player="player"
-      :theaterMode.sync="theaterMode"
-      @togglePlayback="togglePlayback"
-    )
-    MediaControls.mt-10(
-      v-if="stream.micId"
-      :isVideo="stream.isVideo"
-      :isMic="true"
-      :player="this.micPlayer"
-    )
-    ExtraControls.mt-30(
-      v-if="showExtraControls"
-      :autoplay.sync="autoplay"
-      :receiverViewerCount="receiverViewerCount"
-    )
+.frow.column-center.width-100
+  VideoPlayer(
+    :class="{ 'theater-mode': theaterMode }"
+    v-show="stream.isVideo"
+    ref="videoPlayer"
+  )
+  AudioPlayer(
+    v-show="stream.isAudio"
+    ref="audioPlayer"
+  )
+  AudioPlayer(
+    v-show="stream.micId"
+    ref="micPlayer"
+  )
+  MediaControls(
+    :class="{ 'mt-20': stream.isVideo }"
+    :isVideo="stream.isVideo"
+    :player="player"
+    :theaterMode.sync="theaterMode"
+    @togglePlayback="togglePlayback"
+  )
+  MediaControls.mt-10(
+    v-if="stream.micId"
+    :isVideo="stream.isVideo"
+    :isMic="true"
+    :player="this.micPlayer"
+  )
+  ExtraControls.mt-30(
+    v-if="showExtraControls"
+    :autoplay.sync="autoplay"
+    :receiverViewerCount="receiverViewerCount"
+  )
 </template>
 
 <script>

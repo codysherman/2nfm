@@ -6,11 +6,11 @@ video
 </style>
 
 <template lang="pug">
-  video.shadow-light(
-    ref='player'
-    playsinline
-  )
-    | Your browser does not support the video element.
+video.shadow-light(
+  ref='player'
+  playsinline
+)
+  | Your browser does not support the video element.
 </template>
 
 <script>

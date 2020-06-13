@@ -41,26 +41,26 @@
 </style>
 
 <template lang="pug">
-  div
-    h1.text-center.my-30 Public Rooms
-    router-link.public-room(
-      v-for="room in sortListOfRooms"
-      :key="room.owner"
-      :to="room.owner"
-    )
-      .frow.row-between.nowrap
-        .frow.row-start
-          .owner-svg.shrink-0
-            VideoSvg(v-if="room.session.video && !room.session.audio")
-            AudioSvg(v-if="room.session.audio && !room.session.video")
-            VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
-          .owner {{room.owner}}
-        .viewers.shrink-0
-          .frow.row-center.nowrap
-            PersonSvg.shrink-0
-            .viewer-count {{room.extra.receiverViewerCount + 1}}
-    .frow
-      div(v-if="!listOfRooms.length") No public rooms open
+div
+  h1.text-center.my-30 Public Rooms
+  router-link.public-room(
+    v-for="room in sortListOfRooms"
+    :key="room.owner"
+    :to="room.owner"
+  )
+    .frow.row-between.nowrap
+      .frow.row-start
+        .owner-svg.shrink-0
+          VideoSvg(v-if="room.session.video && !room.session.audio")
+          AudioSvg(v-if="room.session.audio && !room.session.video")
+          VideoAndAudioSvg(v-if="room.session.audio && room.session.video")
+        .owner {{room.owner}}
+      .viewers.shrink-0
+        .frow.row-center.nowrap
+          PersonSvg.shrink-0
+          .viewer-count {{room.extra.receiverViewerCount + 1}}
+  .frow
+    div(v-if="!listOfRooms.length") No public rooms open
 </template>
 
 <script>
