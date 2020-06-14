@@ -144,7 +144,7 @@ section
 </style>
 
 <template lang="pug">
-.frow.centered
+div
   DesktopCapturer(
     ref="capturer"
     :enableVideo="enableVideo"
@@ -169,127 +169,128 @@ section
     @viewerCount="onViewerCount"
     @idTaken="onIdTaken"
   )
-  .col-md-1-2
-    router-link.logo(to="/")
-      LogoSvg
-    .live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
-  .col-md-1-2
-    div(v-if="!isSharingOn || !sessionId")
-      .id-taken(v-if="useridAlreadyTaken")
-        | Whoops,
-        b &nbsp;{{useridAlreadyTaken}}&nbsp;
-        | already taken! Please choose another room name.
-      label.room-id-label.row-start
-        span.shrink-0
-          | 2n.fm/
-        input(
-          type="text"
-          placeholder="Random"
-          v-model="room_id"
-          @change="setRoomName"
-          @blur="setRoomName")
-      section.options
-        .section-label Options
-        .section-label.right-item(@click="showAdvancedOptions = !showAdvancedOptions")
-          .gear(v-if="!showAdvancedOptions")
-            .frow.nowrap
-              GearSvg
-              sup !
-          .x-icon(v-if="showAdvancedOptions")
+  .frow.row-center.width-100
+    .col-md-1-2
+      router-link.logo(to="/")
+        LogoSvg
+      .live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
+    .col-md-1-2
+      div(v-if="!isSharingOn || !sessionId")
+        .id-taken(v-if="useridAlreadyTaken")
+          | Whoops,
+          b &nbsp;{{useridAlreadyTaken}}&nbsp;
+          | already taken! Please choose another room name.
+        label.room-id-label.row-start
+          span.shrink-0
+            | 2n.fm/
+          input(
+            type="text"
+            placeholder="Random"
+            v-model="room_id"
+            @change="setRoomName"
+            @blur="setRoomName")
+        section.options
+          .section-label Options
+          .section-label.right-item(@click="showAdvancedOptions = !showAdvancedOptions")
+            .gear(v-if="!showAdvancedOptions")
+              .frow.nowrap
+                GearSvg
+                sup !
+            .x-icon(v-if="showAdvancedOptions")
+              .frow.centered
+                XSvg
+          .advanced(v-show="showAdvancedOptions")
             .frow.centered
-              XSvg
-        .advanced(v-show="showAdvancedOptions")
-          .frow.centered
-            label.row-center.mb-0
-              input(type="checkbox" v-model="isP2POnly")
-              | Force peer-to-peer (P2P) connections
-        .frow.gutters
-          .col-xs-1-2
-            .settings-item
-              label
-                | Resolution
-                select#resolutions(v-model="resolution")
-                  option(:value="Resolutions.FitScreen") Fit Screen
-                  option(:value="Resolutions.Fit4K") 4K (2160p)
-                  option(:value="Resolutions.Fit2K") 2K (1440p)
-                  option(:value="Resolutions.Fit1080p") Full-HD (1080p)
-                  option(:value="Resolutions.Fit720p") HD (720p)
-                  option(:value="Resolutions.Fit480p") SD (480p)
-                  option(:value="Resolutions.Fit360p") LD (360p)
-                  option(:value="Resolutions.Fit240p") N64 (240p)
-                  option(:value="Resolutions.Fit144p") 2LO (144p)
-          .col-xs-1-2
-            label.row-start
-              input(type="radio" value="private" v-model="privacy")
-              | Private Room
-            label.row-start.mb-0
-              input(type="radio" value="public" v-model="privacy")
-              | Public Room
-          .col-xs-1-2
-            label.row-start
-              input(type="checkbox" v-model="enableMic")
-              | Enable Microphone
-          .col-xs-1-2
-            label.row-start.mb-10
-              | Codec
-              select.ml-5(v-model="codecs")
-                option(:value="Codecs.vp9") VP9 (Quality)
-                option(:value="Codecs.vp8") VP8 (Performance)
-                option(:value="Codecs.h264" :disabled="!isP2POnly") H.264 (P2P Only)
-            .label.text-center.m-0
-              span(v-if="codecs === Codecs.vp9")
-                | Best quality, least data
-              span(v-if="codecs === Codecs.vp8")
-                | Good quality, more FPS
-              span(v-if="codecs === Codecs.h264")
-                | Easy on old devices, bandwidth heavy
-          //- .col-xs-1-2
-          //-   .settings-item.mb-0
-          //-     label
-          //-       | Bandwidth
-          //-       input#bandwidth(
-          //-         type="text"
-          //-         value=""
-          //-         placeholder="Optional: 8192, 1048, 512, etc."
-          //-         @change="setBandwidth"
-          //-       )
-          //- .col-xs-1-2
-          //-   .settings-item.mb-0
-          //-     label
-          //-       | Room Password
-          //-       input#room_password(type="password" value="" placeholder="Optional")
-      section
-        .section-label Start
-        .frow.gutters
-          .col-xs-1-3
-            .stream-button(@click="startStream(true, false)")
-              .frow.column-center
-                VideoSvg
-                | Video Only
-                .and-mic(:class="{'opacity-100': enableMic }")
-                  | & Mic
-          .col-xs-1-3
-            .stream-button(@click="startStream(true, true)")
-              .frow.column-center
-                VideoAndAudioSvg
-                | Video + Audio
-                .and-mic(:class="{'opacity-100': enableMic }")
-                  | & Mic
-          .col-xs-1-3
-            .stream-button(@click="startStream(false, true)")
-              .frow.column-center
-                AudioSvg
-                | Audio Only
-                .and-mic(:class="{'opacity-100': enableMic }")
-                  | & Mic
-    StopSection(
-      v-if="isSharingOn && sessionId"
-      :sessionId="sessionId"
-      :viewerCount="viewerCount"
-      :stream="stream"
-      :privacy="privacy"
-      @stopStream="stopStream"
-    )
+              label.row-center.mb-0
+                input(type="checkbox" v-model="isP2POnly")
+                | Force peer-to-peer (P2P) connections
+          .frow.gutters
+            .col-xs-1-2
+              .settings-item
+                label
+                  | Resolution
+                  select#resolutions(v-model="resolution")
+                    option(:value="Resolutions.FitScreen") Fit Screen
+                    option(:value="Resolutions.Fit4K") 4K (2160p)
+                    option(:value="Resolutions.Fit2K") 2K (1440p)
+                    option(:value="Resolutions.Fit1080p") Full-HD (1080p)
+                    option(:value="Resolutions.Fit720p") HD (720p)
+                    option(:value="Resolutions.Fit480p") SD (480p)
+                    option(:value="Resolutions.Fit360p") LD (360p)
+                    option(:value="Resolutions.Fit240p") N64 (240p)
+                    option(:value="Resolutions.Fit144p") 2LO (144p)
+            .col-xs-1-2
+              label.row-start
+                input(type="radio" value="private" v-model="privacy")
+                | Private Room
+              label.row-start.mb-0
+                input(type="radio" value="public" v-model="privacy")
+                | Public Room
+            .col-xs-1-2
+              label.row-start
+                input(type="checkbox" v-model="enableMic")
+                | Enable Microphone
+            .col-xs-1-2
+              label.row-start.mb-10
+                | Codec
+                select.ml-5(v-model="codecs")
+                  option(:value="Codecs.vp9") VP9 (Quality)
+                  option(:value="Codecs.vp8") VP8 (Performance)
+                  option(:value="Codecs.h264" :disabled="!isP2POnly") H.264 (P2P Only)
+              .label.text-center.m-0
+                span(v-if="codecs === Codecs.vp9")
+                  | Best quality, least data
+                span(v-if="codecs === Codecs.vp8")
+                  | Good quality, more FPS
+                span(v-if="codecs === Codecs.h264")
+                  | Easy on old devices, bandwidth heavy
+            //- .col-xs-1-2
+            //-   .settings-item.mb-0
+            //-     label
+            //-       | Bandwidth
+            //-       input#bandwidth(
+            //-         type="text"
+            //-         value=""
+            //-         placeholder="Optional: 8192, 1048, 512, etc."
+            //-         @change="setBandwidth"
+            //-       )
+            //- .col-xs-1-2
+            //-   .settings-item.mb-0
+            //-     label
+            //-       | Room Password
+            //-       input#room_password(type="password" value="" placeholder="Optional")
+        section
+          .section-label Start
+          .frow.gutters
+            .col-xs-1-3
+              .stream-button(@click="startStream(true, false)")
+                .frow.column-center
+                  VideoSvg
+                  | Video Only
+                  .and-mic(:class="{'opacity-100': enableMic }")
+                    | & Mic
+            .col-xs-1-3
+              .stream-button(@click="startStream(true, true)")
+                .frow.column-center
+                  VideoAndAudioSvg
+                  | Video + Audio
+                  .and-mic(:class="{'opacity-100': enableMic }")
+                    | & Mic
+            .col-xs-1-3
+              .stream-button(@click="startStream(false, true)")
+                .frow.column-center
+                  AudioSvg
+                  | Audio Only
+                  .and-mic(:class="{'opacity-100': enableMic }")
+                    | & Mic
+      StopSection(
+        v-if="isSharingOn && sessionId"
+        :sessionId="sessionId"
+        :viewerCount="viewerCount"
+        :stream="stream"
+        :privacy="privacy"
+        @stopStream="stopStream"
+      )
 </template>
 
 <script>

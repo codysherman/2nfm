@@ -69,28 +69,27 @@
 </style>
 
 <template lang="pug">
-.height-100
+div
   GitHubCorner
-  .frow-container.height-100
-    .frow.centered-column.align-between.nowrap.width-100
-      LogoSvg.home-logo
-      .frow.items-stretch.width-100.mt-50
-        .home-half
-          .frow.column-end
-            div
-              h1.mb-30 Start a Room
-              router-link.stream-button(type="button" to="/streamer")
-                | Stream
-        .line-divider
-        .home-half
-          .frow.column-start
-            div
-              h1.mb-30 Join a Room
-              form.frow.nowrap(@submit.prevent="goToRoom")
-                input.room-input(type="text" v-model="roomId" placeholder="Room Name")
-                button.enter-room(type="submit" :disabled="!roomId")
-                  | Go
-      PublicRooms(:publicRoomCount.sync="publicRoomCount")
+  .frow.centered-column.align-between.nowrap.width-100
+    LogoSvg.home-logo
+    .frow.items-stretch.width-100.mt-50
+      .home-half
+        .frow.column-end
+          div
+            h1.mb-30 Start a Room
+            router-link.stream-button(type="button" to="/streamer")
+              | Stream
+      .line-divider
+      .home-half
+        .frow.column-start
+          div
+            h1.mb-30 Join a Room
+            form.frow.nowrap(@submit.prevent="goToRoom")
+              input.room-input(type="text" v-model="roomId" placeholder="Room Name")
+              button.enter-room(type="submit" :disabled="!roomId")
+                | Go
+    PublicRooms(:publicRoomCount.sync="publicRoomCount")
 </template>
 
 <script>
