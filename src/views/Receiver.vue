@@ -62,7 +62,7 @@
 </style>
 
 <template lang="pug">
-.height-100
+div
   ReceiverConnection(
     :roomName="roomName"
     @state="onConnectionStateChanged"

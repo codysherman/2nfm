@@ -4,11 +4,14 @@
 @import @/assets/sass/_variables.sass
 @import ~frow
 @import @/assets/sass/global.sass
+
+.min-100vh
+  min-height: 100vh
 </style>
 
 <template lang="pug">
-  #app.frow-container.height-100
-    router-view(:key="$route.fullPath")
+  #app.frow-container
+    router-view.frow.centered.min-100vh.my-20(:key="$route.fullPath")
 </template>
 
 <script>
