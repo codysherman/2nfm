@@ -440,6 +440,7 @@ export default {
     onIdTaken(takenID) {
       this.useridAlreadyTaken = takenID;
       this.room_id = '';
+      this.stopStream();
     },
     onIsSharing(isSharing) {
       this.isSharingOn = isSharing;
