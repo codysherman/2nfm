@@ -398,7 +398,7 @@ export default {
 
       let protectedRoutes = ['streamer'];
       if (protectedRoutes.includes(this.room_id)) {
-        this.useridAlreadyTaken = 'streamer';
+        this.useridAlreadyTaken = this.room_id;
         return;
       }
       this.$nextTick(() => {
