@@ -176,10 +176,8 @@ div
       .live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
     .col-md-1-2
       div(v-if="!isSharingOn || !sessionId")
-        .id-taken(v-if="useridAlreadyTaken")
-          | Whoops,
-          b &nbsp;{{useridAlreadyTaken}}&nbsp;
-          | already taken! Please choose another room name.
+        .id-taken.text-center(v-if="useridAlreadyTaken === room_id")
+          | Room name already taken: #[strong {{useridAlreadyTaken}}]
         label.room-id-label.row-start
           span.shrink-0
             | 2n.fm/
@@ -439,7 +437,6 @@ export default {
     },
     onIdTaken(takenID) {
       this.useridAlreadyTaken = takenID;
-      this.room_id = '';
       this.stopStream();
     },
     onIsSharing(isSharing) {
