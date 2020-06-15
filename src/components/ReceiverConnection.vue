@@ -321,7 +321,7 @@ export default {
               0,
             );
 
-            setTimeout(() => this.checkPresence(), this.presenceCheckWait);
+            setTimeout(() => this.checkPresence(connection), this.presenceCheckWait);
             return;
           }
 
