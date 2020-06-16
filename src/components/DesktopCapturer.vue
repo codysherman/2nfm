@@ -70,7 +70,6 @@ export default {
           autoGainControl: false,
           echoCancellation: false,
           noiseSuppression: false,
-          googDisableLocalEcho: false, // https://www.chromestatus.com/feature/5056629556903936
         },
       };
 
