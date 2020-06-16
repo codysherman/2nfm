@@ -175,7 +175,7 @@ export default {
       case ReceiverConnection.STATE.NOT_HOSTED:
         this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
             Checking again ${this.presenceCheckWait === 60000 ? 'every' : 'in'}
-            ${this.presenceCheckWait / 1000} seconds.`;
+            ${Math.round(this.presenceCheckWait / 1000)} seconds.`;
         break;
       case ReceiverConnection.STATE.JOINING:
         this.infoBarMessage = `Joining room: ${this.roomName}`;
