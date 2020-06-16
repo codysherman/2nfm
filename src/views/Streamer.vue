@@ -176,7 +176,7 @@ div
       .live-indicator(:class="{ live: isSharingOn && sessionId }") LIVE
     .col-md-1-2
       div(v-if="!isSharingOn || !sessionId")
-        .id-taken.text-center(v-if="useridAlreadyTaken === room_id")
+        .id-taken.text-center(v-if="room_id && room_id === useridAlreadyTaken")
           | Room name already taken: #[strong {{useridAlreadyTaken}}]
         label.room-id-label.row-start
           span.shrink-0
