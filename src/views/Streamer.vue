@@ -52,6 +52,7 @@
   input
     font-size: 40px
     border-width: 4px
+    overflow-x: hidden
 
     // XS
     @media (max-width: 767px)
