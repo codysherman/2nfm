@@ -11,7 +11,7 @@
 
 <template lang="pug">
   #app.frow-container
-    router-view.frow.centered.min-100vh.my-20(:key="$route.fullPath")
+    router-view.frow.centered.min-100vh.py-20(:key="$route.fullPath")
 </template>
 
 <script>
