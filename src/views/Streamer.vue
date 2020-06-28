@@ -289,6 +289,7 @@ div
         :stream="stream"
         :privacy="privacy"
         :enableMic="enableMic"
+        @muteMicToggle="muteMic"
         @stopStream="stopStream"
       )
 </template>
@@ -449,6 +450,9 @@ export default {
     },
     onViewerCount(count) {
       this.viewerCount = count;
+    },
+    muteMic(value) {
+      console.log('11111', value);
     },
   },
 };
