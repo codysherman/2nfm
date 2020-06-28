@@ -69,8 +69,8 @@ div
     :disableAutoplay="true"
   )
   label.row-start(v-if="enableMic")
-    input(type="checkbox")
-    | Mute Mic
+    input(type="checkbox" v-model="muteMic")
+    | Mute Mic {{ muteMic }}
   .streamer-control-buttons
     .frow.row-between
       button.col-xs-2-5(type="button" @click="stopStream")
@@ -123,6 +123,7 @@ export default {
     return {
       copyNotification: false,
       showPreview: false,
+      muteMic: false,
     };
   },
   methods: {
