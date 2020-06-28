@@ -68,6 +68,9 @@ div
     :receiverViewerCount="viewerCount"
     :disableAutoplay="true"
   )
+  label.row-start(v-if="enableMic")
+    input(type="checkbox")
+    | Mute Mic
   .streamer-control-buttons
     .frow.row-between
       button.col-xs-2-5(type="button" @click="stopStream")
@@ -106,6 +109,10 @@ export default {
     viewerCount: {
       type: Number,
       default: 0,
+    },
+    enableMic: {
+      type: Boolean,
+      default: false,
     },
     privacy: {
       type: String,
