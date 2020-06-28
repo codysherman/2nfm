@@ -452,7 +452,8 @@ export default {
       this.viewerCount = count;
     },
     muteMic(value) {
-      console.log('11111', value);
+      this.stream.getAudioTracks()[0].enabled = !value;
+      // this.streamerMuteMicToggle = value;
     },
   },
 };
