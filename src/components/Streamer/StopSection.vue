@@ -69,7 +69,7 @@ div
     :disableAutoplay="true"
   )
   label.row-start(v-if="enableMic")
-    input(type="checkbox" v-model="muteMic")
+    input(type="checkbox" v-model="muteMic" v-on:change="toggleMicMute")
     | Mute Mic {{ muteMic }}
   .streamer-control-buttons
     .frow.row-between
@@ -127,6 +127,9 @@ export default {
     };
   },
   methods: {
+    toggleMicMute() {
+      this.$emit('muteMicToggle', this.muteMic);
+    },
     copyUrl() {
       let tempInput = document.createElement('input');
       tempInput.setAttribute('value', `https://2n.fm/${this.sessionId}`);
