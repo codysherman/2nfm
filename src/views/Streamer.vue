@@ -288,7 +288,6 @@ div
         :viewerCount="viewerCount"
         :stream="stream"
         :privacy="privacy"
-        :enableMic="enableMic"
         @muteMicToggle="muteMic"
         @stopStream="stopStream"
       )
