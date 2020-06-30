@@ -37,6 +37,10 @@ export default {
       type: Boolean,
       default: false, 
     },
+    streamDescription: {
+      type: String,
+      default: '',
+    },
     isP2POnly: {
       type: Boolean,
       default: false,
@@ -60,6 +64,7 @@ export default {
   },
   methods: {
     shareStreamUsingRTCMultiConnection(stream) {
+
       // www.RTCMultiConnection.org/docs/
       this.connection = new RTCMultiConnection();
       this.connection.socketURL = 'https://api.2n.fm:9001/';
@@ -289,6 +294,9 @@ export default {
           this.connection.isInitiator ? participantsCount : 0,
         );
       };
+      console.log('111111', this.connection);
+      this.connection.extra.roomDescription = this.streamDescription;
+
     },
     setViewerCount(count) {
       this.$emit('viewerCount', count);
