@@ -39,8 +39,8 @@
     v-if="showExtraControls"
     :autoplay.sync="autoplay"
     :receiverViewerCount="receiverViewerCount"
-    :stream="stream"
   )
+  | {{ stream.roomDescription}}
 </template>
 
 <script>
