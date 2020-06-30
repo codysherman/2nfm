@@ -22,6 +22,7 @@
       )
   .viewer-count
     | {{ receiverViewerCount + 1 }} {{ receiverViewerCount + 1 === 1 ? 'Viewer' : 'Viewers' }}
+  div {{ stream.roomDescription }}
 </template>
 
 <script>
@@ -37,9 +38,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    stream: {
+      type: MediaStream,
+      default: null,
+    },
   },
   methods: {
     toggleAutoplay() {
+      console.log('444444', this.stream.roomDescription);
       this.$emit('update:autoplay', !this.autoplay);
       this.$nextTick(() => {
         window.localStorage.setItem('autoplay', this.autoplay);
