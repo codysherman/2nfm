@@ -165,6 +165,7 @@ div
     :privacy="privacy"
     :enableVideo="enableVideo"
     :enableAudio="enableAudio"
+    :streamDescription="streamDescription"
     :isP2POnly="isP2POnly"
     @sessionId="onSessionId"
     @viewerCount="onViewerCount"
@@ -229,6 +230,12 @@ div
               label.row-start
                 input(type="checkbox" v-model="enableMic")
                 | Enable Microphone
+              label.row-start
+                textarea(
+                  maxlength="50"
+                  v-model="streamDescription"
+                  placeholder="Add a room description"
+                )
             .col-xs-1-2
               label.row-start.mb-10
                 | Codec
@@ -348,6 +355,7 @@ export default {
       privacy: 'private',
       useridAlreadyTaken: '',
       enableMic: false,
+      streamDescription: '',
       showAdvancedOptions: false,
       isP2POnly: false,
     };
