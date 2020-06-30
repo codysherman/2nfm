@@ -294,7 +294,7 @@ export default {
           this.connection.isInitiator ? participantsCount : 0,
         );
       };
-      console.log('111111', this.connection);
+
       this.connection.extra.roomDescription = this.streamDescription;
 
     },

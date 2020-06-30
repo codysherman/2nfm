@@ -189,8 +189,6 @@ export default {
       };
 
       this.connection.onstream = (e) => {
-        console.log('33333333', e.extra);
-
         if (e.extra.containsVideo) {
           e.stream.containsVideo = e.extra.containsVideo;
         }
