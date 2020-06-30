@@ -237,6 +237,7 @@ export default {
     },
     onStream(stream) {
       this.stream = stream;
+      console.log('22222222222', stream);
     },
     onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;

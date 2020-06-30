@@ -189,6 +189,8 @@ export default {
       };
 
       this.connection.onstream = (e) => {
+        console.log('33333333', e.extra);
+
         if (e.extra.containsVideo) {
           e.stream.containsVideo = e.extra.containsVideo;
         }
@@ -198,9 +200,11 @@ export default {
         if (e.extra.containsMic) {
           e.stream.containsMic = e.extra.containsMic;
         }
+        if (e.extra.roomDescription) {
+          e.stream.roomDescription = e.extra.roomDescription;
+        }
         this.$emit('stream', e.stream);
       };
-
       this.connection.onExtraDataUpdated = (e) => {
         this.$emit('receiverViewerCount', e.extra.receiverViewerCount);
       };
