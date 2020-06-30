@@ -232,9 +232,9 @@ div
                 | Enable Microphone
               label.row-start
                 textarea(
-                  maxlength="50"
+                  maxlength="280"
                   v-model="streamDescription"
-                  placeholder="Add a room description"
+                  placeholder="Add an optional room description"
                 )
             .col-xs-1-2
               label.row-start.mb-10
