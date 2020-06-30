@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     shareStreamUsingRTCMultiConnection(stream) {
-
       // www.RTCMultiConnection.org/docs/
       this.connection = new RTCMultiConnection();
       this.connection.socketURL = 'https://api.2n.fm:9001/';
