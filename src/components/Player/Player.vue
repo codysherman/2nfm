@@ -39,6 +39,7 @@
     v-if="showExtraControls"
     :autoplay.sync="autoplay"
     :receiverViewerCount="receiverViewerCount"
+    :stream="stream"
   )
 </template>
 
@@ -111,6 +112,7 @@ export default {
       }
     },
     onStream() {
+      console.log('121212', this.stream.roomDescription);
       if (typeof this.stream.mute === 'function' && !navigator.mozGetUserMedia) {
         // HACK: Avoids double audio in Chrome-based browsers
         console.warn('Avoiding double audio in Chrome via RTCMultiConnection#mute');
