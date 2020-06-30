@@ -102,6 +102,7 @@ div
     router-link.create-message(v-if="!isStream", to="/streamer")
       | Create your own room
     PublicRooms.mt-40(v-if="!isStream")
+    | {{ stream.roomDescription}}
 </template>
 
 <script>
