@@ -65,6 +65,7 @@
       MicrophoneSvg.microphone(v-if="containsMic")
       input.volume-slider.frow.nowrap(
         type="range"
+        v-if="containsAudio || containsMic"
         :value="volume"
         min="0"
         max="1"
@@ -105,6 +106,10 @@ export default {
   },
   props: {
     containsVideo: {
+      type: Boolean,
+      default: false,
+    },
+    containsAudio: {
       type: Boolean,
       default: false,
     },
