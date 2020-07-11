@@ -25,6 +25,7 @@
   MediaControls(
     :class="{ 'mt-20': stream.containsVideo }"
     :containsVideo="stream.containsVideo"
+    :containsAudio="stream.containsAudio"
     :player="player"
     :theaterMode.sync="theaterMode"
     @togglePlayback="togglePlayback"
@@ -111,41 +112,24 @@ export default {
       }
     },
     onStream() {
-      if (typeof this.stream.mute === 'function' && !navigator.mozGetUserMedia) {
-        // HACK: Avoids double audio in Chrome-based browsers
-        console.warn('Avoiding double audio in Chrome via RTCMultiConnection#mute');
-        // this.stream.mute();
-      }
-
       this.determinePlayers();
 
-      // NOTE: we clone all individual tracks so we can stop the old ones later.
       const tempPlayerStream = new MediaStream();
       if (this.stream.containsVideo) {
-        const track = this.stream.getVideoTracks()[0].clone();
+        const track = this.stream.getVideoTracks()[0];
         tempPlayerStream.addTrack(track);
       }
-      if (!(this.stream.getAudioTracks().length === 1 && this.stream.containsMic)
-        && this.stream.getAudioTracks().length) {
-        const track = this.stream.getAudioTracks()[0].clone();
+      if (this.stream.containsAudio) {
+        const track = this.stream.getAudioTracks()[0];
         tempPlayerStream.addTrack(track);
       }
-
-      tempPlayerStream.getTracks().forEach((track) => { track.enabled = true; });
       this.player.srcObject = tempPlayerStream;
 
       if (this.stream.containsMic) {
         const tempMicStream = new MediaStream();
-        const track = this.stream.getAudioTracks().slice(-1)[0].clone(); // get last track
+        const track = this.stream.getAudioTracks().slice(-1)[0]; // get last track
         tempMicStream.addTrack(track);
-        tempMicStream.getTracks()[0].enabled = true;
         this.micPlayer.srcObject = tempMicStream;
-      }
-
-      if (navigator.mozGetUserMedia) {
-        // HACK: Avoids double audio in Firefox
-        console.warn('Avoiding double audio in Firefox via MediaStreamTrack#stop');
-        this.stream.getAudioTracks().forEach((track) => track.stop());
       }
 
       this.player.volume = this.volume;
