@@ -71,12 +71,15 @@ export default {
           width: { ideal: dimensions.width },
           height: { ideal: dimensions.height },
         },
-        audio: {
+      };
+
+      if (this.enableAudio) {
+        constraints.audio = {
           autoGainControl: false,
           echoCancellation: false,
           noiseSuppression: false,
-        },
-      };
+        };
+      }
 
       const startMicCapture = async () => {
         let captureMicStream;
