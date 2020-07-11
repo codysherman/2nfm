@@ -70,7 +70,7 @@ div
   )
   label.row-start(v-if="stream.containsMic")
     input(type="checkbox" v-model="muteMic" v-on:change="toggleMicMute")
-    | {{muteMic ? `Unmute Mic` : `Mute Mic`}}
+    | Mute Mic
   .streamer-control-buttons
     .frow.row-between
       button.col-xs-2-5(type="button" @click="stopStream")
