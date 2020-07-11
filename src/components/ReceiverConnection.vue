@@ -60,6 +60,7 @@ export default {
     createConnection() {
       // http://www.rtcmulticonnection.org/docs/constructor/
       const connection = new RTCMultiConnection(this.roomName);
+      connection.autoCreateMediaElement = false;
       connection.socketURL = 'https://api.2n.fm:9001/';
       connection.autoCloseEntireSession = true;
 

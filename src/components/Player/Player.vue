@@ -114,7 +114,7 @@ export default {
       if (typeof this.stream.mute === 'function' && !navigator.mozGetUserMedia) {
         // HACK: Avoids double audio in Chrome-based browsers
         console.warn('Avoiding double audio in Chrome via RTCMultiConnection#mute');
-        this.stream.mute();
+        // this.stream.mute();
       }
 
       this.determinePlayers();
