@@ -305,7 +305,7 @@ export default {
       if (!this.connection) return;
       this.setDefaults();
     },
-    setDefaults() {     
+    setDefaults() {
       if (this.connection) {
         this.connection.attachStreams.forEach((stream) => {
           try {

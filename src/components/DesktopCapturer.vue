@@ -18,6 +18,7 @@ export default {
   data() {
     return {
       isSharing: false,
+      stream: null,
     };
   },
   watch: {
@@ -40,15 +41,19 @@ export default {
     },
     stopStream() {
       this.isSharing = false;
-
+      this.stream.getTracks().forEach(function(track) {
+        try {
+          track.stop();
+        } catch (e) {
+          console.error(e);
+        }
+      });
+      this.stream = null;
       // SM: post Vue migration, what previously ran in captureDesktop is instead in setDefaults
       // this.captureDesktop();
       this.setDefaults();
     },
     captureDesktop() {
-      this.onAccessApproved();
-    },
-    onAccessApproved() {
       // console.log(navigator.mediaDevices.getSupportedConstraints());
       let dimensions = '';
       
@@ -110,62 +115,59 @@ export default {
         if (this.enableMic === true && !micStream) {
           return;
         }
-        let stream = await startScreenCapture();
+        this.stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
-
+        if (this.enableAudio && this.stream.getAudioTracks().length === 0) {
+          alert('Make sure to check the "Share audio" box in Google Chrome or Microsoft Edge');
+          this.stopStream();
+          return;
+        }
+        if (this.stream.getAudioTracks().length > 0) {
+          this.stream.containsAudio = true;
+        }
         // Remove the video track from the source stream if audio only
         if (
           !this.enableVideo &&
-          stream.getVideoTracks().length > 0
+          this.stream.getVideoTracks().length > 0
         ) {
-          stream.removeTrack(
-            stream.getVideoTracks()[0],
+          this.stream.removeTrack(
+            this.stream.getVideoTracks()[0],
           );
         }
-        if (stream.getVideoTracks().length > 0) {
-          stream.containsVideo = true;
-        }
-        if (this.enableAudio && stream.getAudioTracks().length === 0) {
-          alert('Make sure to check the "Share audio" box in Google Chrome or Microsoft Edge');
-          this.$nextTick(() => {
-            this.stopStream();
-          });
-          return;
-        }
-        if (stream.getAudioTracks().length > 0) {
-          stream.containsAudio = true;
+        if (this.stream.getVideoTracks().length > 0) {
+          this.stream.containsVideo = true;
         }
         if (micStream) {
-          stream.addTrack(micStream.getAudioTracks()[0]);
-          stream.containsMic = true;
+          this.stream.addTrack(micStream.getAudioTracks()[0]);
+          this.stream.containsMic = true;
         }
-        this.gotStream(stream);
+        this.gotStream();
       };
       startCapturing();
     },
-    gotStream(stream) {
-      if (!stream) {
+    gotStream() {
+      if (!this.stream) {
         this.setDefaults();
         return;
       }
 
-      stream.addEventListener('inactive', () => {
+      this.stream.addEventListener('inactive', () => {
         this.setDefaults();
       });
 
-      this.addStreamStopListener(stream, () => {
+      this.addStreamStopListener(() => {
         this.setDefaults();
       });
 
-      this.$emit('gotStream', stream);
+      this.$emit('gotStream', this.stream);
     },
-    addStreamStopListener(stream, callback) {
+    addStreamStopListener(callback) {
       var streamEndedEvent = 'ended';
-      if ('oninactive' in stream) {
+      if ('oninactive' in this.stream) {
         streamEndedEvent = 'inactive';
       }
-      stream.addEventListener(
+      this.stream.addEventListener(
         streamEndedEvent,
         function() {
           callback();
@@ -173,7 +175,7 @@ export default {
         },
         false,
       );
-      stream.getAudioTracks().forEach(function(track) {
+      this.stream.getAudioTracks().forEach(function(track) {
         track.addEventListener(
           streamEndedEvent,
           function() {
@@ -183,7 +185,7 @@ export default {
           false,
         );
       });
-      stream.getVideoTracks().forEach(function(track) {
+      this.stream.getVideoTracks().forEach(function(track) {
         track.addEventListener(
           streamEndedEvent,
           function() {
