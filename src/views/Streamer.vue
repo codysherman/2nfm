@@ -383,7 +383,6 @@ export default {
     startStream(enableVideo, enableAudio) {
       this.enableVideo = enableVideo;
       this.enableAudio = enableAudio;
-    
 
       if (this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0]) {
         this.onSetDefaults();

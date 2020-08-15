@@ -200,7 +200,6 @@ export default {
 
         this.setViewerCount(text);
       }, 500);
-      
 
       // www.RTCMultiConnection.org/docs/open/
       this.connection.socketCustomEvent = this.connection.sessionid;

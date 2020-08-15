@@ -116,7 +116,6 @@ import TheaterSvg from '@/assets/svgs/theater.svg';
 import ReceiverConnection from '@/components/ReceiverConnection.vue';
 import PublicRooms from '@/components/PublicRooms.vue';
 
-
 import Player from '@/components/Player/Player.vue';
 
 export default {
