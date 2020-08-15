@@ -35,14 +35,19 @@ module.exports = {
       'exports': 'always-multiline',
       'functions': 'always-multiline',
     }],
-    'semi':[2, 'always'],
     'import/extensions': ['error', 'ignorePackages', {'js': 'never'}],
     'indent': ['error', 2],
     'max-len': ['error', { 'code': 100, 'tabWidth': 2,
       'ignorePattern': '^\\s*' +
         '(transition:\\s[A-Za-z-]+\\s[#$)(0-9A-Za-z-]|background-image:\\s|<svg)',
     }],
-    'quotes': ['error', 'single'],
+    'no-duplicate-imports': 'error',
     'no-empty': ['error', { 'allowEmptyCatch': true }],
+    'no-multiple-empty-lines': ['error', {
+      'max': 1}],
+    'no-multi-spaces': 'error',
+    'quotes': ['error', 'single'],
+    'semi':[2, 'always'],
+    'spaced-comment': ['error', 'always'],
   },
 };
