@@ -258,7 +258,6 @@ export default {
       this.connection.onSocketError = () => {
         this.$emit('state', { value: STATE.SOCKET_ERROR });
       };
-      
 
       this.connection.onopen = () => {
         //
@@ -337,7 +336,6 @@ export default {
         },
       );
     },
-
 
     onGettingWebRTCStats(stats, userid) {
       if (!this.connection.peers[userid]) {

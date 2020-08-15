@@ -50,7 +50,6 @@ import AudioPlayer from '@/components/Player/AudioPlayer.vue';
 import MediaControls from '@/components/Player/MediaControls.vue';
 import ExtraControls from '@/components/Player/ExtraControls.vue';
 
-
 export default {
   name: 'Player',
   components: {
