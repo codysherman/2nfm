@@ -31,8 +31,8 @@ module.exports = {
     'comma-dangle': ['error', {
       'arrays': 'always-multiline',
       'exports': 'always-multiline',
-      'imports': 'always-multiline',
       'functions': 'always-multiline',
+      'imports': 'always-multiline',
       'objects': 'always-multiline',
     }],
     'import/extensions': ['error', 'ignorePackages', {'js': 'never'}],
