@@ -9,6 +9,8 @@ module.exports = {
     // use the recommended rule set for both plain javascript and vue
     'eslint:recommended',
     'plugin:vue/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
   ],
   globals: {
     RTCMultiConnection: true,
@@ -49,5 +51,15 @@ module.exports = {
     'quotes': ['error', 'single'],
     'semi':['error', 'always'],
     'spaced-comment': ['error', 'always'],
+  },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@', './src'],
+        ],
+        extensions: ['.vue', '.json', '.js'],
+      },
+    },
   },
 };
