@@ -16,9 +16,7 @@
 
 <script>
 export default {
-  name: 'App', 
-  metaInfo: {
-    title: '2N.fm',
-  },
+  name: 'App',
+  metaInfo: { title: '2N.fm' },
 };
 </script>

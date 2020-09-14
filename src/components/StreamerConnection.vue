@@ -35,31 +35,29 @@ export default {
     },
     enableAudio: {
       type: Boolean,
-      default: false, 
+      default: false,
     },
     isP2POnly: {
       type: Boolean,
       default: false,
     },
-  },  
+  },
   data() {
-    return {
-      connection: null,
-    };
+    return { connection: null };
   },
   mounted() {
-    window.addEventListener('offline', this.setOffline, false);
-    window.addEventListener('online', this.setOnline, false);
+    window.addEventListener( 'offline', this.setOffline, false );
+    window.addEventListener( 'online', this.setOnline, false );
   },
   beforeDestroy() {
-    window.removeEventListener('offline', this.setOffline, false);
-    window.removeEventListener('online', this.setOnline, false);
+    window.removeEventListener( 'offline', this.setOffline, false );
+    window.removeEventListener( 'online', this.setOnline, false );
 
     this.connection = null;
     delete this.connection;
   },
   methods: {
-    shareStreamUsingRTCMultiConnection(stream) {
+    shareStreamUsingRTCMultiConnection( stream ) {
       // www.RTCMultiConnection.org/docs/
       this.connection = new RTCMultiConnection();
       this.connection.autoCreateMediaElement = false;
@@ -67,14 +65,14 @@ export default {
       this.connection.socketURL = 'https://api.2n.fm:9001/';
       this.connection.autoCloseEntireSession = true;
       // this must match the viewer page
-      if (this.privacy === 'public') {
+      if ( this.privacy === 'public' ) {
         this.connection.publicRoomIdentifier = 'desktopCapture';
       }
-      
+
       this.connection.socketMessageEvent = 'desktopCapture';
 
       this.connection.password = null;
-      if (this.roomPassword && this.roomPassword.length) {
+      if ( this.roomPassword && this.roomPassword.length ) {
         this.connection.password = this.roomPassword;
       }
 
@@ -104,7 +102,7 @@ export default {
 
       this.connection.channel = this.connection.sessionid = this.connection.userid;
 
-      if (this.roomId && this.roomId.length) {
+      if ( this.roomId && this.roomId.length ) {
         this.connection.channel = this.connection.sessionid = this.connection.userid = this.roomId;
       }
 
@@ -112,30 +110,30 @@ export default {
       this.connection.getExternalIceServers = false;
 
       this.connection.extra.isP2POnly = this.isP2POnly;
-      this.connection.iceServers = IceServersHandler.getIceServers(!this.isP2POnly);
+      this.connection.iceServers = IceServersHandler.getIceServers( !this.isP2POnly );
 
-      this.connection.processSdp = (sdp) => {
-        if (this.bandwidth) {
+      this.connection.processSdp = ( sdp ) => {
+        if ( this.bandwidth ) {
           if (
             this.bandwidth &&
-            !isNaN(this.bandwidth) &&
+            !isNaN( this.bandwidth ) &&
             this.bandwidth != 'NaN' &&
             typeof this.bandwidth == 'number'
           ) {
-            sdp = setBandwidth(sdp, this.bandwidth);
-            sdp = CodecsHandler.setVideoBitrates(sdp, {
+            sdp = setBandwidth( sdp, this.bandwidth );
+            sdp = CodecsHandler.setVideoBitrates( sdp, {
               min: this.bandwidth,
               max: this.bandwidth,
             });
           }
         }
 
-        if (this.enableAudio && !this.enableVideo) {
-          sdp = CodecsHandler.preferCodec(sdp, Codecs.h264);
+        if ( this.enableAudio && !this.enableVideo ) {
+          sdp = CodecsHandler.preferCodec( sdp, Codecs.h264 );
         } else {
-          sdp = CodecsHandler.preferCodec(sdp, this.codecs);
+          sdp = CodecsHandler.preferCodec( sdp, this.codecs );
         }
-          
+
         return sdp;
       };
 
@@ -145,79 +143,79 @@ export default {
         OfferToReceiveVideo: false,
       };
 
-      this.connection.onstream = this.connection.onstreamended = (event) => {
+      this.connection.onstream = this.connection.onstreamended = ( event ) => {
         try {
           event.mediaElement.pause();
           delete event.mediaElement;
-        } catch (e) {
-          console.error(e);
+        } catch ( e ) {
+          console.error( e );
         }
       };
 
-      this.connection.onUserIdAlreadyTaken = (useridAlreadyTaken) => {
-        this.$emit('idTaken', useridAlreadyTaken);
+      this.connection.onUserIdAlreadyTaken = ( useridAlreadyTaken ) => {
+        this.$emit( 'idTaken', useridAlreadyTaken );
       };
 
       // www.RTCMultiConnection.org/docs/dontCaptureUserMedia/
       this.connection.dontCaptureUserMedia = true;
 
       // www.RTCMultiConnection.org/docs/attachStreams/
-      this.connection.attachStreams.push(stream);
+      this.connection.attachStreams.push( stream );
 
-      if(stream.containsVideo) {
+      if ( stream.containsVideo ) {
         this.connection.extra.containsVideo = stream.containsVideo;
         // this.connection.updateExtraData();
       }
 
-      if(stream.containsAudio) {
+      if ( stream.containsAudio ) {
         this.connection.extra.containsAudio = stream.containsAudio;
         // this.connection.updateExtraData();
       }
 
-      if (stream.containsMic) {
+      if ( stream.containsMic ) {
         this.connection.extra.containsMic = stream.containsMic;
         // this.connection.updateExtraData();
       }
 
       var text = '-';
-      const looper = setInterval(() => {
-        if (!this.connection) {
-          this.setViewerCount(0);
-          clearInterval(looper);
+      const looper = setInterval( () => {
+        if ( !this.connection ) {
+          this.setViewerCount( 0 );
+          clearInterval( looper );
           return;
         }
 
-        if (this.connection.isInitiator) {
-          this.setViewerCount(0);
-          clearInterval(looper);
+        if ( this.connection.isInitiator ) {
+          this.setViewerCount( 0 );
+          clearInterval( looper );
           return;
         }
 
         text += ' -';
-        if (text.length > 6) {
+        if ( text.length > 6 ) {
           text = '-';
         }
 
-        this.setViewerCount(text);
-      }, 500);
+        this.setViewerCount( text );
+      }, 500 );
 
       // www.RTCMultiConnection.org/docs/open/
       this.connection.socketCustomEvent = this.connection.sessionid;
 
-      const roomOpenCallback = (isRoomOpened, roomid, error) => {
-        if (error) {
-          alert(error);
+      const roomOpenCallback = ( isRoomOpened, roomid, error ) => {
+        if ( error ) {
+          alert( error );
         }
 
         // any key-values set here should be reset in setDefaults.js
-        this.$emit('sessionId', this.connection.sessionid);
+        this.$emit( 'sessionId', this.connection.sessionid );
 
-        this.setViewerCount(0);
+        this.setViewerCount( 0 );
 
         this.connection.socket.on(
           this.connection.socketCustomEvent,
-          (message) => {
-            if (message.receivedYourScreen) {
+          ( message ) => {
+            if ( message.receivedYourScreen ) {
               this.setViewerCount(
                 this.connection.isInitiator
                   ? this.connection.getAllParticipants().length
@@ -230,25 +228,25 @@ export default {
 
       this.connection.onSocketDisconnect = () => {
         // alert('externalThis.connection to the server is closed.');
-        if (this.connection.getAllParticipants().length > 0) return;
+        if ( this.connection.getAllParticipants().length > 0 ) return;
 
         this.setDefaults();
       };
 
       this.connection.onSocketError = () => {
-        alert('Unable to connect to the server. Please try again.');
+        alert( 'Unable to connect to the server. Please try again.' );
 
-        setTimeout(() => {
+        setTimeout( () => {
           this.setDefaults();
-        }, 1000);
+        }, 1000 );
       };
 
       // this.connection.onopen = (event) => {
       //   //
       // };
 
-      this.connection.onmessage = (event) => {
-        if (event.data.newChatMessage) {
+      this.connection.onmessage = ( event ) => {
+        if ( event.data.newChatMessage ) {
           // this.runtimePort.postMessage({
           //   messageFromContentScript1234: true,
           //   newChatMessage: event.data.newChatMessage
@@ -269,21 +267,21 @@ export default {
         // }
       };
 
-      this.connection.open(this.connection.sessionid, roomOpenCallback);
+      this.connection.open( this.connection.sessionid, roomOpenCallback );
 
       var oldLength = 0;
-      this.connection.onleave = (event) =>{
+      this.connection.onleave = ( event ) => {
         const participants = this.connection.getAllParticipants();
         let count = participants.length;
-        if (participants.includes(event.userid)) {
+        if ( participants.includes( event.userid ) ) {
           count--;
         }
-        this.setViewerCount(count);
+        this.setViewerCount( count );
       };
 
       this.connection.onPeerStateChanged = () => {
         const participantsCount = this.connection.getAllParticipants().length;
-        if (oldLength != participantsCount) {
+        if ( oldLength != participantsCount ) {
           // sendTabTitle();
         }
         this.setViewerCount(
@@ -291,52 +289,52 @@ export default {
         );
       };
     },
-    setViewerCount(count) {
-      this.$emit('viewerCount', count);
-      if (this.connection) {
+    setViewerCount( count ) {
+      this.$emit( 'viewerCount', count );
+      if ( this.connection ) {
         this.connection.extra.receiverViewerCount = count;
         this.connection.updateExtraData();
       }
     },
     setOffline() {
-      if (!this.connection || !this.connection.attachStreams.length) return;
+      if ( !this.connection || !this.connection.attachStreams.length ) return;
       this.setDefaults();
     },
     setOnline() {
-      if (!this.connection) return;
+      if ( !this.connection ) return;
       this.setDefaults();
     },
     setDefaults() {
-      if (this.connection) {
-        this.connection.attachStreams.forEach((stream) => {
+      if ( this.connection ) {
+        this.connection.attachStreams.forEach( ( stream ) => {
           try {
-            stream.getTracks().forEach((track) => {
+            stream.getTracks().forEach( ( track ) => {
               try {
                 track.stop();
-              } catch (e) {
-                console.error(e);
+              } catch ( e ) {
+                console.error( e );
               }
             });
-          } catch (e) {
-            console.error(e);
+          } catch ( e ) {
+            console.error( e );
           }
         });
 
         try {
           this.connection.closeSocket();
-        } catch (e) {
-          console.error(e);
+        } catch ( e ) {
+          console.error( e );
         }
         this.connection = null;
       }
 
-      this.setViewerCount(0);
+      this.setViewerCount( 0 );
     },
   },
 };
 
-function setBandwidth(sdp, value) {
-  sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
+function setBandwidth( sdp, value ) {
+  sdp = sdp.replace( /b=AS([^\r\n]+\r\n)/g, '' );
   sdp = sdp.replace(
     /a=mid:video\r\n/g,
     'a=mid:video\r\nb=AS:' + value + '\r\n',

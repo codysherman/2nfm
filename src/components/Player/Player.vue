@@ -82,31 +82,31 @@ export default {
       theaterMode: false,
       player: null,
       micPlayer: null,
-      volume: window.localStorage.getItem('volume') || 0.5,
-      autoplay: JSON.parse(window.localStorage.getItem('autoplay')) === false ? false : true,
+      volume: window.localStorage.getItem( 'volume' ) || 0.5,
+      autoplay: JSON.parse( window.localStorage.getItem( 'autoplay' ) ) !== false,
     };
   },
   watch: {
     stream() {
-      if (this.stream.active) {
+      if ( this.stream.active ) {
         this.onStream();
       }
     },
   },
   mounted() {
-    if (this.stream && this.stream.active) {
+    if ( this.stream && this.stream.active ) {
       this.onStream();
     }
   },
   methods: {
     determinePlayers() {
-      if (this.stream.containsVideo) {
+      if ( this.stream.containsVideo ) {
         this.player = this.$refs.videoPlayer.$refs.player;
       } else {
         this.player = this.$refs.audioPlayer.$refs.player;
       }
 
-      if (this.stream.containsMic) {
+      if ( this.stream.containsMic ) {
         this.micPlayer = this.$refs.micPlayer.$refs.player;
       }
     },
@@ -114,52 +114,52 @@ export default {
       this.determinePlayers();
 
       const tempPlayerStream = new MediaStream();
-      if (this.stream.containsVideo) {
+      if ( this.stream.containsVideo ) {
         const track = this.stream.getVideoTracks()[0];
-        tempPlayerStream.addTrack(track);
+        tempPlayerStream.addTrack( track );
       }
-      if (this.stream.containsAudio) {
+      if ( this.stream.containsAudio ) {
         const track = this.stream.getAudioTracks()[0];
-        tempPlayerStream.addTrack(track);
+        tempPlayerStream.addTrack( track );
       }
       this.player.srcObject = tempPlayerStream;
 
-      if (this.stream.containsMic) {
+      if ( this.stream.containsMic ) {
         const tempMicStream = new MediaStream();
-        const track = this.stream.getAudioTracks().slice(-1)[0]; // get last track
-        tempMicStream.addTrack(track);
+        const track = this.stream.getAudioTracks().slice( -1 )[0]; // get last track
+        tempMicStream.addTrack( track );
         this.micPlayer.srcObject = tempMicStream;
       }
 
       this.player.volume = this.volume;
-      if (this.autoplay && !this.disableAutoplay) {
+      if ( this.autoplay && !this.disableAutoplay ) {
         this.playMedia();
       }
     },
     async playMedia() {
       try {
         await this.player.play();
-        if (this.stream.containsMic) {
+        if ( this.stream.containsMic ) {
           await this.micPlayer.play();
         }
-      } catch (err) {
-        if (err.name == 'NotAllowedError') {
+      } catch ( err ) {
+        if ( err.name == 'NotAllowedError' ) {
           console.warn(
             'Unable to playMedia due to browser permissions;',
             'this is probably autoplay, so failing silently',
           );
         } else {
           // Playback Failed
-          console.error(err);
+          console.error( err );
         }
       }
     },
     togglePlayback() {
-      if (this.player.paused) {
+      if ( this.player.paused ) {
         this.playMedia();
       } else {
         this.player.pause();
-        if (this.stream.containsMic) {
+        if ( this.stream.containsMic ) {
           this.micPlayer.pause();
         }
       }

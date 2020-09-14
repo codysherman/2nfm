@@ -12,18 +12,18 @@
 // MIT License   - www.WebRTC-Experiment.com/licence
 // --------------------------------------------------
 
-export function getStats(mediaStreamTrack, callback, interval) {
+export function getStats( mediaStreamTrack, callback, interval ) {
   var RTCPeerConnection =
     window.RTCPeerConnection ||
     window.mozRTCPeerConnection ||
     window.webkitRTCPeerConnection;
 
-  if (typeof MediaStreamTrack === 'undefined') {
+  if ( typeof MediaStreamTrack === 'undefined' ) {
     // eslint-disable-next-line
     MediaStreamTrack = {};
   }
 
-  var systemNetworkType = ((navigator.connection || {}).type || 'unknown')
+  var systemNetworkType = ( ( navigator.connection || {}).type || 'unknown' )
     .toString()
     .toLowerCase();
 
@@ -115,8 +115,8 @@ export function getStats(mediaStreamTrack, callback, interval) {
   };
 
   var getStatsParser = {
-    checkIfOfferer: function(result) {
-      if (result.type === 'googLibjingleSession') {
+    checkIfOfferer: function( result ) {
+      if ( result.type === 'googLibjingleSession' ) {
         getStatsResult.isOfferer = result.googInitiator;
       }
     },
@@ -124,23 +124,23 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
   var peer = this;
 
-  if (arguments[0] instanceof RTCPeerConnection) {
+  if ( arguments[0] instanceof RTCPeerConnection ) {
     peer = arguments[0];
 
-    if (navigator.mozGetUserMedia) {
+    if ( navigator.mozGetUserMedia ) {
       mediaStreamTrack = arguments[1];
       callback = arguments[2];
       interval = arguments[3];
     }
 
     if (
-      !(mediaStreamTrack instanceof MediaStreamTrack) &&
+      !( mediaStreamTrack instanceof MediaStreamTrack ) &&
       !!navigator.mozGetUserMedia
     ) {
       throw '2nd argument is not instance of MediaStreamTrack.';
     }
   } else if (
-    !(mediaStreamTrack instanceof MediaStreamTrack) &&
+    !( mediaStreamTrack instanceof MediaStreamTrack ) &&
     !!navigator.mozGetUserMedia
   ) {
     throw '1st argument is not instance of MediaStreamTrack.';
@@ -149,11 +149,11 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var nomore = false;
 
   function getStatsLooper() {
-    getStatsWrapper(function(results) {
-      results.forEach(function(result) {
-        Object.keys(getStatsParser).forEach(function(key) {
-          if (typeof getStatsParser[key] === 'function') {
-            getStatsParser[key](result);
+    getStatsWrapper( function( results ) {
+      results.forEach( function( result ) {
+        Object.keys( getStatsParser ).forEach( function( key ) {
+          if ( typeof getStatsParser[key] === 'function' ) {
+            getStatsParser[key]( result );
           }
         });
 
@@ -168,15 +168,15 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
       try {
         // failed|closed
-        if (peer.iceConnectionState.search(/failed/gi) !== -1) {
+        if ( peer.iceConnectionState.search( /failed/gi ) !== -1 ) {
           nomore = true;
         }
-      } catch (e) {
+      } catch ( e ) {
         nomore = true;
       }
 
-      if (nomore === true) {
-        if (getStatsResult.datachannel) {
+      if ( nomore === true ) {
+        if ( getStatsResult.datachannel ) {
           getStatsResult.datachannel.state = 'close';
         }
         getStatsResult.ended = true;
@@ -185,101 +185,100 @@ export function getStats(mediaStreamTrack, callback, interval) {
       // allow users to access native results
       getStatsResult.results = results;
 
-      if (getStatsResult.audio && getStatsResult.video) {
+      if ( getStatsResult.audio && getStatsResult.video ) {
         getStatsResult.bandwidth.speed =
           getStatsResult.audio.bytesSent -
           getStatsResult.bandwidth.helper.audioBytesSent +
-          (getStatsResult.video.bytesSent -
-            getStatsResult.bandwidth.helper.videoBytesSent);
+          ( getStatsResult.video.bytesSent -
+            getStatsResult.bandwidth.helper.videoBytesSent );
         getStatsResult.bandwidth.helper.audioBytesSent =
           getStatsResult.audio.bytesSent;
         getStatsResult.bandwidth.helper.videoBytesSent =
           getStatsResult.video.bytesSent;
       }
 
-      callback(getStatsResult);
+      callback( getStatsResult );
 
       // second argument checks to see, if target-user is still connected.
-      if (!nomore) {
+      if ( !nomore ) {
         typeof interval != undefined &&
           interval &&
-          setTimeout(getStatsLooper, interval || 1000);
+          setTimeout( getStatsLooper, interval || 1000 );
       }
     });
   }
 
   // a wrapper around getStats which hides the differences (where possible)
   // following code-snippet is taken from somewhere on the github
-  function getStatsWrapper(cb) {
+  function getStatsWrapper( cb ) {
     // if !peer or peer.signalingState == 'closed' then return;
 
-    if (typeof window.InstallTrigger !== 'undefined') {
+    if ( typeof window.InstallTrigger !== 'undefined' ) {
       peer.getStats(
         mediaStreamTrack,
-        function(res) {
+        function( res ) {
           var items = [];
-          res.forEach(function(r) {
-            items.push(r);
+          res.forEach( function( r ) {
+            items.push( r );
           });
-          cb(items);
+          cb( items );
         },
         cb,
       );
     } else {
-      peer.getStats(function(res) {
+      peer.getStats( function( res ) {
         var items = [];
-        res.result().forEach(function(res) {
+        res.result().forEach( function( res ) {
           var item = {};
-          res.names().forEach(function(name) {
-            item[name] = res.stat(name);
+          res.names().forEach( function( name ) {
+            item[name] = res.stat( name );
           });
           item.id = res.id;
           item.type = res.type;
           item.timestamp = res.timestamp;
-          items.push(item);
+          items.push( item );
         });
-        cb(items);
+        cb( items );
       });
     }
   }
 
-  getStatsParser.datachannel = function(result) {
-    if (result.type !== 'datachannel') return;
+  getStatsParser.datachannel = function( result ) {
+    if ( result.type !== 'datachannel' ) return;
 
-    getStatsResult.datachannel = {
-      state: result.state, // open or connecting
-    };
+    // open or connecting
+    getStatsResult.datachannel = { state: result.state };
   };
 
-  getStatsParser.googCertificate = function(result) {
-    if (result.type == 'googCertificate') {
+  getStatsParser.googCertificate = function( result ) {
+    if ( result.type == 'googCertificate' ) {
       getStatsResult.encryption = result.googFingerprintAlgorithm;
     }
   };
 
   var AUDIO_codecs = ['opus', 'isac', 'ilbc'];
 
-  getStatsParser.checkAudioTracks = function(result) {
-    if (!result.googCodecName || result.mediaType !== 'audio') return;
+  getStatsParser.checkAudioTracks = function( result ) {
+    if ( !result.googCodecName || result.mediaType !== 'audio' ) return;
 
-    if (AUDIO_codecs.indexOf(result.googCodecName.toLowerCase()) === -1) return;
+    if ( AUDIO_codecs.indexOf( result.googCodecName.toLowerCase() ) === -1 ) return;
 
-    var sendrecvType = result.id.split('_').pop();
+    var sendrecvType = result.id.split( '_' ).pop();
 
     if (
       getStatsResult.audio[sendrecvType].codecs.indexOf(
         result.googCodecName,
       ) === -1
     ) {
-      getStatsResult.audio[sendrecvType].codecs.push(result.googCodecName);
+      getStatsResult.audio[sendrecvType].codecs.push( result.googCodecName );
     }
 
     var kilobytes, bytes;
 
-    if (result.bytesSent) {
+    if ( result.bytesSent ) {
       kilobytes = 0;
-      if (result.bytesSent) {
-        if (!getStatsResult.internal.audio[sendrecvType].prevBytesSent) {
+      if ( result.bytesSent ) {
+        if ( !getStatsResult.internal.audio[sendrecvType].prevBytesSent ) {
           getStatsResult.internal.audio[sendrecvType].prevBytesSent =
             result.bytesSent;
         }
@@ -298,10 +297,10 @@ export function getStats(mediaStreamTrack, callback, interval) {
       );
     }
 
-    if (result.bytesReceived) {
+    if ( result.bytesReceived ) {
       kilobytes = 0;
-      if (result.bytesReceived) {
-        if (!getStatsResult.internal.audio[sendrecvType].prevBytesReceived) {
+      if ( result.bytesReceived ) {
+        if ( !getStatsResult.internal.audio[sendrecvType].prevBytesReceived ) {
           getStatsResult.internal.audio[sendrecvType].prevBytesReceived =
             result.bytesReceived;
         }
@@ -321,37 +320,37 @@ export function getStats(mediaStreamTrack, callback, interval) {
     }
 
     if (
-      getStatsResult.audio[sendrecvType].tracks.indexOf(result.googTrackId) ===
+      getStatsResult.audio[sendrecvType].tracks.indexOf( result.googTrackId ) ===
       -1
     ) {
-      getStatsResult.audio[sendrecvType].tracks.push(result.googTrackId);
+      getStatsResult.audio[sendrecvType].tracks.push( result.googTrackId );
     }
   };
 
   var VIDEO_codecs = ['vp9', 'vp8', 'h264'];
 
-  getStatsParser.checkVideoTracks = function(result) {
-    if (!result.googCodecName || result.mediaType !== 'video') return;
+  getStatsParser.checkVideoTracks = function( result ) {
+    if ( !result.googCodecName || result.mediaType !== 'video' ) return;
 
-    if (VIDEO_codecs.indexOf(result.googCodecName.toLowerCase()) === -1) return;
+    if ( VIDEO_codecs.indexOf( result.googCodecName.toLowerCase() ) === -1 ) return;
 
     // googCurrentDelayMs, googRenderDelayMs, googTargetDelayMs
     // transportId === 'Channel-audio-1'
-    var sendrecvType = result.id.split('_').pop();
+    var sendrecvType = result.id.split( '_' ).pop();
 
     if (
       getStatsResult.video[sendrecvType].codecs.indexOf(
         result.googCodecName,
       ) === -1
     ) {
-      getStatsResult.video[sendrecvType].codecs.push(result.googCodecName);
+      getStatsResult.video[sendrecvType].codecs.push( result.googCodecName );
     }
 
     var kilobytes, bytes;
 
-    if (result.bytesSent) {
+    if ( result.bytesSent ) {
       kilobytes = 0;
-      if (!getStatsResult.internal.video[sendrecvType].prevBytesSent) {
+      if ( !getStatsResult.internal.video[sendrecvType].prevBytesSent ) {
         getStatsResult.internal.video[sendrecvType].prevBytesSent =
           result.bytesSent;
       }
@@ -365,9 +364,9 @@ export function getStats(mediaStreamTrack, callback, interval) {
       kilobytes = bytes / 1024;
     }
 
-    if (result.bytesReceived) {
+    if ( result.bytesReceived ) {
       kilobytes = 0;
-      if (!getStatsResult.internal.video[sendrecvType].prevBytesReceived) {
+      if ( !getStatsResult.internal.video[sendrecvType].prevBytesReceived ) {
         getStatsResult.internal.video[sendrecvType].prevBytesReceived =
           result.bytesReceived;
       }
@@ -385,14 +384,14 @@ export function getStats(mediaStreamTrack, callback, interval) {
       1,
     );
 
-    if (result.googFrameHeightReceived && result.googFrameWidthReceived) {
+    if ( result.googFrameHeightReceived && result.googFrameWidthReceived ) {
       getStatsResult.resolutions[sendrecvType].width =
         result.googFrameWidthReceived;
       getStatsResult.resolutions[sendrecvType].height =
         result.googFrameHeightReceived;
     }
 
-    if (result.googFrameHeightSent && result.googFrameWidthSent) {
+    if ( result.googFrameHeightSent && result.googFrameWidthSent ) {
       getStatsResult.resolutions[sendrecvType].width =
         result.googFrameWidthSent;
       getStatsResult.resolutions[sendrecvType].height =
@@ -400,15 +399,15 @@ export function getStats(mediaStreamTrack, callback, interval) {
     }
 
     if (
-      getStatsResult.video[sendrecvType].tracks.indexOf(result.googTrackId) ===
+      getStatsResult.video[sendrecvType].tracks.indexOf( result.googTrackId ) ===
       -1
     ) {
-      getStatsResult.video[sendrecvType].tracks.push(result.googTrackId);
+      getStatsResult.video[sendrecvType].tracks.push( result.googTrackId );
     }
   };
 
-  getStatsParser.bweforvideo = function(result) {
-    if (result.type !== 'VideoBwe') return;
+  getStatsParser.bweforvideo = function( result ) {
+    if ( result.type !== 'VideoBwe' ) return;
 
     getStatsResult.bandwidth.availableSendBandwidth =
       result.googAvailableSendBandwidth;
@@ -425,22 +424,22 @@ export function getStats(mediaStreamTrack, callback, interval) {
     getStatsResult.bandwidth.googTransmitBitrate = result.googTransmitBitrate;
   };
 
-  getStatsParser.candidatePair = function(result) {
-    if (result.type !== 'googCandidatePair' && result.type !== 'candidate-pair')
+  getStatsParser.candidatePair = function( result ) {
+    if ( result.type !== 'googCandidatePair' && result.type !== 'candidate-pair' )
       return;
 
     // result.googActiveConnection means either STUN or TURN is used.
     var localCandidate, remoteCandidate;
 
-    if (result.googActiveConnection == 'true') {
+    if ( result.googActiveConnection == 'true' ) {
       // id === 'Conn-audio-1-0'
       // localCandidateId, remoteCandidateId
 
       // bytesSent, bytesReceived
 
-      Object.keys(getStatsResult.internal.candidates).forEach(function(cid) {
+      Object.keys( getStatsResult.internal.candidates ).forEach( function( cid ) {
         var candidate = getStatsResult.internal.candidates[cid];
-        if (candidate.ipAddress.indexOf(result.googLocalAddress) !== -1) {
+        if ( candidate.ipAddress.indexOf( result.googLocalAddress ) !== -1 ) {
           getStatsResult.connectionType.local.candidateType =
             candidate.candidateType;
           getStatsResult.connectionType.local.ipAddress = candidate.ipAddress;
@@ -448,7 +447,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
             candidate.networkType;
           getStatsResult.connectionType.local.transport = candidate.transport;
         }
-        if (candidate.ipAddress.indexOf(result.googRemoteAddress) !== -1) {
+        if ( candidate.ipAddress.indexOf( result.googRemoteAddress ) !== -1 ) {
           getStatsResult.connectionType.remote.candidateType =
             candidate.candidateType;
           getStatsResult.connectionType.remote.ipAddress = candidate.ipAddress;
@@ -461,23 +460,23 @@ export function getStats(mediaStreamTrack, callback, interval) {
       getStatsResult.connectionType.transport = result.googTransportType;
 
       localCandidate = getStatsResult.internal.candidates[result.localCandidateId];
-      if (localCandidate) {
-        if (localCandidate.ipAddress) {
+      if ( localCandidate ) {
+        if ( localCandidate.ipAddress ) {
           getStatsResult.connectionType.systemIpAddress =
             localCandidate.ipAddress;
         }
       }
 
       remoteCandidate = getStatsResult.internal.candidates[result.remoteCandidateId];
-      if (remoteCandidate) {
-        if (remoteCandidate.ipAddress) {
+      if ( remoteCandidate ) {
+        if ( remoteCandidate.ipAddress ) {
           getStatsResult.connectionType.systemIpAddress =
             remoteCandidate.ipAddress;
         }
       }
     }
 
-    if (result.type === 'candidate-pair') {
+    if ( result.type === 'candidate-pair' ) {
       if (
         result.selected === true &&
         result.nominated === true &&
@@ -497,39 +496,39 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var LOCAL_ipAddress = {};
   var LOCAL_networkType = {};
 
-  getStatsParser.localcandidate = function(result) {
-    if (result.type !== 'localcandidate' && result.type !== 'local-candidate')
+  getStatsParser.localcandidate = function( result ) {
+    if ( result.type !== 'localcandidate' && result.type !== 'local-candidate' )
       return;
-    if (!result.id) return;
+    if ( !result.id ) return;
 
-    if (!LOCAL_candidateType[result.id]) {
+    if ( !LOCAL_candidateType[result.id] ) {
       LOCAL_candidateType[result.id] = [];
     }
 
-    if (!LOCAL_transport[result.id]) {
+    if ( !LOCAL_transport[result.id] ) {
       LOCAL_transport[result.id] = [];
     }
 
-    if (!LOCAL_ipAddress[result.id]) {
+    if ( !LOCAL_ipAddress[result.id] ) {
       LOCAL_ipAddress[result.id] = [];
     }
 
-    if (!LOCAL_networkType[result.id]) {
+    if ( !LOCAL_networkType[result.id] ) {
       LOCAL_networkType[result.id] = [];
     }
 
     if (
       result.candidateType &&
-      LOCAL_candidateType[result.id].indexOf(result.candidateType) === -1
+      LOCAL_candidateType[result.id].indexOf( result.candidateType ) === -1
     ) {
-      LOCAL_candidateType[result.id].push(result.candidateType);
+      LOCAL_candidateType[result.id].push( result.candidateType );
     }
 
     if (
       result.transport &&
-      LOCAL_transport[result.id].indexOf(result.transport) === -1
+      LOCAL_transport[result.id].indexOf( result.transport ) === -1
     ) {
-      LOCAL_transport[result.id].push(result.transport);
+      LOCAL_transport[result.id].push( result.transport );
     }
 
     if (
@@ -545,9 +544,9 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
     if (
       result.networkType &&
-      LOCAL_networkType[result.id].indexOf(result.networkType) === -1
+      LOCAL_networkType[result.id].indexOf( result.networkType ) === -1
     ) {
-      LOCAL_networkType[result.id].push(result.networkType);
+      LOCAL_networkType[result.id].push( result.networkType );
     }
 
     getStatsResult.internal.candidates[result.id] = {
@@ -575,39 +574,39 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var REMOTE_ipAddress = {};
   var REMOTE_networkType = {};
 
-  getStatsParser.remotecandidate = function(result) {
-    if (result.type !== 'remotecandidate' && result.type !== 'remote-candidate')
+  getStatsParser.remotecandidate = function( result ) {
+    if ( result.type !== 'remotecandidate' && result.type !== 'remote-candidate' )
       return;
-    if (!result.id) return;
+    if ( !result.id ) return;
 
-    if (!REMOTE_candidateType[result.id]) {
+    if ( !REMOTE_candidateType[result.id] ) {
       REMOTE_candidateType[result.id] = [];
     }
 
-    if (!REMOTE_transport[result.id]) {
+    if ( !REMOTE_transport[result.id] ) {
       REMOTE_transport[result.id] = [];
     }
 
-    if (!REMOTE_ipAddress[result.id]) {
+    if ( !REMOTE_ipAddress[result.id] ) {
       REMOTE_ipAddress[result.id] = [];
     }
 
-    if (!REMOTE_networkType[result.id]) {
+    if ( !REMOTE_networkType[result.id] ) {
       REMOTE_networkType[result.id] = [];
     }
 
     if (
       result.candidateType &&
-      REMOTE_candidateType[result.id].indexOf(result.candidateType) === -1
+      REMOTE_candidateType[result.id].indexOf( result.candidateType ) === -1
     ) {
-      REMOTE_candidateType[result.id].push(result.candidateType);
+      REMOTE_candidateType[result.id].push( result.candidateType );
     }
 
     if (
       result.transport &&
-      REMOTE_transport[result.id].indexOf(result.transport) === -1
+      REMOTE_transport[result.id].indexOf( result.transport ) === -1
     ) {
-      REMOTE_transport[result.id].push(result.transport);
+      REMOTE_transport[result.id].push( result.transport );
     }
 
     if (
@@ -623,9 +622,9 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
     if (
       result.networkType &&
-      REMOTE_networkType[result.id].indexOf(result.networkType) === -1
+      REMOTE_networkType[result.id].indexOf( result.networkType ) === -1
     ) {
-      REMOTE_networkType[result.id].push(result.networkType);
+      REMOTE_networkType[result.id].push( result.networkType );
     }
 
     getStatsResult.internal.candidates[result.id] = {
@@ -650,18 +649,18 @@ export function getStats(mediaStreamTrack, callback, interval) {
       REMOTE_transport[result.id];
   };
 
-  getStatsParser.dataSentReceived = function(result) {
+  getStatsParser.dataSentReceived = function( result ) {
     if (
       !result.googCodecName ||
-      (result.mediaType !== 'video' && result.mediaType !== 'audio')
+      ( result.mediaType !== 'video' && result.mediaType !== 'audio' )
     )
       return;
 
-    if (result.bytesSent) {
-      getStatsResult[result.mediaType].bytesSent = parseInt(result.bytesSent);
+    if ( result.bytesSent ) {
+      getStatsResult[result.mediaType].bytesSent = parseInt( result.bytesSent );
     }
 
-    if (result.bytesReceived) {
+    if ( result.bytesReceived ) {
       getStatsResult[result.mediaType].bytesReceived = parseInt(
         result.bytesReceived,
       );
@@ -679,17 +678,17 @@ export function getStats(mediaStreamTrack, callback, interval) {
     },
   };
 
-  getStatsParser.ssrc = function(result) {
+  getStatsParser.ssrc = function( result ) {
     if (
       !result.googCodecName ||
-      (result.mediaType !== 'video' && result.mediaType !== 'audio')
+      ( result.mediaType !== 'video' && result.mediaType !== 'audio' )
     )
       return;
-    if (result.type !== 'ssrc') return;
-    var sendrecvType = result.id.split('_').pop();
+    if ( result.type !== 'ssrc' ) return;
+    var sendrecvType = result.id.split( '_' ).pop();
 
-    if (SSRC[result.mediaType][sendrecvType].indexOf(result.ssrc) === -1) {
-      SSRC[result.mediaType][sendrecvType].push(result.ssrc);
+    if ( SSRC[result.mediaType][sendrecvType].indexOf( result.ssrc ) === -1 ) {
+      SSRC[result.mediaType][sendrecvType].push( result.ssrc );
     }
 
     getStatsResult[result.mediaType][sendrecvType].streams =

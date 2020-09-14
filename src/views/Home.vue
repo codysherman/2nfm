@@ -101,7 +101,7 @@ export default {
   name: 'Home',
   metaInfo() {
     return {
-      title: 
+      title:
       `2N.fm ${!this.publicRoomCount ? ''
         : `· ${this.publicRoomCount} ${this.publicRoomCount === 1 ? 'room' : 'rooms'}`}`,
     };
@@ -121,10 +121,10 @@ export default {
     goToRoom() {
       this.roomId = this.roomId
         .trim()
-        .replace(/\s+/g, '-')
-        .replace(/[^a-zA-Z0-9-_]/g, '')
+        .replace( /\s+/g, '-' )
+        .replace( /[^a-zA-Z0-9-_]/g, '' )
         .toLowerCase();
-      this.$router.push(this.roomId);
+      this.$router.push( this.roomId );
     },
   },
 };

@@ -129,41 +129,41 @@ export default {
   data() {
     return {
       isPlaying: false,
-      volume: window.localStorage.getItem('volume') || 0.5,
+      volume: window.localStorage.getItem( 'volume' ) || 0.5,
     };
   },
   watch: {
     player() {
-      this.player.addEventListener('pause', this.playbackToggled);
-      this.player.addEventListener('playing', this.playbackToggled);
+      this.player.addEventListener( 'pause', this.playbackToggled );
+      this.player.addEventListener( 'playing', this.playbackToggled );
     },
   },
   methods: {
     togglePlayback() {
-      this.$emit('togglePlayback');
+      this.$emit( 'togglePlayback' );
     },
-    setVolume(event) {
+    setVolume( event ) {
       this.player.volume = event.srcElement.valueAsNumber;
       this.volume = event.srcElement.valueAsNumber;
-      if (!this.containsMic) {
-        localStorage.setItem('volume', event.srcElement.valueAsNumber);
+      if ( !this.containsMic ) {
+        localStorage.setItem( 'volume', event.srcElement.valueAsNumber );
       }
     },
     fullscreenVideo() {
-      if (this.player.requestFullscreen)
+      if ( this.player.requestFullscreen )
         this.player.requestFullscreen();
-      else if (this.player.mozRequestFullScreen)
+      else if ( this.player.mozRequestFullScreen )
         this.player.mozRequestFullScreen();
-      else if (this.player.webkitRequestFullScreen)
+      else if ( this.player.webkitRequestFullScreen )
         this.player.webkitRequestFullScreen();
-      else if (this.player.msRequestFullscreen)
+      else if ( this.player.msRequestFullscreen )
         this.player.msRequestFullscreen();
     },
     toggleTheaterMode() {
-      this.$emit('update:theaterMode', !this.theaterMode);
+      this.$emit( 'update:theaterMode', !this.theaterMode );
     },
     playbackToggled() {
-      if (this.player.paused) {
+      if ( this.player.paused ) {
         this.isPlaying = false;
       } else {
         this.isPlaying = true;

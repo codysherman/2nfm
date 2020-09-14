@@ -22,8 +22,8 @@ export default {
     };
   },
   watch: {
-    isSharing(newValue) {
-      this.$emit('isSharing', newValue);
+    isSharing( newValue ) {
+      this.$emit( 'isSharing', newValue );
     },
   },
   beforeDestroy() {
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     setDefaults() {
-      this.$emit('setDefaults');
+      this.$emit( 'setDefaults' );
       this.isSharing = false;
     },
     startStream() {
@@ -41,11 +41,11 @@ export default {
     },
     stopStream() {
       this.isSharing = false;
-      this.stream.getTracks().forEach(function(track) {
+      this.stream.getTracks().forEach( function( track ) {
         try {
           track.stop();
-        } catch (e) {
-          console.error(e);
+        } catch ( e ) {
+          console.error( e );
         }
       });
       this.stream = null;
@@ -56,13 +56,13 @@ export default {
     captureDesktop() {
       // console.log(navigator.mediaDevices.getSupportedConstraints());
       let dimensions = '';
-      
-      if(!this.enableVideo) {
-        dimensions = getDimensionsForResolution('Fit144p');
+
+      if ( !this.enableVideo ) {
+        dimensions = getDimensionsForResolution( 'Fit144p' );
       } else {
-        dimensions = getDimensionsForResolution(this.resolution);
+        dimensions = getDimensionsForResolution( this.resolution );
       }
-      
+
       let constraints = {
         video: {
           // TODO: displaySurface support is waiting on browser support
@@ -73,7 +73,7 @@ export default {
         },
       };
 
-      if (this.enableAudio) {
+      if ( this.enableAudio ) {
         constraints.audio = {
           autoGainControl: false,
           echoCancellation: false,
@@ -81,7 +81,7 @@ export default {
         };
       }
 
-      const startMicCapture = async () => {
+      const startMicCapture = async() => {
         let captureMicStream;
         try {
           captureMicStream = await navigator.mediaDevices.getUserMedia(
@@ -90,43 +90,43 @@ export default {
               video: false,
             },
           );
-        } catch (err) {
-          console.error('Error getting microphone', err);
-          alert('Your browser denied microphone access');
+        } catch ( err ) {
+          console.error( 'Error getting microphone', err );
+          alert( 'Your browser denied microphone access' );
           // this.setDefaults();
         }
         return captureMicStream;
       };
 
-      const startScreenCapture = async () => {
+      const startScreenCapture = async() => {
         let captureStream;
         try {
           captureStream = await navigator.mediaDevices.getDisplayMedia(
             constraints,
           );
-        } catch (err) {
+        } catch ( err ) {
           this.setDefaults();
         }
         return captureStream;
       };
 
-      const startCapturing = async () => {
+      const startCapturing = async() => {
         let micStream = null;
-        if (this.enableMic === true) {
+        if ( this.enableMic === true ) {
           micStream = await startMicCapture();
         }
-        if (this.enableMic === true && !micStream) {
+        if ( this.enableMic === true && !micStream ) {
           return;
         }
         this.stream = await startScreenCapture();
         // console.log(stream.getTracks()[0].getCapabilities());
         // console.log(stream.getTracks()[0].getSettings());
-        if (this.enableAudio && this.stream.getAudioTracks().length === 0) {
-          alert('Make sure to check the "Share audio" box in Google Chrome or Microsoft Edge');
+        if ( this.enableAudio && this.stream.getAudioTracks().length === 0 ) {
+          alert( 'Make sure to check the "Share audio" box in Google Chrome or Microsoft Edge' );
           this.stopStream();
           return;
         }
-        if (this.stream.getAudioTracks().length > 0) {
+        if ( this.stream.getAudioTracks().length > 0 ) {
           this.stream.containsAudio = true;
         }
         // Remove the video track from the source stream if audio only
@@ -138,11 +138,11 @@ export default {
             this.stream.getVideoTracks()[0],
           );
         }
-        if (this.stream.getVideoTracks().length > 0) {
+        if ( this.stream.getVideoTracks().length > 0 ) {
           this.stream.containsVideo = true;
         }
-        if (micStream) {
-          this.stream.addTrack(micStream.getAudioTracks()[0]);
+        if ( micStream ) {
+          this.stream.addTrack( micStream.getAudioTracks()[0] );
           this.stream.containsMic = true;
         }
         this.gotStream();
@@ -150,24 +150,24 @@ export default {
       startCapturing();
     },
     gotStream() {
-      if (!this.stream) {
+      if ( !this.stream ) {
         this.setDefaults();
         return;
       }
 
-      this.stream.addEventListener('inactive', () => {
+      this.stream.addEventListener( 'inactive', () => {
         this.setDefaults();
       });
 
-      this.addStreamStopListener(() => {
+      this.addStreamStopListener( () => {
         this.setDefaults();
       });
 
-      this.$emit('gotStream', this.stream);
+      this.$emit( 'gotStream', this.stream );
     },
-    addStreamStopListener(callback) {
+    addStreamStopListener( callback ) {
       var streamEndedEvent = 'ended';
-      if ('oninactive' in this.stream) {
+      if ( 'oninactive' in this.stream ) {
         streamEndedEvent = 'inactive';
       }
       this.stream.addEventListener(
@@ -178,7 +178,7 @@ export default {
         },
         false,
       );
-      this.stream.getAudioTracks().forEach(function(track) {
+      this.stream.getAudioTracks().forEach( function( track ) {
         track.addEventListener(
           streamEndedEvent,
           function() {
@@ -188,7 +188,7 @@ export default {
           false,
         );
       });
-      this.stream.getVideoTracks().forEach(function(track) {
+      this.stream.getVideoTracks().forEach( function( track ) {
         track.addEventListener(
           streamEndedEvent,
           function() {

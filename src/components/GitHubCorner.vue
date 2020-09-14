@@ -43,8 +43,6 @@ import GitHubSvg from '@/assets/svgs/github.svg';
 
 export default {
   name: 'GitHubCorner',
-  components: {
-    GitHubSvg,
-  },
+  components: { GitHubSvg },
 };
 </script>

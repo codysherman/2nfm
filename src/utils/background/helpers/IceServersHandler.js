@@ -1,14 +1,12 @@
 // IceServersHandler.js
 
-export const IceServersHandler = (function() {
-  function getIceServers(withTurn = true) {
-    var iceServers = [{
-      urls: [ 'stun:us-turn7.xirsys.com' ],
-    }];
+export const IceServersHandler = ( function() {
+  function getIceServers( withTurn = true ) {
+    var iceServers = [{ urls: ['stun:us-turn7.xirsys.com'] }];
 
-    if (withTurn) {
-      if (!process.env.VUE_APP_TURN_USERNAME || !process.env.VUE_APP_TURN_CREDENTIAL) {
-        console.warn('Missing TURN login credentials');
+    if ( withTurn ) {
+      if ( !process.env.VUE_APP_TURN_USERNAME || !process.env.VUE_APP_TURN_CREDENTIAL ) {
+        console.warn( 'Missing TURN login credentials' );
       }
       iceServers.push({
         username: process.env.VUE_APP_TURN_USERNAME,
@@ -27,7 +25,5 @@ export const IceServersHandler = (function() {
     return iceServers;
   }
 
-  return {
-    getIceServers: getIceServers,
-  };
+  return { getIceServers: getIceServers };
 })();

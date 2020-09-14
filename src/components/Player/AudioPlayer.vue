@@ -7,7 +7,5 @@ audio(ref='player')
 </template>
 
 <script>
-export default {
-  name: 'AudioPlayer',
-};
+export default { name: 'AudioPlayer' };
 </script>

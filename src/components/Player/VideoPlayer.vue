@@ -14,7 +14,5 @@ video.shadow-light(
 </template>
 
 <script>
-export default {
-  name: 'VideoPlayer',
-};
+export default { name: 'VideoPlayer' };
 </script>
