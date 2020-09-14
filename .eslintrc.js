@@ -24,8 +24,8 @@ module.exports = {
   ],
   rules: {
     // we should always disable console logs and debugging in production
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'arrow-parens': ['error', 'always'],
     // must expand out comma-dangle to get `functions` option enabled
     'comma-dangle': ['error', {
@@ -36,18 +36,18 @@ module.exports = {
       'functions': 'always-multiline',
     }],
     'import/extensions': ['error', 'ignorePackages', {'js': 'never'}],
-    'indent': ['error', 2],
+    'indent': ['error', 2, { 'SwitchCase': 1 }],
+    'linebreak-style': ['error', 'unix'],
     'max-len': ['error', { 'code': 100, 'tabWidth': 2,
       'ignorePattern': '^\\s*' +
         '(transition:\\s[A-Za-z-]+\\s[#$)(0-9A-Za-z-]|background-image:\\s|<svg)',
     }],
     'no-duplicate-imports': 'error',
     'no-empty': ['error', { 'allowEmptyCatch': true }],
-    'no-multiple-empty-lines': ['error', {
-      'max': 1}],
     'no-multi-spaces': 'error',
+    'no-multiple-empty-lines': ['error', {'max': 1}],
     'quotes': ['error', 'single'],
-    'semi':[2, 'always'],
+    'semi':['error', 'always'],
     'spaced-comment': ['error', 'always'],
   },
 };

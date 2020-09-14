@@ -15,24 +15,24 @@ export const Resolutions = {
  */
 export const getDimensionsForResolution = (resolution) => {
   switch (resolution) {
-  case Resolutions.Fit4K:
-    return { width: 3840, height: 2160 };
-  case Resolutions.Fit2K:
-    return { width: 2560, height: 1440 };
-  case Resolutions.Fit1080p:
-    return { width: 1920, height: 1080 };
-  case Resolutions.Fit720p:
-    return { width: 1280, height: 720 };
-  case Resolutions.Fit480p:
-    return { width: 720, height: 480 };
-  case Resolutions.Fit360p:
-    return { width: 640, height: 360 };
-  case Resolutions.Fit240p:
-    return { width: 426, height: 240 };
-  case Resolutions.Fit144p:
-    return { width: 256, height: 144 };
-  case Resolutions.FitScreen:
-  default:
-    return (window || {}).screen || getDimensionsForResolution(Resolutions.Fit720p);
+    case Resolutions.Fit4K:
+      return { width: 3840, height: 2160 };
+    case Resolutions.Fit2K:
+      return { width: 2560, height: 1440 };
+    case Resolutions.Fit1080p:
+      return { width: 1920, height: 1080 };
+    case Resolutions.Fit720p:
+      return { width: 1280, height: 720 };
+    case Resolutions.Fit480p:
+      return { width: 720, height: 480 };
+    case Resolutions.Fit360p:
+      return { width: 640, height: 360 };
+    case Resolutions.Fit240p:
+      return { width: 426, height: 240 };
+    case Resolutions.Fit144p:
+      return { width: 256, height: 144 };
+    case Resolutions.FitScreen:
+    default:
+      return (window || {}).screen || getDimensionsForResolution(Resolutions.Fit720p);
   }
 };

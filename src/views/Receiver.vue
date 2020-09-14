@@ -171,67 +171,67 @@ export default {
   methods: {
     onConnectionStateChanged(state) {
       switch (state.value) {
-      case ReceiverConnection.STATE.NOT_HOSTED:
-        this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
+        case ReceiverConnection.STATE.NOT_HOSTED:
+          this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
             Checking again ${this.presenceCheckWait === 60000 ? 'every' : 'in'}
             ${Math.round(this.presenceCheckWait / 1000)} seconds.`;
-        break;
-      case ReceiverConnection.STATE.JOINING:
-        this.infoBarMessage = `Joining room: ${this.roomName}`;
-        break;
-      case ReceiverConnection.STATE.UNAUTHORIZED:
-        this.infoBarMessage = 'Incorrect password';
-        break;
-      case ReceiverConnection.STATE.UNAVAILABLE:
-        this.infoBarMessage = `
+          break;
+        case ReceiverConnection.STATE.JOINING:
+          this.infoBarMessage = `Joining room: ${this.roomName}`;
+          break;
+        case ReceiverConnection.STATE.UNAUTHORIZED:
+          this.infoBarMessage = 'Incorrect password';
+          break;
+        case ReceiverConnection.STATE.UNAVAILABLE:
+          this.infoBarMessage = `
           Screen share session is closed or paused.
           You will join automatically when share session is resumed.
         `;
-        break;
-      case ReceiverConnection.STATE.PEER_WILL_SEND:
-        this.infoBarMessage = 'Remote peer is about to send his screen.';
-        break;
-      case ReceiverConnection.STATE.SOCKET_CLOSED:
-        this.stream = null;
+          break;
+        case ReceiverConnection.STATE.PEER_WILL_SEND:
+          this.infoBarMessage = 'Remote peer is about to send his screen.';
+          break;
+        case ReceiverConnection.STATE.SOCKET_CLOSED:
+          this.stream = null;
 
-        this.infoBarMessage = 'Screen sharing has been closed.';
-        this.hideStats();
+          this.infoBarMessage = 'Screen sharing has been closed.';
+          this.hideStats();
 
-        location.reload();
-        break;
-      case ReceiverConnection.STATE.SOCKET_DISCONNECT:
-        // Required only when ending a stream using "share tab chrome bar" while a receiver is open.
-        this.isStream = false;
-
-        location.reload();
-        break;
-      case ReceiverConnection.STATE.SOCKET_ERROR:
-        alert('Unable to connect to the server. Please try again.');
-
-        setTimeout(() => {
           location.reload();
-        }, 1000);
-        break;
-      case ReceiverConnection.STATE.HAVE_OFFER:
-        this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
-        break;
-      case ReceiverConnection.STATE.HANDSHAKE_COMPLETE:
-        this.infoBarMessage = `
+          break;
+        case ReceiverConnection.STATE.SOCKET_DISCONNECT:
+        // Required only when ending a stream using "share tab chrome bar" while a receiver is open.
+          this.isStream = false;
+
+          location.reload();
+          break;
+        case ReceiverConnection.STATE.SOCKET_ERROR:
+          alert('Unable to connect to the server. Please try again.');
+
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          break;
+        case ReceiverConnection.STATE.HAVE_OFFER:
+          this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
+          break;
+        case ReceiverConnection.STATE.HANDSHAKE_COMPLETE:
+          this.infoBarMessage = `
           WebRTC handshake is completed.
           Waiting for remote video from: ${this.roomName}
         `;
-        break;
-      case ReceiverConnection.STATE.CONNECTED:
-        this.isStream = true;
-        break;
-      case ReceiverConnection.STATE.DISCONNECTED:
-        this.isStream = false;
+          break;
+        case ReceiverConnection.STATE.CONNECTED:
+          this.isStream = true;
+          break;
+        case ReceiverConnection.STATE.DISCONNECTED:
+          this.isStream = false;
 
-        this.infoBarMessage = 'You\'ve been disconnected. Please try again.';
-        break;
-      case ReceiverConnection.STATE.GENERIC:
-        this.infoBarMessage = `${state.name}: ${state.reason}`;
-        break;
+          this.infoBarMessage = 'You\'ve been disconnected. Please try again.';
+          break;
+        case ReceiverConnection.STATE.GENERIC:
+          this.infoBarMessage = `${state.name}: ${state.reason}`;
+          break;
       }
     },
     onStream(stream) {
