@@ -48,18 +48,18 @@ export default {
     };
   },
   watch: {
-    presenceCheckWait( newValue ) {
-      this.$emit( 'presenceCheckWait', newValue );
+    presenceCheckWait(newValue) {
+      this.$emit('presenceCheckWait', newValue);
     },
   },
   async mounted() {
     const { isP2POnly } = await this.fetchConnectionInfo();
-    this.connect( isP2POnly );
+    this.connect(isP2POnly);
   },
   methods: {
     createConnection() {
       // http://www.rtcmulticonnection.org/docs/constructor/
-      const connection = new RTCMultiConnection( this.roomName );
+      const connection = new RTCMultiConnection(this.roomName);
       connection.autoCreateMediaElement = false;
       connection.socketURL = 'https://api.2n.fm:9001/';
       connection.autoCloseEntireSession = true;
@@ -76,8 +76,8 @@ export default {
       return connection;
     },
     async fetchConnectionInfo() {
-      return new Promise( ( resolve, reject ) => {
-        console.log( '[ReceiverConnection fetchConnectionInfo]', 'starting / promise called' );
+      return new Promise((resolve, reject) => {
+        console.log('[ReceiverConnection fetchConnectionInfo]', 'starting / promise called');
         const connection = this.createConnection();
         this.params = getParams();
 
@@ -93,18 +93,18 @@ export default {
           OfferToReceiveVideo: false,
         };
 
-        connection.onstream = ( e ) => {
-          console.log( 'hello world' );
+        connection.onstream = (e) => {
+          console.log('hello world');
           const connectionInfo = e.extra;
           connection.close();
-          resolve( connectionInfo );
+          resolve(connectionInfo);
         };
 
         // TODO: this should be a more extensive check
         connection.onSocketError = reject;
 
-        connection.onleave = ( e ) => {
-          if ( e.userid !== this.roomName ) return;
+        connection.onleave = (e) => {
+          if (e.userid !== this.roomName) return;
 
           connection.close();
           connection.closeSocket();
@@ -113,11 +113,11 @@ export default {
 
         connection.onstreamended = connection.onSessionClosed = connection.onleave;
 
-        this.checkPresence( connection );
+        this.checkPresence(connection);
       });
     },
-    connect( isP2POnly ) {
-      console.log( '[ReceiverConnection connect]', 'starting' );
+    connect(isP2POnly) {
+      console.log('[ReceiverConnection connect]', 'starting');
       this.connection = this.createConnection();
       this.params = getParams();
 
@@ -134,33 +134,33 @@ export default {
         OfferToReceiveVideo: true,
       };
 
-      this.connection.processSdp = ( sdp ) => {
+      this.connection.processSdp = (sdp) => {
         var bandwidth = this.params.bandwidth;
         var codecs = this.params.codecs;
 
-        if ( bandwidth ) {
+        if (bandwidth) {
           try {
-            bandwidth = parseInt( bandwidth );
-          } catch ( e ) {
+            bandwidth = parseInt(bandwidth);
+          } catch (e) {
             bandwidth = null;
           }
 
           if (
             bandwidth &&
-            !isNaN( bandwidth ) &&
+            !isNaN(bandwidth) &&
             bandwidth != 'NaN' &&
             typeof bandwidth == 'number'
           ) {
-            sdp = setBandwidth( sdp, bandwidth );
-            sdp = CodecsHandler.setVideoBitrates( sdp, {
+            sdp = setBandwidth(sdp, bandwidth);
+            sdp = CodecsHandler.setVideoBitrates(sdp, {
               min: bandwidth,
               max: bandwidth,
             });
           }
         }
 
-        if ( !!codecs && codecs !== 'default' ) {
-          sdp = CodecsHandler.preferCodec( sdp, codecs );
+        if (!!codecs && codecs !== 'default') {
+          sdp = CodecsHandler.preferCodec(sdp, codecs);
         }
         return sdp;
       };
@@ -172,66 +172,66 @@ export default {
       this.connection.iceTransportPolicy = 'all';
 
       this.connection.getExternalIceServers = false;
-      this.connection.iceServers = IceServersHandler.getIceServers( !isP2POnly );
+      this.connection.iceServers = IceServersHandler.getIceServers(!isP2POnly);
 
-      this.connection.onstatechange = ( state ) => {
-        if ( state.name == 'request-rejected' && this.params.p ) {
-          this.$emit( 'state', { value: STATE.UNAUTHORIZED });
-        } else if ( state.name === 'room-not-available' ) {
-          this.$emit( 'state', { value: STATE.UNAVAILABLE });
+      this.connection.onstatechange = (state) => {
+        if (state.name == 'request-rejected' && this.params.p) {
+          this.$emit('state', { value: STATE.UNAUTHORIZED });
+        } else if (state.name === 'room-not-available') {
+          this.$emit('state', { value: STATE.UNAVAILABLE });
         } else {
           const { name, reason } = state;
-          this.$emit( 'state', { value: STATE.GENERIC, name, reason });
+          this.$emit('state', { value: STATE.GENERIC, name, reason });
         }
       };
 
       this.connection.onstreamid = () => {
-        this.$emit( 'state', { value: STATE.PEER_WILL_SEND });
+        this.$emit('state', { value: STATE.PEER_WILL_SEND });
       };
 
-      this.connection.onstream = ( e ) => {
-        if ( e.extra.containsVideo ) {
+      this.connection.onstream = (e) => {
+        if (e.extra.containsVideo) {
           e.stream.containsVideo = e.extra.containsVideo;
         }
-        if ( e.extra.containsAudio ) {
+        if (e.extra.containsAudio) {
           e.stream.containsAudio = e.extra.containsAudio;
         }
-        if ( e.extra.containsMic ) {
+        if (e.extra.containsMic) {
           e.stream.containsMic = e.extra.containsMic;
         }
-        this.$emit( 'stream', e.stream );
+        this.$emit('stream', e.stream);
       };
 
-      this.connection.onExtraDataUpdated = ( e ) => {
-        this.$emit( 'receiverViewerCount', e.extra.receiverViewerCount );
+      this.connection.onExtraDataUpdated = (e) => {
+        this.$emit('receiverViewerCount', e.extra.receiverViewerCount);
       };
 
       // if user left
-      this.connection.onleave = ( e ) => {
-        if ( e.userid !== this.roomName ) return;
+      this.connection.onleave = (e) => {
+        if (e.userid !== this.roomName) return;
 
         // TODO: maybe split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing
         this.connection.close();
         this.connection.closeSocket();
         this.connection.userid = this.connection.token();
 
-        this.$emit( 'state', { value: STATE.SOCKET_CLOSED });
+        this.$emit('state', { value: STATE.SOCKET_CLOSED });
       };
 
       // TODO: refactor so synchronous `prompt`'s (or better alternative) is done from the Receiver
-      this.connection.onJoinWithPassword = ( remoteUserId ) => {
-        if ( !this.params.p ) {
+      this.connection.onJoinWithPassword = (remoteUserId) => {
+        if (!this.params.p) {
           this.params.p = prompt(
             remoteUserId + ' is password protected. Please enter the pasword:',
           );
         }
 
         this.connection.password = this.params.p;
-        this.connection.join( remoteUserId );
+        this.connection.join(remoteUserId);
       };
       this.connection.onstreamended = this.connection.onSessionClosed = this.connection.onleave;
 
-      this.connection.onInvalidPassword = ( remoteUserId, oldPassword ) => {
+      this.connection.onInvalidPassword = (remoteUserId, oldPassword) => {
         var password = prompt(
           remoteUserId +
             ' is password protected. Your entered wrong password (' +
@@ -239,10 +239,10 @@ export default {
             '). Please enter valid pasword:',
         );
         this.connection.password = password;
-        this.connection.join( remoteUserId );
+        this.connection.join(remoteUserId);
       };
 
-      this.connection.onPasswordMaxTriesOver = ( remoteUserId ) => {
+      this.connection.onPasswordMaxTriesOver = (remoteUserId) => {
         alert(
           remoteUserId +
             ' is password protected. Your max password tries exceeded the limit.',
@@ -250,13 +250,13 @@ export default {
       };
 
       this.connection.onSocketDisconnect = () => {
-        if ( this.connection.getAllParticipants().length > 0 ) return;
+        if (this.connection.getAllParticipants().length > 0) return;
 
-        this.$emit( 'state', { value: STATE.SOCKET_DISCONNECT });
+        this.$emit('state', { value: STATE.SOCKET_DISCONNECT });
       };
 
       this.connection.onSocketError = () => {
-        this.$emit( 'state', { value: STATE.SOCKET_ERROR });
+        this.$emit('state', { value: STATE.SOCKET_ERROR });
       };
 
       this.connection.onopen = () => {
@@ -266,20 +266,20 @@ export default {
       this.connection.socketCustomEvent = this.roomName;
 
       // console.log('[Connection mounted]: roomName check:', this.roomName);
-      if ( this.roomName ) {
+      if (this.roomName) {
         this.checkPresence();
       }
 
       var dontDuplicate = {};
-      this.connection.onPeerStateChanged = ( event ) => {
-        if ( !this.connection.getRemoteStreams( this.roomName ).length ) {
-          if ( event.signalingState === 'have-remote-offer' ) {
-            this.$emit( 'state', { value: STATE.HAVE_OFFER });
+      this.connection.onPeerStateChanged = (event) => {
+        if (!this.connection.getRemoteStreams(this.roomName).length) {
+          if (event.signalingState === 'have-remote-offer') {
+            this.$emit('state', { value: STATE.HAVE_OFFER });
           } else if (
             event.iceGatheringState === 'complete' &&
             event.iceConnectionState === 'connected'
           ) {
-            this.$emit( 'state', { value: STATE.HANDSHAKE_COMPLETE });
+            this.$emit('state', { value: STATE.HANDSHAKE_COMPLETE });
           }
         }
 
@@ -287,69 +287,69 @@ export default {
           event.iceConnectionState === 'connected' &&
           event.signalingState === 'stable'
         ) {
-          if ( dontDuplicate[event.userid] ) return;
+          if (dontDuplicate[event.userid]) return;
           dontDuplicate[event.userid] = true;
 
-          this.$emit( 'state', { value: STATE.CONNECTED });
+          this.$emit('state', { value: STATE.CONNECTED });
           getStats(
             this.connection.peers[event.userid].peer,
-            ( stats ) => {
-              this.onGettingWebRTCStats( stats, event.userid );
+            (stats) => {
+              this.onGettingWebRTCStats(stats, event.userid);
             },
             1000,
           );
-        } else if ( event.iceConnectionState === 'disconnected' ) {
-          this.$emit( 'state', { value: STATE.DISCONNECTED });
+        } else if (event.iceConnectionState === 'disconnected') {
+          this.$emit('state', { value: STATE.DISCONNECTED });
         }
       };
     },
-    checkPresence( connection = null ) {
-      ( connection || this.connection ).checkPresence(
+    checkPresence(connection = null) {
+      (connection || this.connection).checkPresence(
         this.roomName,
         // Keeping these parameters here for documentation
         // eslint-disable-next-line no-unused-vars
-        ( isRoomExist, roomid, extra ) => {
-          if ( isRoomExist === false ) {
-            if ( this.presenceCheckWait < 60000 ) {
+        (isRoomExist, roomid, extra) => {
+          if (isRoomExist === false) {
+            if (this.presenceCheckWait < 60000) {
               this.presenceCheckWait = this.presenceCheckWait * 2;
             }
 
             // FIXME: ensure presenceCheckWait watcher is triggered before sending state update
             // (or, this could be solved by making the infobarMessage a computed in Receiver)
             setTimeout(
-              () => this.$emit( 'state', { value: STATE.NOT_HOSTED }),
+              () => this.$emit('state', { value: STATE.NOT_HOSTED }),
               0,
             );
 
-            setTimeout( () => this.checkPresence( connection ), this.presenceCheckWait );
+            setTimeout(() => this.checkPresence(connection), this.presenceCheckWait);
             return;
           }
 
-          this.$emit( 'state', { value: STATE.JOINING });
+          this.$emit('state', { value: STATE.JOINING });
 
-          ( connection || this.connection ).password = null;
-          if ( this.params.p ) {
-            ( connection || this.connection ).password = this.params.p;
+          (connection || this.connection).password = null;
+          if (this.params.p) {
+            (connection || this.connection).password = this.params.p;
           }
 
-          ( connection || this.connection ).join( this.roomName );
+          (connection || this.connection).join(this.roomName);
         },
       );
     },
 
-    onGettingWebRTCStats( stats, userid ) {
-      if ( !this.connection.peers[userid] ) {
+    onGettingWebRTCStats(stats, userid) {
+      if (!this.connection.peers[userid]) {
         stats.nomore();
         return;
       }
-      this.$emit( 'stats', stats );
+      this.$emit('stats', stats);
     },
   },
 };
 
-function setBandwidth( sdp ) {
-  sdp = sdp.replace( /b=AS([^\r\n]+\r\n)/g, '' );
-  sdp = sdp.replace( /a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:10000\r\n' );
+function setBandwidth(sdp) {
+  sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
+  sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:10000\r\n');
   return sdp;
 }
 
@@ -357,19 +357,19 @@ function getParams() {
   let r;
   let DEFAULTS;
   let tempParams;
-  ( tempParams = {}),
-  ( r = /([^&=]+)=?([^&]*)/g ),
-  ( DEFAULTS = { bandwidth: 8192 });
+  (tempParams = {}),
+  (r = /([^&=]+)=?([^&]*)/g),
+  (DEFAULTS = { bandwidth: 8192 });
 
-  function d( s ) {
-    return decodeURIComponent( s.replace( /\+/g, ' ' ) );
+  function d(s) {
+    return decodeURIComponent(s.replace(/\+/g, ' '));
   }
 
   var match,
     search = window.location.search;
-  while ( ( match = r.exec( search.substring( 1 ) ) ) )
-    tempParams[d( match[1] )] = d( match[2] );
+  while ((match = r.exec(search.substring(1))))
+    tempParams[d(match[1])] = d(match[2]);
 
-  return Object.assign({}, DEFAULTS, tempParams );
+  return Object.assign({}, DEFAULTS, tempParams);
 }
 </script>

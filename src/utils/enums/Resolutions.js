@@ -13,8 +13,8 @@ export const Resolutions = {
 /**
  * @return dimensions { width: number, height: number }
  */
-export const getDimensionsForResolution = ( resolution ) => {
-  switch ( resolution ) {
+export const getDimensionsForResolution = (resolution) => {
+  switch (resolution) {
     case Resolutions.Fit4K:
       return { width: 3840, height: 2160 };
     case Resolutions.Fit2K:
@@ -33,6 +33,6 @@ export const getDimensionsForResolution = ( resolution ) => {
       return { width: 256, height: 144 };
     case Resolutions.FitScreen:
     default:
-      return ( window || {}).screen || getDimensionsForResolution( Resolutions.Fit720p );
+      return (window || {}).screen || getDimensionsForResolution(Resolutions.Fit720p);
   }
 };

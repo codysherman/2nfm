@@ -68,7 +68,7 @@ module.exports = {
     'semi-spacing': 'error',
     'semi-style': ['error', 'last'],
     'space-before-function-paren': ['error', 'never'],
-    'space-in-parens': ['error', 'always', { exceptions: ['{}'] }],
+    'space-in-parens': ['error', 'never'],
     'spaced-comment': ['error', 'always'],
   },
   settings: {

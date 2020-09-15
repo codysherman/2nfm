@@ -151,28 +151,28 @@ export default {
   created() {
     const sanitizedRoomId = this.$route.params.room
       .trim()
-      .replace( /\s+/g, '-' )
-      .replace( /[^a-zA-Z0-9-_]/g, '' )
+      .replace(/\s+/g, '-')
+      .replace(/[^a-zA-Z0-9-_]/g, '')
       .toLowerCase();
-    if ( this.$route.params.room !== sanitizedRoomId ) {
-      this.$router.push( sanitizedRoomId );
+    if (this.$route.params.room !== sanitizedRoomId) {
+      this.$router.push(sanitizedRoomId);
     }
   },
   mounted() {
-    window.addEventListener( 'offline', this.setOffline, false );
-    window.addEventListener( 'online', this.setOnline, false );
+    window.addEventListener('offline', this.setOffline, false);
+    window.addEventListener('online', this.setOnline, false);
   },
   beforeDestroy() {
-    window.removeEventListener( 'offline', this.setOffline, false );
-    window.removeEventListener( 'online', this.setOnline, false );
+    window.removeEventListener('offline', this.setOffline, false);
+    window.removeEventListener('online', this.setOnline, false);
   },
   methods: {
-    onConnectionStateChanged( state ) {
-      switch ( state.value ) {
+    onConnectionStateChanged(state) {
+      switch (state.value) {
         case ReceiverConnection.STATE.NOT_HOSTED:
           this.infoBarMessage = `Room: ${this.roomName} isn't hosted yet.
             Checking again ${this.presenceCheckWait === 60000 ? 'every' : 'in'}
-            ${Math.round( this.presenceCheckWait / 1000 )} seconds.`;
+            ${Math.round(this.presenceCheckWait / 1000)} seconds.`;
           break;
         case ReceiverConnection.STATE.JOINING:
           this.infoBarMessage = `Joining room: ${this.roomName}`;
@@ -204,11 +204,11 @@ export default {
           location.reload();
           break;
         case ReceiverConnection.STATE.SOCKET_ERROR:
-          alert( 'Unable to connect to the server. Please try again.' );
+          alert('Unable to connect to the server. Please try again.');
 
-          setTimeout( () => {
+          setTimeout(() => {
             location.reload();
-          }, 1000 );
+          }, 1000);
           break;
         case ReceiverConnection.STATE.HAVE_OFFER:
           this.infoBarMessage = `Received WebRTC offer from: ${this.roomName}`;
@@ -232,16 +232,16 @@ export default {
           break;
       }
     },
-    onStream( stream ) {
+    onStream(stream) {
       this.stream = stream;
     },
-    onPresenceCheckWait( newValue ) {
+    onPresenceCheckWait(newValue) {
       this.presenceCheckWait = newValue;
     },
-    onReceiverViewerCount( count ) {
+    onReceiverViewerCount(count) {
       this.receiverViewerCount = count;
     },
-    onStats( stats ) {
+    onStats(stats) {
       this.stats = stats;
     },
     showStats() {
@@ -250,14 +250,14 @@ export default {
     hideStats() {
       this.statsVisible = false;
     },
-    bytesToSize( bytes ) {
+    bytesToSize(bytes) {
       let k = 1000;
       let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-      if ( bytes === 0 ) {
+      if (bytes === 0) {
         return '0 Bytes';
       }
-      let i = parseInt( Math.floor( Math.log( bytes ) / Math.log( k ) ), 10 );
-      return `${( bytes / Math.pow( k, i ) ).toPrecision( 3 )} ${sizes[i]}`;
+      let i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
+      return `${(bytes / Math.pow(k, i)).toPrecision(3)} ${sizes[i]}`;
     },
   },
   setOffline() {

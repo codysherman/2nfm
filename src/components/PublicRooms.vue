@@ -122,24 +122,24 @@ export default {
   computed: {
     sortListOfRooms: function() {
       let newList = this.listOfRooms;
-      return newList.sort( ( a, b ) => {
+      return newList.sort((a, b) => {
         return b.extra.receiverViewerCount - a.extra.receiverViewerCount;
       });
     },
   },
   watch: {
-    presenceCheckWait( newValue ) {
-      this.$emit( 'presenceCheckWait', newValue );
+    presenceCheckWait(newValue) {
+      this.$emit('presenceCheckWait', newValue);
     },
-    listOfRooms( numOfRooms ) {
-      this.$emit( 'update:publicRoomCount', numOfRooms.length );
+    listOfRooms(numOfRooms) {
+      this.$emit('update:publicRoomCount', numOfRooms.length);
     },
   },
   mounted() {
     this.params = getParams();
 
     // http://www.rtcmulticonnection.org/docs/constructor/
-    this.connection = new RTCMultiConnection( this.roomName );
+    this.connection = new RTCMultiConnection(this.roomName);
     this.connection.socketURL = 'https://api.2n.fm:9001/';
     this.connection.autoCloseEntireSession = false;
 
@@ -169,11 +169,11 @@ export default {
     this.connection.getExternalIceServers = false;
     this.connection.iceServers = IceServersHandler.getIceServers();
 
-    this.connection.onstream = ( e ) => {
-      this.$emit( 'stream', e.stream );
+    this.connection.onstream = (e) => {
+      this.$emit('stream', e.stream);
     };
 
-    if ( this.roomName ) {
+    if (this.roomName) {
       this.checkPresence();
     }
   },
@@ -183,8 +183,8 @@ export default {
         this.roomName,
         // Keeping these parameters here for documentation
         // eslint-disable-next-line no-unused-vars
-        ( isRoomExist, roomid, extra ) => {
-          if ( isRoomExist === false ) {
+        (isRoomExist, roomid, extra) => {
+          if (isRoomExist === false) {
             // if (this.presenceCheckWait < 60000) {
             //   this.presenceCheckWait = this.presenceCheckWait * 2;
             // }
@@ -192,29 +192,29 @@ export default {
             // FIXME: ensure presenceCheckWait watcher is triggered before sending state update
             // (or, this could be solved by making the infobarMessage a computed in Receiver)
             setTimeout(
-              () => this.$emit( 'state', { value: STATE.NOT_HOSTED }),
+              () => this.$emit('state', { value: STATE.NOT_HOSTED }),
               0,
             );
 
-            setTimeout( () => this.checkPresence(), this.presenceCheckWait );
+            setTimeout(() => this.checkPresence(), this.presenceCheckWait);
             return;
           }
 
-          this.$emit( 'state', { value: STATE.JOINING });
+          this.$emit('state', { value: STATE.JOINING });
 
           this.connection.password = null;
-          if ( this.params.p ) {
+          if (this.params.p) {
             this.connection.password = this.params.p;
           }
 
-          this.connection.join( this.roomName );
+          this.connection.join(this.roomName);
         },
       );
       this.connection.publicRoomIdentifier = 'desktopCapture';
       this.connection.socket.emit(
         'get-public-rooms',
         this.connection.publicRoomIdentifier,
-        ( listOfRooms ) => {
+        (listOfRooms) => {
           this.listOfRooms = listOfRooms;
         },
       );
@@ -225,8 +225,8 @@ export default {
 function getParams() {
   let DEFAULTS;
   let tempParams;
-  ( tempParams = {}), ( DEFAULTS = { bandwidth: 8192 });
+  (tempParams = {}), (DEFAULTS = { bandwidth: 8192 });
 
-  return Object.assign({}, DEFAULTS, tempParams );
+  return Object.assign({}, DEFAULTS, tempParams);
 }
 </script>

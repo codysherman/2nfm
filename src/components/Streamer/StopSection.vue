@@ -124,26 +124,26 @@ export default {
   },
   methods: {
     toggleMicMute() {
-      this.$emit( 'muteMicToggle', this.muteMic );
+      this.$emit('muteMicToggle', this.muteMic);
     },
     copyUrl() {
-      let tempInput = document.createElement( 'input' );
-      tempInput.setAttribute( 'value', `https://2n.fm/${this.sessionId}` );
-      document.body.appendChild( tempInput );
+      let tempInput = document.createElement('input');
+      tempInput.setAttribute('value', `https://2n.fm/${this.sessionId}`);
+      document.body.appendChild(tempInput);
       tempInput.select();
-      let result = document.execCommand( 'copy' );
-      if ( result ) {
+      let result = document.execCommand('copy');
+      if (result) {
         this.copyNotification = true;
-        setTimeout( () => {
+        setTimeout(() => {
           this.copyNotification = false;
-        }, 5000 );
+        }, 5000);
       } else {
-        console.error( 'Copy failed' );
+        console.error('Copy failed');
       }
-      document.body.removeChild( tempInput );
+      document.body.removeChild(tempInput);
     },
     stopStream() {
-      this.$emit( 'stopStream' );
+      this.$emit('stopStream');
     },
   },
 };

@@ -338,7 +338,7 @@ export default {
       desktop_id: null,
       constraints: null,
       room_password: '',
-      room_id: window.localStorage.getItem( 'room_id' ) || '',
+      room_id: window.localStorage.getItem('room_id') || '',
       resolution: Resolutions.FitScreen,
       codecs: Codecs.vp8,
       bandwidth: null,
@@ -358,8 +358,8 @@ export default {
     Codecs() { return Codecs; },
   },
   watch: {
-    isP2POnly( isP2POnly ) {
-      if ( !isP2POnly && this.codecs == Codecs.h264 ) {
+    isP2POnly(isP2POnly) {
+      if (!isP2POnly && this.codecs == Codecs.h264) {
         // TODO: we may want to alert the user of this change somehow
         this.codecs = Codecs.vp8;
       }
@@ -380,27 +380,27 @@ export default {
     // };
   },
   methods: {
-    startStream( enableVideo, enableAudio ) {
+    startStream(enableVideo, enableAudio) {
       this.enableVideo = enableVideo;
       this.enableAudio = enableAudio;
 
-      if ( this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0] ) {
+      if (this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0]) {
         this.onSetDefaults();
         return;
       }
 
       this.room_id = '';
 
-      if ( window.localStorage.getItem( 'room_id' ) ) {
-        this.room_id = window.localStorage.getItem( 'room_id' );
+      if (window.localStorage.getItem('room_id')) {
+        this.room_id = window.localStorage.getItem('room_id');
       }
 
       let protectedRoutes = ['streamer'];
-      if ( protectedRoutes.includes( this.room_id ) ) {
+      if (protectedRoutes.includes(this.room_id)) {
         this.useridAlreadyTaken = this.room_id;
         return;
       }
-      this.$nextTick( () => {
+      this.$nextTick(() => {
         this.$refs.capturer.startStream();
       });
     },
@@ -411,46 +411,46 @@ export default {
     setRoomName() {
       this.room_id = this.room_id
         .trim()
-        .replace( /\s+/g, '-' )
-        .replace( /[^a-zA-Z0-9-_]/g, '' )
+        .replace(/\s+/g, '-')
+        .replace(/[^a-zA-Z0-9-_]/g, '')
         .toLowerCase();
-      window.localStorage.setItem( 'room_id', this.room_id );
+      window.localStorage.setItem('room_id', this.room_id);
     },
-    setBandwidth( value ) {
+    setBandwidth(value) {
       try {
-        this.bandwidth = parseInt( value );
-      } catch ( e ) {
+        this.bandwidth = parseInt(value);
+      } catch (e) {
         this.bandwidth = null;
       }
     },
-    onGotStream( stream ) {
+    onGotStream(stream) {
       this.stream = stream;
       this.stream.enableVideo = this.enableVideo;
       this.stream.enableAudio = this.enableAudio;
-      this.$refs.connection.shareStreamUsingRTCMultiConnection( this.stream );
+      this.$refs.connection.shareStreamUsingRTCMultiConnection(this.stream);
     },
-    onSessionId( id ) {
+    onSessionId(id) {
       this.useridAlreadyTaken = '';
       this.sessionId = id;
     },
     onSetDefaults() {
       this.$refs.connection.setDefaults();
     },
-    onIdTaken( takenID ) {
+    onIdTaken(takenID) {
       this.useridAlreadyTaken = takenID;
       this.stopStream();
     },
-    onIsSharing( isSharing ) {
+    onIsSharing(isSharing) {
       this.isSharingOn = isSharing;
-      if ( !this.isSharingOn ) {
+      if (!this.isSharingOn) {
         this.sessionId = null;
       }
     },
-    onViewerCount( count ) {
+    onViewerCount(count) {
       this.viewerCount = count;
     },
-    muteMic( value ) {
-      this.stream.getAudioTracks().slice( -1 )[0].enabled = !value;
+    muteMic(value) {
+      this.stream.getAudioTracks().slice(-1)[0].enabled = !value;
     },
   },
 };

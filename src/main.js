@@ -7,17 +7,17 @@ import VueMeta from 'vue-meta';
 
 Vue.config.productionTip = false;
 
-Vue.use( VueMeta );
+Vue.use(VueMeta);
 
 new Vue({
   router,
   // store,
   created() {
-    if ( sessionStorage.redirect ) {
+    if (sessionStorage.redirect) {
       const redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;
-      this.$router.push( redirect );
+      this.$router.push(redirect);
     }
   },
-  render: ( h ) => h( App ),
-}).$mount( '#app' );
+  render: (h) => h(App),
+}).$mount('#app');

@@ -40,9 +40,9 @@ export default {
   },
   methods: {
     toggleAutoplay() {
-      this.$emit( 'update:autoplay', !this.autoplay );
-      this.$nextTick( () => {
-        window.localStorage.setItem( 'autoplay', this.autoplay );
+      this.$emit('update:autoplay', !this.autoplay);
+      this.$nextTick(() => {
+        window.localStorage.setItem('autoplay', this.autoplay);
       });
     },
   },
