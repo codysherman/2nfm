@@ -1,9 +1,17 @@
 module.exports = {
+  root: true,
   env: {
     // this section will be used to determine which APIs are available to us
     // (i.e are we running in a browser environment or a node.js env)
     browser: true,
     node: true,
+  },
+  globals: { RTCMultiConnection: true },
+  parser: 'vue-eslint-parser',
+  parserOptions: {
+    parser: 'babel-eslint',
+    // specifying a module sourcetype prevent eslint from marking import statements as errors
+    sourceType: 'module',
   },
   extends: [
     // use the recommended rule set for both plain javascript and vue
@@ -12,16 +20,9 @@ module.exports = {
     'plugin:import/errors',
     'plugin:import/warnings',
   ],
-  globals: { RTCMultiConnection: true },
-  parserOptions: {
-    parser: 'babel-eslint',
-    // specifying a module sourcetype prevent eslint from marking import statements as errors
-    sourceType: 'module',
-  },
   plugins: [
     'import',
   ],
-  root: true,
   rules: {
     // we should always disable console logs and debugging in production
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
