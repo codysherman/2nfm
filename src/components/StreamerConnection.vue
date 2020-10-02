@@ -65,14 +65,14 @@ export default {
       this.connection.socketURL = 'https://api.2n.fm:9001/';
       this.connection.autoCloseEntireSession = true;
       // this must match the viewer page
-      if (this.privacy === 'public') {
+      if(this.privacy === 'public') {
         this.connection.publicRoomIdentifier = 'desktopCapture';
       }
 
       this.connection.socketMessageEvent = 'desktopCapture';
 
       this.connection.password = null;
-      if (this.roomPassword && this.roomPassword.length) {
+      if(this.roomPassword && this.roomPassword.length) {
         this.connection.password = this.roomPassword;
       }
 
@@ -102,7 +102,7 @@ export default {
 
       this.connection.channel = this.connection.sessionid = this.connection.userid;
 
-      if (this.roomId && this.roomId.length) {
+      if(this.roomId && this.roomId.length) {
         this.connection.channel = this.connection.sessionid = this.connection.userid = this.roomId;
       }
 
@@ -113,8 +113,8 @@ export default {
       this.connection.iceServers = IceServersHandler.getIceServers(!this.isP2POnly);
 
       this.connection.processSdp = (sdp) => {
-        if (this.bandwidth) {
-          if (
+        if(this.bandwidth) {
+          if(
             this.bandwidth &&
             !isNaN(this.bandwidth) &&
             this.bandwidth != 'NaN' &&
@@ -128,7 +128,7 @@ export default {
           }
         }
 
-        if (this.enableAudio && !this.enableVideo) {
+        if(this.enableAudio && !this.enableVideo) {
           sdp = CodecsHandler.preferCodec(sdp, Codecs.h264);
         } else {
           sdp = CodecsHandler.preferCodec(sdp, this.codecs);
@@ -162,37 +162,37 @@ export default {
       // www.RTCMultiConnection.org/docs/attachStreams/
       this.connection.attachStreams.push(stream);
 
-      if (stream.containsVideo) {
+      if(stream.containsVideo) {
         this.connection.extra.containsVideo = stream.containsVideo;
         // this.connection.updateExtraData();
       }
 
-      if (stream.containsAudio) {
+      if(stream.containsAudio) {
         this.connection.extra.containsAudio = stream.containsAudio;
         // this.connection.updateExtraData();
       }
 
-      if (stream.containsMic) {
+      if(stream.containsMic) {
         this.connection.extra.containsMic = stream.containsMic;
         // this.connection.updateExtraData();
       }
 
       var text = '-';
       const looper = setInterval(() => {
-        if (!this.connection) {
+        if(!this.connection) {
           this.setViewerCount(0);
           clearInterval(looper);
           return;
         }
 
-        if (this.connection.isInitiator) {
+        if(this.connection.isInitiator) {
           this.setViewerCount(0);
           clearInterval(looper);
           return;
         }
 
         text += ' -';
-        if (text.length > 6) {
+        if(text.length > 6) {
           text = '-';
         }
 
@@ -203,7 +203,7 @@ export default {
       this.connection.socketCustomEvent = this.connection.sessionid;
 
       const roomOpenCallback = (isRoomOpened, roomid, error) => {
-        if (error) {
+        if(error) {
           alert(error);
         }
 
@@ -215,7 +215,7 @@ export default {
         this.connection.socket.on(
           this.connection.socketCustomEvent,
           (message) => {
-            if (message.receivedYourScreen) {
+            if(message.receivedYourScreen) {
               this.setViewerCount(
                 this.connection.isInitiator
                   ? this.connection.getAllParticipants().length
@@ -228,7 +228,7 @@ export default {
 
       this.connection.onSocketDisconnect = () => {
         // alert('externalThis.connection to the server is closed.');
-        if (this.connection.getAllParticipants().length > 0) return;
+        if(this.connection.getAllParticipants().length > 0) return;
 
         this.setDefaults();
       };
@@ -246,7 +246,7 @@ export default {
       // };
 
       this.connection.onmessage = (event) => {
-        if (event.data.newChatMessage) {
+        if(event.data.newChatMessage) {
           // this.runtimePort.postMessage({
           //   messageFromContentScript1234: true,
           //   newChatMessage: event.data.newChatMessage
@@ -273,7 +273,7 @@ export default {
       this.connection.onleave = (event) => {
         const participants = this.connection.getAllParticipants();
         let count = participants.length;
-        if (participants.includes(event.userid)) {
+        if(participants.includes(event.userid)) {
           count--;
         }
         this.setViewerCount(count);
@@ -281,7 +281,7 @@ export default {
 
       this.connection.onPeerStateChanged = () => {
         const participantsCount = this.connection.getAllParticipants().length;
-        if (oldLength != participantsCount) {
+        if(oldLength != participantsCount) {
           // sendTabTitle();
         }
         this.setViewerCount(
@@ -291,21 +291,21 @@ export default {
     },
     setViewerCount(count) {
       this.$emit('viewerCount', count);
-      if (this.connection) {
+      if(this.connection) {
         this.connection.extra.receiverViewerCount = count;
         this.connection.updateExtraData();
       }
     },
     setOffline() {
-      if (!this.connection || !this.connection.attachStreams.length) return;
+      if(!this.connection || !this.connection.attachStreams.length) return;
       this.setDefaults();
     },
     setOnline() {
-      if (!this.connection) return;
+      if(!this.connection) return;
       this.setDefaults();
     },
     setDefaults() {
-      if (this.connection) {
+      if(this.connection) {
         this.connection.attachStreams.forEach((stream) => {
           try {
             stream.getTracks().forEach((track) => {

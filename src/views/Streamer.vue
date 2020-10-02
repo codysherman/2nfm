@@ -359,7 +359,7 @@ export default {
   },
   watch: {
     isP2POnly(isP2POnly) {
-      if (!isP2POnly && this.codecs == Codecs.h264) {
+      if(!isP2POnly && this.codecs == Codecs.h264) {
         // TODO: we may want to alert the user of this change somehow
         this.codecs = Codecs.vp8;
       }
@@ -384,19 +384,19 @@ export default {
       this.enableVideo = enableVideo;
       this.enableAudio = enableAudio;
 
-      if (this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0]) {
+      if(this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0]) {
         this.onSetDefaults();
         return;
       }
 
       this.room_id = '';
 
-      if (window.localStorage.getItem('room_id')) {
+      if(window.localStorage.getItem('room_id')) {
         this.room_id = window.localStorage.getItem('room_id');
       }
 
-      let protectedRoutes = ['streamer'];
-      if (protectedRoutes.includes(this.room_id)) {
+      let protectedRoutes = [ 'streamer' ];
+      if(protectedRoutes.includes(this.room_id)) {
         this.useridAlreadyTaken = this.room_id;
         return;
       }
@@ -442,7 +442,7 @@ export default {
     },
     onIsSharing(isSharing) {
       this.isSharingOn = isSharing;
-      if (!this.isSharingOn) {
+      if(!this.isSharingOn) {
         this.sessionId = null;
       }
     },

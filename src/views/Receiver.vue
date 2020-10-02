@@ -154,7 +154,7 @@ export default {
       .replace(/\s+/g, '-')
       .replace(/[^a-zA-Z0-9-_]/g, '')
       .toLowerCase();
-    if (this.$route.params.room !== sanitizedRoomId) {
+    if(this.$route.params.room !== sanitizedRoomId) {
       this.$router.push(sanitizedRoomId);
     }
   },
@@ -252,8 +252,8 @@ export default {
     },
     bytesToSize(bytes) {
       let k = 1000;
-      let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-      if (bytes === 0) {
+      let sizes = [ 'Bytes', 'KB', 'MB', 'GB', 'TB' ];
+      if(bytes === 0) {
         return '0 Bytes';
       }
       let i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
