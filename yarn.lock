@@ -27,6 +27,7 @@ __metadata:
     source-map: ^0.7.3
     vue: ^2.6.11
     vue-cli-plugin-pug: ^1.0.7
+    vue-eslint-parser: ^7.1.0
     vue-meta: ^2.4.0
     vue-router: ^3.3.4
     vue-svg-loader: ^0.16.0
@@ -11806,7 +11807,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"vue-eslint-parser@npm:^7.0.0":
+"vue-eslint-parser@npm:^7.0.0, vue-eslint-parser@npm:^7.1.0":
   version: 7.1.0
   resolution: "vue-eslint-parser@npm:7.1.0"
   dependencies:

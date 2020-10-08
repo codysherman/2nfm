@@ -41,7 +41,7 @@ export default {
     },
     stopStream() {
       this.isSharing = false;
-      this.stream.getTracks().forEach(function(track) {
+      this.stream.getTracks().forEach(function (track) {
         try {
           track.stop();
         } catch (e) {
@@ -81,7 +81,7 @@ export default {
         };
       }
 
-      const startMicCapture = async() => {
+      const startMicCapture = async () => {
         let captureMicStream;
         try {
           captureMicStream = await navigator.mediaDevices.getUserMedia(
@@ -98,7 +98,7 @@ export default {
         return captureMicStream;
       };
 
-      const startScreenCapture = async() => {
+      const startScreenCapture = async () => {
         let captureStream;
         try {
           captureStream = await navigator.mediaDevices.getDisplayMedia(
@@ -110,7 +110,7 @@ export default {
         return captureStream;
       };
 
-      const startCapturing = async() => {
+      const startCapturing = async () => {
         let micStream = null;
         if(this.enableMic === true) {
           micStream = await startMicCapture();
@@ -172,28 +172,28 @@ export default {
       }
       this.stream.addEventListener(
         streamEndedEvent,
-        function() {
+        function () {
           callback();
-          callback = function() {};
+          callback = function () {};
         },
         false,
       );
-      this.stream.getAudioTracks().forEach(function(track) {
+      this.stream.getAudioTracks().forEach(function (track) {
         track.addEventListener(
           streamEndedEvent,
-          function() {
+          function () {
             callback();
-            callback = function() {};
+            callback = function () {};
           },
           false,
         );
       });
-      this.stream.getVideoTracks().forEach(function(track) {
+      this.stream.getVideoTracks().forEach(function (track) {
         track.addEventListener(
           streamEndedEvent,
-          function() {
+          function () {
             callback();
-            callback = function() {};
+            callback = function () {};
           },
           false,
         );

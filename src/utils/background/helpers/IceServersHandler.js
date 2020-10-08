@@ -1,6 +1,6 @@
 // IceServersHandler.js
 
-export const IceServersHandler = (function() {
+export const IceServersHandler = (function () {
   function getIceServers(withTurn = true) {
     var iceServers = [ { urls: [ 'stun:us-turn7.xirsys.com' ] } ];
 

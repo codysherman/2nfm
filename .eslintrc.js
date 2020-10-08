@@ -74,6 +74,11 @@ module.exports = {
     'semi':[ 'error', 'always' ],
     'semi-spacing': 'error',
     'semi-style': [ 'error', 'last' ],
+    'space-before-function-paren': [ 'error', {
+      anonymous: 'always',
+      named: 'never',
+      asyncArrow: 'always',
+    } ],
     'spaced-comment': [ 'error', 'always' ],
   },
   settings: {

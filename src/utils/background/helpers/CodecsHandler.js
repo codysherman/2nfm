@@ -1,6 +1,6 @@
 // CodecsHandler.js
 
-export var CodecsHandler = (function() {
+export var CodecsHandler = (function () {
   function preferCodec(sdp, codecName) {
     var info = splitLines(sdp);
 
@@ -67,7 +67,7 @@ export var CodecsHandler = (function() {
       newOrder = [];
     }
 
-    info.videoCodecNumbers.forEach(function(codecNumber) {
+    info.videoCodecNumbers.forEach(function (codecNumber) {
       if(codecNumber === preferCodecNumber) return;
       newOrder.push(codecNumber);
     });
@@ -80,13 +80,13 @@ export var CodecsHandler = (function() {
 
   function splitLines(sdp) {
     var info = {};
-    sdp.split('\n').forEach(function(line) {
+    sdp.split('\n').forEach(function (line) {
       if(line.indexOf('m=video') === 0) {
         info.videoCodecNumbers = [];
         line
           .split('SAVPF')[1]
           .split(' ')
-          .forEach(function(codecNumber) {
+          .forEach(function (codecNumber) {
             codecNumber = codecNumber.trim();
             if(!codecNumber || !codecNumber.length) return;
             info.videoCodecNumbers.push(codecNumber);
@@ -142,7 +142,7 @@ export var CodecsHandler = (function() {
       throw 'Invalid arguments.';
     }
 
-    peer.getSenders().forEach(function(sender) {
+    peer.getSenders().forEach(function (sender) {
       var params = sender.getParameters();
       for(var i = 0; i < params.codecs.length; i++) {
         if(params.codecs[i].mimeType == codecMimeType) {
@@ -404,16 +404,16 @@ export var CodecsHandler = (function() {
     disableNACK: disableNACK,
     prioritize: prioritize,
     removeNonG722: removeNonG722,
-    setApplicationSpecificBandwidth: function(sdp, bandwidth, isScreen) {
+    setApplicationSpecificBandwidth: function (sdp, bandwidth, isScreen) {
       return setBAS(sdp, bandwidth, isScreen);
     },
-    setVideoBitrates: function(sdp, params) {
+    setVideoBitrates: function (sdp, params) {
       return setVideoBitrates(sdp, params);
     },
-    setOpusAttributes: function(sdp, params) {
+    setOpusAttributes: function (sdp, params) {
       return setOpusAttributes(sdp, params);
     },
-    preferVP9: function(sdp) {
+    preferVP9: function (sdp) {
       return preferCodec(sdp, 'vp9');
     },
     preferCodec: preferCodec,

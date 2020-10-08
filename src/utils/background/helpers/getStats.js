@@ -109,13 +109,13 @@ export function getStats(mediaStreamTrack, callback, interval) {
       },
       candidates: {},
     },
-    nomore: function() {
+    nomore: function () {
       nomore = true;
     },
   };
 
   var getStatsParser = {
-    checkIfOfferer: function(result) {
+    checkIfOfferer: function (result) {
       if(result.type === 'googLibjingleSession') {
         getStatsResult.isOfferer = result.googInitiator;
       }
@@ -149,9 +149,9 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var nomore = false;
 
   function getStatsLooper() {
-    getStatsWrapper(function(results) {
-      results.forEach(function(result) {
-        Object.keys(getStatsParser).forEach(function(key) {
+    getStatsWrapper(function (results) {
+      results.forEach(function (result) {
+        Object.keys(getStatsParser).forEach(function (key) {
           if(typeof getStatsParser[key] === 'function') {
             getStatsParser[key](result);
           }
@@ -216,9 +216,9 @@ export function getStats(mediaStreamTrack, callback, interval) {
     if(typeof window.InstallTrigger !== 'undefined') {
       peer.getStats(
         mediaStreamTrack,
-        function(res) {
+        function (res) {
           var items = [];
-          res.forEach(function(r) {
+          res.forEach(function (r) {
             items.push(r);
           });
           cb(items);
@@ -226,11 +226,11 @@ export function getStats(mediaStreamTrack, callback, interval) {
         cb,
       );
     } else {
-      peer.getStats(function(res) {
+      peer.getStats(function (res) {
         var items = [];
-        res.result().forEach(function(res) {
+        res.result().forEach(function (res) {
           var item = {};
-          res.names().forEach(function(name) {
+          res.names().forEach(function (name) {
             item[name] = res.stat(name);
           });
           item.id = res.id;
@@ -243,14 +243,14 @@ export function getStats(mediaStreamTrack, callback, interval) {
     }
   }
 
-  getStatsParser.datachannel = function(result) {
+  getStatsParser.datachannel = function (result) {
     if(result.type !== 'datachannel') return;
 
     // open or connecting
     getStatsResult.datachannel = { state: result.state };
   };
 
-  getStatsParser.googCertificate = function(result) {
+  getStatsParser.googCertificate = function (result) {
     if(result.type == 'googCertificate') {
       getStatsResult.encryption = result.googFingerprintAlgorithm;
     }
@@ -258,7 +258,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
   var AUDIO_codecs = [ 'opus', 'isac', 'ilbc' ];
 
-  getStatsParser.checkAudioTracks = function(result) {
+  getStatsParser.checkAudioTracks = function (result) {
     if(!result.googCodecName || result.mediaType !== 'audio') return;
 
     if(AUDIO_codecs.indexOf(result.googCodecName.toLowerCase()) === -1) return;
@@ -329,7 +329,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
   var VIDEO_codecs = [ 'vp9', 'vp8', 'h264' ];
 
-  getStatsParser.checkVideoTracks = function(result) {
+  getStatsParser.checkVideoTracks = function (result) {
     if(!result.googCodecName || result.mediaType !== 'video') return;
 
     if(VIDEO_codecs.indexOf(result.googCodecName.toLowerCase()) === -1) return;
@@ -406,7 +406,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
     }
   };
 
-  getStatsParser.bweforvideo = function(result) {
+  getStatsParser.bweforvideo = function (result) {
     if(result.type !== 'VideoBwe') return;
 
     getStatsResult.bandwidth.availableSendBandwidth =
@@ -424,7 +424,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
     getStatsResult.bandwidth.googTransmitBitrate = result.googTransmitBitrate;
   };
 
-  getStatsParser.candidatePair = function(result) {
+  getStatsParser.candidatePair = function (result) {
     if(result.type !== 'googCandidatePair' && result.type !== 'candidate-pair')
       return;
 
@@ -437,7 +437,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
 
       // bytesSent, bytesReceived
 
-      Object.keys(getStatsResult.internal.candidates).forEach(function(cid) {
+      Object.keys(getStatsResult.internal.candidates).forEach(function (cid) {
         var candidate = getStatsResult.internal.candidates[cid];
         if(candidate.ipAddress.indexOf(result.googLocalAddress) !== -1) {
           getStatsResult.connectionType.local.candidateType =
@@ -496,7 +496,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var LOCAL_ipAddress = {};
   var LOCAL_networkType = {};
 
-  getStatsParser.localcandidate = function(result) {
+  getStatsParser.localcandidate = function (result) {
     if(result.type !== 'localcandidate' && result.type !== 'local-candidate')
       return;
     if(!result.id) return;
@@ -574,7 +574,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
   var REMOTE_ipAddress = {};
   var REMOTE_networkType = {};
 
-  getStatsParser.remotecandidate = function(result) {
+  getStatsParser.remotecandidate = function (result) {
     if(result.type !== 'remotecandidate' && result.type !== 'remote-candidate')
       return;
     if(!result.id) return;
@@ -649,7 +649,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
       REMOTE_transport[result.id];
   };
 
-  getStatsParser.dataSentReceived = function(result) {
+  getStatsParser.dataSentReceived = function (result) {
     if(
       !result.googCodecName ||
       (result.mediaType !== 'video' && result.mediaType !== 'audio')
@@ -678,7 +678,7 @@ export function getStats(mediaStreamTrack, callback, interval) {
     },
   };
 
-  getStatsParser.ssrc = function(result) {
+  getStatsParser.ssrc = function (result) {
     if(
       !result.googCodecName ||
       (result.mediaType !== 'video' && result.mediaType !== 'audio')

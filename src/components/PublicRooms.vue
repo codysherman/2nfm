@@ -120,7 +120,7 @@ export default {
     };
   },
   computed: {
-    sortListOfRooms: function() {
+    sortListOfRooms: function () {
       let newList = this.listOfRooms;
       return newList.sort((a, b) => {
         return b.extra.receiverViewerCount - a.extra.receiverViewerCount;

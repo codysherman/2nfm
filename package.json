@@ -31,6 +31,7 @@
     "sass-loader": "^8.0.2",
     "source-map": "^0.7.3",
     "vue-cli-plugin-pug": "^1.0.7",
+    "vue-eslint-parser": "^7.1.0",
     "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.11"
   }
