@@ -132,7 +132,7 @@ export default {
       document.body.appendChild(tempInput);
       tempInput.select();
       let result = document.execCommand('copy');
-      if(result) {
+      if (result) {
         this.copyNotification = true;
         setTimeout(() => {
           this.copyNotification = false;

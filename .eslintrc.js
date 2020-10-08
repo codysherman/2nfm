@@ -46,11 +46,8 @@ module.exports = {
     'import/extensions': [ 'error', 'ignorePackages', { js: 'never' } ],
     'indent': [ 'error', 2, { SwitchCase: 1 } ],
     'keyword-spacing': [ 'error', {
-      overrides: {
-        if: { after: false },
-        for: { after: false },
-        while: { after: false },
-      },
+      before: true,
+      after: true,
     } ],
     'linebreak-style': [ 'error', 'unix' ],
     'max-len': [ 'error', {
