@@ -27,7 +27,8 @@
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-vue": "^7.0.1",
-    "lint-staged": "^10.2.10",
+    "husky": ">=4",
+    "lint-staged": ">=10",
     "sass": "^1.26.8",
     "sass-loader": "^10.0.3",
     "source-map": "^0.7.3",
@@ -35,12 +36,12 @@
     "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.11"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
-    "*.{js,vue}": [
-      "vue-cli-service lint"
-    ]
+    "*.js": "eslint --cache --fix"
   }
 }
