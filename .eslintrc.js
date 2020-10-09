@@ -20,9 +20,6 @@ module.exports = {
     'plugin:import/errors',
     'plugin:import/warnings',
   ],
-  plugins: [
-    'import',
-  ],
   rules: {
     // we should always disable console logs and debugging in production
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -46,11 +43,8 @@ module.exports = {
     'import/extensions': [ 'error', 'ignorePackages', { js: 'never' } ],
     'indent': [ 'error', 2, { SwitchCase: 1 } ],
     'keyword-spacing': [ 'error', {
-      overrides: {
-        if: { after: false },
-        for: { after: false },
-        while: { after: false },
-      },
+      before: true,
+      after: true,
     } ],
     'linebreak-style': [ 'error', 'unix' ],
     'max-len': [ 'error', {
@@ -74,7 +68,13 @@ module.exports = {
     'semi':[ 'error', 'always' ],
     'semi-spacing': 'error',
     'semi-style': [ 'error', 'last' ],
+    'space-before-function-paren': [ 'error', {
+      anonymous: 'always',
+      named: 'never',
+      asyncArrow: 'always',
+    } ],
     'spaced-comment': [ 'error', 'always' ],
+    'vue/component-tags-order': [ 'error', { order: [ 'style', [ 'template', 'script' ] ] } ],
   },
   settings: {
     'import/resolver': {
