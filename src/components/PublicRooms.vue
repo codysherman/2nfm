@@ -120,7 +120,7 @@ export default {
     };
   },
   computed: {
-    sortListOfRooms: function() {
+    sortListOfRooms: function () {
       let newList = this.listOfRooms;
       return newList.sort((a, b) => {
         return b.extra.receiverViewerCount - a.extra.receiverViewerCount;
@@ -129,10 +129,10 @@ export default {
   },
   watch: {
     presenceCheckWait(newValue) {
-      this.$emit('presenceCheckWait', newValue);
+      this.$emit('presence-check-wait', newValue);
     },
     listOfRooms(numOfRooms) {
-      this.$emit('update:publicRoomCount', numOfRooms.length);
+      this.$emit('update:public-room-count', numOfRooms.length);
     },
   },
   mounted() {
@@ -173,7 +173,7 @@ export default {
       this.$emit('stream', e.stream);
     };
 
-    if(this.roomName) {
+    if (this.roomName) {
       this.checkPresence();
     }
   },
@@ -184,7 +184,7 @@ export default {
         // Keeping these parameters here for documentation
         // eslint-disable-next-line no-unused-vars
         (isRoomExist, roomid, extra) => {
-          if(isRoomExist === false) {
+          if (isRoomExist === false) {
             // if (this.presenceCheckWait < 60000) {
             //   this.presenceCheckWait = this.presenceCheckWait * 2;
             // }
@@ -203,7 +203,7 @@ export default {
           this.$emit('state', { value: STATE.JOINING });
 
           this.connection.password = null;
-          if(this.params.p) {
+          if (this.params.p) {
             this.connection.password = this.params.p;
           }
 

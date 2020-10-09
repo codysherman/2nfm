@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     toggleMicMute() {
-      this.$emit('muteMicToggle', this.muteMic);
+      this.$emit('mute-mic-toggle', this.muteMic);
     },
     copyUrl() {
       let tempInput = document.createElement('input');
@@ -132,7 +132,7 @@ export default {
       document.body.appendChild(tempInput);
       tempInput.select();
       let result = document.execCommand('copy');
-      if(result) {
+      if (result) {
         this.copyNotification = true;
         setTimeout(() => {
           this.copyNotification = false;
@@ -143,7 +143,7 @@ export default {
       document.body.removeChild(tempInput);
     },
     stopStream() {
-      this.$emit('stopStream');
+      this.$emit('stop-stream');
     },
   },
 };
