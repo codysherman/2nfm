@@ -42,6 +42,8 @@
     }
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix"
+    "*.{js,vue}": [
+      "vue-cli-service lint"
+    ]
   }
 }
