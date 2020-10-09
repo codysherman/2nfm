@@ -11,29 +11,29 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "frow": "^3.3.2",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-meta": "^2.4.0",
-    "vue-router": "^3.3.4"
+    "vue-router": "^3.4.6"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.4.4",
-    "@vue/cli-plugin-eslint": "^4.4.4",
-    "@vue/cli-service": "^4.4.4",
+    "@vue/cli-plugin-babel": "^4.5.7",
+    "@vue/cli-plugin-eslint": "^4.5.7",
+    "@vue/cli-service": "^4.5.7",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.2.0",
+    "eslint": "^7.10.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "^7.0.1",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",
     "regenerator-runtime": "^0.13.7",
-    "sass": "^1.26.8",
-    "sass-loader": "^8.0.2",
+    "sass": "^1.27.0",
+    "sass-loader": "^10.0.2",
     "source-map": "^0.7.3",
     "supports-color": "^7.2.0",
     "vue-cli-plugin-pug": "^1.0.7",
     "vue-eslint-parser": "^7.1.0",
     "vue-svg-loader": "^0.16.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   }
 }

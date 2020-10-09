@@ -74,6 +74,7 @@ module.exports = {
       asyncArrow: 'always',
     } ],
     'spaced-comment': [ 'error', 'always' ],
+    'vue/component-tags-order': [ 'error', { order: [ 'style', [ 'template', 'script' ] ] } ],
   },
   settings: {
     'import/resolver': {

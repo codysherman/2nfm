@@ -1,6 +1,6 @@
 module.exports = {
   lintOnSave: false,
-  css: { loaderOptions: { sass: { prependData: '@import "@/assets/sass/global-setup.sass"' } } },
+  css: { loaderOptions: { sass: { additionalData: '@import "@/assets/sass/global-setup.sass"' } } },
   chainWebpack: (config) => {
     const svgRule = config.module.rule('svg');
 

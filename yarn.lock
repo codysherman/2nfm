@@ -9,30 +9,30 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "2nfm@workspace:."
   dependencies:
-    "@vue/cli-plugin-babel": ^4.4.4
-    "@vue/cli-plugin-eslint": ^4.4.4
-    "@vue/cli-service": ^4.4.4
+    "@vue/cli-plugin-babel": ^4.5.7
+    "@vue/cli-plugin-eslint": ^4.5.7
+    "@vue/cli-service": ^4.5.7
     babel-eslint: ^10.1.0
     core-js: ^3.6.5
-    eslint: ^7.2.0
+    eslint: ^7.10.0
     eslint-import-resolver-alias: ^1.1.2
     eslint-plugin-import: ^2.22.1
-    eslint-plugin-vue: ^6.2.2
+    eslint-plugin-vue: ^7.0.1
     frow: ^3.3.2
     pug: ^3.0.0
     pug-plain-loader: ^1.0.0
     regenerator-runtime: ^0.13.7
-    sass: ^1.26.8
-    sass-loader: ^8.0.2
+    sass: ^1.27.0
+    sass-loader: ^10.0.2
     source-map: ^0.7.3
     supports-color: ^7.2.0
-    vue: ^2.6.11
+    vue: ^2.6.12
     vue-cli-plugin-pug: ^1.0.7
     vue-eslint-parser: ^7.1.0
     vue-meta: ^2.4.0
-    vue-router: ^3.3.4
+    vue-router: ^3.4.6
     vue-svg-loader: ^0.16.0
-    vue-template-compiler: ^2.6.11
+    vue-template-compiler: ^2.6.12
   languageName: unknown
   linkType: soft
 
@@ -1732,7 +1732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/cli-plugin-babel@npm:^4.4.4":
+"@vue/cli-plugin-babel@npm:^4.5.7":
   version: 4.5.7
   resolution: "@vue/cli-plugin-babel@npm:4.5.7"
   dependencies:
@@ -1749,7 +1749,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/cli-plugin-eslint@npm:^4.4.4":
+"@vue/cli-plugin-eslint@npm:^4.5.7":
   version: 4.5.7
   resolution: "@vue/cli-plugin-eslint@npm:4.5.7"
   dependencies:
@@ -1786,7 +1786,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/cli-service@npm:^4.4.4":
+"@vue/cli-service@npm:^4.5.7":
   version: 4.5.7
   resolution: "@vue/cli-service@npm:4.5.7"
   dependencies:
@@ -3518,17 +3518,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clone-deep@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "clone-deep@npm:4.0.1"
-  dependencies:
-    is-plain-object: ^2.0.4
-    kind-of: ^6.0.2
-    shallow-clone: ^3.0.0
-  checksum: b0146d66cabc7e609d23d10155dcc88e2f74b03539b3b65f8a05f889500e2a78b6c6265a744445d009d512a1afa16836f62aa5737d462027142984c2d41130c8
-  languageName: node
-  linkType: hard
-
 "clone@npm:^1.0.2":
   version: 1.0.4
   resolution: "clone@npm:1.0.4"
@@ -4911,16 +4900,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^6.2.2":
-  version: 6.2.2
-  resolution: "eslint-plugin-vue@npm:6.2.2"
+"eslint-plugin-vue@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "eslint-plugin-vue@npm:7.0.1"
   dependencies:
+    eslint-utils: ^2.1.0
     natural-compare: ^1.4.0
-    semver: ^5.6.0
-    vue-eslint-parser: ^7.0.0
+    semver: ^7.3.2
+    vue-eslint-parser: ^7.1.0
   peerDependencies:
-    eslint: ^5.0.0 || ^6.0.0
-  checksum: 9e868f6fa042cdf8250d57e0073a19c05303caf8b2fcab1d68b706e9020c1bd7a0cc0a5c17f5c76adebcf065385e851650b2d0071c2ce149392794a002cc408c
+    eslint: ^6.2.0 || ^7.0.0
+  checksum: 0c880107426e7ba55a76d82987bce610f4147616b7cc166633e51fc00d74f810399c2d307513308b27e6299ac29f7a05fa2568693603b30e7d79bd2f81e63e35
   languageName: node
   linkType: hard
 
@@ -4960,7 +4950,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.2.0":
+"eslint@npm:^7.10.0":
   version: 7.10.0
   resolution: "eslint@npm:7.10.0"
   dependencies:
@@ -7173,6 +7163,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"klona@npm:^2.0.3":
+  version: 2.0.4
+  resolution: "klona@npm:2.0.4"
+  checksum: be4a0c784135b6a75ac2c5ac9564894807aa050de041ac775a20d3ee46969ac5c3d37503d12c215c7decb592196e59e22852fd0cf28ac0cc29fe3a6df9168624
+  languageName: node
+  linkType: hard
+
 "launch-editor-middleware@npm:^2.2.1":
   version: 2.2.1
   resolution: "launch-editor-middleware@npm:2.2.1"
@@ -7897,7 +7894,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"neo-async@npm:^2.5.0, neo-async@npm:^2.6.0, neo-async@npm:^2.6.1":
+"neo-async@npm:^2.5.0, neo-async@npm:^2.6.0, neo-async@npm:^2.6.1, neo-async@npm:^2.6.2":
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: 34a8f5309135be258a97082af810ea43700a3e0121e7b1ea31b3e22e2663d7c0d502cd949abb6d1ab8c11abfd04500ee61721ec5408b2d4bef8105241fd8a4c2
@@ -10209,15 +10206,15 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:^8.0.2":
-  version: 8.0.2
-  resolution: "sass-loader@npm:8.0.2"
+"sass-loader@npm:^10.0.2":
+  version: 10.0.2
+  resolution: "sass-loader@npm:10.0.2"
   dependencies:
-    clone-deep: ^4.0.1
-    loader-utils: ^1.2.3
-    neo-async: ^2.6.1
-    schema-utils: ^2.6.1
-    semver: ^6.3.0
+    klona: ^2.0.3
+    loader-utils: ^2.0.0
+    neo-async: ^2.6.2
+    schema-utils: ^2.7.1
+    semver: ^7.3.2
   peerDependencies:
     fibers: ">= 3.1.0"
     node-sass: ^4.0.0
@@ -10230,11 +10227,11 @@ fsevents@~2.1.2:
       optional: true
     sass:
       optional: true
-  checksum: e23d9b308f0792fb9ca3ebe314d5c9c96dfa833f89f457e4fc9c5026dacbfbb81e65b1e9b924f6aa11d749e2ba033acf7d1767929d6f9628c45525535bceb889
+  checksum: 9eec5e84be53db8e46aa1e7f4cc5e48b1e72508159dcc53986a59f14789547e07084793b03638e33d9a94339e2229dca1fb5f1ece5d2e1479af329e28a28ecb7
   languageName: node
   linkType: hard
 
-"sass@npm:^1.26.8":
+"sass@npm:^1.27.0":
   version: 1.27.0
   resolution: "sass@npm:1.27.0"
   dependencies:
@@ -10263,7 +10260,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^2.0.0, schema-utils@npm:^2.5.0, schema-utils@npm:^2.6.1, schema-utils@npm:^2.6.5, schema-utils@npm:^2.6.6, schema-utils@npm:^2.7.0":
+"schema-utils@npm:^2.0.0, schema-utils@npm:^2.5.0, schema-utils@npm:^2.6.5, schema-utils@npm:^2.6.6, schema-utils@npm:^2.7.0, schema-utils@npm:^2.7.1":
   version: 2.7.1
   resolution: "schema-utils@npm:2.7.1"
   dependencies:
@@ -10432,15 +10429,6 @@ fsevents@~2.1.2:
   bin:
     sha.js: ./bin.js
   checksum: 7554240ab76e683f7115123eb4815aae16b5fc6f2cdff97009831ad5b17b107ffcef022526211f7306957bce7a67fa4d0ccad79a3040c5073414365595e90516
-  languageName: node
-  linkType: hard
-
-"shallow-clone@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "shallow-clone@npm:3.0.1"
-  dependencies:
-    kind-of: ^6.0.2
-  checksum: e329e054c286f0681fd8a9e5c353999519332f12510a99e189ea9cfa0337adb6f1414639d44493418ef6790a693b78c354525269f5db25a9feddd8b4d7891a62
   languageName: node
   linkType: hard
 
@@ -11808,7 +11796,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"vue-eslint-parser@npm:^7.0.0, vue-eslint-parser@npm:^7.1.0":
+"vue-eslint-parser@npm:^7.1.0":
   version: 7.1.0
   resolution: "vue-eslint-parser@npm:7.1.0"
   dependencies:
@@ -11872,7 +11860,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"vue-router@npm:^3.3.4":
+"vue-router@npm:^3.4.6":
   version: 3.4.6
   resolution: "vue-router@npm:3.4.6"
   checksum: 6b450e7d6229ed547b8d06acdd675dc3f27e93e97bcd18ca30e98c38f971d7cef2d689ad23c8328d2dbd734104c6c1463488b6799cf116c23048540f0c7cbfd6
@@ -11901,7 +11889,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"vue-template-compiler@npm:^2.6.11":
+"vue-template-compiler@npm:^2.6.12":
   version: 2.6.12
   resolution: "vue-template-compiler@npm:2.6.12"
   dependencies:
@@ -11918,7 +11906,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"vue@npm:^2.6.11":
+"vue@npm:^2.6.12":
   version: 2.6.12
   resolution: "vue@npm:2.6.12"
   checksum: 92ed547e55a4b27a2a45aa9ab7ff5999f891dc9754562a37226dd190b323d9f99daec892dd8bd39786e404e6e065d808e165b1a0c127ce8d45fd1bde79ec7312
