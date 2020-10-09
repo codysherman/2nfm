@@ -140,30 +140,30 @@ export default {
   },
   methods: {
     togglePlayback() {
-      this.$emit('togglePlayback');
+      this.$emit('toggle-playback');
     },
     setVolume(event) {
       this.player.volume = event.srcElement.valueAsNumber;
       this.volume = event.srcElement.valueAsNumber;
-      if(!this.containsMic) {
+      if (!this.containsMic) {
         localStorage.setItem('volume', event.srcElement.valueAsNumber);
       }
     },
     fullscreenVideo() {
-      if(this.player.requestFullscreen)
+      if (this.player.requestFullscreen)
         this.player.requestFullscreen();
-      else if(this.player.mozRequestFullScreen)
+      else if (this.player.mozRequestFullScreen)
         this.player.mozRequestFullScreen();
-      else if(this.player.webkitRequestFullScreen)
+      else if (this.player.webkitRequestFullScreen)
         this.player.webkitRequestFullScreen();
-      else if(this.player.msRequestFullscreen)
+      else if (this.player.msRequestFullscreen)
         this.player.msRequestFullscreen();
     },
     toggleTheaterMode() {
-      this.$emit('update:theaterMode', !this.theaterMode);
+      this.$emit('update:theater-mode', !this.theaterMode);
     },
     playbackToggled() {
-      if(this.player.paused) {
+      if (this.player.paused) {
         this.isPlaying = false;
       } else {
         this.isPlaying = true;

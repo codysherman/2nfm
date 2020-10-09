@@ -49,7 +49,7 @@ export default {
   },
   watch: {
     presenceCheckWait(newValue) {
-      this.$emit('presenceCheckWait', newValue);
+      this.$emit('presence-check-wait', newValue);
     },
   },
   async mounted() {
@@ -104,7 +104,7 @@ export default {
         connection.onSocketError = reject;
 
         connection.onleave = (e) => {
-          if(e.userid !== this.roomName) return;
+          if (e.userid !== this.roomName) return;
 
           connection.close();
           connection.closeSocket();
@@ -138,14 +138,14 @@ export default {
         var bandwidth = this.params.bandwidth;
         var codecs = this.params.codecs;
 
-        if(bandwidth) {
+        if (bandwidth) {
           try {
             bandwidth = parseInt(bandwidth);
           } catch (e) {
             bandwidth = null;
           }
 
-          if(
+          if (
             bandwidth &&
             !isNaN(bandwidth) &&
             bandwidth != 'NaN' &&
@@ -159,7 +159,7 @@ export default {
           }
         }
 
-        if(!!codecs && codecs !== 'default') {
+        if (!!codecs && codecs !== 'default') {
           sdp = CodecsHandler.preferCodec(sdp, codecs);
         }
         return sdp;
@@ -175,9 +175,9 @@ export default {
       this.connection.iceServers = IceServersHandler.getIceServers(!isP2POnly);
 
       this.connection.onstatechange = (state) => {
-        if(state.name == 'request-rejected' && this.params.p) {
+        if (state.name == 'request-rejected' && this.params.p) {
           this.$emit('state', { value: STATE.UNAUTHORIZED });
-        } else if(state.name === 'room-not-available') {
+        } else if (state.name === 'room-not-available') {
           this.$emit('state', { value: STATE.UNAVAILABLE });
         } else {
           const { name, reason } = state;
@@ -190,25 +190,25 @@ export default {
       };
 
       this.connection.onstream = (e) => {
-        if(e.extra.containsVideo) {
+        if (e.extra.containsVideo) {
           e.stream.containsVideo = e.extra.containsVideo;
         }
-        if(e.extra.containsAudio) {
+        if (e.extra.containsAudio) {
           e.stream.containsAudio = e.extra.containsAudio;
         }
-        if(e.extra.containsMic) {
+        if (e.extra.containsMic) {
           e.stream.containsMic = e.extra.containsMic;
         }
         this.$emit('stream', e.stream);
       };
 
       this.connection.onExtraDataUpdated = (e) => {
-        this.$emit('receiverViewerCount', e.extra.receiverViewerCount);
+        this.$emit('receiver-viewer-count', e.extra.receiverViewerCount);
       };
 
       // if user left
       this.connection.onleave = (e) => {
-        if(e.userid !== this.roomName) return;
+        if (e.userid !== this.roomName) return;
 
         // TODO: maybe split into SOCKET_WILL_CLOSE so we can update infoBarMessage before closing
         this.connection.close();
@@ -220,7 +220,7 @@ export default {
 
       // TODO: refactor so synchronous `prompt`'s (or better alternative) is done from the Receiver
       this.connection.onJoinWithPassword = (remoteUserId) => {
-        if(!this.params.p) {
+        if (!this.params.p) {
           this.params.p = prompt(
             remoteUserId + ' is password protected. Please enter the pasword:',
           );
@@ -250,7 +250,7 @@ export default {
       };
 
       this.connection.onSocketDisconnect = () => {
-        if(this.connection.getAllParticipants().length > 0) return;
+        if (this.connection.getAllParticipants().length > 0) return;
 
         this.$emit('state', { value: STATE.SOCKET_DISCONNECT });
       };
@@ -266,16 +266,16 @@ export default {
       this.connection.socketCustomEvent = this.roomName;
 
       // console.log('[Connection mounted]: roomName check:', this.roomName);
-      if(this.roomName) {
+      if (this.roomName) {
         this.checkPresence();
       }
 
       var dontDuplicate = {};
       this.connection.onPeerStateChanged = (event) => {
-        if(!this.connection.getRemoteStreams(this.roomName).length) {
-          if(event.signalingState === 'have-remote-offer') {
+        if (!this.connection.getRemoteStreams(this.roomName).length) {
+          if (event.signalingState === 'have-remote-offer') {
             this.$emit('state', { value: STATE.HAVE_OFFER });
-          } else if(
+          } else if (
             event.iceGatheringState === 'complete' &&
             event.iceConnectionState === 'connected'
           ) {
@@ -283,11 +283,11 @@ export default {
           }
         }
 
-        if(
+        if (
           event.iceConnectionState === 'connected' &&
           event.signalingState === 'stable'
         ) {
-          if(dontDuplicate[event.userid]) return;
+          if (dontDuplicate[event.userid]) return;
           dontDuplicate[event.userid] = true;
 
           this.$emit('state', { value: STATE.CONNECTED });
@@ -298,7 +298,7 @@ export default {
             },
             1000,
           );
-        } else if(event.iceConnectionState === 'disconnected') {
+        } else if (event.iceConnectionState === 'disconnected') {
           this.$emit('state', { value: STATE.DISCONNECTED });
         }
       };
@@ -309,8 +309,8 @@ export default {
         // Keeping these parameters here for documentation
         // eslint-disable-next-line no-unused-vars
         (isRoomExist, roomid, extra) => {
-          if(isRoomExist === false) {
-            if(this.presenceCheckWait < 60000) {
+          if (isRoomExist === false) {
+            if (this.presenceCheckWait < 60000) {
               this.presenceCheckWait = this.presenceCheckWait * 2;
             }
 
@@ -328,7 +328,7 @@ export default {
           this.$emit('state', { value: STATE.JOINING });
 
           (connection || this.connection).password = null;
-          if(this.params.p) {
+          if (this.params.p) {
             (connection || this.connection).password = this.params.p;
           }
 
@@ -338,7 +338,7 @@ export default {
     },
 
     onGettingWebRTCStats(stats, userid) {
-      if(!this.connection.peers[userid]) {
+      if (!this.connection.peers[userid]) {
         stats.nomore();
         return;
       }
@@ -367,7 +367,7 @@ function getParams() {
 
   var match,
     search = window.location.search;
-  while((match = r.exec(search.substring(1))))
+  while ((match = r.exec(search.substring(1))))
     tempParams[d(match[1])] = d(match[2]);
 
   return Object.assign({}, DEFAULTS, tempParams);
