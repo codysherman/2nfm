@@ -16,7 +16,7 @@ __metadata:
     core-js: ^3.6.5
     eslint: ^7.2.0
     eslint-import-resolver-alias: ^1.1.2
-    eslint-plugin-import: ^2.22.0
+    eslint-plugin-import: ^2.22.1
     eslint-plugin-vue: ^6.2.2
     frow: ^3.3.2
     pug: ^3.0.0
@@ -25,6 +25,7 @@ __metadata:
     sass: ^1.26.8
     sass-loader: ^8.0.2
     source-map: ^0.7.3
+    supports-color: ^7.2.0
     vue: ^2.6.11
     vue-cli-plugin-pug: ^1.0.7
     vue-eslint-parser: ^7.1.0
@@ -4887,7 +4888,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:^2.22.0":
+"eslint-plugin-import@npm:^2.22.1":
   version: 2.22.1
   resolution: "eslint-plugin-import@npm:2.22.1"
   dependencies:
@@ -11034,7 +11035,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"supports-color@npm:^7.0.0, supports-color@npm:^7.1.0":
+"supports-color@npm:^7.0.0, supports-color@npm:^7.1.0, supports-color@npm:^7.2.0":
   version: 7.2.0
   resolution: "supports-color@npm:7.2.0"
   dependencies:

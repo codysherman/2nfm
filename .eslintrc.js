@@ -20,9 +20,6 @@ module.exports = {
     'plugin:import/errors',
     'plugin:import/warnings',
   ],
-  plugins: [
-    'import',
-  ],
   rules: {
     // we should always disable console logs and debugging in production
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
