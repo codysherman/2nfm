@@ -8,6 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "author": "Cody Sherman <cody@codysherman.com> (https://codysherman.com)",
+  "license": "BSD-3-Clause",
   "dependencies": {
     "core-js": "^3.6.5",
     "frow": "^3.3.2",
