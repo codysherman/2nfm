@@ -28,7 +28,7 @@
     :containsAudio="stream.containsAudio"
     :player="player"
     :theaterMode.sync="theaterMode"
-    @togglePlayback="togglePlayback"
+    @toggle-playback="togglePlayback"
   )
   MediaControls.mt-10(
     v-if="stream.containsMic"

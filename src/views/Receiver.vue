@@ -67,9 +67,9 @@ div
     :roomName="roomName"
     @state="onConnectionStateChanged"
     @stream="onStream"
-    @presenceCheckWait="onPresenceCheckWait"
+    @presence-check-wait="onPresenceCheckWait"
     @stats="onStats"
-    @receiverViewerCount="onReceiverViewerCount"
+    @receiver-viewer-count="onReceiverViewerCount"
   )
   .menu-bar
     .frow.row-start

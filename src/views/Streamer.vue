@@ -152,9 +152,9 @@ div
     :enableAudio="enableAudio"
     :enableMic="enableMic"
     :resolution="resolution"
-    @isSharing="onIsSharing"
-    @gotStream="onGotStream"
-    @setDefaults="onSetDefaults"
+    @is-sharing="onIsSharing"
+    @got-stream="onGotStream"
+    @set-defaults="onSetDefaults"
   )
   StreamerConnection(
     ref="connection"
@@ -166,9 +166,9 @@ div
     :enableVideo="enableVideo"
     :enableAudio="enableAudio"
     :isP2POnly="isP2POnly"
-    @sessionId="onSessionId"
-    @viewerCount="onViewerCount"
-    @idTaken="onIdTaken"
+    @session-id="onSessionId"
+    @viewer-count="onViewerCount"
+    @id-taken="onIdTaken"
   )
   .frow.row-center.width-100
     .col-md-1-2
@@ -288,8 +288,8 @@ div
         :viewerCount="viewerCount"
         :stream="stream"
         :privacy="privacy"
-        @muteMicToggle="muteMic"
-        @stopStream="stopStream"
+        @mute-mic-toggle="muteMic"
+        @stop-stream="stopStream"
       )
 </template>
 
