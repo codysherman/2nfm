@@ -21,7 +21,7 @@
         @change="toggleAutoplay"
       )
   .viewer-count
-    | {{ receiverViewerCount + 1 }} {{ receiverViewerCount + 1 === 1 ? 'Viewer' : 'Viewers' }}
+    | {{ receiverViewerCount + 1 }} {{ receiverViewerCount + 1 === 1 ? 'person' : 'people' }} in room
 </template>
 
 <script>
