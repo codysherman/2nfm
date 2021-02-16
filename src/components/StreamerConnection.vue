@@ -37,6 +37,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    streamDescription: {
+      type: String,
+      default: '',
+    },
     isP2POnly: {
       type: Boolean,
       default: false,
@@ -288,6 +292,9 @@ export default {
           this.connection.isInitiator ? participantsCount : 0,
         );
       };
+
+      this.connection.extra.roomDescription = this.streamDescription;
+
     },
     setViewerCount(count) {
       this.$emit('viewer-count', count);

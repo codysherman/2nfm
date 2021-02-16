@@ -199,9 +199,11 @@ export default {
         if (e.extra.containsMic) {
           e.stream.containsMic = e.extra.containsMic;
         }
+        if (e.extra.roomDescription) {
+          e.stream.roomDescription = e.extra.roomDescription;
+        }
         this.$emit('stream', e.stream);
       };
-
       this.connection.onExtraDataUpdated = (e) => {
         this.$emit('receiver-viewer-count', e.extra.receiverViewerCount);
       };
