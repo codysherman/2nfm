@@ -6,7 +6,8 @@
     "start": "yarn serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "prepare": "husky install"
   },
   "author": "Cody Sherman <cody@codysherman.com> (https://codysherman.com)",
   "license": "BSD-3-Clause",
@@ -35,11 +36,6 @@
     "vue-cli-plugin-pug": "^1.0.7",
     "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.11"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,vue}": [
