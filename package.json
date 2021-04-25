@@ -28,7 +28,7 @@
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-vue": "^7.0.1",
-    "husky": ">=4",
+    "husky": ">=6",
     "lint-staged": ">=10",
     "sass": "^1.26.8",
     "sass-loader": "^10.0.3",
