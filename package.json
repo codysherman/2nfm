@@ -13,7 +13,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "core-js": "^3.6.5",
-    "frow": "^3.3.2",
+    "frow": "^4.0.0",
     "vue": "^2.6.11",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.3.4"
@@ -30,7 +30,7 @@
     "eslint-plugin-vue": "^7.0.1",
     "husky": ">=6",
     "lint-staged": ">=10",
-    "sass": "^1.26.8",
+    "sass": "^1.41.0",
     "sass-loader": "^10.0.3",
     "source-map": "^0.7.3",
     "vue-cli-plugin-pug": "^1.0.7",
