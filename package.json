@@ -7,7 +7,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "prepare": "husky install"
+    "prepare": "husky install && chmod ug+x .husky/*"
   },
   "author": "Cody Sherman <cody@codysherman.com> (https://codysherman.com)",
   "license": "BSD-3-Clause",
@@ -28,8 +28,8 @@
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-vue": "^7.0.1",
-    "husky": ">=6",
-    "lint-staged": ">=10",
+    "husky": ">=7",
+    "lint-staged": ">=11",
     "sass": "^1.41.0",
     "sass-loader": "^10.0.3",
     "source-map": "^0.7.3",
