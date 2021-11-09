@@ -70,6 +70,7 @@ section
     position: absolute
     top: -12px
     left: 30px
+    color:  #{$off-black}
     background-color: $white
     border-radius: $border-radius-small
     padding: 2px 10px
