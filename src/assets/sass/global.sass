@@ -2,8 +2,9 @@ html,
 body
   font-family: $font-family
   font-weight: $weight-regular
-  background-color: $white
-
+  background-color:  var(--theme-color)
+  color: var(--inverse-color)
+  transition: color $theme-fade-speed, background-color $theme-fade-speed
 input
   font-weight: $weight-regular
 
@@ -15,4 +16,8 @@ strong
 
 label,
 .label
-  color: $text-color
+  color: var(--inverse-color)
+
+svg
+  fill: var(--inverse-color)
+
