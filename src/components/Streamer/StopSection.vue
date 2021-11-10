@@ -3,7 +3,7 @@
   text-align: center
   display: inline-block
   font-size: 40px
-  color: $primary-color
+  color: var(--inverse-color)
   margin: 0
 
   // XS
@@ -17,7 +17,7 @@
 
   svg
     width: 30px
-    fill: $primary-color
+    fill: var(--inverse-color)
 
 .copy-notification
   font-size: 20px
@@ -44,8 +44,8 @@
     font-size: 30px
     padding: 15px
     background: none
-    border: 3px solid $primary-color
-    color: $primary-color
+    border: 3px solid var(--inverse-color)
+    color: var(--inverse-color)
     border-radius: 10px
 </style>
 

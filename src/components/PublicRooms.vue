@@ -20,7 +20,7 @@
     width: 20px
     height: auto
     margin: 10px
-    fill: $primary-color
+    fill: var(--inverse-color)
 
 .owner
   margin-bottom: 2px

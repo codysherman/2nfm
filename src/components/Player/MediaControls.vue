@@ -9,12 +9,12 @@
 
     svg
       width: 30px
-      fill: $primary-color
+      fill: var(--inverse-color)
 
   .microphone
     width: 30px
     margin-right: 5px
-    fill: $primary-color
+    fill: var(--inverse-color)
 
   .volume-slider
     max-width: 120px
@@ -28,7 +28,7 @@
 .theater-button
   svg
     width: 18px
-    fill: $primary-color
+    fill: var(--inverse-color)
     transition: transform $animate-speed
 
   &:hover,
@@ -39,7 +39,7 @@
 .fullscreen-button
   svg
     width: 30px
-    fill: $primary-color
+    fill: var(--inverse-color)
     transition: transform $animate-speed
 
   &:hover,
