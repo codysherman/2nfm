@@ -3,7 +3,7 @@
   height: 70px
   width: auto
   margin: 0 auto
-  fill: $primary-color
+  fill: var(--inverse-color)
   animation: fade-in 2s ease-out
 
   // XS
