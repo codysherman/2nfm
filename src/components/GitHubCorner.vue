@@ -11,7 +11,7 @@
     transform: rotate(10deg)
 
 .github-corner
-  fill: $primary-color
+  fill: var(--inverse-color)
   color: $white
   position: absolute
   top: 0
@@ -27,7 +27,7 @@
 
 .octo-body,
 .octo-arm
-  fill: $white
+  fill: var(--theme-color)
 
 .octo-arm
   transform-origin: 130px 106px
