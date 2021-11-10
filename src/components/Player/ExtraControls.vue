@@ -22,7 +22,7 @@
       )
   .viewer-count
     | {{ receiverViewerCount + 1 }}
-    |  {{ receiverViewerCount + 1 === 1 ? 'person' : 'people' }} in room
+    | {{ receiverViewerCount + 1 === 1 ? 'person' : 'people' }} in room
 </template>
 
 <script>
