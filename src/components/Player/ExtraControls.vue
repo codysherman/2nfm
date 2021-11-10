@@ -2,7 +2,7 @@
 .autoplay
   label
     font-weight: $weight-bold
-    color: $primary-color
+    color: var(--inverse-color)
     font-size: 16px
     margin-bottom: 0
 
@@ -21,7 +21,8 @@
         @change="toggleAutoplay"
       )
   .viewer-count
-    | {{ receiverViewerCount + 1 }} {{ receiverViewerCount + 1 === 1 ? 'person' : 'people' }} in room
+    | {{ receiverViewerCount + 1 }}
+    |  {{ receiverViewerCount + 1 === 1 ? 'person' : 'people' }} in room
 </template>
 
 <script>
