@@ -42,7 +42,7 @@
       background: var(--theme-off-color)
       color: var(--inverse-off-color)
   
-@mixin button-solid($color: $primary-color)
+@mixin button-solid($color: var(--inverse-color))
   background-color: $color
   border-color: transparent
 
@@ -86,7 +86,7 @@
       background: transparent
 
 
-@mixin button-outline($color: $primary-color)
+@mixin button-outline($color: var(--inverse-color))
   background-color: transparent
   color: $color
   border: solid $color 2px
@@ -129,7 +129,7 @@
       border: solid transparent 2px
       color: rgba($color, 0.5)
 
-@mixin button-white($color: $primary-color)
+@mixin button-white($color: var(--inverse-color))
   background-color: $white
   color: $color
   border: solid transparent 2px
@@ -176,6 +176,6 @@
     &:active,
     &:focus
       text-decoration: none
-      border-bottom: 2px solid $primary-color
-      color: $primary-color
+      border-bottom: 2px solid var(--inverse-color)
+      color: var(--inverse-color)
       background: none

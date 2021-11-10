@@ -45,7 +45,7 @@
 .reciever-logo
   height: 50px
   width: auto
-  fill: $primary-color
+  fill: var(--inverse-color)
   animation: fade-in 2s ease-out
 
 .info-bar
