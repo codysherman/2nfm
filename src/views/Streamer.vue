@@ -4,7 +4,7 @@
   margin: 0 auto
   width: 228px
   height: auto
-  fill: $primary-color
+  fill: var(--inverse-color)
 
   // XS
   @media (max-width: 767px)
@@ -43,7 +43,7 @@
 
 .room-id-label
   font-size: 40px
-  color: $primary-color
+  color: var(--inverse-color)
 
   // XS
   @media (max-width: 767px)
@@ -126,7 +126,7 @@ section
   transition: color $animate-speed
 
   &:hover
-    color: $black
+    color: var(--inverse-off-color)
 
   svg
     width: 40px
@@ -134,11 +134,11 @@ section
     margin-bottom: 10px
 
     path
-      fill: $primary-color
+      fill: var(--inverse-color)
       transition: fill $animate-speed
 
   &:hover svg path
-    fill: $black
+    fill: var(--inverse-off-color)
 
 .and-mic
   opacity: 0
