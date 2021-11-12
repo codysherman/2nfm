@@ -106,15 +106,18 @@ section
   .advanced
     overflow: hidden
     position: absolute
-    top: 0
-    right: 0
-    bottom: 0
-    left: 0
+    top: -1px
+    right: -1px
+    bottom: -1px
+    left: -1px
+    border-radius: 10px
 
     & > .frow
       animation: slide-down $animate-speed ease
       background-color: $tertiary-color
 
+    label
+      color: $primary-color
 .settings-item
   margin-bottom: 40px
 
