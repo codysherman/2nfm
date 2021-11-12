@@ -8,6 +8,28 @@ body
 input
   font-weight: $weight-regular
 
+  &[type="range"]
+    &::-webkit-slider-thumb
+      background-color: var(--inverse-color)
+    &::-moz-range-thumb
+      background: var(--inverse-color)
+    &::-ms-thumb
+      background: var(--inverse-color)
+    &:active, &:hover, &:focus
+      &::-webkit-slider-thumb
+        background: var(--inverse-color)
+      &::-moz-range-thumb
+        background: var(--inverse-color)
+      &::-ms-thumb
+        background: var(--inverse-color)
+    &:disabled
+      &::-webkit-slider-thumb
+        background: var(--inverse-color)
+      &::-moz-range-thumb
+        background: var(--inverse-color)
+      &::-ms-thumb
+        background: var(--inverse-color)
+
 h1, h2, h3, h4, h5, h6
   font-weight: $weight-bold
 
@@ -26,7 +48,6 @@ select
 svg,
 path
   transition: fill $theme-fade-speed
-
 
 [data-theme="dark"]
   .shadow-light
