@@ -58,6 +58,7 @@
   transition: fade-in 0.4s
 
 .create-message
+  color: var(--inverse-color)
   font-size: 24px
   margin-top: 20px
   text-decoration: underline
