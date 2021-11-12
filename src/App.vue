@@ -5,22 +5,27 @@
 @import ~frow
 @import @/assets/sass/global.sass
 
+.bounce-in-enter-active
+  animation: pop-in $animate-speed
+
 .theme-svg
   height: 25px
   width: auto
   position: fixed
   right: 10px
   top: 10px
-  &:hover
-    cursor: pointer
+  cursor: pointer
+  transition: 0s
 .min-100vh
   min-height: 100vh
 </style>
 
 <template lang="pug">
   #app.frow-container
-    LightThemeSun.theme-svg.animate-pop-in(v-if="theme === 'light'" @click="toggleDarkTheme")
-    DarkThemeMoon.theme-svg.animate-pop-in(v-if="theme === 'dark'" @click="toggleDarkTheme")
+    transition(name="bounce-in")
+      LightThemeSun.theme-svg(v-if="theme === 'light'" @click="toggleDarkTheme")
+    transition(name="bounce-in")
+      DarkThemeMoon.theme-svg(v-if="theme === 'dark'" @click="toggleDarkTheme")
     router-view.frow.centered.min-100vh.py-20(:key="$route.fullPath")
 </template>
 
@@ -39,7 +44,7 @@ export default {
   },
   created() {
     document.documentElement.setAttribute(
-      'data-theme', localStorage.getItem('theme') || 'dark',
+      'data-theme', localStorage.getItem('theme') || 'light',
     );
     this.theme = document.documentElement.getAttribute('data-theme');
   },
