@@ -9,7 +9,7 @@
   height: 25px
   width: auto
   position: fixed
-  left: 10px
+  right: 10px
   top: 10px
   &:hover
     cursor: pointer
@@ -19,9 +19,8 @@
 
 <template lang="pug">
   #app.frow-container
-    LightThemeSun.theme-svg(v-if="theme === 'light'" @click="toggleDarkTheme")
-    DarkThemeMoon.theme-svg(v-if="theme === 'dark'" @click="toggleDarkTheme")
-    div {{ theme }}
+    LightThemeSun.theme-svg.animate-pop-in(v-if="theme === 'light'" @click="toggleDarkTheme")
+    DarkThemeMoon.theme-svg.animate-pop-in(v-if="theme === 'dark'" @click="toggleDarkTheme")
     router-view.frow.centered.min-100vh.py-20(:key="$route.fullPath")
 </template>
 
