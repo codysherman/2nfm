@@ -66,7 +66,7 @@ export default {
   },
   created() {
     document.documentElement.setAttribute(
-      'data-theme', localStorage.getItem('theme') || 'light',
+      'data-theme', localStorage.getItem('theme') || 'auto',
     );
     this.theme = document.documentElement.getAttribute('data-theme');
   },
