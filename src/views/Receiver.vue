@@ -9,16 +9,19 @@
     margin-right: 10px
 
 .stats-box
-  background-color: rgba(255, 255, 255, 0.92)
+  background-color: var(--theme-color)
+  color: var(--inverse-color)
   top: 35px
   left: 20px
   position: absolute
   text-align: left
   padding: 10px
+  min-width: 150px
 
   svg
     position: absolute
     top: 5px
+    fill: var(--inverse-color)
     right: 5px
     cursor: pointer
     width: 10px
