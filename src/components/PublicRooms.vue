@@ -6,14 +6,13 @@
   padding: 5px 7px
   border-radius: 5px
   font-size: 18px
-  color: $text-color
+  color: var(--inverse-color)
 
   &:hover,
   &:active,
   &:focus
     text-decoration: none
-    color: $black
-    background-color: $gray-lighter
+    background-color: var(--placeholder-color)
 
 .owner-svg
   svg
