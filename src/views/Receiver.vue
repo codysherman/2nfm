@@ -5,7 +5,7 @@
   top: 5px
 
   button
-    color: $gray-dark
+    color: var(--inverse-color)
     margin-right: 10px
 
 .stats-box
