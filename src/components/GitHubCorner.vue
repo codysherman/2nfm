@@ -14,9 +14,10 @@
   fill: var(--inverse-color)
   color: $white
   position: absolute
-  top: 0
+  top: -2px
   border: 0
-  right: 0
+  left: 0
+  transform: rotate(-90deg)
 
   &:hover .octo-arm
     animation: 560ms ease-in-out octocat-wave
