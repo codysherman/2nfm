@@ -17,7 +17,12 @@ strong
 label,
 .label
   color: var(--inverse-color)
+  transition: color $theme-fade-speed
 
 select
   background-color: var(--theme-color)
   transition: color $theme-fade-speed, background-color $theme-fade-speed
+
+svg,
+path
+  transition: fill $theme-fade-speed
