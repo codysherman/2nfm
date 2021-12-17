@@ -1,4 +1,7 @@
 <style scoped lang="sass">
+a.text-underline
+  color: var(--inverse-color)
+
 .public-link
   text-align: center
   display: inline-block
