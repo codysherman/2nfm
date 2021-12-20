@@ -1,5 +1,6 @@
 <style scoped lang="sass">
 a.text-underline
+  transition: color $theme-fade-speed
   color: var(--inverse-color)
 
 .public-link
